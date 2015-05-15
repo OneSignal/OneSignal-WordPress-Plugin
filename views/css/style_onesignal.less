@@ -1,0 +1,234 @@
+@red: #f26161;
+
+
+
+/* Overriding WordPress UI */
+#wpcontent {
+	background-color: #eee;
+	min-height: 100vh;
+
+}
+
+
+/* to fit on smaller screens with the wordpress sidebar */
+.container {
+	max-width: 1025px;
+}
+
+
+/* Tabs */
+li.active {
+	a:focus, a:hover, a:active {
+		outline: none;
+		-moz-box-shadow: none;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}
+	
+}
+
+.tab-content {
+	background-color: white;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 50px 70px;
+    -webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+
+/* content */
+
+h1 {
+	color: @red;
+	padding-bottom: 20px;
+}
+
+h2, h3, h4 {
+	color: #333;
+}
+
+#content-container {
+	padding-top: 30px;
+}
+
+
+
+
+
+
+.nav-tabs {
+    margin-bottom: 0;
+}
+
+
+
+.col-md-9 {
+	p {
+		display: inline-block;
+	}
+
+}
+
+
+
+
+
+/* Getting Started */
+
+#getting-started-container {
+	.steps {
+		font-size: 1.6em;
+		margin-top: 60px;
+		margin-bottom: 25px;
+
+	}
+	p {
+		font-size: 1.1em;
+	}
+
+	img {
+		display: block;
+		margin: 20px auto;
+		width: 60%;
+		min-width: 350px;
+
+	}
+
+	ul {
+		li {
+			p {
+				margin-left: 20px;
+			}
+		}
+	}
+}
+
+.alert {
+	padding: 30px;
+	h4 {
+		margin-top: 0;
+		font-size: 1.4em;
+		text-decoration: underline;
+	}
+	p {
+		margin-left: 0;
+	}
+}
+
+#thanks-message {
+	border: 2px solid @red;
+	padding: 20px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+
+	p {
+		color: @red;
+		text-align: center;
+	}
+}
+
+
+
+
+
+
+
+/* Application Settings */
+
+input[type="text"] {
+	padding: 10px;
+	border: solid 1px #c9c9c9;
+	transition: border 0.3s;
+	height: 40px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	min-width: 300px;
+	width: 75%;
+	padding: 5px 15px;
+	font-size: 1.2em;
+}
+
+input[type="text"]:focus, input[type="text"].focus {
+	border: solid 1px @red;
+	box-shadow: none;
+}
+
+input[type="submit"] {
+	border: none;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background: @red;
+	color: white;
+	padding: 10px 30px;
+	font-size: 1.4em;
+
+}
+
+a.help {
+	display: block;
+	font-style: italic;
+	cursor: pointer;
+}
+
+
+.topic {
+	margin: 30px 0px;
+}
+
+.not-visible {
+	display:none;
+}
+
+#account-settings {
+	img {
+		display: block;
+		width: 60%;
+		min-width: 350px;
+		margin: 10px auto;
+
+		;
+	}
+}
+
+
+
+
+/* notification-settings */
+
+input[type="checkbox"] {
+	margin: -4px 4px 0px 0px;
+}
+
+#notification-settings {
+	p {
+		font-size: 1.1em;
+	}
+}
+
+#custom-link-example {
+	background-color: #eee;
+	padding: 15px;
+}
+.sample-code {
+	color: #333;
+	font-size: 1.0em;
+}
+
+
+
+
+/* create notifications */
+#create-notification {
+	p {
+		font-size: 1.4em;
+	}
+}
+
+

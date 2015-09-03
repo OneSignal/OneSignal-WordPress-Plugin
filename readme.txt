@@ -3,8 +3,8 @@ Contributors: OneSignal
 Donate link: https://onesignal.com
 Tags: chrome, push, push notifications, safari, chrome push, safari push, notifications, web push, notification, notify, mavericks, firefox push, android, android push, android notifications, mobile notifications, mobile, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
-Tested up to: 4.2.1
-Stable tag: 1.0.3
+Tested up to: 4.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,13 +12,13 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and sites, trusted by over 2400 developers and marketers including some of the largest brands and websites in the world.
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and sites, trusted by over 5000 developers and marketers including some of the largest brands and websites in the world.
 
 After just a few seconds of set-up, your visitors will be able to opt-in to receive desktop push notifications when you publish a new post. OneSignal makes use of a brand new Google Chrome feature to send desktop notifications to your visitors even after they’ve left your website.
 
 OneSignal makes it easy to configure when to send notifications, target notifications to specific users, and to customize the Opt-In process for your visitors.
 
-Best of all, for a limited time, all WordPress users that use OneSignal will get a FREE lifetime account.
+Best of all, WordPress users that use OneSignal will get a FREE lifetime account.
 
 Features:
 
@@ -46,14 +46,18 @@ Features:
 
 == Changelog ==
 
+= 1.0.4 =
+- Notifications sent with the Automatic Push Notifications on Post feature directly link to the post instead of the homepage when opening the notification.
+- Updated GCM instructions and added HTTP subscribe link/widget instructions on the Getting Started tab.
+
 = 1.0.3 =
-Fixed compatibility issue with PHP versions older than 5.3.0
-For HTTPS sites a modal dialog is shown before the native Chrome Notification permission prompt.
+- Fixed compatibility issue with PHP versions older than 5.3.0
+- For HTTPS sites a modal dialog is shown before the native Chrome Notification permission prompt.
 
 = 1.0.2 =
-Fixed bug with OneSignal not getting initialized in some cases.
-Now omits extra unneeded manifest link from the head tag when using HTTP.
-Clicks handler added to elements with the class OneSignal-prompt are now setup in a more compatible way.
+- Fixed bug with OneSignal not getting initialized in some cases.
+- Now omits extra unneeded manifest link from the head tag when using HTTP.
+- Clicks handler added to elements with the class OneSignal-prompt are now setup in a more compatible way.
 
 = 1.0.1 =
 Modified description

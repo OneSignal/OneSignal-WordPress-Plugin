@@ -160,6 +160,7 @@ class OneSignal_Admin {
         'app_id' => $onesignal_wp_settings['app_id'],
         'included_segments' => array('All'),
         'isChromeWeb' => true,
+        'url' => get_permalink(),
         'contents' => array("en" => $notif_content)
       );
       

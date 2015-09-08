@@ -8,12 +8,14 @@ class OneSignal_Admin {
 	public static function init() {
 		$onesignal = new self();
 		if(current_user_can('update_plugins')) {
-			add_action( 'admin_menu', array(__CLASS__,'add_admin_page') );
+			add_action( 'admin_menu', array(__CLASS__, 'add_admin_page') );
+    }
+    if(current_user_can('publish_posts') || current_user_can('edit_published_posts')) {
       add_action( 'add_meta_boxes_post', array( __CLASS__, 'add_onesignal_post_options' ) );
       add_action( 'save_post', array( __CLASS__, 'on_post_save' ) );
 		}
     
-    // Outside is_admin() to catch posts that go from future to published in the background.
+    // Outside publish_posts check to catch posts that go from future to published in the background.
     add_action( 'transition_post_status', array( __CLASS__, 'notification_on_blog_post' ), 10, 3 );
     
 		return $onesignal;
@@ -167,7 +169,7 @@ class OneSignal_Admin {
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
       curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json',
-                             'Authorization: Basic ' . $onesignal_wp_settings['app_rest_api_key'])); // TODO: Get auth key from settings
+                             'Authorization: Basic ' . $onesignal_wp_settings['app_rest_api_key']));
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
       curl_setopt($ch, CURLOPT_HEADER, FALSE);
       curl_setopt($ch, CURLOPT_POST, TRUE);

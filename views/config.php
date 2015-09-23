@@ -193,7 +193,7 @@ if ($_POST['app_id']) {
           
           <div class="row" id="appID-helper" style="display:none;">
             <div class="col-md-12">
-              <img src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/app_id-1.jpg"?>">
+              <img src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/app_id-1.jpg" ?>" style="width: 80%">
             </div>
           </div>
         
@@ -212,7 +212,7 @@ if ($_POST['app_id']) {
 
           <div class="row" id="rest-API-helper" style="display:none;">
             <div class="col-md-12">
-              <img src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/app_id-1.jpg"?>">
+              <img src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/app_id-1.jpg"?>" style="width: 80%">
             </div>
           </div>
 
@@ -268,8 +268,15 @@ if ($_POST['app_id']) {
 
             <div class="col-md-9">
               <input type="checkbox" name="notification_on_post" value="true" <?php if ($onesignal_wp_settings['notification_on_post']) { echo checked; } ?>></input>
-              <p> By default, notifications will be sent to your subscribers whenever you publish a post. </p>
-              <p style="font-style:italic;">(You can change this setting per post before you publish.) </p>
+              <p> Post from default Wordpress creator.</p><br/>
+              <p style="font-style:italic; font-size:10pt">(You can change this setting per post before you publish.)</p>
+            </div>
+            
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-9">
+              <input type="checkbox" name="notification_on_post_from_plugin" value="true" <?php if ($onesignal_wp_settings['notification_on_post_from_plugin']) { echo checked; } ?>></input>
+              <p> All Posts created from other plugins. </p>
             </div>
           </div>
 

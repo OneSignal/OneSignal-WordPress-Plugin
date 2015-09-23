@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: chrome, push, push notifications, safari, chrome push, safari push, notifications, web push, notification, notify, mavericks, firefox push, android, android push, android notifications, mobile notifications, mobile, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
 Tested up to: 4.3
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,8 +46,13 @@ Features:
 
 == Changelog ==
 
+= 1.0.6 =
+- Added Automatic Push Notifications option for 'All Posts created from other plugins' on the "Notification Settings" tab.
+   - Note, this is on by default for new installs but off of existing ones so behavior does not automatically change when you update.
+- Fixed errors with missing images.
+
 = 1.0.5 =
-Send notification on post is now available to any Wordpress user with permissions to create or edit posts.
+- Send notification on post is now available to any Wordpress user with permissions to create or edit posts.
 
 = 1.0.4 =
 - Notifications sent with the Automatic Push Notifications on Post feature directly link to the post instead of the homepage when opening the notification.
@@ -63,7 +68,7 @@ Send notification on post is now available to any Wordpress user with permission
 - Clicks handler added to elements with the class OneSignal-prompt are now setup in a more compatible way.
 
 = 1.0.1 =
-Modified description
+- Modified description
 
 = 1.0.0 =
-Initial release of the plugin
+- Initial release of the plugin

@@ -6,12 +6,11 @@ class OneSignal_Admin {
 
   public static function init() {
     $onesignal = new self();
-    if(current_user_can('update_plugins')) {
+    if (current_user_can('update_plugins')) {
       add_action( 'admin_menu', array(__CLASS__, 'add_admin_page') );
     }
-    if(current_user_can('publish_posts') || current_user_can('edit_published_posts')) {
+    if (current_user_can('publish_posts') || current_user_can('edit_published_posts')) {
       add_action( 'add_meta_boxes_post', array( __CLASS__, 'add_onesignal_post_options' ) );
-      add_action( 'save_post', array( __CLASS__, 'on_post_save' ) );
     }
     
     add_action( 'transition_post_status', array( __CLASS__, 'on_transition_post_status' ), 10, 3 );
@@ -28,19 +27,10 @@ class OneSignal_Admin {
                    'high');
   }
   
-  public static function on_post_save($post_id) {
-    if ( $_POST['send_onesignal_notification'] === "true" && get_post_status($post_id) !== "publish" ) {
-      update_post_meta($post_id, 'send_onesignal_notification', "true");
-    }
-    else {
-      update_post_meta($post_id, 'send_onesignal_notification', "false");
-    }
-  }
-  
   public static function onesignal_notif_on_post_html_view($post) {
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
     ?>
-      <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($onesignal_wp_settings['notification_on_post'] && $post->post_status != "publish") { echo checked; } ?>></input>
+      <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($onesignal_wp_settings['notification_on_post'] && $post->post_status != "publish") { echo "checked"; } ?>></input>
       <input type="hidden" name="has_onesignal_setting" value="true"></input>
       <label> <?php if ($post->post_status == "publish") { echo "Send notification on update"; } else { echo "Send notification on publish"; } ?></label>
     <?php
@@ -72,30 +62,26 @@ class OneSignal_Admin {
       $onesignal_wp_settings['subdomain'] = $config['subdomain'];
     }
     
-    if ($config['auto_register'] == "true") {
+    if (@$config['auto_register'] == "true") {
       $onesignal_wp_settings['auto_register'] = true;
     }
     else {
       $onesignal_wp_settings['auto_register'] = false;
     }
     
-    if ($config['notification_on_post'] == "true") {
+    if (@$config['notification_on_post'] == "true") {
       $onesignal_wp_settings['notification_on_post'] = true;
     }
     else {
       $onesignal_wp_settings['notification_on_post'] = false;
     }
     
-    if ($config['notification_on_post_from_plugin'] == "true") {
+    if (@$config['notification_on_post_from_plugin'] == "true") {
       $onesignal_wp_settings['notification_on_post_from_plugin'] = true;
     }
     else {
       $onesignal_wp_settings['notification_on_post_from_plugin'] = false;
     }
-    
-    $onesignal_wp_settings['default_title'] = $config['default_title'];
-    $onesignal_wp_settings['default_icon'] = $config['default_icon'];
-    $onesignal_wp_settings['default_url'] = $config['default_url'];
     
     $onesignal_wp_settings['app_rest_api_key'] = $config['app_rest_api_key'];
     
@@ -144,14 +130,8 @@ class OneSignal_Admin {
     if (isset($_POST['has_onesignal_setting'])) {
       $send_onesignal_notification = $_POST['send_onesignal_notification'];
     }
-    else {
-      $isOneSignalPostMeta = get_post_meta( $post->ID, 'send_onesignal_notification', true );
-      if (empty(isOneSignalPostMeta)) {
-        $send_onesignal_notification = $isOneSignalPostMeta;
-      }
-      elseif ($old_status !== "publish") {
-        $send_onesignal_notification = $onesignal_wp_settings['notification_on_post_from_plugin'];
-      }
+    elseif ($old_status !== "publish") {
+      $send_onesignal_notification = $onesignal_wp_settings['notification_on_post_from_plugin'];
     }
     
     if ($send_onesignal_notification === true || $send_onesignal_notification === "true") {

@@ -1,11 +1,7 @@
 <?php
 $onesignal_wp_settings = OneSignal::get_onesignal_settings();
-/*
-echo var_dump($_POST);
-echo "<br/>";
-echo var_dump($onesignal_wp_settings);
-*/
-if ($_POST['app_id']) {
+
+if (array_key_exists('app_id', $_POST)) {
   $onesignal_wp_settings = OneSignal_Admin::save_config_page($_POST);
 }
 ?>
@@ -267,7 +263,7 @@ if ($_POST['app_id']) {
             </div>
 
             <div class="col-md-9">
-              <input type="checkbox" name="notification_on_post" value="true" <?php if ($onesignal_wp_settings['notification_on_post']) { echo checked; } ?>></input>
+              <input type="checkbox" name="notification_on_post" value="true" <?php if ($onesignal_wp_settings['notification_on_post']) { echo "checked"; } ?>></input>
               <p> Post from default Wordpress creator.</p><br/>
               <p style="font-style:italic; font-size:10pt">(You can change this setting per post before you publish.)</p>
             </div>
@@ -275,7 +271,7 @@ if ($_POST['app_id']) {
             <div class="col-md-3">
             </div>
             <div class="col-md-9">
-              <input type="checkbox" name="notification_on_post_from_plugin" value="true" <?php if ($onesignal_wp_settings['notification_on_post_from_plugin']) { echo checked; } ?>></input>
+              <input type="checkbox" name="notification_on_post_from_plugin" value="true" <?php if ($onesignal_wp_settings['notification_on_post_from_plugin']) { echo "checked"; } ?>></input>
               <p> All Posts created from other plugins. </p>
             </div>
           </div>
@@ -307,7 +303,7 @@ if ($_POST['app_id']) {
 
             <div class="col-md-9">
 
-              <!--<input type="checkbox" name="add-widget" value="true" <?php if ($onesignal_wp_settings['auto_register']) { echo checked; } ?>></input>-->
+              <!--<input type="checkbox" name="add-widget" value="true" <?php if ($onesignal_wp_settings['auto_register']) { echo "checked"; } ?>></input>-->
               <p> <strong> Option 1: </strong> Search for and install the OneSignal widget, allowing users to receive notifications from your site. </p>
 
               <br/></br/>

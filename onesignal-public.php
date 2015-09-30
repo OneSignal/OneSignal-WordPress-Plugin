@@ -5,8 +5,7 @@ class OneSignal_Public {
   public function __construct() {}
 
   public static function init() {
-    define( 'ONESIGNAL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-        add_action( 'wp_head', array( __CLASS__, 'onesignal_header' ), 1 );
+    add_action( 'wp_head', array( __CLASS__, 'onesignal_header' ), 1 );
   }
 
   public static function onesignal_header() {

@@ -1,7 +1,7 @@
 <?php
 class OneSignal {
   public static function get_onesignal_settings() {
-    if (!defined($onesignal_wp_settings)) {
+    if (!isset($onesignal_wp_settings)) {
       $onesignal_wp_settings = get_option("OneSignalWPSetting");
       if (empty( $onesignal_wp_settings )) {
          $onesignal_wp_settings = array(

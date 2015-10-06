@@ -50,17 +50,9 @@ class OneSignal_Admin {
     
     if (is_numeric($config['gcm_sender_id'])) {
       $onesignal_wp_settings['gcm_sender_id'] = $config['gcm_sender_id'];
-      $manifest_json = "{\n"
-                       . "  \"start_url\": \"/\",\n"
-                       . "  \"gcm_sender_id\": \"" . $onesignal_wp_settings['gcm_sender_id'] . "\",\n"
-                       . "  \"gcm_user_visible_only\": true\n"
-                       . "}";
-      file_put_contents($sdk_dir . 'manifest.json', $manifest_json);
     }
     
-    if ($config['gcm_sender_id']) {
-      $onesignal_wp_settings['subdomain'] = $config['subdomain'];
-    }
+    $onesignal_wp_settings['subdomain'] = $config['subdomain'];
     
     if (@$config['auto_register'] == "true") {
       $onesignal_wp_settings['auto_register'] = true;
@@ -134,10 +126,8 @@ class OneSignal_Admin {
       $send_onesignal_notification = $onesignal_wp_settings['notification_on_post_from_plugin'];
     }
     
-    if ($send_onesignal_notification === true || $send_onesignal_notification === "true") {
-      update_post_meta($post->ID, 'send_onesignal_notification', "false");
-      
-      $notif_content = get_the_title( $post->ID );
+    if ($send_onesignal_notification === true || $send_onesignal_notification === "true") {  
+      $notif_content = html_entity_decode(get_the_title($post->ID), ENT_QUOTES, 'UTF-8');
       
       $fields = array(
         'app_id' => $onesignal_wp_settings['app_id'],

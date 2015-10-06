@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: OneSignal Push Notifications
+  * Plugin Name: OneSignal Push Notifications
  * Plugin URI: https://onesignal.com/
  * Description: 
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: OneSignal
  * Author URI: https://onesignal.com
  * License: MIT

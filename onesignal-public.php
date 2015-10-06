@@ -10,11 +10,18 @@ class OneSignal_Public {
 
   public static function onesignal_header() {
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
+    
+    if ($onesignal_wp_settings["subdomain"] == "") {
+      if (strpos(ONESIGNAL_PLUGIN_URL, "http://localhost") === false && strpos(ONESIGNAL_PLUGIN_URL, "http://127.0.0.1") === false) {
+        $current_plugin_url = preg_replace("/(http:\/\/)/i", "https://", ONESIGNAL_PLUGIN_URL);
+      }
+      else {
+        $current_plugin_url = ONESIGNAL_PLUGIN_URL;
+      }
 ?>
+    <link rel="manifest" href="<?php echo( $current_plugin_url . 'sdk_files/manifest.json.php' ) ?>" />
+<?php } ?>
     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
-    <?php if ($onesignal_wp_settings["subdomain"] == "") { ?>
-    <link rel="manifest" href="<?php echo(  ONESIGNAL_PLUGIN_URL . 'sdk_files/manifest.json' ) ?>" />
-    <?php } ?>
     <script>
       var OneSignal = OneSignal || [];
       
@@ -29,11 +36,11 @@ class OneSignal_Public {
         else {
           echo "OneSignal.setDefaultTitle(\"" . get_bloginfo( 'name' ) . "\");\n";
         }
-        ?>
-        <?php if ($onesignal_wp_settings['default_icon'] != "") {
+        
+        if ($onesignal_wp_settings['default_icon'] != "") {
           echo "OneSignal.setDefaultIcon(\"" . $onesignal_wp_settings['default_icon'] . "\");\n";
-        } ?>
-        <?php
+        }
+        
         if ($onesignal_wp_settings['default_url'] != "") {
           echo "OneSignal.setDefaultNotificationUrl(\"" . $onesignal_wp_settings['default_url'] . "\");";
         }
@@ -43,8 +50,13 @@ class OneSignal_Public {
         ?>
         
         OneSignal.init({appId: "<?php echo $onesignal_wp_settings["app_id"] ?>",
-                        <?php if ($onesignal_wp_settings["subdomain"] != "") { echo "subdomainName: \"" . $onesignal_wp_settings["subdomain"] . "\",\n"; } ?>
-                        path: "<?php echo ONESIGNAL_PLUGIN_URL . 'sdk_files' ?>/"});
+                        <?php
+                        if ($onesignal_wp_settings["subdomain"] != "") {
+                          echo "subdomainName: \"" . $onesignal_wp_settings["subdomain"] . "\"";
+                        }
+                        else {
+                          echo 'path: "' . $current_plugin_url . 'sdk_files/"';
+                        } ?>});
       }
       
       window.addEventListener("load", function(event){

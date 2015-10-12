@@ -112,6 +112,14 @@ if (array_key_exists('app_id', $_POST)) {
                   <p><strong>6.2:</strong> Test your subcribe link by clicking on the link, button, or widget.</p>
                 </li>
                 
+                 <li>
+                  <h4 class="steps"> STEP 7: Add Safari Desktop support</h4>
+                  <p> <strong> 7.1:</strong> On the OneSignal Dashboard go to "App Settings" > Safari. Fill out "Site Name" and "Site Domain". Highly recommend you upload your own icons otherwise it will default to OneSignal icons. You can skip the .p12 and password if you don't have one. </p>
+                  <img src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/SafariRequiredSettings.png"?>" style="width: 80%">
+                  <p> <strong> 7.2:</strong> Press save and copy the generated WebID shown. Enter this in the 'Safari WebID' field under the "Account Settings" tab in Wordpress. </p>
+                  <img src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/SafariWebId.png"?>" style="width: 80%">
+                </li>
+                
                 <br><br>
                 <div class="alert alert-info" role="alert">
                   <h4> Subdomain </h4>
@@ -224,6 +232,17 @@ if (array_key_exists('app_id', $_POST)) {
               <input name="subdomain" type="text" value="<?php echo $onesignal_wp_settings['subdomain'] ?>"></input>
             </div>
           </div>
+          
+          <!-- Safari Web ID -->
+          <div class="row topic">
+            <div class="col-md-4">
+              <label>Safari WebID</label>
+              <p> <span style="font-style: italic"> (OneSignal dashboard - "App Settings" > Safari) </span></p>
+            </div>
+            <div class="col-md-8">
+              <input name="safari_web_id" type="text" value="<?php echo @$onesignal_wp_settings['safari_web_id']; ?>"></input>
+            </div>
+          </div>
 
 
           <div class="row">
@@ -271,7 +290,7 @@ if (array_key_exists('app_id', $_POST)) {
             <div class="col-md-3">
             </div>
             <div class="col-md-9">
-              <input type="checkbox" name="notification_on_post_from_plugin" value="true" <?php if ($onesignal_wp_settings['notification_on_post_from_plugin']) { echo "checked"; } ?>></input>
+              <input type="checkbox" name="notification_on_post_from_plugin" value="true" <?php if (@$onesignal_wp_settings['notification_on_post_from_plugin']) { echo "checked"; } ?>></input>
               <p> All Posts created from other plugins. </p>
             </div>
           </div>

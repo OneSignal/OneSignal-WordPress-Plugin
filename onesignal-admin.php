@@ -77,6 +77,9 @@ class OneSignal_Admin {
     
     $onesignal_wp_settings['app_rest_api_key'] = $config['app_rest_api_key'];
     
+    $onesignal_wp_settings['safari_web_id'] = $config['safari_web_id'];
+    
+    
     OneSignal::save_onesignal_settings($onesignal_wp_settings);
     
     return $onesignal_wp_settings;
@@ -132,7 +135,7 @@ class OneSignal_Admin {
       $fields = array(
         'app_id' => $onesignal_wp_settings['app_id'],
         'included_segments' => array('All'),
-        'isChromeWeb' => true,
+        'isAnyWeb' => true,
         'url' => get_permalink($post->ID),
         'contents' => array("en" => $notif_content)
       );

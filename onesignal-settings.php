@@ -16,7 +16,8 @@ class OneSignal {
                 'default_title' => "",
                 'default_icon' => "",
                 'default_url' => "",
-                'app_rest_api_key' => ""
+                'app_rest_api_key' => "",
+                'safari_web_id' => ""
                 );
       }
     }

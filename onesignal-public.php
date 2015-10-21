@@ -65,14 +65,22 @@ class OneSignal_Public {
         OneSignal.init(oneSignal_options);
       }
       
-      window.addEventListener("load", function(event){
+      function documentInitOneSignal() {
         OneSignal.push(initOneSignal);
-        
         var oneSignal_elements = document.getElementsByClassName("OneSignal-prompt");
         var oneSignalLinkClickHandler = function(event) { OneSignal.push(['registerForPushNotifications', {modalPrompt: true}]); event.preventDefault(); };
         for(var i = 0; i < oneSignal_elements.length; i++)
           oneSignal_elements[i].addEventListener('click', oneSignalLinkClickHandler, false);
-      });
+      }
+
+      if (document.readyState === 'complete') {
+           documentInitOneSignal();
+      }
+      else {
+           window.addEventListener("load", function(event){
+               documentInitOneSignal();
+          });
+      }
     </script>
 
 <?php

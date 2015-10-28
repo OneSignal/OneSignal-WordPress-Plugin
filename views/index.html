@@ -1,0 +1,48 @@
+<link rel="stylesheet" href="css/semantic-ui.css">
+<link rel="stylesheet" href="css/site.css">
+
+<div class="ui site container" id="content-container">
+
+  <div class="ui top attached tabular menu">
+    <a class="active item" data-tab="first">Setup</a>
+    <a class="item" data-tab="second">Configuration</a>
+    <a class="item" data-tab="third">Tools</a>
+  </div>
+  <div class="ui bottom attached active tab segment" data-tab="first/a">
+    <div class="ui secondary pointing menu">
+      <a class="item">
+        Home
+      </a>
+      <a class="item">
+        Messages
+      </a>
+      <a class="item active">
+        Friends
+      </a>
+      <div class="right menu">
+        <a class="ui item">
+          Logout
+        </a>
+      </div>
+    </div>
+    <div class="ui segment">
+      <p></p>
+    </div>
+  </div>
+  <div class="ui bottom attached tab segment" data-tab="second">
+    Second
+  </div>
+  <div class="ui bottom attached tab segment" data-tab="third">
+    Third
+  </div>
+
+  <h1>OneSignal Settings</h1>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="javascript/semantic-ui.js"></script><!-- <script src="javascript/intercom.js"></script> -->
+<script src="javascript/settings.js"></script>
+<script>
+  $('.tabular.menu .item').tab();
+  $('.pointing.menu .item').tab();
+</script>

@@ -105,12 +105,11 @@ class OneSignal_Admin {
   }
   
   public static function admin_custom_scripts() {
-    wp_enqueue_style( 'bootstrap.min', plugin_dir_url( __FILE__ ) . 'views/css/bootstrap.min.css');
-    wp_enqueue_style( 'style_onesignal', plugin_dir_url( __FILE__ ) . 'views/css/style_onesignal.css');
+    wp_enqueue_style( 'ui', plugin_dir_url( __FILE__ ) . 'views/css/semantic-ui.css');
+    wp_enqueue_style( 'site', plugin_dir_url( __FILE__ ) . 'views/css/site.css');
 
-    wp_enqueue_script( 'bootstrap.min', plugin_dir_url( __FILE__ ) . 'views/javascript/bootstrap.min.js');
+    wp_enqueue_script( 'semantic', plugin_dir_url( __FILE__ ) . 'views/javascript/semantic-ui.js');
     wp_enqueue_script( 'settings', plugin_dir_url( __FILE__ ) . 'views/javascript/settings.js');
-    
     wp_enqueue_script( 'intercom', plugin_dir_url( __FILE__ ) . 'views/javascript/intercom.js');
 
   }

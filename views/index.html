@@ -1,48 +1,82 @@
 <link rel="stylesheet" href="css/semantic-ui.css">
 <link rel="stylesheet" href="css/site.css">
 
-<div class="ui site container" id="content-container">
-
-  <div class="ui top attached tabular menu">
-    <a class="active item" data-tab="first">Setup</a>
-    <a class="item" data-tab="second">Configuration</a>
-    <a class="item" data-tab="third">Tools</a>
-  </div>
-  <div class="ui bottom attached active tab segment" data-tab="first/a">
-    <div class="ui secondary pointing menu">
-      <a class="item">
-        Home
+<div class="outer site container">
+  <div class="ui site container" id="content-container">
+    <header>
+      <a href="https://onesignal.com" target="_blank">
+        <div class="onesignal logo" id="logo" style="width: 250px; height: 66px;">&nbsp;</div>
       </a>
-      <a class="item">
-        Messages
-      </a>
-      <a class="item active">
-        Friends
-      </a>
-      <div class="right menu">
-        <a class="ui item">
-          Logout
-        </a>
+    </header>
+    <div class="ui top borderless tabular menu">
+      <a class="active item" data-tab="setup">Setup</a> <a class="item" data-tab="configuration">Configuration</a> <a class="item" data-tab="tools">Tools</a>
+    </div>
+    <div class="ui bottom active tab segment" data-tab="setup">
+      <div class="ui top secondary pointing menu">
+        <a class="item" data-tab="setup/0">Overview</a>
+        <a class="item active" data-tab="setup/1">Get Google Keys</a>
+        <a class="item" data-tab="setup/2">Create an Account & App</a>
+        <a class="item" data-tab="setup/3">Configure Chrome Push</a>
+        <a class="item" data-tab="setup/4"> Step 3 </a>
+      </div>
+      <div class="ui tab borderless shadowless segment" data-tab="setup/0">
+        <p>We'll guide you through adding web push for Chrome, Safari, and Firefox for your Wordpress blog.</p>
+        <p>First you'll get some required keys from Google. Then you'll be on our website creating a new app and setting up web push for each browser. This entire process should take around 15 minutes.</p>
+        <p>Please follow each step in order! If you're ever stuck or have questions, click the bright red button to chat with us! We read and respond to every message.</p>
+      </div>
+      <div class="ui tab active borderless shadowless segment" data-tab="setup/1">
+        <p>To begin, we'll create a Google Project. This authorizes us to use Google's web push services for your notifications.</p>
+        <dl>
+          <dt>1</dt>
+          <dd>
+            <p>Create a <a href="https://console.developers.google.com/project" target="_blank">Google Developers</a> account or log in to your existing account.</p>
+          </dd>
+          <dt>2</dt>
+          <dd>
+            <p>Create a new project.</p>
+            <img class="img-responsive" src="images/settings/gcm-1.jpg">
+            <p>Choose any name. I used <code>example-project</code>.</p>
+            <img class="img-responsive" src="images/settings/gcm-1-2.jpg">
+          </dd>
+          <dt>3</dt>
+          <dd>
+            <p>Create a <a href="https://console.developers.google.com/project" target="_blank">Google Developers</a> account or log in to your existing account.</p>
+          </dd>
+        </dl>
+      </div>
+      <div class="ui tab borderless shadowless segment" data-tab="setup/2">
+        <dl>
+          <dt>1</dt>
+          <dd>
+            <p>Create an account on <a href="https://onesignal.com" target="_blank">OneSignal</a>.</p>
+          </dd>
+          <dt>2</dt>
+          <dd>
+            <p>Sign in and <em>Add a new app</em>.</p>
+            <img class="img-responsive" src="images/settings/create-1.jpg"></dd>
+        </dl>
+      </div>
+      <div class="ui tab borderless shadowless segment" data-tab="setup/3">
+        Step 2
+      </div>
+      <div class="ui tab borderless shadowless segment" data-tab="setup/4">
+        <p>Step 3</p>
       </div>
     </div>
-    <div class="ui segment">
-      <p></p>
+    <div class="ui bottom borderless shadowless tab segment" data-tab="configuration">
+      Second
+    </div>
+    <div class="ui bottom borderless shadowless tab segment" data-tab="tools">
+      Third
     </div>
   </div>
-  <div class="ui bottom attached tab segment" data-tab="second">
-    Second
-  </div>
-  <div class="ui bottom attached tab segment" data-tab="third">
-    Third
-  </div>
-
-  <h1>OneSignal Settings</h1>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="javascript/semantic-ui.js"></script><!-- <script src="javascript/intercom.js"></script> -->
 <script src="javascript/settings.js"></script>
 <script>
-  $('.tabular.menu .item').tab();
-  $('.pointing.menu .item').tab();
+  //$('#content-container .tabular.menu .item').tab({ context: $('#content-container') });
+  $('.menu .item').tab({
+  });
 </script>

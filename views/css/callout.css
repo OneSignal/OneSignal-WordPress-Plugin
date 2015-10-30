@@ -1,0 +1,61 @@
+/*
+Error: Undefined variable: "$color-teallink".
+        on line 6 of callouts.scss
+
+1: $callout-default-color: #777777;
+2: $callout-primary-color: #428bca;
+3: $callout-success-color: #5cb85c;
+4: $callout-danger-color: #d9534f;
+5: $callout-warning-color: #f0ad4e;
+6: $callout-info-color: $color-teallink;
+7: $callout-padding: 10px;
+8: $callout-width: 4px;
+9: $callout-border-radius: 3px;
+10: 
+11: /*
+
+Backtrace:
+callouts.scss:6
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/script/tree/variable.rb:49:in `_perform'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/script/tree/node.rb:50:in `perform'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/perform.rb:469:in `visit_variable'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/base.rb:36:in `visit'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/stack.rb:79:in `block in with_base'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/stack.rb:115:in `with_frame'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/stack.rb:79:in `with_base'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/perform.rb:158:in `visit'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/base.rb:52:in `map'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/base.rb:52:in `visit_children'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/perform.rb:167:in `block in visit_children'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/perform.rb:166:in `visit_children'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/base.rb:36:in `block in visit'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/perform.rb:186:in `visit_root'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/base.rb:36:in `visit'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/perform.rb:157:in `visit'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/visitors/perform.rb:8:in `visit'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/root_node.rb:36:in `css_tree'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/tree/root_node.rb:29:in `render_with_sourcemap'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/engine.rb:378:in `_render_with_sourcemap'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/engine.rb:295:in `render_with_sourcemap'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/plugin/compiler.rb:490:in `update_stylesheet'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/plugin/compiler.rb:209:in `each'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/plugin.rb:82:in `update_stylesheets'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/exec/sass_scss.rb:364:in `watch_or_update'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/exec/sass_scss.rb:51:in `process_result'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/exec/base.rb:52:in `parse'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/lib/sass/exec/base.rb:19:in `parse!'
+/Users/jpang/.rvm/gems/ruby-2.2.1/gems/sass-3.4.18/bin/scss:13:in `<top (required)>'
+/Users/jpang/.rvm/gems/ruby-2.2.1/bin/scss:23:in `load'
+/Users/jpang/.rvm/gems/ruby-2.2.1/bin/scss:23:in `<main>'
+/Users/jpang/.rvm/gems/ruby-2.2.1/bin/ruby_executable_hooks:15:in `eval'
+/Users/jpang/.rvm/gems/ruby-2.2.1/bin/ruby_executable_hooks:15:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Undefined variable: \"$color-teallink\".\A         on line 6 of callouts.scss\A \A 1: $callout-default-color: #777777;\A 2: $callout-primary-color: #428bca;\A 3: $callout-success-color: #5cb85c;\A 4: $callout-danger-color: #d9534f;\A 5: $callout-warning-color: #f0ad4e;\A 6: $callout-info-color: $color-teallink;\A 7: $callout-padding: 10px;\A 8: $callout-width: 4px;\A 9: $callout-border-radius: 3px;\A 10: \A 11: /*"; }

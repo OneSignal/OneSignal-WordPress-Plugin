@@ -1,6 +1,291 @@
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700|Source+Sans+Pro:400,600,700");
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700|Open+Sans:300,400,500,600,700");
+@font-face {
+  font-family: "Lusitana";
+  src: url("lusitana/Lusitana-Regular-OTF.ttf") format("opentype");
+  font-style: normal;
+  font-weight: normal; }
+@font-face {
+  font-family: "LusitanaBold";
+  src: url("lusitana/Lusitana-Bold-OTF.ttf") format("opentype");
+  font-style: normal;
+  font-weight: normal; }
+@font-face {
+  font-family: "LusitanaItalic";
+  src: url("lusitana/Lusitana-Italic-OTF.ttf") format("opentype");
+  font-style: normal;
+  font-weight: normal; }
+@font-face {
+  font-family: "LusitanaItalicBold";
+  src: url("lusitana/Lusitana-BoldItalic-OTF.ttf") format("opentype");
+  font-style: normal;
+  font-weight: normal; }
+/*
+* Dotted Border - A SASS mixin to help you increase spacing between the dots of border-style:dotted.
+* By @florbraz
+* Documentation and examples - github.com/florbraz/Dotted-Border-w-custom-spacing-SCSS-Mixin
+* V1.0
+*/
+.callout {
+  padding: 10px;
+  margin: 15px 0; }
+  .callout h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 15px;
+    font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+    font-weight: 400; }
+  .callout p:last-child {
+    margin-bottom: 0; }
+  .callout code {
+    border-radius: 3px; }
+  .callout + .callout {
+    margin-top: -5px; }
+  .callout.callout-default {
+    border-left-color: #777777;
+    border: 1px solid #777777;
+    border-left-width: 4px;
+    border-radius: 3px;
+    background-color: #f9f9f9;
+    color: #777777; }
+    .callout.callout-default a {
+      display: inline;
+      font-size: inherit;
+      font-family: inherit;
+      font-weight: 500;
+      text-align: center;
+      touch-action: manipulation;
+      cursor: pointer;
+      color: #777777;
+      background-color: none;
+      padding: 0;
+      border-radius: 4px;
+      letter-spacing: initial;
+      text-decoration: none;
+      word-wrap: break-word;
+      white-space: normal;
+      background-position: bottom;
+      background-image: linear-gradient(to right, #777777 25%, rgba(255, 255, 255, 0) 50%);
+      background-size: 4px 1px;
+      background-repeat: repeat-x; }
+      .callout.callout-default a:hover {
+        color: #515151;
+        background-color: none; }
+      .callout.callout-default a:active, .callout.callout-default a.active {
+        color: #777777; }
+      .callout.callout-default a[disabled] {
+        pointer-events: none; }
+      .callout.callout-default a.disabled, .callout.callout-default a[disabled], fieldset[disabled] .callout.callout-default a {
+        cursor: not-allowed;
+        opacity: .65;
+        box-shadow: none; }
+      .callout.callout-default a a.disabled, fieldset[disabled] .callout.callout-default a a {
+        pointer-events: none; }
+  .callout.callout-primary {
+    border-left-color: #428bca;
+    border: 1px solid #428bca;
+    border-left-width: 4px;
+    border-radius: 3px;
+    color: #428bca;
+    background-color: #f5f9fc; }
+    .callout.callout-primary a {
+      display: inline;
+      font-size: inherit;
+      font-family: inherit;
+      font-weight: 500;
+      text-align: center;
+      touch-action: manipulation;
+      cursor: pointer;
+      color: #428bca;
+      background-color: none;
+      padding: 0;
+      border-radius: 4px;
+      letter-spacing: initial;
+      text-decoration: none;
+      word-wrap: break-word;
+      white-space: normal;
+      background-position: bottom;
+      background-image: linear-gradient(to right, #428bca 25%, rgba(255, 255, 255, 0) 50%);
+      background-size: 4px 1px;
+      background-repeat: repeat-x; }
+      .callout.callout-primary a:hover {
+        color: #2a6496;
+        background-color: none; }
+      .callout.callout-primary a:active, .callout.callout-primary a.active {
+        color: #428bca; }
+      .callout.callout-primary a[disabled] {
+        pointer-events: none; }
+      .callout.callout-primary a.disabled, .callout.callout-primary a[disabled], fieldset[disabled] .callout.callout-primary a {
+        cursor: not-allowed;
+        opacity: .65;
+        box-shadow: none; }
+      .callout.callout-primary a a.disabled, fieldset[disabled] .callout.callout-primary a a {
+        pointer-events: none; }
+  .callout.callout-success {
+    border-left-color: #5cb85c;
+    border: 1px solid #5cb85c;
+    border-left-width: 4px;
+    border-radius: 3px;
+    color: #5cb85c;
+    background-color: #f8fcf8; }
+    .callout.callout-success a {
+      display: inline;
+      font-size: inherit;
+      font-family: inherit;
+      font-weight: 500;
+      text-align: center;
+      touch-action: manipulation;
+      cursor: pointer;
+      color: #5cb85c;
+      background-color: none;
+      padding: 0;
+      border-radius: 4px;
+      letter-spacing: initial;
+      text-decoration: none;
+      word-wrap: break-word;
+      white-space: normal;
+      background-position: bottom;
+      background-image: linear-gradient(to right, #5cb85c 25%, rgba(255, 255, 255, 0) 50%);
+      background-size: 4px 1px;
+      background-repeat: repeat-x; }
+      .callout.callout-success a:hover {
+        color: #3d8b3d;
+        background-color: none; }
+      .callout.callout-success a:active, .callout.callout-success a.active {
+        color: #5cb85c; }
+      .callout.callout-success a[disabled] {
+        pointer-events: none; }
+      .callout.callout-success a.disabled, .callout.callout-success a[disabled], fieldset[disabled] .callout.callout-success a {
+        cursor: not-allowed;
+        opacity: .65;
+        box-shadow: none; }
+      .callout.callout-success a a.disabled, fieldset[disabled] .callout.callout-success a a {
+        pointer-events: none; }
+  .callout.callout-danger {
+    border-left-color: #d9534f;
+    border: 1px solid #d9534f;
+    border-left-width: 4px;
+    border-radius: 3px;
+    background-color: #fdf7f7;
+    color: #d9534f; }
+    .callout.callout-danger a {
+      display: inline;
+      font-size: inherit;
+      font-family: inherit;
+      font-weight: 500;
+      text-align: center;
+      touch-action: manipulation;
+      cursor: pointer;
+      color: #d9534f;
+      background-color: none;
+      padding: 0;
+      border-radius: 4px;
+      letter-spacing: initial;
+      text-decoration: none;
+      word-wrap: break-word;
+      white-space: normal;
+      background-position: bottom;
+      background-image: linear-gradient(to right, #d9534f 25%, rgba(255, 255, 255, 0) 50%);
+      background-size: 4px 1px;
+      background-repeat: repeat-x; }
+      .callout.callout-danger a:hover {
+        color: #b52b27;
+        background-color: none; }
+      .callout.callout-danger a:active, .callout.callout-danger a.active {
+        color: #d9534f; }
+      .callout.callout-danger a[disabled] {
+        pointer-events: none; }
+      .callout.callout-danger a.disabled, .callout.callout-danger a[disabled], fieldset[disabled] .callout.callout-danger a {
+        cursor: not-allowed;
+        opacity: .65;
+        box-shadow: none; }
+      .callout.callout-danger a a.disabled, fieldset[disabled] .callout.callout-danger a a {
+        pointer-events: none; }
+  .callout.callout-warning {
+    border-left-color: #f0ad4e;
+    border: 1px solid #f0ad4e;
+    border-left-width: 4px;
+    border-radius: 3px;
+    color: #f0ad4e;
+    background-color: #fefbf7; }
+    .callout.callout-warning a {
+      display: inline;
+      font-size: inherit;
+      font-family: inherit;
+      font-weight: 500;
+      text-align: center;
+      touch-action: manipulation;
+      cursor: pointer;
+      color: #f0ad4e;
+      background-color: none;
+      padding: 0;
+      border-radius: 4px;
+      letter-spacing: initial;
+      text-decoration: none;
+      word-wrap: break-word;
+      white-space: normal;
+      background-position: bottom;
+      background-image: linear-gradient(to right, #f0ad4e 25%, rgba(255, 255, 255, 0) 50%);
+      background-size: 4px 1px;
+      background-repeat: repeat-x; }
+      .callout.callout-warning a:hover {
+        color: #df8a13;
+        background-color: none; }
+      .callout.callout-warning a:active, .callout.callout-warning a.active {
+        color: #f0ad4e; }
+      .callout.callout-warning a[disabled] {
+        pointer-events: none; }
+      .callout.callout-warning a.disabled, .callout.callout-warning a[disabled], fieldset[disabled] .callout.callout-warning a {
+        cursor: not-allowed;
+        opacity: .65;
+        box-shadow: none; }
+      .callout.callout-warning a a.disabled, fieldset[disabled] .callout.callout-warning a a {
+        pointer-events: none; }
+  .callout.callout-info {
+    border-left-color: #71bec0;
+    border: 1px solid #71bec0;
+    border-left-width: 4px;
+    border-radius: 3px;
+    color: #71bec0;
+    background-color: #fbfdfd; }
+    .callout.callout-info a {
+      display: inline;
+      font-size: inherit;
+      font-family: inherit;
+      font-weight: 500;
+      text-align: center;
+      touch-action: manipulation;
+      cursor: pointer;
+      color: #71bec0;
+      background-color: none;
+      padding: 0;
+      border-radius: 4px;
+      letter-spacing: initial;
+      text-decoration: none;
+      word-wrap: break-word;
+      white-space: normal;
+      background-position: bottom;
+      background-image: linear-gradient(to right, #71bec0 25%, rgba(255, 255, 255, 0) 50%);
+      background-size: 4px 1px;
+      background-repeat: repeat-x; }
+      .callout.callout-info a:hover {
+        color: #469c9e;
+        background-color: none; }
+      .callout.callout-info a:active, .callout.callout-info a.active {
+        color: #71bec0; }
+      .callout.callout-info a[disabled] {
+        pointer-events: none; }
+      .callout.callout-info a.disabled, .callout.callout-info a[disabled], fieldset[disabled] .callout.callout-info a {
+        cursor: not-allowed;
+        opacity: .65;
+        box-shadow: none; }
+      .callout.callout-info a a.disabled, fieldset[disabled] .callout.callout-info a a {
+        pointer-events: none; }
+  .callout ul li strong {
+    font-weight: 600; }
+
 .container.site {
-  background-color: whote; }
+  background-color: white;
+  position: relative; }
 
 /*!
  * # Semantic UI 2.1.3 - Site
@@ -28,8 +313,8 @@ body {
   overflow-x: hidden;
   min-width: 320px;
   background: #ffffff;
-  font-family: 'Raleway', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-size: 16px;
+  font-family: 'Lusitana', 'Raleway', sans-serif;
+  font-size: 17px;
   line-height: 1.4285em;
   color: rgba(0, 0, 0, 0.87);
   font-smoothing: antialiased; }
@@ -140,9 +425,106 @@ input::selection {
 /*******************************
          Site Overrides
 *******************************/
-.ui.tabular.menu {
+.tabular.menu::before {
+  content: '';
+  position: absolute;
+  top: 164px;
+  left: -100%;
+  border-bottom: 1px solid lightgray;
+  width: 9001%; }
+
+.ui.segment {
+  padding-top: 0.5em; }
+
+.ui.menu {
   font-size: 1.2rem; }
-  .ui.tabular.menu .active.item {
-    font-weight: 500; }
+  .ui.menu .item {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400; }
+    .ui.menu .item.active {
+      font-weight: 600 !important; }
+
+.debug {
+  border: 1px solid magenta !important; }
+
+.borderless {
+  border: none !important; }
+
+.bordered {
+  border: unset !important; }
+
+.shadowless {
+  box-shadow: none !important; }
+
+.shadowed {
+  box-shadow: unset !important; }
+
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto; }
+
+header {
+  height: 100px;
+  margin-left: -160px;
+  margin-right: -160px;
+  padding-left: 160px;
+  padding-right: 160px; }
+
+.logo.onesignal {
+  background: url("https://onesignal.com/assets/logo_onesignal.svg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%; }
+
+code {
+  background: rgba(51, 51, 51, 0.05);
+  padding: 0.25em;
+  border-radius: 4px;
+  font-size: 17px; }
+
+.segment img {
+  margin: 1em auto; }
+  .segment img + p {
+    margin-top: 3em; }
+
+.alternate {
+  color: #999999; }
+
+em {
+  font-family: "LusitanaItalic"; }
+
+strong {
+  font-family: "LusitanaBold"; }
+
+p {
+  font-size: 19px;
+  color: #333333; }
+  p + dl {
+    padding-top: 1em; }
+
+ul {
+  font-size: 19px;
+  color: #333333; }
+
+dl {
+  margin: 0; }
+  dl dd {
+    color: #333333;
+    padding-bottom: 2em;
+    padding-top: 0.22em;
+    padding-left: 1em; }
+  dl dt {
+    padding-bottom: 2em;
+    border: 1px solid #cccccc;
+    text-align: center;
+    line-height: 30px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 500;
+    border-radius: 50%;
+    color: #333333;
+    float: left;
+    width: 35px;
+    height: 35px;
+    vertical-align: baseline; }
 
 /*# sourceMappingURL=site.css.map */

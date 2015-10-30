@@ -1,0 +1,22 @@
+@font-face {
+  font-family: "Lusitana";
+  src: url("lusitana/Lusitana-Regular-OTF.ttf") format("opentype");
+  font-style: normal;
+  font-weight: normal; }
+@font-face {
+  font-family: "LusitanaBold";
+  src: url("lusitana/Lusitana-Bold-OTF.ttf") format("opentype");
+  font-style: normal;
+  font-weight: normal; }
+@font-face {
+  font-family: "LusitanaItalic";
+  src: url("lusitana/Lusitana-Italic-OTF.ttf") format("opentype");
+  font-style: normal;
+  font-weight: normal; }
+@font-face {
+  font-family: "LusitanaItalicBold";
+  src: url("lusitana/Lusitana-BoldItalic-OTF.ttf") format("opentype");
+  font-style: normal;
+  font-weight: normal; }
+
+/*# sourceMappingURL=lusitana.css.map */

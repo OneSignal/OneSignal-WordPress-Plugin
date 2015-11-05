@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="css/icons.css">
 <link rel="stylesheet" href="css/semantic-ui.css">
 <link rel="stylesheet" href="css/site.css">
 
@@ -14,8 +15,8 @@
     <div class="ui bottom active tab segment" data-tab="setup">
       <div class="ui top secondary pointing menu">
         <a class="item" data-tab="setup/0">Overview</a>
-        <a class="item active" data-tab="setup/1">Get Google Keys</a>
-        <a class="item" data-tab="setup/2">Create an Account & App</a>
+        <a class="item" data-tab="setup/1">Get Google Keys</a>
+        <a class="item active" data-tab="setup/2">Create an Account & App</a>
         <a class="item" data-tab="setup/3">Configure Chrome Push</a>
         <a class="item" data-tab="setup/4"> Step 3 </a>
       </div>
@@ -23,9 +24,10 @@
         <p>We'll guide you through adding web push for Chrome, Safari, and Firefox for your Wordpress blog.</p>
         <p>First you'll get some required keys from Google. Then you'll be on our website creating a new app and setting up web push for each browser. This entire process should take around 15 minutes.</p>
         <p>Please follow each step in order! If you're ever stuck or have questions, click the bright red button to chat with us! We read and respond to every message.</p>
+        <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/1');">Get Google Keys</a> to begin.</p>
       </div>
-      <div class="ui tab active borderless shadowless segment" data-tab="setup/1">
-        <p>To begin, we'll create a Google Project. This authorizes us to use Google's web push services for your notifications.</p>
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/1">
+        <p>To begin, we'll create and configure a Google Project. This authorizes us to use Google's web push services for your notifications.</p>
         <dl>
           <dt>1</dt>
           <dd>
@@ -33,27 +35,182 @@
           </dd>
           <dt>2</dt>
           <dd>
-            <p>Create a new project.</p>
+            <p>Once you're logged in, click <strong>Create project</strong>.</p>
             <img class="img-responsive" src="images/settings/gcm-1.jpg">
-            <p>Choose any name. I used <code>example-project</code>.</p>
+            <p>Choose any name for your project. Here we use <code>example-project</code>. Click <strong>Create</strong>.</p>
             <img class="img-responsive" src="images/settings/gcm-1-2.jpg">
           </dd>
           <dt>3</dt>
           <dd>
-            <p>Create a <a href="https://console.developers.google.com/project" target="_blank">Google Developers</a> account or log in to your existing account.</p>
+            <p>Find your <strong>Project number</strong>. Save this number!.</p>
+            <p class="alternate"><em>It can take a minute for your project to be created. You'll be redirected to your new project page.</em></p>
+            <img class="img-responsive" src="images/settings/gcm-2.jpg">
+            <div class="ui center aligned piled segment">
+              <i class="big grey circular info pinned icon"></i>
+              <h3>Project Number</h3>
+              <p>Save your project number. You'll need it on the next page.</p>
+            </div>
+          </dd>
+          <dt>4</dt>
+          <dd>
+            <p>Click <strong>APIs &amp; auth > APIs</strong> on the left sidebar.</p>
+            <p>On the right pane, in the search box, type <strong><code>cloud messaging</code></strong>.</p>
+            <p>Select <strong>Google Cloud Messaging for Android</strong>.</p>
+            <img class="img-responsive" src="images/settings/gcm-3.jpg">
+            <p>Click <strong>Enable API</strong>.</p>
+            <img class="img-responsive" src="images/settings/gcm-4.jpg">
+          </dd>
+          <dt>5</dt>
+          <dd>
+            <p>Click <strong>APIs &amp; auth > Credentials</strong> on the left sidebar.</p>
+            <p>On the right pane, click <strong>Add credentials > API key</strong>.</p>
+            <img class="img-responsive" src="images/settings/gcm-5.jpg">
+            <p>Click <strong>Server Key</strong>.</p>
+            <img class="img-responsive" src="images/settings/gcm-6.jpg">
+            <p><em>Without entering any values</em>, click <strong>Create</strong>.</p>
+            <p class="alternate"><em>Make sure to leave the IP address textbox blank. You may name the key if you'd like, but it's not necessary.</em></p>
+            <img class="img-responsive" src="images/settings/gcm-7.jpg">
+            <p>Find your <strong>API Key</strong>. Save this number!</p>
+            <img class="img-responsive" src="images/settings/gcm-8.jpg">
+            <div class="ui center aligned piled segment">
+              <i class="big grey circular info pinned icon"></i>
+              <h3>API Key</h3>
+              <p>Save your API key. You'll need it on the next page.</p>
+            </div>
+          </dd>
+          <dt>6</dt>
+          <dd>
+            <p>You've successfully created and configured your Google project! You should have:</p>
+            <ul>
+              <li>Your <strong>Project Number</strong>. It looks something like <code>703322744261</code>.</li>
+              <li>Your <strong>API key</strong>. It looks something like <code>AIzBSyC_N8hcAeDaZEELfPadGnKBWE5zrmAdYfr</code>.</li>
+            </ul>
+            <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/2');">Create an Account &amp; App</a> to continue.</p>
           </dd>
         </dl>
       </div>
-      <div class="ui tab borderless shadowless segment" data-tab="setup/2">
+      <div class="ui active tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/2">
+        <p>Now that we have our Google Project Number and API Key, we'll create and configure a OneSignal app.</p>
         <dl>
           <dt>1</dt>
           <dd>
-            <p>Create an account on <a href="https://onesignal.com" target="_blank">OneSignal</a>.</p>
+            <p>Create a <a href="https://onesignal.com" target="_blank">OneSignal</a> account or log in to your existing account.</p>
           </dd>
           <dt>2</dt>
           <dd>
-            <p>Sign in and <em>Add a new app</em>.</p>
-            <img class="img-responsive" src="images/settings/create-1.jpg"></dd>
+            <p>Click <strong>Add a new app</strong>.</p>
+            <p class="alternate"><em>If you're a new user, a welcome popup will appear. You can click <strong>Add a new app</strong> on the last screen.</em></p>
+            <img class="img-responsive" src="images/settings/create-1.jpg">
+            <p>Choose any name for your app. Here we use <code>Wordpress Demo</code>. Click <strong>Create</strong>.</p>
+            <img class="img-responsive" src="images/settings/create-2.jpg">
+          </dd>
+          <dt>3</dt>
+          <dd>
+            <p>Select the <strong>Website Push</strong> platform and click <strong>Next</strong>.</p>
+            <img class="img-responsive" src="images/settings/create-3.jpg">
+          </dd>
+          <dt>4</dt>
+          <dd>
+            <p>Select the <strong>Google Chrome</strong> sub-platform and click <strong>Next</strong>.</p>
+            <p>Setting up web push notifications is best first on Google Chrome because:
+              <ul>
+                <li>Chrome is the <a href="http://gs.statcounter.com/" target="_blank">most</a> <a href="http://www.w3schools.com/browsers/browsers_stats.asp" target="_blank">popular</a> <a href="https://en.wikipedia.org/wiki/Usage_share_of_web_browsers" target="_blank">browser</a></li>
+                <li>Chrome web push <a href="https://documentation.onesignal.com/docs/website-sdk-overview" target="_blank">has the most platform support</a> (Windows, Mac OS X, Linux, and Android)</li>
+                <li>A completed Chrome web push setup is required to set up Firefox web push</li>
+              </ul>
+            </p>
+            <p>Instructions to set up Firefox & Safari web push are available at the end of this guide.</p>
+            <img class="img-responsive" src="images/settings/create-4.jpg">
+          </dd>
+          <dt>5</dt>
+          <dd>
+            <p>In this step, we focus only on filling out the <em>Site URL</em>.
+            <img class="img-responsive" src="images/settings/create-5.jpg">
+            <p>Enter the URL to your site's domain. The purpose of this field is to prevent other sites from hijacking your keys to impersonate you and send push notifications on your behalf. Please note:</p>
+            <ul>
+              <li>
+                <p>Don't include trailing slashes</p>
+                <p>Instead of using <code>http://domain.com/</code>, use <code>http://domain.com</code> instead.</p>
+                <p></p>
+              </li>
+              <li>
+                <p>Don't include subfolders</p>
+                <p>Even if your WordPress blog is hosted on <code>http://domain.com/resource/blog</code>, use <code>http://domain.com</code></p>
+                <p></p>
+              </li>
+              <li>
+                <p>Include the correct protocol</p>
+                <p>If your site uses HTTPS, use <code>https://domain.com</code>. If your site uses a mix of HTTPS/HTTP or only HTTP, use <code>http://domain.com</code>. If you're not sure, <a href="">contact us!</a>.</p>
+                <p></p>
+              </li>
+            </ul>
+            <p>You may use two special properties instead of the URL to your site domain:</p>
+            <ul>
+              <li>
+                <p><code>localhost</code></p>
+                <p>You can use this to test locally.</p>
+              </li>
+              <li>
+                <p><code>*</code></p>
+                <p>This allows all sites. <em>Please don't use this on production, otherwise any other site can send push notifications on your behalf.</em></p>
+              </li>
+            </ul>
+          </dd>
+          <dt>6</dt>
+          <dd>
+            <p>In this step, we focus only on filling out the <em>Google Server API Key</em>.
+              <img class="img-responsive" src="images/settings/create-6.jpg">
+            <p>Enter the <em>API Key</em> you saved from the previous page.</p>
+          </dd>
+          <dt>7</dt>
+          <dd>
+            <p>In this step, we focus only on filling out the <em>Default Notification Icon URL</em>.
+              <img class="img-responsive" src="images/settings/create-7.jpg">
+            <p>Enter the complete URL to your notification icon. Please note:</p>
+            <ul>
+              <li>
+                <p>Your notification icon must be <code>80 pixels &times; 80 pixels</code> large</p>
+                <p>On some platforms, larger icons are forcefully downsized to <code>40 &times; 40</code> and centered with an ugly white 20 pixel margin</p>
+                <p></p>
+              </li>
+              <li>The <a href="https://onesignal.com/images/notification_logo.png" target="_blank">default OneSignal notification icon</a> will be used as a default if you don't choose one</li>
+            </ul>
+          </dd>
+          <dt>8</dt>
+          <dd>
+            <p>In this step, we focus only on the <em>HTTP Fallback Mode</em>.</p>
+            <p class="alternate"><em>This step is important &mdash; read through it to see if it applies to you!</em></p>
+            <img class="img-responsive" src="images/settings/create-8.jpg">
+            <div class="relative ui two column middle aligned very relaxed stackable grid">
+              <div class="center aligned column">
+                <code><strong>http</strong>://domain.com</code>
+                <h3>HTTP</h3>
+              </div>
+              <div class="ui vertical divider">
+                Or
+              </div>
+              <div class="center aligned column">
+                <code><strong>https</strong>://domain.com</code>
+                <h3>HTTPS</h3>
+              </div>
+            </div>
+            <p>Check the <em>My site is not fully HTTPS</em> box if:</p>
+            <ul>
+              <li>You already know your site doesn't support HTTPS</li>
+              <li>Your site supports HTTPS, but your site can be viewed on <code><strong>http</strong>://domain.com</code>, without being automatically redirected to <code><strong>https</strong>://domain.com</code></li>
+            </ul>
+          </dd>
+        </dl>
+        <div class="ui center aligned piled segment">
+          <i class="big grey circular info pinned icon"></i>
+          <h3>Next Steps</h3>
+          <p>The following steps only apply if you've checked <code>My site is not fully HTTPS</code>.</p>
+        </div>
+        <dl>
+          <dt>9</dt>
+          <dd>
+            <p>Create a <a href="https://console.developers.google.com/project" target="_blank">Google Developers</a> account or log in to your existing account.</p>
+          </dd>
         </dl>
       </div>
       <div class="ui tab borderless shadowless segment" data-tab="setup/3">
@@ -79,4 +236,17 @@
   //$('#content-container .tabular.menu .item').tab({ context: $('#content-container') });
   $('.menu .item').tab({
   });
+
+  function activateSetupTab(tab) {
+    $('.menu .item').tab('change tab', tab);
+    $('body').scrollTop(0);
+  }
+
+  function showSupportMessage(type) {
+    var message = "";
+    if (type === "not_sure_protocol") {
+      message = "Hello, I'm on step 5 of the WordPress plugin under `Create an Account & App`. I need to enter a Site URL into my Chrome's platform config, but I'm not sure ";
+    }
+    Intercom('showNewMessage', message);
+  }
 </script>

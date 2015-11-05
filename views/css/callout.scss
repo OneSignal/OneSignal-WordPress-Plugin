@@ -4,7 +4,7 @@ $callout-success-color: #5cb85c;
 $callout-danger-color: #d9534f;
 $callout-warning-color: #f0ad4e;
 $callout-info-color: #71bec0;
-$callout-padding: 10px;
+$callout-padding: 1em;
 $callout-width: 4px;
 $callout-border-radius: 3px;
 
@@ -48,12 +48,23 @@ $font-raleway: "Raleway", sans-serif !default;
     padding: $callout-padding;
     margin: 15px 0;
 
-    h4 {
-        margin-top: 0;
-        margin-bottom: 8px;
-        font-size: 15px;
+    h3 {
+        padding: 0;
+        margin: 0;
+        margin-bottom: 0.7em;
+        font-size: 1em;
         font-family: $font-sourcesans;
-        font-weight: 400;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        word-spacing: 0.12em;
+    }
+
+    p {
+        font-family: $font-sourcesans;
+        font-weight: 300;
+        font-size: 1.05em;
+        color: inherit;
     }
 
     p:last-child {
@@ -68,7 +79,7 @@ $font-raleway: "Raleway", sans-serif !default;
         margin-top: -5px;
     }
 
-    &.callout-default {
+    &.default {
         border-left-color: $callout-default-color;
         border: 1px solid $callout-default-color;
         border-left-width: $callout-width;
@@ -78,7 +89,7 @@ $font-raleway: "Raleway", sans-serif !default;
         @include callout-link($callout-default-color, lighten($callout-default-color, 51%));
     }
 
-    &.callout-primary {
+    &.primary {
         border-left-color: $callout-primary-color;
         border: 1px solid $callout-primary-color;
         border-left-width: $callout-width;
@@ -88,7 +99,7 @@ $font-raleway: "Raleway", sans-serif !default;
         @include callout-link($callout-primary-color, lighten($callout-primary-color, 45%));
     }
 
-    &.callout-success {
+    &.success {
         border-left-color: $callout-success-color;
         border: 1px solid $callout-success-color;
         border-left-width: $callout-width;
@@ -98,7 +109,7 @@ $font-raleway: "Raleway", sans-serif !default;
         @include callout-link($callout-success-color, lighten($callout-success-color, 44%));
     }
 
-    &.callout-danger {
+    &.danger {
         border-left-color: $callout-danger-color;
         border: 1px solid $callout-danger-color;
         border-left-width: $callout-width;
@@ -108,7 +119,7 @@ $font-raleway: "Raleway", sans-serif !default;
         @include callout-link($callout-danger-color, lighten($callout-danger-color, 40%));
     }
 
-    &.callout-warning {
+    &.warning {
         border-left-color: $callout-warning-color;
         border: 1px solid $callout-warning-color;
         border-left-width: $callout-width;
@@ -118,12 +129,12 @@ $font-raleway: "Raleway", sans-serif !default;
         @include callout-link($callout-warning-color, lighten($callout-warning-color, 36%));
     }
 
-    &.callout-info {
+    &.info {
         border-left-color: $callout-info-color;
         border: 1px solid $callout-info-color;
         border-left-width: $callout-width;
         border-radius: $callout-border-radius;
-        color: $callout-info-color;
+        color: darken($callout-info-color, 15%);
         background-color: lighten($callout-info-color, 39%);
         @include callout-link($callout-info-color, lighten($callout-info-color, 39%));
     }

@@ -26,28 +26,37 @@
 * V1.0
 */
 .callout {
-  padding: 10px;
+  padding: 1em;
   margin: 15px 0; }
-  .callout h4 {
-    margin-top: 0;
-    margin-bottom: 8px;
-    font-size: 15px;
+  .callout h3 {
+    padding: 0;
+    margin: 0;
+    margin-bottom: 0.7em;
+    font-size: 1em;
     font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
-    font-weight: 400; }
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    word-spacing: 0.12em; }
+  .callout p {
+    font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+    font-weight: 300;
+    font-size: 1.05em;
+    color: inherit; }
   .callout p:last-child {
     margin-bottom: 0; }
   .callout code {
     border-radius: 3px; }
   .callout + .callout {
     margin-top: -5px; }
-  .callout.callout-default {
+  .callout.default {
     border-left-color: #777777;
     border: 1px solid #777777;
     border-left-width: 4px;
     border-radius: 3px;
     background-color: #f9f9f9;
     color: #777777; }
-    .callout.callout-default a {
+    .callout.default a {
       display: inline;
       font-size: inherit;
       font-family: inherit;
@@ -67,27 +76,27 @@
       background-image: linear-gradient(to right, #777777 25%, rgba(255, 255, 255, 0) 50%);
       background-size: 4px 1px;
       background-repeat: repeat-x; }
-      .callout.callout-default a:hover {
+      .callout.default a:hover {
         color: #515151;
         background-color: none; }
-      .callout.callout-default a:active, .callout.callout-default a.active {
+      .callout.default a:active, .callout.default a.active {
         color: #777777; }
-      .callout.callout-default a[disabled] {
+      .callout.default a[disabled] {
         pointer-events: none; }
-      .callout.callout-default a.disabled, .callout.callout-default a[disabled], fieldset[disabled] .callout.callout-default a {
+      .callout.default a.disabled, .callout.default a[disabled], fieldset[disabled] .callout.default a {
         cursor: not-allowed;
         opacity: .65;
         box-shadow: none; }
-      .callout.callout-default a a.disabled, fieldset[disabled] .callout.callout-default a a {
+      .callout.default a a.disabled, fieldset[disabled] .callout.default a a {
         pointer-events: none; }
-  .callout.callout-primary {
+  .callout.primary {
     border-left-color: #428bca;
     border: 1px solid #428bca;
     border-left-width: 4px;
     border-radius: 3px;
     color: #428bca;
     background-color: #f5f9fc; }
-    .callout.callout-primary a {
+    .callout.primary a {
       display: inline;
       font-size: inherit;
       font-family: inherit;
@@ -107,27 +116,27 @@
       background-image: linear-gradient(to right, #428bca 25%, rgba(255, 255, 255, 0) 50%);
       background-size: 4px 1px;
       background-repeat: repeat-x; }
-      .callout.callout-primary a:hover {
+      .callout.primary a:hover {
         color: #2a6496;
         background-color: none; }
-      .callout.callout-primary a:active, .callout.callout-primary a.active {
+      .callout.primary a:active, .callout.primary a.active {
         color: #428bca; }
-      .callout.callout-primary a[disabled] {
+      .callout.primary a[disabled] {
         pointer-events: none; }
-      .callout.callout-primary a.disabled, .callout.callout-primary a[disabled], fieldset[disabled] .callout.callout-primary a {
+      .callout.primary a.disabled, .callout.primary a[disabled], fieldset[disabled] .callout.primary a {
         cursor: not-allowed;
         opacity: .65;
         box-shadow: none; }
-      .callout.callout-primary a a.disabled, fieldset[disabled] .callout.callout-primary a a {
+      .callout.primary a a.disabled, fieldset[disabled] .callout.primary a a {
         pointer-events: none; }
-  .callout.callout-success {
+  .callout.success {
     border-left-color: #5cb85c;
     border: 1px solid #5cb85c;
     border-left-width: 4px;
     border-radius: 3px;
     color: #5cb85c;
     background-color: #f8fcf8; }
-    .callout.callout-success a {
+    .callout.success a {
       display: inline;
       font-size: inherit;
       font-family: inherit;
@@ -147,27 +156,27 @@
       background-image: linear-gradient(to right, #5cb85c 25%, rgba(255, 255, 255, 0) 50%);
       background-size: 4px 1px;
       background-repeat: repeat-x; }
-      .callout.callout-success a:hover {
+      .callout.success a:hover {
         color: #3d8b3d;
         background-color: none; }
-      .callout.callout-success a:active, .callout.callout-success a.active {
+      .callout.success a:active, .callout.success a.active {
         color: #5cb85c; }
-      .callout.callout-success a[disabled] {
+      .callout.success a[disabled] {
         pointer-events: none; }
-      .callout.callout-success a.disabled, .callout.callout-success a[disabled], fieldset[disabled] .callout.callout-success a {
+      .callout.success a.disabled, .callout.success a[disabled], fieldset[disabled] .callout.success a {
         cursor: not-allowed;
         opacity: .65;
         box-shadow: none; }
-      .callout.callout-success a a.disabled, fieldset[disabled] .callout.callout-success a a {
+      .callout.success a a.disabled, fieldset[disabled] .callout.success a a {
         pointer-events: none; }
-  .callout.callout-danger {
+  .callout.danger {
     border-left-color: #d9534f;
     border: 1px solid #d9534f;
     border-left-width: 4px;
     border-radius: 3px;
     background-color: #fdf7f7;
     color: #d9534f; }
-    .callout.callout-danger a {
+    .callout.danger a {
       display: inline;
       font-size: inherit;
       font-family: inherit;
@@ -187,27 +196,27 @@
       background-image: linear-gradient(to right, #d9534f 25%, rgba(255, 255, 255, 0) 50%);
       background-size: 4px 1px;
       background-repeat: repeat-x; }
-      .callout.callout-danger a:hover {
+      .callout.danger a:hover {
         color: #b52b27;
         background-color: none; }
-      .callout.callout-danger a:active, .callout.callout-danger a.active {
+      .callout.danger a:active, .callout.danger a.active {
         color: #d9534f; }
-      .callout.callout-danger a[disabled] {
+      .callout.danger a[disabled] {
         pointer-events: none; }
-      .callout.callout-danger a.disabled, .callout.callout-danger a[disabled], fieldset[disabled] .callout.callout-danger a {
+      .callout.danger a.disabled, .callout.danger a[disabled], fieldset[disabled] .callout.danger a {
         cursor: not-allowed;
         opacity: .65;
         box-shadow: none; }
-      .callout.callout-danger a a.disabled, fieldset[disabled] .callout.callout-danger a a {
+      .callout.danger a a.disabled, fieldset[disabled] .callout.danger a a {
         pointer-events: none; }
-  .callout.callout-warning {
+  .callout.warning {
     border-left-color: #f0ad4e;
     border: 1px solid #f0ad4e;
     border-left-width: 4px;
     border-radius: 3px;
     color: #f0ad4e;
     background-color: #fefbf7; }
-    .callout.callout-warning a {
+    .callout.warning a {
       display: inline;
       font-size: inherit;
       font-family: inherit;
@@ -227,27 +236,27 @@
       background-image: linear-gradient(to right, #f0ad4e 25%, rgba(255, 255, 255, 0) 50%);
       background-size: 4px 1px;
       background-repeat: repeat-x; }
-      .callout.callout-warning a:hover {
+      .callout.warning a:hover {
         color: #df8a13;
         background-color: none; }
-      .callout.callout-warning a:active, .callout.callout-warning a.active {
+      .callout.warning a:active, .callout.warning a.active {
         color: #f0ad4e; }
-      .callout.callout-warning a[disabled] {
+      .callout.warning a[disabled] {
         pointer-events: none; }
-      .callout.callout-warning a.disabled, .callout.callout-warning a[disabled], fieldset[disabled] .callout.callout-warning a {
+      .callout.warning a.disabled, .callout.warning a[disabled], fieldset[disabled] .callout.warning a {
         cursor: not-allowed;
         opacity: .65;
         box-shadow: none; }
-      .callout.callout-warning a a.disabled, fieldset[disabled] .callout.callout-warning a a {
+      .callout.warning a a.disabled, fieldset[disabled] .callout.warning a a {
         pointer-events: none; }
-  .callout.callout-info {
+  .callout.info {
     border-left-color: #71bec0;
     border: 1px solid #71bec0;
     border-left-width: 4px;
     border-radius: 3px;
-    color: #71bec0;
+    color: #469c9e;
     background-color: #fbfdfd; }
-    .callout.callout-info a {
+    .callout.info a {
       display: inline;
       font-size: inherit;
       font-family: inherit;
@@ -267,18 +276,18 @@
       background-image: linear-gradient(to right, #71bec0 25%, rgba(255, 255, 255, 0) 50%);
       background-size: 4px 1px;
       background-repeat: repeat-x; }
-      .callout.callout-info a:hover {
+      .callout.info a:hover {
         color: #469c9e;
         background-color: none; }
-      .callout.callout-info a:active, .callout.callout-info a.active {
+      .callout.info a:active, .callout.info a.active {
         color: #71bec0; }
-      .callout.callout-info a[disabled] {
+      .callout.info a[disabled] {
         pointer-events: none; }
-      .callout.callout-info a.disabled, .callout.callout-info a[disabled], fieldset[disabled] .callout.callout-info a {
+      .callout.info a.disabled, .callout.info a[disabled], fieldset[disabled] .callout.info a {
         cursor: not-allowed;
         opacity: .65;
         box-shadow: none; }
-      .callout.callout-info a a.disabled, fieldset[disabled] .callout.callout-info a a {
+      .callout.info a a.disabled, fieldset[disabled] .callout.info a a {
         pointer-events: none; }
   .callout ul li strong {
     font-weight: 600; }
@@ -327,11 +336,11 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   line-height: 1.2857em;
   margin: calc(2rem -  0.14285em ) 0em 1rem;
-  font-weight: bold;
-  padding: 0em; }
+  font-weight: 600;
+  padding: 0;
+  font-family: "Source Sans Pro", "Helvetica Neue", sans-serif; }
 
 h1 {
   min-height: 1rem;
@@ -464,6 +473,13 @@ input::selection {
   max-width: 100%;
   height: auto; }
 
+.relative {
+  position: relative; }
+
+.small-caps {
+  text-transform: uppercase;
+  font-size: 85%; }
+
 header {
   height: 100px;
   margin-left: -160px;
@@ -481,6 +497,8 @@ code {
   padding: 0.25em;
   border-radius: 4px;
   font-size: 17px; }
+  code strong, code em {
+    font-family: monospace; }
 
 .segment img {
   margin: 1em auto; }
@@ -492,9 +510,13 @@ code {
 
 em {
   font-family: "LusitanaItalic"; }
+  em strong {
+    font-family: 'LusitanaItalicBold'; }
 
 strong {
   font-family: "LusitanaBold"; }
+  strong em {
+    font-family: 'LusitanaItalicBold'; }
 
 p {
   font-size: 19px;
@@ -505,9 +527,13 @@ p {
 ul {
   font-size: 19px;
   color: #333333; }
+  ul li {
+    margin: 0.5em 0; }
 
 dl {
   margin: 0; }
+  dl + .piled.segment {
+    margin-top: 1em !important; }
   dl dd {
     color: #333333;
     padding-bottom: 2em;
@@ -515,16 +541,39 @@ dl {
     padding-left: 1em; }
   dl dt {
     padding-bottom: 2em;
-    border: 1px solid #cccccc;
+    border: 1px solid gray;
     text-align: center;
-    line-height: 30px;
+    line-height: 34px;
     font-family: 'Open Sans', sans-serif;
-    font-weight: 500;
+    font-weight: 600;
     border-radius: 50%;
     color: #333333;
     float: left;
     width: 35px;
     height: 35px;
-    vertical-align: baseline; }
+    vertical-align: middle; }
+
+.divider {
+  font-family: "Source Sans Pro", "Helvetica Neue", sans-serif; }
+
+.grid {
+  padding: 1em 0 !important;
+  margin-top: 1em !important;
+  margin-bottom: 1.5em !important; }
+
+.piled.segment {
+  padding-top: 1em;
+  font-weight: 400; }
+  .piled.segment h3 {
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: 0; }
+
+.pinned.icon {
+  position: absolute;
+  left: 0.5em;
+  top: 0.5em; }
+  .pinned.icon.lightgrey {
+    background-color: rgba(0, 0, 0, 0.1) !important; }
 
 /*# sourceMappingURL=site.css.map */

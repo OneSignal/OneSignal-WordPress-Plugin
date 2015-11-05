@@ -58,11 +58,11 @@ h2,
 h3,
 h4,
 h5 {
-    font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, Helvetica, sans-serif;
     line-height: 1.2857em;
     margin: calc(2rem -  0.14285em ) 0em 1rem;
-    font-weight: bold;
-    padding: 0em;
+    font-weight: 600;
+    padding: 0;
+    font-family: $font-sourcesans;
 }
 h1 {
     min-height: 1rem;
@@ -234,6 +234,15 @@ $color-text: rgb(51, 51, 51);
     height: auto; // Part 2: Scale the height according to the width, otherwise you get stretching
 }
 
+.relative {
+    position: relative;
+}
+
+.small-caps {
+    text-transform: uppercase;
+    font-size: 85%;
+}
+
 header {
     height: $header-height;
     margin-left: -$container-width;
@@ -255,6 +264,10 @@ code {
     padding: 0.25em;
     border-radius: 4px;
     font-size: 17px;
+
+    strong, em {
+        font-family: monospace;
+    }
 }
 
 .segment {
@@ -273,10 +286,18 @@ code {
 
 em {
     font-family: "LusitanaItalic";
+
+    strong {
+        font-family: 'LusitanaItalicBold';
+    }
 }
 
 strong {
     font-family: "LusitanaBold";
+
+    em {
+        font-family: 'LusitanaItalicBold';
+    }
 }
 
 p {
@@ -291,10 +312,18 @@ p {
 ul {
     font-size: 19px;
     color:$color-text;
+
+    li {
+        margin: 0.5em 0;
+    }
 }
 
 dl {
     margin: 0;
+
+    & + .piled.segment {
+        margin-top: 1em !important;
+    }
 
     dd {
         color:$color-text;
@@ -306,17 +335,48 @@ dl {
     dt {
         padding-bottom: $dt-margin;
         //background: lighten($color-text, 66%);
-        border: 1px solid lighten($color-text, 60%);
+        border: 1px solid lighten($color-text, 30%);
         text-align: center;
-        line-height: $dt-height - 5px;
+        line-height: $dt-height - 1px;
         font-family: 'Open Sans', sans-serif;
-        font-weight: 500;
+        font-weight: 600;
         border-radius: 50%;
         color: $color-text;
         //color: white;
         float: left;
         width: $dt-height;
         height: $dt-height;
-        vertical-align: baseline;
+        vertical-align: middle;
+    }
+}
+
+.divider {
+    font-family: $font-sourcesans;
+}
+
+.grid {
+    padding: 1em 0 !important;
+    margin-top: 1em !important;
+    margin-bottom: 1.5em !important;
+}
+
+.piled.segment {
+    padding-top: 1em;
+    font-weight: 400;
+
+    h3 {
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-top: 0;
+    }
+}
+
+.pinned.icon {
+    position: absolute;
+    left: 0.5em;
+    top: 0.5em;
+
+    &.lightgrey {
+        background-color: rgba(0, 0, 0, 0.1) !important;
     }
 }

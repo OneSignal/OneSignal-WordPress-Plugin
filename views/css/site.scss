@@ -234,6 +234,10 @@ $color-text: rgb(51, 51, 51);
     height: auto; // Part 2: Scale the height according to the width, otherwise you get stretching
 }
 
+.marginless {
+    margin: 0;
+}
+
 .relative {
     position: relative;
 }
@@ -267,6 +271,10 @@ code {
 
     strong, em {
         font-family: monospace;
+    }
+
+    &.massive {
+        font-size: 23px;
     }
 }
 
@@ -309,7 +317,7 @@ p {
     }
 }
 
-ul {
+ol,ul {
     font-size: 19px;
     color:$color-text;
 
@@ -320,10 +328,6 @@ ul {
 
 dl {
     margin: 0;
-
-    & + .piled.segment {
-        margin-top: 1em !important;
-    }
 
     dd {
         color:$color-text;

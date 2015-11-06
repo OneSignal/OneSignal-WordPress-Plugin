@@ -473,6 +473,9 @@ input::selection {
   max-width: 100%;
   height: auto; }
 
+.marginless {
+  margin: 0; }
+
 .relative {
   position: relative; }
 
@@ -499,6 +502,8 @@ code {
   font-size: 17px; }
   code strong, code em {
     font-family: monospace; }
+  code.massive {
+    font-size: 23px; }
 
 .segment img {
   margin: 1em auto; }
@@ -524,16 +529,14 @@ p {
   p + dl {
     padding-top: 1em; }
 
-ul {
+ol, ul {
   font-size: 19px;
   color: #333333; }
-  ul li {
+  ol li, ul li {
     margin: 0.5em 0; }
 
 dl {
   margin: 0; }
-  dl + .piled.segment {
-    margin-top: 1em !important; }
   dl dd {
     color: #333333;
     padding-bottom: 2em;

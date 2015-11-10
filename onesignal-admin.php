@@ -99,18 +99,27 @@ class OneSignal_Admin {
 	public static function admin_menu() {
     require_once( plugin_dir_path( __FILE__ ) . '/views/config.php' );
   }
-  
+
   public static function admin_custom_load() {
     add_action( 'admin_enqueue_scripts', array(__CLASS__, 'admin_custom_scripts') );
   }
+
+function change_footer_admin() {
+  echo '';
+}
+
   
   public static function admin_custom_scripts() {
-    wp_enqueue_style( 'ui', plugin_dir_url( __FILE__ ) . 'views/css/semantic-ui.css');
+    add_filter('admin_footer_text', 'change_footer_admin ');
+
+    wp_enqueue_style( 'icons', plugin_dir_url( __FILE__ ) . 'views/css/icons.css');
+    wp_enqueue_style( 'semantic-ui', plugin_dir_url( __FILE__ ) . 'views/css/semantic-ui.css');
     wp_enqueue_style( 'site', plugin_dir_url( __FILE__ ) . 'views/css/site.css');
 
-    wp_enqueue_script( 'semantic', plugin_dir_url( __FILE__ ) . 'views/javascript/semantic-ui.js');
-    wp_enqueue_script( 'settings', plugin_dir_url( __FILE__ ) . 'views/javascript/settings.js');
+    wp_enqueue_script( 'jquery.min', plugin_dir_url( __FILE__ ) . 'views/javascript/jquery.min.js');
+    wp_enqueue_script( 'semantic-ui', plugin_dir_url( __FILE__ ) . 'views/javascript/semantic-ui.js');
     wp_enqueue_script( 'intercom', plugin_dir_url( __FILE__ ) . 'views/javascript/intercom.js');
+    wp_enqueue_script( 'site', plugin_dir_url( __FILE__ ) . 'views/javascript/site.js');
 
   }
   

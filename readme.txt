@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: chrome, safari, push, push notifications, safari, chrome push, safari push, notifications, web push, notification, notify, mavericks, firefox push, android, android push, android notifications, mobile notifications, mobile, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
 Tested up to: 4.3.1
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,9 @@ Features:
 3. Follow the instructions on the new OneSignal Wordpress menu option to get started.
 
 == Changelog ==
+= 1.1.2 =
+- Graphical redesign of the plugin. Much better instructions.
+
 = 1.1.1 =
 - OneSignal library initialization now occurs regardless of whether the window.onload event has yet to be fired or has already fired.
 

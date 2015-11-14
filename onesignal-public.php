@@ -25,7 +25,7 @@ class OneSignal_Public {
     <script>
       var OneSignal = OneSignal || [];
       
-      function initOneSignal() {
+      OneSignal.push( function() {
         OneSignal.SERVICE_WORKER_UPDATER_PATH = "OneSignalSDKUpdaterWorker.js.php";
         OneSignal.SERVICE_WORKER_PATH = "OneSignalSDKWorker.js.php";
         OneSignal.SERVICE_WORKER_PARAM = { scope: '/' };
@@ -60,13 +60,25 @@ class OneSignal_Public {
         if (@$onesignal_wp_settings["safari_web_id"]) {
           echo "oneSignal_options['safari_web_id'] = \"" . $onesignal_wp_settings["safari_web_id"] . "\";\n";
         }
+
+
+        if ($onesignal_wp_settings["subdomain"] != "") {
+          echo "oneSignal_options['promptOptions'] = { };\n";
+          echo "oneSignal_options['promptOptions']['actionMessage'] = '" . $onesignal_wp_settings["prompt_action_message"] . "';\n";
+          echo "oneSignal_options['promptOptions']['exampleNotificationTitleDesktop'] = '" . $onesignal_wp_settings["prompt_example_notification_title_desktop"] . "';\n";
+          echo "oneSignal_options['promptOptions']['exampleNotificationMessageDesktop'] = '" . $onesignal_wp_settings["prompt_example_notification_message_desktop"] . "';\n";
+          echo "oneSignal_options['promptOptions']['exampleNotificationTitleMobile'] = '" . $onesignal_wp_settings["prompt_example_notification_title_mobile"] . "';\n";
+          echo "oneSignal_options['promptOptions']['exampleNotificationMessageMobile'] = '" . $onesignal_wp_settings["prompt_example_notification_message_mobile"] . "';\n";
+          echo "oneSignal_options['promptOptions']['exampleNotificationCaption'] = '" . $onesignal_wp_settings["prompt_example_notification_caption"] . "';\n";
+          echo "oneSignal_options['promptOptions']['acceptButtonText'] = '" . $onesignal_wp_settings["prompt_accept_button_text"] . "';\n";
+          echo "oneSignal_options['promptOptions']['cancelButtonText'] = '" . $onesignal_wp_settings["prompt_cancel_button_text"] . "';\n";
+        }
         ?>
         
         OneSignal.init(oneSignal_options);
-      }
+      });
       
       function documentInitOneSignal() {
-        OneSignal.push(initOneSignal);
         var oneSignal_elements = document.getElementsByClassName("OneSignal-prompt");
         var oneSignalLinkClickHandler = function(event) { OneSignal.push(['registerForPushNotifications', {modalPrompt: true}]); event.preventDefault(); };
         for(var i = 0; i < oneSignal_elements.length; i++)

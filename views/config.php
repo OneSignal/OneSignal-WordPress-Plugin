@@ -555,6 +555,52 @@ if (array_key_exists('app_id', $_POST)) {
             <input type="text" name="safari_web_id" placeholder="web.com.example" value="<?php echo @$onesignal_wp_settings['safari_web_id']; ?>">
           </div>
         </div>
+        <?php if (!empty($onesignal_wp_settings['subdomain'])): ?>
+          <div class="ui dividing header">
+            <i class="external icon"></i>
+            <div class="content">
+              HTTP Popup Settings
+            </div>
+          </div>
+          <div class="ui borderless shadowless segment" style="position: relative;">
+              <p class="lato">These settings modify the popup message and button text for all users. Use this to localize the popup to your language. All fields here are limited in the length of text they can display; use the Preview Popup button to preview your changes.</p>
+              <div class="field">
+                <button class="ui gray button" type="button" onclick="showHttpPopup()">Preview Popup</button>
+              </div>
+              <div class="field">
+                  <label>Action Message</label>
+                  <input type="text" name="prompt_action_message" placeholder="wants to show notifications:" value="<?php echo @$onesignal_wp_settings['prompt_action_message']; ?>">
+              </div>
+              <div class="field">
+                  <label>Example Notification Title (Desktop)</label>
+                  <input type="text" name="prompt_example_notification_title_desktop" placeholder="This is an example notification" value="<?php echo @$onesignal_wp_settings['prompt_example_notification_title_desktop']; ?>">
+              </div>
+              <div class="field">
+                  <label>Example Notification Message (Desktop)</label>
+                  <input type="text" name="prompt_example_notification_message_desktop" placeholder="Notifications will appear on your desktop" value="<?php echo @$onesignal_wp_settings['prompt_example_notification_message_desktop']; ?>">
+              </div>
+              <div class="field">
+                  <label>Example Notification Title (Mobile)</label>
+                  <input type="text" name="prompt_example_notification_title_mobile" placeholder="Example notification" value="<?php echo @$onesignal_wp_settings['prompt_example_notification_title_mobile']; ?>">
+              </div>
+              <div class="field">
+                  <label>Example Notification Message (Mobile)</label>
+                  <input type="text" name="prompt_example_notification_message_mobile" placeholder="Notifications will appear on your device" value="<?php echo @$onesignal_wp_settings['prompt_example_notification_message_mobile']; ?>">
+              </div>
+              <div class="field">
+                  <label>Example Notification Caption</label>
+                  <input type="text" name="prompt_example_notification_caption" placeholder="(you can unsubscribe anytime)" value="<?php echo @$onesignal_wp_settings['prompt_example_notification_caption']; ?>">
+              </div>
+              <div class="field">
+                  <label>Accept Button Text</label>
+                  <input type="text" name="prompt_accept_button_text" placeholder="CONTINUE" value="<?php echo @$onesignal_wp_settings['prompt_accept_button_text']; ?>">
+              </div>
+              <div class="field">
+                  <label>Cancel Button Text</label>
+                  <input type="text" name="prompt_cancel_button_text" placeholder="NO THANKS" value="<?php echo @$onesignal_wp_settings['prompt_cancel_button_text']; ?>">
+              </div>
+          </div>
+        <?php endif; ?>
         <div class="ui dividing header">
           <i class="alarm outline icon"></i>
           <div class="content">

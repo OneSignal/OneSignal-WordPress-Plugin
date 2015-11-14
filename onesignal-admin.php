@@ -78,7 +78,15 @@ class OneSignal_Admin {
     $onesignal_wp_settings['app_rest_api_key'] = $config['app_rest_api_key'];
     
     $onesignal_wp_settings['safari_web_id'] = $config['safari_web_id'];
-    
+
+    $onesignal_wp_settings['prompt_action_message'] = $config['prompt_action_message'];
+    $onesignal_wp_settings['prompt_example_notification_title_desktop'] = $config['prompt_example_notification_title_desktop'];
+    $onesignal_wp_settings['prompt_example_notification_message_desktop'] = $config['prompt_example_notification_message_desktop'];
+    $onesignal_wp_settings['prompt_example_notification_title_mobile'] = $config['prompt_example_notification_title_mobile'];
+    $onesignal_wp_settings['prompt_example_notification_message_mobile'] = $config['prompt_example_notification_message_mobile'];
+    $onesignal_wp_settings['prompt_example_notification_caption'] = $config['prompt_example_notification_caption'];
+    $onesignal_wp_settings['prompt_cancel_button_text'] = $config['prompt_cancel_button_text'];
+    $onesignal_wp_settings['prompt_accept_button_text'] = $config['prompt_accept_button_text'];
     
     OneSignal::save_onesignal_settings($onesignal_wp_settings);
     
@@ -119,7 +127,7 @@ function change_footer_admin() {
     wp_enqueue_script( 'jquery.min', plugin_dir_url( __FILE__ ) . 'views/javascript/jquery.min.js');
     wp_enqueue_script( 'semantic-ui', plugin_dir_url( __FILE__ ) . 'views/javascript/semantic-ui.js');
     wp_enqueue_script( 'intercom', plugin_dir_url( __FILE__ ) . 'views/javascript/intercom.js');
-    wp_enqueue_script( 'site', plugin_dir_url( __FILE__ ) . 'views/javascript/site.js');
+    wp_enqueue_script( 'site', plugin_dir_url( __FILE__ ) . 'views/javascript/site-admin.js');
 
   }
   

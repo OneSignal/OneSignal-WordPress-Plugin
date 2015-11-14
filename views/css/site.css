@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700|Open+Sans:300,400,500,600,700");
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700|Open+Sans:300,400,500,600,700|Lato:300,400,700");
 @font-face {
   font-family: "Lusitana";
   src: url("lusitana/Lusitana-Regular-OTF.ttf") format("opentype");
@@ -331,6 +331,10 @@ html {
   color: rgba(0, 0, 0, 0.87);
   font-smoothing: antialiased; }
 
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
 /*******************************
              Headers
 *******************************/
@@ -532,20 +536,30 @@ code {
   background-color: transparent; }
 
 em {
-  font-family: "LusitanaItalic"; }
+  font-family: "LusitanaItalic";
+  font-style: normal; }
   em strong {
-    font-family: 'LusitanaItalicBold'; }
+    font-family: 'LusitanaItalicBold';
+    font-style: normal;
+    font-weight: 100; }
 
 strong {
-  font-family: "LusitanaBold"; }
+  font-family: "LusitanaBold";
+  font-style: normal;
+  font-weight: 100; }
   strong em {
-    font-family: 'LusitanaItalicBold'; }
+    font-family: 'LusitanaItalicBold';
+    font-style: normal;
+    font-weight: 100; }
 
 p {
   font-size: 1.3rem;
   color: #333333; }
   p + dl {
     padding-top: 1em; }
+  p.lato {
+    font-family: 'Lato';
+    font-size: 1.2rem; }
 
 ol, ul {
   font-size: 1.3rem;
@@ -587,7 +601,8 @@ dl {
 
 label {
   font-family: 'Lato';
-  font-size: 1.2rem !important; }
+  font-size: 1.2rem !important;
+  font-weight: 500; }
   label .alternate {
     margin: 0 0.85em;
     font-weight: 400; }

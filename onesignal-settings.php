@@ -17,7 +17,15 @@ class OneSignal {
                 'default_icon' => "",
                 'default_url' => "",
                 'app_rest_api_key' => "",
-                'safari_web_id' => ""
+                'safari_web_id' => "",
+                'prompt_action_message' => "",
+                'prompt_example_notification_title_desktop' => "",
+                'prompt_example_notification_message_desktop' => "",
+                'prompt_example_notification_title_mobile' => "",
+                'prompt_example_notification_message_mobile' => "",
+                'prompt_example_notification_caption' => "",
+                'prompt_accept_button_text' => "",
+                'prompt_cancel_button_text' => ""
                 );
       }
     }

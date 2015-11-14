@@ -45,9 +45,12 @@ Features:
 3. Follow the instructions on the new OneSignal Wordpress menu option to get started.
 
 == Changelog ==
+<<<<<<< HEAD
 = 1.3.0 =
 - Added popup settings to localize prompt text. Updated fonts to render better on Firefox and Safari.
 
+=======
+>>>>>>> 379fa277aaabbaed738b998cdcb8a8974fced31b
 = 1.2.0 =
 - Graphical redesign of the plugin. Much better instructions.
 

@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: chrome, safari, push, push notifications, safari, chrome push, safari push, notifications, web push, notification, notify, mavericks, firefox push, android, android push, android notifications, mobile notifications, mobile, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
 Tested up to: 4.3.1
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,12 +45,12 @@ Features:
 3. Follow the instructions on the new OneSignal Wordpress menu option to get started.
 
 == Changelog ==
-<<<<<<< HEAD
+= 1.3.1 =
+- Fixed HTTP popup prompt dialog to not display empty values if configuration options are unset
+
 = 1.3.0 =
 - Added popup settings to localize prompt text. Updated fonts to render better on Firefox and Safari.
 
-=======
->>>>>>> 379fa277aaabbaed738b998cdcb8a8974fced31b
 = 1.2.0 =
 - Graphical redesign of the plugin. Much better instructions.
 

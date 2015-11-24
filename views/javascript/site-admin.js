@@ -1,18 +1,18 @@
-$(function() {
-  $('.site .menu .item').tab();
-  $('form[role="configuration"] [type=checkbox]').checkbox();
-  $('form[role="configuration"] [role=popup]').popup({
+jQuery(function() {
+  jQuery('.site .menu .item').tab();
+  jQuery('form[role="configuration"] [type=checkbox]').checkbox();
+  jQuery('form[role="configuration"] [role=popup]').popup({
     hoverable: true,
     position: 'right center'
   });
-  $('.ui.sidebar')
+  jQuery('.ui.sidebar')
     .sidebar('toggle')
   ;
 });
 
 function activateSetupTab(tab) {
-  $('.menu .item').tab('change tab', tab);
-  $('body').scrollTop(0);
+  jQuery('.menu .item').tab('change tab', tab);
+  jQuery('body').scrollTop(0);
 }
 
 function showSupportMessage(type) {
@@ -29,16 +29,16 @@ function showSupportMessage(type) {
 
 
 function showHttpPopup() {
-  subdomain = $('[name=subdomain]').val();
+  subdomain = jQuery('[name=subdomain]').val();
   message_localization_opts = {
-    actionMessage: $('[name=prompt_action_message]').val(),
-    exampleNotificationTitleDesktop: $('[name=prompt_example_notification_title_desktop]').val(),
-    exampleNotificationMessageDesktop: $('[name=prompt_example_notification_message_desktop]').val(),
-    exampleNotificationTitleMobile: $('[name=prompt_example_notification_title_mobile]').val(),
-    exampleNotificationMessageMobile: $('[name=prompt_example_notification_message_mobile]').val(),
-    exampleNotificationCaption: $('[name=prompt_example_notification_caption]').val(),
-    acceptButtonText: $('[name=prompt_accept_button_text]').val(),
-    cancelButtonText: $('[name=prompt_cancel_button_text]').val()
+    actionMessage: jQuery('[name=prompt_action_message]').val(),
+    exampleNotificationTitleDesktop: jQuery('[name=prompt_example_notification_title_desktop]').val(),
+    exampleNotificationMessageDesktop: jQuery('[name=prompt_example_notification_message_desktop]').val(),
+    exampleNotificationTitleMobile: jQuery('[name=prompt_example_notification_title_mobile]').val(),
+    exampleNotificationMessageMobile: jQuery('[name=prompt_example_notification_message_mobile]').val(),
+    exampleNotificationCaption: jQuery('[name=prompt_example_notification_caption]').val(),
+    acceptButtonText: jQuery('[name=prompt_accept_button_text]').val(),
+    cancelButtonText: jQuery('[name=prompt_cancel_button_text]').val()
   };
   var message_localization_opts_str = '';
   if (message_localization_opts) {

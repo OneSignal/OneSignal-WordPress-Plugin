@@ -49,14 +49,22 @@ class OneSignal_Public {
         } 
         ?>
         var oneSignal_options = {appId: "<?php echo $onesignal_wp_settings["app_id"] ?>"};
-        
+
         <?php
+        if ($onesignal_wp_settings["no_auto_register"] == "1") {
+          echo "oneSignal_options['autoRegister'] = false;\n";
+        }
+        else {
+          echo "oneSignal_options['autoRegister'] = true;\n";
+        }
+
         if ($onesignal_wp_settings["subdomain"] != "") {
           echo "oneSignal_options['subdomainName'] = \"" . $onesignal_wp_settings["subdomain"] . "\";\n";
         }
         else {
           echo "oneSignal_options['path'] = \"" . $current_plugin_url . "sdk_files/\";\n";
         }
+
         if (@$onesignal_wp_settings["safari_web_id"]) {
           echo "oneSignal_options['safari_web_id'] = \"" . $onesignal_wp_settings["safari_web_id"] . "\";\n";
         }

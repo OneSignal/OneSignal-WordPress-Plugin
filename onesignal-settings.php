@@ -7,7 +7,7 @@ class OneSignal {
          $onesignal_wp_settings = array(
                 'app_id' => '',
                 'gcm_sender_id' => '',
-                'auto_register' => true,
+                'no_auto_register' => true,
                 'notification_on_post' => true,
                 'notification_on_post_from_plugin' => true,
                 'use_http' => false,

@@ -53,12 +53,12 @@ class OneSignal_Admin {
     }
     
     $onesignal_wp_settings['subdomain'] = $config['subdomain'];
-    
-    if (@$config['auto_register'] == "true") {
-      $onesignal_wp_settings['auto_register'] = true;
+
+    if (@$config['no_auto_register'] == "true") {
+      $onesignal_wp_settings['no_auto_register'] = true;
     }
     else {
-      $onesignal_wp_settings['auto_register'] = false;
+      $onesignal_wp_settings['no_auto_register'] = false;
     }
     
     if (@$config['notification_on_post'] == "true") {

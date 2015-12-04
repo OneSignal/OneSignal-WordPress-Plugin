@@ -60,6 +60,13 @@ class OneSignal_Admin {
     else {
       $onesignal_wp_settings['no_auto_register'] = false;
     }
+
+    if (@$config['use_modal_prompt'] == "true") {
+      $onesignal_wp_settings['use_modal_prompt'] = true;
+    }
+    else {
+      $onesignal_wp_settings['use_modal_prompt'] = false;
+    }
     
     if (@$config['notification_on_post'] == "true") {
       $onesignal_wp_settings['notification_on_post'] = true;

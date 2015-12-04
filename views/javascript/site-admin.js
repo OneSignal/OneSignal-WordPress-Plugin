@@ -5,9 +5,23 @@ jQuery(function() {
     hoverable: true,
     position: 'right center'
   });
-  jQuery('.ui.sidebar')
-    .sidebar('toggle')
-  ;
+  jQuery('.ui.sidebar').sidebar('toggle');
+  jQuery('[name=use_modal_prompt]').change(function() {
+    var isUseModalPromptChecked = jQuery('[name=use_modal_prompt]').is(':checked');
+    if (isUseModalPromptChecked) {
+      var isNoAutoRegisterChecked = jQuery('[name=no_auto_register]').is(':checked');
+      if (!isNoAutoRegisterChecked)
+        jQuery('[name=no_auto_register]').click();
+    }
+  });
+  jQuery('[name=no_auto_register]').change(function() {
+    var isNoAutoRegisterChecked = jQuery('[name=no_auto_register]').is(':checked');
+    if (!isNoAutoRegisterChecked) {
+      var isUseModalPromptChecked = jQuery('[name=use_modal_prompt]').is(':checked');
+      if (isUseModalPromptChecked)
+        jQuery('[name=use_modal_prompt]').click();
+    }
+  });
 });
 
 function activateSetupTab(tab) {

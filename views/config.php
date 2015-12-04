@@ -555,23 +555,7 @@ if (array_key_exists('app_id', $_POST)) {
             <input type="text" name="safari_web_id" placeholder="web.com.example" value="<?php echo @$onesignal_wp_settings['safari_web_id']; ?>">
           </div>
         </div>
-        <?php if (empty($onesignal_wp_settings['subdomain'])): ?>
-          <div class="ui dividing header">
-            <i class="alarm outline icon"></i>
-            <div class="content">
-              Prompt Settings
-            </div>
-          </div>
-          <div class="ui borderless shadowless segment" style="position: relative;">
-              <div class="field">
-                <div class="ui toggle checkbox">
-                  <input type="checkbox" name="no_auto_register" value="true" <?php if ($onesignal_wp_settings['no_auto_register']) { echo "checked"; } ?>>
-                  <label>Don't automatically prompt new site visitors to subscribe to push notifications<i class="tiny circular help icon link" role="popup" data-html="<p>If turned on, your site will no longer automatically present the following:</p><img src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg" ?>' width=450><p>Instead, you must write your own code to prompt the user.</p>" data-variation="flowing"></i></label>
-                </div>
-              </div>
-          </div>
-        <?php endif; ?>
-        <?php if (!empty($onesignal_wp_settings['subdomain'])): ?>
+        <?php if (!empty($onesignal_wp_settings['subdomain']) || !empty($onesignal_wp_settings['use_modal_prompt'])): ?>
           <div class="ui dividing header">
             <i class="external icon"></i>
             <div class="content">
@@ -614,6 +598,28 @@ if (array_key_exists('app_id', $_POST)) {
               <div class="field">
                   <label>Cancel Button Text</label>
                   <input type="text" name="prompt_cancel_button_text" placeholder="NO THANKS" value="<?php echo @$onesignal_wp_settings['prompt_cancel_button_text']; ?>">
+              </div>
+          </div>
+        <?php endif; ?>
+        <?php if (empty($onesignal_wp_settings['subdomain'])): ?>
+          <div class="ui dividing header">
+            <i class="alarm outline icon"></i>
+            <div class="content">
+              Prompt Settings
+            </div>
+          </div>
+          <div class="ui borderless shadowless segment" style="position: relative;">
+              <div class="field">
+                <div class="ui toggle checkbox">
+                  <input type="checkbox" name="no_auto_register" value="true" <?php if ($onesignal_wp_settings['no_auto_register']) { echo "checked"; } ?>>
+                  <label>Don't automatically prompt new site visitors to subscribe to push notifications<i class="tiny circular help icon link" role="popup" data-html="<p>If turned on, your site will no longer automatically present the following:</p><img src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg" ?>' width=450><p>Instead, you must write your own code to show the prompt.</p>" data-variation="flowing"></i></label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui toggle checkbox">
+                  <input type="checkbox" name="use_modal_prompt" value="true" <?php if ($onesignal_wp_settings['use_modal_prompt']) { echo "checked"; } ?>>
+                  <label>Use an alternate full-screen prompt when requesting subscription permission</label>
+                </div>
               </div>
           </div>
         <?php endif; ?>

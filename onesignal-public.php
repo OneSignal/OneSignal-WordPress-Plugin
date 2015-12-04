@@ -96,6 +96,8 @@ class OneSignal_Public {
           if ($onesignal_wp_settings["prompt_cancel_button_text"] != "") {
             echo "oneSignal_options['promptOptions']['cancelButtonText'] = '" . $onesignal_wp_settings["prompt_cancel_button_text"] . "';\n";
           }
+        } else {
+
         }
         ?>
         
@@ -104,7 +106,15 @@ class OneSignal_Public {
       
       function documentInitOneSignal() {
         var oneSignal_elements = document.getElementsByClassName("OneSignal-prompt");
-        var oneSignalLinkClickHandler = function(event) { OneSignal.push(['registerForPushNotifications', {modalPrompt: true}]); event.preventDefault(); };
+
+        <?php
+        if ($onesignal_wp_settings["use_modal_prompt"] == "1") {
+          echo "var oneSignalLinkClickHandler = function(event) { OneSignal.push(['registerForPushNotifications', {modalPrompt: true}]); event.preventDefault(); };";
+        }
+        else {
+          echo "var oneSignalLinkClickHandler = function(event) { OneSignal.push(['registerForPushNotifications']); event.preventDefault(); };";
+        }
+        ?>
         for(var i = 0; i < oneSignal_elements.length; i++)
           oneSignal_elements[i].addEventListener('click', oneSignalLinkClickHandler, false);
       }

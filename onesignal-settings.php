@@ -7,7 +7,10 @@ class OneSignal {
          $onesignal_wp_settings = array(
                 'app_id' => '',
                 'gcm_sender_id' => '',
-                'no_auto_register' => true,
+                'no_auto_register' => false,
+                'no_welcome_notification' => false,
+                'welcome_notification_title' => '',
+                'welcome_notification_message' => '',
                 'notification_on_post' => true,
                 'notification_on_post_from_plugin' => true,
                 'use_http' => false,
@@ -28,6 +31,26 @@ class OneSignal {
                 'prompt_cancel_button_text' => ""
                 );
       }
+    }
+
+    if (!array_key_exists('no_welcome_notification', $onesignal_wp_settings)) {
+       $onesignal_wp_settings['no_welcome_notification'] = false;
+    }
+
+    if (!array_key_exists('welcome_notification_title', $onesignal_wp_settings)) {
+       $onesignal_wp_settings['welcome_notification_title'] = '';
+    }
+
+    if (!array_key_exists('welcome_notification_message', $onesignal_wp_settings)) {
+       $onesignal_wp_settings['welcome_notification_message'] = '';
+    }
+
+    if (!array_key_exists('use_modal_prompt', $onesignal_wp_settings)) {
+       $onesignal_wp_settings['use_modal_prompt'] = false;
+    }
+
+    if (!array_key_exists('no_auto_register', $onesignal_wp_settings)) {
+       $onesignal_wp_settings['no_auto_register'] = false;
     }
     
     return $onesignal_wp_settings;

@@ -624,6 +624,28 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
         <?php endif; ?>
         <div class="ui dividing header">
+          <i class="birthday outline icon"></i>
+          <div class="content">
+            Welcome Notification Settings
+          </div>
+        </div>
+        <div class="ui borderless shadowless segment" style="position: relative;">
+            <div class="field">
+              <div class="ui toggle checkbox">
+                <input type="checkbox" name="no_welcome_notification" value="true" <?php if ($onesignal_wp_settings['no_welcome_notification']) { echo "checked"; } ?>>
+                <label>Don't send new users a welcome push notification after subscribing<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification" data-content="If turned on, your site will no longer send a welcome push notification to new site visitors who have just subscribed. The message is customizable below."></i></label>
+              </div>
+            </div>
+            <div class="field">
+                <label>Title<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification Title" data-content="The welcome notification's title. You can localize this to your own language. If not set, the site's title will be used. Set to one space ' ' to clear the title, although this is not recommended." data-variation="wide"></i></label>
+                <input type="text" placeholder="" name="welcome_notification_title" value="<?php echo @$onesignal_wp_settings['welcome_notification_title']; ?>">
+            </div>
+            <div class="field">
+                <label>Message<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification Message" data-content="The welcome notification's message. You can localize this to your own language. A message is required. If left blank, the default of 'Thanks for subscribing!' will be used." data-variation="wide"></i></label>
+                <input type="text" placeholder="Thanks for subscribing!" name="welcome_notification_message" value="<?php echo @$onesignal_wp_settings['welcome_notification_message']; ?>">
+            </div>
+        </div>
+        <div class="ui dividing header">
           <i class="wizard icon"></i>
           <div class="content">
             Automatic Notification Settings

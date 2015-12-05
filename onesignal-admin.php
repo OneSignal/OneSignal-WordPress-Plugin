@@ -67,6 +67,13 @@ class OneSignal_Admin {
     else {
       $onesignal_wp_settings['use_modal_prompt'] = false;
     }
+
+    if (@$config['no_welcome_notification'] == "true") {
+      $onesignal_wp_settings['no_welcome_notification'] = true;
+    }
+    else {
+      $onesignal_wp_settings['no_welcome_notification'] = false;
+    }
     
     if (@$config['notification_on_post'] == "true") {
       $onesignal_wp_settings['notification_on_post'] = true;
@@ -110,6 +117,13 @@ class OneSignal_Admin {
     if (array_key_exists('prompt_accept_button_text', $config)) {
       $onesignal_wp_settings['prompt_accept_button_text'] = $config['prompt_accept_button_text'];
     }
+
+    if (array_key_exists('welcome_notification_title', $config)) {
+      $onesignal_wp_settings['welcome_notification_title'] = $config['welcome_notification_title'];
+    }
+    if (array_key_exists('welcome_notification_message', $config)) {
+      $onesignal_wp_settings['welcome_notification_message'] = $config['welcome_notification_message'];
+    }
     
     OneSignal::save_onesignal_settings($onesignal_wp_settings);
     
@@ -150,7 +164,7 @@ function change_footer_admin() {
     wp_enqueue_script( 'jquery.min', plugin_dir_url( __FILE__ ) . 'views/javascript/jquery.min.js');
     wp_enqueue_script( 'semantic-ui', plugin_dir_url( __FILE__ ) . 'views/javascript/semantic-ui.js');
     wp_enqueue_script( 'intercom', plugin_dir_url( __FILE__ ) . 'views/javascript/intercom.js');
-    wp_enqueue_script( 'site', plugin_dir_url( __FILE__ ) . 'views/javascript/site-admin.js');
+    wp_enqueue_script( 'site', plugin_dir_url( __FILE__ ) . 'views/javascript/site-admin.js', false, '1');
 
   }
   

@@ -73,10 +73,15 @@ function showHttpPopup() {
       }
     }
   }
+
+  if (subdomain.length == 0)
+    subdomain = 's-onesignalexample';
+
   var domainPrefix = 'https://' + subdomain + '.onesignal.com/sdks/initOneSignalHttp';
   if (window.popupPreviewWindow) {
     window.popupPreviewWindow.close();
   }
+
   window.popupPreviewWindow = window.open(domainPrefix + "?" + message_localization_opts_str, "_blank", 'scrollbars=yes, width=' + 550 + ', height=' + 480 + ', top=' + 0 + ', left=' + 0);
 
   if (popupPreviewWindow)

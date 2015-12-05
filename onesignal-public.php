@@ -21,6 +21,8 @@ class OneSignal_Public {
 ?>
     <link rel="manifest" href="<?php echo( $current_plugin_url . 'sdk_files/manifest.json.php' ) ?>" />
 <?php } ?>
+    <?php /* <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script> */ ?>
+    <?php /* <script src="https://192.168.1.206:3000/dev_sdks/OneSignalSDK.js" async></script> */ ?>
     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
     <script>
       var OneSignal = OneSignal || [];
@@ -58,6 +60,16 @@ class OneSignal_Public {
           echo "oneSignal_options['autoRegister'] = true;\n";
         }
 
+        if ($onesignal_wp_settings["no_welcome_notification"] == "1") {
+          echo "oneSignal_options['welcomeNotification'] = { };\n";
+          echo "oneSignal_options['welcomeNotification']['disable'] = true;\n";
+        }
+        else {
+          echo "oneSignal_options['welcomeNotification'] = { };\n";
+          echo "oneSignal_options['welcomeNotification']['title'] = \"" . $onesignal_wp_settings["welcome_notification_title"] . "\";\n";
+          echo "oneSignal_options['welcomeNotification']['message'] = \"" . $onesignal_wp_settings["welcome_notification_message"] . "\";\n";
+        }
+
         if ($onesignal_wp_settings["subdomain"] != "") {
           echo "oneSignal_options['subdomainName'] = \"" . $onesignal_wp_settings["subdomain"] . "\";\n";
         }
@@ -70,7 +82,7 @@ class OneSignal_Public {
         }
 
 
-        if ($onesignal_wp_settings["subdomain"] != "") {
+        if ($onesignal_wp_settings["subdomain"] != "" || $onesignal_wp_settings["use_modal_prompt"] == "1") {
           echo "oneSignal_options['promptOptions'] = { };\n";
           if ($onesignal_wp_settings["prompt_action_message"] != "") {
             echo "oneSignal_options['promptOptions']['actionMessage'] = '" . $onesignal_wp_settings["prompt_action_message"] . "';\n";

@@ -49,6 +49,7 @@ Features:
 - Added option to send a welcome notification to new site visitors
 - Removed {modalPrompt: true} as the default prompt method for HTTPS sites; the native browser prompt is once again the default
 - Added option to use the modal prompt instead of the native prompt method
+- Popup settings now display for both HTTPS modal users and HTTP prompt users
 
 = 1.4.0 =
 - Added option to disable automatically prompting new visitors to register for push notifications

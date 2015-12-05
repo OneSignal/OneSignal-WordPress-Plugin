@@ -12,23 +12,23 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and sites, trusted by over 6000 developers and marketers including some of the largest brands and websites in the world.
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 8,500 developers and marketers including some of the largest brands and websites in the world.
 
-After just a few seconds of set-up, your visitors will be able to opt-in to receive desktop push notifications when you publish a new post. OneSignal makes use of a brand new Google Chrome feature to send desktop notifications to your visitors even after they’ve left your website.
+After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
 
-OneSignal makes it easy to configure when to send notifications, target notifications to specific users, and to customize the Opt-In process for your visitors.
+We make it easy to configure delivering notifications at preset intervals, targeting notifications to specific users, and customizing the opt-in process for your visitors.
 
 Best of all, WordPress users that use OneSignal will get a FREE lifetime account.
 
 Features:
 
-* Supports Chrome(Desktop & Android) and Safari(Mac OSX) Push on both HTTP and HTTPS sites.
+* Supports Chrome (Desktop & Android), Safari (Mac OS X), and Firefox (Beta) on both HTTP and HTTPS sites.
 
 * **Automatic Notifications** - Send notifications to followers every time you publish a new post. Or set up a reminder that gets automatically sent to them if they haven’t visited for a few days.
 
-* **Target Segments** - Send notifications to specific visitors based on language, number of times they’ve visited your blog, or even set up your own user attributes that you can target.
+* **Targeting Segments** - Send notifications to specific visitors based on language, number of times they’ve visited your blog, or even set up your own user attributes that you can target.
 
-* **Easy Opt-In Configuration** - Choose when and how to ask your visitors to opt-in to browser notifications.
+* **Opt-In Customization** - Choose when and how to ask your visitors to opt-in to browser notifications. Customize the prompt they first see.
 
 * **Real Time Analytics** - See your notifications being delivered in real time, and watch them as they convert into visitors.
 
@@ -42,7 +42,7 @@ Features:
 
 1. Install OneSignal from the WordPress.org plugin directory or by uploading the OneSignal plugin folder to your wp-content/plugins directory.
 2. Active the OneSignal plugin from your WordPress settings dashboard.
-3. Follow the instructions on the new OneSignal Wordpress menu option to get started.
+3. Follow the instructions on the Setup page.
 
 == Changelog ==
 = 1.5.0 =

@@ -632,6 +632,15 @@ label {
 
 .ui.popup {
   font-family: 'Lato'; }
+  .ui.popup p {
+    font-size: 1.0em; }
+
+.explanation {
+  margin-bottom: 1.1rem; }
+  .explanation p {
+    font-family: 'Lato';
+    font-size: 1.1rem;
+    font-weight: 500; }
 
 i[role=popup] {
   margin-left: 1em; }
@@ -641,5 +650,16 @@ i[role=popup] {
 
 .ui.button {
   height: initial !important; }
+
+.ui.form .field > .selection.dropdown {
+  max-width: 150px;
+  font-family: 'Lato';
+  font-size: 1.1rem;
+  font-weight: 500; }
+
+.ui.form .field > label.inline-setting {
+  font-weight: 500;
+  display: inline-block;
+  margin-right: 0.5em; }
 
 /*# sourceMappingURL=site.css.map */

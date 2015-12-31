@@ -346,22 +346,24 @@ if (array_key_exists('app_id', $_POST)) {
         </dl>
       </div>
       <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/4">
-        <div class="ui center aligned piled segment">
-          <i class="big grey announcement pinned icon"></i>
-          <h3>HTTP Only</h3>
-          <p>This entire section applies only to HTTP sites. If your site is <em>fully HTTPS</em>, you're done!
-            <br> You can optionally add <a href="javascript:void(0);" onclick="activateSetupTab('setup/5')">Safari</a> and <a href="javascript:void(0);" onclick="activateSetupTab('setup/6');">Firefox</a> web push.</p>
-          <p>Please continue reading if your site is HTTP. This section is also very short!</p>
-        </div>
+        <p>By now, push notifications already work on your site. <strong>But your users still need a way to <em>subscribe</em> to your push notifications</strong>. This section talks about the three possible ways:
+          <ol>
+          <li>Using the OneSignal Bell, an interactive site widget we developed</li>
+          <li>Or using a basic and simple WordPress sidebar widget</li>
+          <li>Or adding the CSS class <code>OneSignal-prompt</code> to any clickable element</li>
+          </ol>
+        </p>
+
+        <p>If your site is fully-HTTPS, you can automatically prompt users for notifications and skip adding any of the three items. But if you don't automatically prompt users, you'll need to add one of the above methods so your users can subscribe to your site's notifications.</p>
+
         <dl>
           <div class="ui segment">
             <dt>1</dt>
             <dd>
-              <p>On HTTP sites, you must provide something for users to click so they can subscribe to receive push notifications.</p>
-              <p>There are two options:</p>
-              <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
+              <p>Take a look at each of the three options:</p>
+              <div class="relative ui three column middle aligned very relaxed stackable grid" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
                 <div class="center aligned column">
-                  <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/widget.jpg" ?>">
+                  <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell.jpg" ?>">
                 </div>
                 <div class="ui vertical divider">
                   Or
@@ -369,17 +371,27 @@ if (array_key_exists('app_id', $_POST)) {
                 <div class="center aligned column">
                   <code class="massive">&lt;div <strong>class="OneSignal-prompt"</strong>&gt;</code>
                 </div>
-              </div>
-              <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-top: 0 !important; padding-top: 0 !important;">
+                <div class="ui vertical divider">
+                  Or
+                </div>
                 <div class="center aligned column">
-                  <h3>WordPress Widget</h3>
+                  <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/widget.jpg" ?>">
+                </div>
+              </div>
+              <div class="relative ui three column middle aligned very relaxed stackable grid" style="margin-top: 0 !important; padding-top: 0 !important;">
+                <div class="center aligned column">
+                  <h3>OneSignal Bell</h3>
                 </div>
                 <div class="center aligned column">
                   <h3>CSS Class</h3>
                 </div>
+                <div class="center aligned column">
+                  <h3>WordPress Widget</h3>
+                </div>
               </div>
-              <p>The WordPress widget gets added to your site's sidebar. Our CSS class can be added to any element.</p>
-              <p>The WordPress widget doesn't offer as much control over styling and positioning. Adding a CSS class gives you the most flexibility.</p>
+              <p>The WordPress widget gets added to your site's sidebar. It doesn't hide if the user is already subscribed, it is a very basic widget.</p>
+              <p>Use the CSS class if your site is highly specialized and need complete control over styling and positioning. Our SDK detects any elements with the CSS class <code>OneSignal-prompt</code> and prompts the user to subscribe upon clicking those elements.</p>
+              <p>The Bell is custom developed by us and does all the work for you! It detects when users are unsubscribed, already subscribed, or have blocked your site and show instructions to unblock. It allows users to easily temporarily subscribe from and resubscribe to notifications.</p>
               <p>To add the <em>WordPress widget</em> to your site:</p>
               <ol>
                 <li>Go to your WordPress dashboard's <strong>Appearance > Widgets</strong>.</li>
@@ -387,6 +399,7 @@ if (array_key_exists('app_id', $_POST)) {
                 <li>Click <em>OneSignal: Follow</em> to reveal a dropdown and customize the title and body to your liking.</li>
               </ol>
               <p>To add the CSS class, add <strong><code>OneSignal-prompt</code></strong> to any element you'd like. When the user clicks on this element, they will see a popup window asking them to subscribe to your site's notifications. Our plugin initializes JavaScript code on your page that, on document ready, searches for all instances of the class and attaches a click event handler.
+              <p>To add the OneSignal Bell, go to the Configuration tab and enable it.</p>
             </dd>
           </div>
           <div class="ui segment">
@@ -535,7 +548,7 @@ if (array_key_exists('app_id', $_POST)) {
         </div>
         <div class="ui borderless shadowless segment">
           <div class="field">
-            <label>Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Google Project Number" data-content="Your 13 digit project number. You can find this on Setup > Google Keys > Step 3." data-variation="wide"></i></label>
+            <label>Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Google Project Number" data-content="Your project number. You can find this on Setup > Google Keys > Step 3." data-variation="wide"></i></label>
             <input type="text" name="gcm_sender_id" placeholder="#############" value="<?php echo $onesignal_wp_settings['gcm_sender_id'] ?>">
           </div>
           <div class="field">
@@ -555,7 +568,7 @@ if (array_key_exists('app_id', $_POST)) {
             <input type="text" name="safari_web_id" placeholder="web.com.example" value="<?php echo @$onesignal_wp_settings['safari_web_id']; ?>">
           </div>
         </div>
-        <?php if (!empty($onesignal_wp_settings['subdomain']) || !empty($onesignal_wp_settings['use_modal_prompt'])): ?>
+        <div <?php if (empty($onesignal_wp_settings['subdomain']) && empty($onesignal_wp_settings['use_modal_prompt'])) { echo 'style="display: none;"'; } ?>>
           <div class="ui dividing header">
             <i class="external icon"></i>
             <div class="content">
@@ -599,20 +612,29 @@ if (array_key_exists('app_id', $_POST)) {
                   <label>Cancel Button Text</label>
                   <input type="text" name="prompt_cancel_button_text" placeholder="NO THANKS" value="<?php echo @$onesignal_wp_settings['prompt_cancel_button_text']; ?>">
               </div>
+              <div class="field">
+                <div class="ui toggle checkbox">
+                  <input type="checkbox" name="prompt_showcredit" value="true" <?php if (@$onesignal_wp_settings['prompt_showcredit']) { echo "checked"; } ?>>
+                  <label>Show the OneSignal logo on the prompt</label>
+                </div>
+              </div>
           </div>
-        <?php endif; ?>
-        <?php if (empty($onesignal_wp_settings['subdomain'])): ?>
+        </div>
+        <div <?php if (!empty($onesignal_wp_settings['subdomain'])) { echo 'style="display: none;"'; } ?>>
           <div class="ui dividing header">
-            <i class="alarm outline icon"></i>
+            <i class="comment outline icon"></i>
             <div class="content">
               Prompt Settings
             </div>
           </div>
           <div class="ui borderless shadowless segment" style="position: relative;">
+              <div class="explanation">
+                <p>These settings configure the popup prompt subscribing users see for non-HTTPS users or the in-page modal prompt HTTPS sites can optionally use.</p>
+              </div>
               <div class="field">
                 <div class="ui toggle checkbox">
-                  <input type="checkbox" name="no_auto_register" value="true" <?php if ($onesignal_wp_settings['no_auto_register']) { echo "checked"; } ?>>
-                  <label>Don't automatically prompt new site visitors to subscribe to push notifications<i class="tiny circular help icon link" role="popup" data-html="<p>If turned on, your site will no longer automatically present the following:</p><img src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg" ?>' width=450><p>Instead, you must write your own code to show the prompt.</p>" data-variation="flowing"></i></label>
+                  <input type="checkbox" name="prompt_auto_register" value="true" <?php if ($onesignal_wp_settings['prompt_auto_register']) { echo "checked"; } ?>>
+                  <label>Automatically prompt new site visitors to subscribe to push notifications<i class="tiny circular help icon link" role="popup" data-html="<p>If enabled, your site will automatically present the following without any code required:</p><img src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg" ?>' width=450>" data-variation="flowing"></i></label>
                 </div>
               </div>
               <div class="field">
@@ -622,7 +644,7 @@ if (array_key_exists('app_id', $_POST)) {
                 </div>
               </div>
           </div>
-        <?php endif; ?>
+        </div>
         <div class="ui dividing header">
           <i class="birthday outline icon"></i>
           <div class="content">
@@ -630,15 +652,18 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
         </div>
         <div class="ui borderless shadowless segment" style="position: relative;">
+            <div class="explanation">
+              <p>A welcome notification is sent to new visitors after subscribing. A new visitor is someone who hasn't previously registered. If a user's browser cache is cleared, the user is considered new again.</p>
+            </div>
             <div class="field">
               <div class="ui toggle checkbox">
-                <input type="checkbox" name="no_welcome_notification" value="true" <?php if ($onesignal_wp_settings['no_welcome_notification']) { echo "checked"; } ?>>
-                <label>Don't send new users a welcome push notification after subscribing<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification" data-content="If turned on, your site will no longer send a welcome push notification to new site visitors who have just subscribed. The message is customizable below."></i></label>
+                <input type="checkbox" name="send_welcome_notification" value="true" <?php if ($onesignal_wp_settings['send_welcome_notification']) { echo "checked"; } ?>>
+                <label>Send new users a welcome push notification after subscribing<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification" data-content="If enabled, your site will send a welcome push notification to new site visitors who have just subscribed. The message is customizable below."></i></label>
               </div>
             </div>
             <div class="field">
                 <label>Title<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification Title" data-content="The welcome notification's title. You can localize this to your own language. If not set, the site's title will be used. Set to one space ' ' to clear the title, although this is not recommended." data-variation="wide"></i></label>
-                <input type="text" placeholder="" name="welcome_notification_title" value="<?php echo @$onesignal_wp_settings['welcome_notification_title']; ?>">
+                <input type="text" placeholder="(defaults to your website's title if blank)" name="welcome_notification_title" value="<?php echo @$onesignal_wp_settings['welcome_notification_title']; ?>">
             </div>
             <div class="field">
                 <label>Message<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification Message" data-content="The welcome notification's message. You can localize this to your own language. A message is required. If left blank, the default of 'Thanks for subscribing!' will be used." data-variation="wide"></i></label>
@@ -663,6 +688,106 @@ if (array_key_exists('app_id', $_POST)) {
               <input type="checkbox" name="notification_on_post_from_plugin" value="true" <?php if (@$onesignal_wp_settings['notification_on_post_from_plugin']) { echo "checked"; } ?>>
               <label>Automatically send a push notification when I create a post from 3<sup>rd</sup> party plugins<i class="tiny circular help icon link" role="popup" data-title="Automatic Push from 3rd Party Editors" data-content="If checked, when you create a new post from most 3rd party plugins, the checkbox 'Send notification on publish' will be automatically checked." data-variation="wide"></i></label>
             </div>
+          </div>
+        </div>
+        <div class="ui dividing header">
+          <i class="alarm outline icon"></i>
+          <div class="content">
+            Bell Settings
+          </div>
+        </div>
+        <?php /* debug($onesignal_wp_settings['prompt_showcredit']) */ ?>
+        <div class="ui borderless shadowless segment">
+          <div class="explanation">
+            <p>The bell is an interactive widget your site visitors can use to manage their push notification subscription status. The bell can be used to initially subscribe to push notifications, and to unsubscribe.</p>
+          </div>
+          <div class="inline-setting field">
+            <label class="inline-setting">Size:</label>
+            <select class="ui dropdown" name="bell_size">
+              <option value="small" <?php if (array_key_exists('bell_size', $onesignal_wp_settings) && $onesignal_wp_settings['bell_size'] == "small") { echo "selected"; } ?>>Small</option>
+              <option value="medium" <?php if ((array_key_exists('bell_size', $onesignal_wp_settings) && $onesignal_wp_settings['bell_size'] == "medium") || !array_key_exists('bell_theme', $onesignal_wp_settings)) { echo "selected"; } ?>>Medium</option>
+              <option value="large" <?php if (array_key_exists('bell_size', $onesignal_wp_settings) && $onesignal_wp_settings['bell_size'] == "large") { echo "selected"; } ?>>Large</option>
+            </select>
+          </div>
+          <div class="inline-setting field">
+            <label class="inline-setting">Position:</label>
+            <select class="ui dropdown" name="bell_position">
+              <option value="bottom-left" <?php if (array_key_exists('bell_position', $onesignal_wp_settings) && $onesignal_wp_settings['bell_position'] == "bottom-left") { echo "selected"; } ?>>Bottom Left</option>
+              <option value="bottom-right" <?php if ((array_key_exists('bell_position', $onesignal_wp_settings) && $onesignal_wp_settings['bell_position'] == "bottom-right") || !array_key_exists('bell_position', $onesignal_wp_settings)) { echo "selected"; } ?>>Bottom Right</option>
+            </select>
+          </div>
+          <div class="inline-setting field">
+            <label class="inline-setting">Theme:</label>
+            <select class="ui dropdown" name="bell_theme">
+              <option value="default" <?php if ((array_key_exists('bell_theme', $onesignal_wp_settings) && $onesignal_wp_settings['bell_theme'] == "default") || !array_key_exists('bell_theme', $onesignal_wp_settings)) { echo "selected"; } ?>>Red</option>
+              <option value="inverse" <?php if (array_key_exists('bell_theme', $onesignal_wp_settings) && $onesignal_wp_settings['bell_theme'] == "inverse") { echo "selected"; } ?>>White</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="bell_enable" value="true" <?php if (array_key_exists('bell_enable', $onesignal_wp_settings) && $onesignal_wp_settings['bell_enable']) { echo "checked"; } ?>>
+              <label>Enable the bell<i class="tiny circular help icon link" role="popup" data-title="Bell" data-content="If checked, the bell and its resources will be loaded into your website." data-variation="wide"></i></label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="bell_prenotify" value="true" <?php if (array_key_exists('bell_prenotify', $onesignal_wp_settings) && @$onesignal_wp_settings['bell_prenotify']) { echo "checked"; } ?>>
+              <label>Show first-time site visitors an unread message icon<i class="tiny circular help icon link" role="popup" data-html="<p>If checked, a circle indicating 1 unread message will be shown:</p><img src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell-prenotify.jpg" ?>' width=56><p>A message will be displayed when they hover over the bell. This message can be customized below.</p>" data-variation="wide"></i></label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="bell_showcredit" value="true" <?php if (array_key_exists('bell_showcredit', $onesignal_wp_settings) && @$onesignal_wp_settings['bell_showcredit']) { echo "checked"; } ?>>
+              <label>Show the OneSignal logo on the bell dialog</label>
+            </div>
+          </div>
+          <div class="field">
+              <label>First-time visitor message (on bell hover)</label>
+              <input type="text" name="bell_message_prenotify" placeholder="Click to subscribe to notifications" value="<?php echo @$onesignal_wp_settings['bell_message_prenotify']; ?>">
+          </div>
+          <div class="field">
+              <label>Tip when unsubscribed</label>
+              <input type="text" name="bell_tip_state_unsubscribed" placeholder="Subscribe to notifications" value="<?php echo @$onesignal_wp_settings['bell_tip_state_unsubscribed']; ?>">
+          </div>
+          <div class="field">
+              <label>Tip when subscribed</label>
+              <input type="text" name="bell_tip_state_subscribed" placeholder="You're subscribed to notifications" value="<?php echo @$onesignal_wp_settings['bell_tip_state_subscribed']; ?>">
+          </div>
+          <div class="field">
+              <label>Tip when blocked</label>
+              <input type="text" name="bell_tip_state_blocked" placeholder="You've blocked notifications" value="<?php echo @$onesignal_wp_settings['bell_tip_state_blocked']; ?>">
+          </div>
+          <div class="field">
+              <label>Message on subscribed</label>
+              <input type="text" name="bell_message_action_subscribed" placeholder="Thanks for subscribing!" value="<?php echo @$onesignal_wp_settings['bell_message_action_subscribed']; ?>">
+          </div>
+          <div class="field">
+              <label>Message on re-subscribed (after first unsubscribing)</label>
+              <input type="text" name="bell_message_action_resubscribed" placeholder="You're subscribed to notifications" value="<?php echo @$onesignal_wp_settings['bell_message_action_resubscribed']; ?>">
+          </div>
+          <div class="field">
+              <label>Message on unsubscribed</label>
+              <input type="text" name="bell_message_action_unsubscribed" placeholder="You won't receive notifications again" value="<?php echo @$onesignal_wp_settings['bell_message_action_unsubscribed']; ?>">
+          </div>
+          <div class="field">
+              <label>Main dialog title</label>
+              <input type="text" name="bell_dialog_main_title" placeholder="Manage Site Notifications" value="<?php echo @$onesignal_wp_settings['bell_dialog_main_title']; ?>">
+          </div>
+          <div class="field">
+              <label>Main dialog subscribe button</label>
+              <input type="text" name="bell_dialog_main_button_subscribe" placeholder="SUBSCRIBE" value="<?php echo @$onesignal_wp_settings['bell_dialog_main_button_subscribe']; ?>">
+          </div>
+          <div class="field">
+              <label>Main dialog unsubscribe button</label>
+              <input type="text" name="bell_dialog_main_button_unsubscribe" placeholder="UNSUBSCRIBE" value="<?php echo @$onesignal_wp_settings['bell_dialog_main_button_unsubscribe']; ?>">
+          </div>
+          <div class="field">
+              <label>Blocked dialog title</label>
+              <input type="text" name="bell_dialog_blocked_title" placeholder="Unblock Notifications" value="<?php echo @$onesignal_wp_settings['bell_dialog_blocked_title']; ?>">
+          </div>
+          <div class="field">
+              <label>Blocked dialog message</label>
+              <input type="text" name="bell_dialog_blocked_message" placeholder="Follow these instructions to allow notifications:" value="<?php echo @$onesignal_wp_settings['bell_dialog_blocked_message']; ?>">
           </div>
         </div>
         <button class="ui large teal button" type="submit">Save</button>

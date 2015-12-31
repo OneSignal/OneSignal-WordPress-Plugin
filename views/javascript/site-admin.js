@@ -6,17 +6,19 @@ jQuery(function() {
     position: 'right center'
   });
   jQuery('.ui.sidebar').sidebar('toggle');
+  jQuery('.ui.dropdown').dropdown();
+
   jQuery('[name=use_modal_prompt]').change(function() {
     var isUseModalPromptChecked = jQuery('[name=use_modal_prompt]').is(':checked');
     if (isUseModalPromptChecked) {
-      var isNoAutoRegisterChecked = jQuery('[name=no_auto_register]').is(':checked');
-      if (!isNoAutoRegisterChecked)
-        jQuery('[name=no_auto_register]').click();
+      var isAutoRegisterChecked = jQuery('[name=prompt_auto_register]').is(':checked');
+      if (isAutoRegisterChecked)
+        jQuery('[name=prompt_auto_register]').click();
     }
   });
-  jQuery('[name=no_auto_register]').change(function() {
-    var isNoAutoRegisterChecked = jQuery('[name=no_auto_register]').is(':checked');
-    if (!isNoAutoRegisterChecked) {
+  jQuery('[name=prompt_auto_register]').change(function() {
+    var isAutoRegisterChecked = jQuery('[name=prompt_auto_register]').is(':checked');
+    if (isAutoRegisterChecked) {
       var isUseModalPromptChecked = jQuery('[name=use_modal_prompt]').is(':checked');
       if (isUseModalPromptChecked)
         jQuery('[name=use_modal_prompt]').click();
@@ -43,8 +45,8 @@ function showSupportMessage(type) {
 
 
 function showHttpPopup() {
-  subdomain = jQuery('[name=subdomain]').val();
-  message_localization_opts = {
+  var subdomain = jQuery('[name=subdomain]').val();
+  var message_localization_opts = {
     actionMessage: jQuery('[name=prompt_action_message]').val(),
     exampleNotificationTitleDesktop: jQuery('[name=prompt_example_notification_title_desktop]').val(),
     exampleNotificationMessageDesktop: jQuery('[name=prompt_example_notification_message_desktop]').val(),
@@ -52,7 +54,8 @@ function showHttpPopup() {
     exampleNotificationMessageMobile: jQuery('[name=prompt_example_notification_message_mobile]').val(),
     exampleNotificationCaption: jQuery('[name=prompt_example_notification_caption]').val(),
     acceptButtonText: jQuery('[name=prompt_accept_button_text]').val(),
-    cancelButtonText: jQuery('[name=prompt_cancel_button_text]').val()
+    cancelButtonText: jQuery('[name=prompt_cancel_button_text]').val(),
+    showCredit: jQuery('[name=prompt_showcredit]').is(':checked'),
   };
   var message_localization_opts_str = '';
   if (message_localization_opts) {
@@ -63,12 +66,13 @@ function showHttpPopup() {
       'exampleNotificationMessageMobile',
       'exampleNotificationCaption',
       'acceptButtonText',
-      'cancelButtonText'];
+      'cancelButtonText',
+      'showCredit'];
     for (var i = 0; i < message_localization_params.length; i++) {
       var key = message_localization_params[i];
       var value = message_localization_opts[key];
       var encoded_value = encodeURIComponent(value);
-      if (value) {
+      if (value || value === false) {
         message_localization_opts_str += '&' + key + '=' + encoded_value;
       }
     }

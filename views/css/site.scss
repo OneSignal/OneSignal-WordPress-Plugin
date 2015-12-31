@@ -442,6 +442,19 @@ label {
 
 .ui.popup {
     font-family: 'Lato';
+
+    p {
+        font-size: 1.0em;
+    }
+}
+
+.explanation {
+    p {
+        font-family: 'Lato';
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+    margin-bottom: 1.1rem;
 }
 
 i {
@@ -456,4 +469,19 @@ i {
 
 .ui.button {
     height: initial !important;
+}
+
+.ui.form .field > .selection.dropdown {
+    max-width: 150px;
+    font-family: 'Lato';
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+// .ui.form .field > label
+
+.ui.form .field > label.inline-setting {
+    font-weight: 500;
+    display: inline-block;
+    margin-right: 0.5em;
 }

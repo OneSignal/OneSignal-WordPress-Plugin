@@ -20,8 +20,19 @@ jQuery(function() {
     var isAutoRegisterChecked = jQuery('[name=prompt_auto_register]').is(':checked');
     if (isAutoRegisterChecked) {
       var isUseModalPromptChecked = jQuery('[name=use_modal_prompt]').is(':checked');
+      var isNotifyButtonEnabled = jQuery('[name=notifyButton_enable]').is(':checked');
       if (isUseModalPromptChecked)
         jQuery('[name=use_modal_prompt]').click();
+      if (isNotifyButtonEnabled)
+        jQuery('[name=notifyButton_enable]').click();
+    }
+  });
+  jQuery('[name=notifyButton_enable]').change(function() {
+    var isNotifyButtonEnabled = jQuery('[name=notifyButton_enable]').is(':checked');
+    if (isNotifyButtonEnabled) {
+      var isAutoRegisterChecked = jQuery('[name=prompt_auto_register]').is(':checked');
+      if (isAutoRegisterChecked)
+        jQuery('[name=prompt_auto_register]').click();
     }
   });
 });

@@ -1,10 +1,7 @@
 <?php
 
-function debug($text) {
-  print "<div style='font-family: Monaco, monospace; font-size: 20px; background: whitesmoke; border-bottom-right-radius: 8px; color: black;font-weight: 500; z-index: 9999999; position: fixed; top: 30px; left: 160px; padding: 1em;'>" . $text . "</div>";
-}
-function debugArray($var) {
-  print "<div style='font-family: Monaco, monospace; font-size: 16px; background: whitesmoke; border-bottom-right-radius: 8px; color: black;font-weight: 500; z-index: 9999999; position: fixed; top: 30px; left: 160px; padding: 1em;'><pre>"; print_r($var); echo "</pre></div>";
+function change_footer_admin() {
+  return '';
 }
 
 class OneSignal_Admin {
@@ -139,73 +136,73 @@ class OneSignal_Admin {
       $onesignal_wp_settings['prompt_showcredit'] = false;
     }
 
-    if (@$config['bell_size']) {
-      $onesignal_wp_settings['bell_size'] = @$config['bell_size'];
+    if (@$config['notifyButton_size']) {
+      $onesignal_wp_settings['notifyButton_size'] = @$config['notifyButton_size'];
     }
-    if (@$config['bell_theme']) {
-      $onesignal_wp_settings['bell_theme'] = @$config['bell_theme'];
+    if (@$config['notifyButton_theme']) {
+      $onesignal_wp_settings['notifyButton_theme'] = @$config['notifyButton_theme'];
     }
-    if (@$config['bell_position']) {
-      $onesignal_wp_settings['bell_position'] = @$config['bell_position'];
+    if (@$config['notifyButton_position']) {
+      $onesignal_wp_settings['notifyButton_position'] = @$config['notifyButton_position'];
     }
 
-    if (@$config['bell_enable'] == "true") {
-      $onesignal_wp_settings['bell_enable'] = true;
+    if (@$config['notifyButton_enable'] == "true") {
+      $onesignal_wp_settings['notifyButton_enable'] = true;
     }
     else {
-      $onesignal_wp_settings['bell_enable'] = false;
+      $onesignal_wp_settings['notifyButton_enable'] = false;
     }
 
-    if (@$config['bell_prenotify'] == "true") {
-      $onesignal_wp_settings['bell_prenotify'] = true;
+    if (@$config['notifyButton_prenotify'] == "true") {
+      $onesignal_wp_settings['notifyButton_prenotify'] = true;
     }
     else {
-      $onesignal_wp_settings['bell_prenotify'] = false;
+      $onesignal_wp_settings['notifyButton_prenotify'] = false;
     }
 
-    if (@$config['bell_showcredit'] == "true") {
-      $onesignal_wp_settings['bell_showcredit'] = true;
+    if (@$config['notifyButton_showcredit'] == "true") {
+      $onesignal_wp_settings['notifyButton_showcredit'] = true;
     }
     else {
-      $onesignal_wp_settings['bell_showcredit'] = false;
+      $onesignal_wp_settings['notifyButton_showcredit'] = false;
     }
 
 
-    if (array_key_exists('bell_message_prenotify', $config)) {
-      $onesignal_wp_settings['bell_message_prenotify'] = $config['bell_message_prenotify'];
+    if (array_key_exists('notifyButton_message_prenotify', $config)) {
+      $onesignal_wp_settings['notifyButton_message_prenotify'] = $config['notifyButton_message_prenotify'];
     }
-    if (array_key_exists('bell_tip_state_unsubscribed', $config)) {
-      $onesignal_wp_settings['bell_tip_state_unsubscribed'] = $config['bell_tip_state_unsubscribed'];
+    if (array_key_exists('notifyButton_tip_state_unsubscribed', $config)) {
+      $onesignal_wp_settings['notifyButton_tip_state_unsubscribed'] = $config['notifyButton_tip_state_unsubscribed'];
     }
-    if (array_key_exists('bell_tip_state_subscribed', $config)) {
-      $onesignal_wp_settings['bell_tip_state_subscribed'] = $config['bell_tip_state_subscribed'];
+    if (array_key_exists('notifyButton_tip_state_subscribed', $config)) {
+      $onesignal_wp_settings['notifyButton_tip_state_subscribed'] = $config['notifyButton_tip_state_subscribed'];
     }
-    if (array_key_exists('bell_tip_state_blocked', $config)) {
-      $onesignal_wp_settings['bell_tip_state_blocked'] = $config['bell_tip_state_blocked'];
+    if (array_key_exists('notifyButton_tip_state_blocked', $config)) {
+      $onesignal_wp_settings['notifyButton_tip_state_blocked'] = $config['notifyButton_tip_state_blocked'];
     }
-    if (array_key_exists('bell_message_action_subscribed', $config)) {
-      $onesignal_wp_settings['bell_message_action_subscribed'] = $config['bell_message_action_subscribed'];
+    if (array_key_exists('notifyButton_message_action_subscribed', $config)) {
+      $onesignal_wp_settings['notifyButton_message_action_subscribed'] = $config['notifyButton_message_action_subscribed'];
     }
-    if (array_key_exists('bell_message_action_resubscribed', $config)) {
-      $onesignal_wp_settings['bell_message_action_resubscribed'] = $config['bell_message_action_resubscribed'];
+    if (array_key_exists('notifyButton_message_action_resubscribed', $config)) {
+      $onesignal_wp_settings['notifyButton_message_action_resubscribed'] = $config['notifyButton_message_action_resubscribed'];
     }
-    if (array_key_exists('bell_message_action_unsubscribed', $config)) {
-      $onesignal_wp_settings['bell_message_action_unsubscribed'] = $config['bell_message_action_unsubscribed'];
+    if (array_key_exists('notifyButton_message_action_unsubscribed', $config)) {
+      $onesignal_wp_settings['notifyButton_message_action_unsubscribed'] = $config['notifyButton_message_action_unsubscribed'];
     }
-    if (array_key_exists('bell_dialog_main_title', $config)) {
-      $onesignal_wp_settings['bell_dialog_main_title'] = $config['bell_dialog_main_title'];
+    if (array_key_exists('notifyButton_dialog_main_title', $config)) {
+      $onesignal_wp_settings['notifyButton_dialog_main_title'] = $config['notifyButton_dialog_main_title'];
     }
-    if (array_key_exists('bell_dialog_main_button_subscribe', $config)) {
-      $onesignal_wp_settings['bell_dialog_main_button_subscribe'] = $config['bell_dialog_main_button_subscribe'];
+    if (array_key_exists('notifyButton_dialog_main_button_subscribe', $config)) {
+      $onesignal_wp_settings['notifyButton_dialog_main_button_subscribe'] = $config['notifyButton_dialog_main_button_subscribe'];
     }
-    if (array_key_exists('bell_dialog_main_button_unsubscribe', $config)) {
-      $onesignal_wp_settings['bell_dialog_main_button_unsubscribe'] = $config['bell_dialog_main_button_unsubscribe'];
+    if (array_key_exists('notifyButton_dialog_main_button_unsubscribe', $config)) {
+      $onesignal_wp_settings['notifyButton_dialog_main_button_unsubscribe'] = $config['notifyButton_dialog_main_button_unsubscribe'];
     }
-    if (array_key_exists('bell_dialog_blocked_title', $config)) {
-      $onesignal_wp_settings['bell_dialog_blocked_title'] = $config['bell_dialog_blocked_title'];
+    if (array_key_exists('notifyButton_dialog_blocked_title', $config)) {
+      $onesignal_wp_settings['notifyButton_dialog_blocked_title'] = $config['notifyButton_dialog_blocked_title'];
     }
-    if (array_key_exists('bell_dialog_blocked_message', $config)) {
-      $onesignal_wp_settings['bell_dialog_blocked_message'] = $config['bell_dialog_blocked_message'];
+    if (array_key_exists('notifyButton_dialog_blocked_message', $config)) {
+      $onesignal_wp_settings['notifyButton_dialog_blocked_message'] = $config['notifyButton_dialog_blocked_message'];
     }
     
     OneSignal::save_onesignal_settings($onesignal_wp_settings);
@@ -231,23 +228,18 @@ class OneSignal_Admin {
   public static function admin_custom_load() {
     add_action( 'admin_enqueue_scripts', array(__CLASS__, 'admin_custom_scripts') );
   }
-
-function change_footer_admin() {
-  echo '';
-}
-
   
   public static function admin_custom_scripts() {
-    add_filter('admin_footer_text', 'change_footer_admin ');
+    add_filter('admin_footer_text', 'change_footer_admin', 9999); // 9999 means priority, execute after the original fn executes
 
     wp_enqueue_style( 'icons', plugin_dir_url( __FILE__ ) . 'views/css/icons.css');
     wp_enqueue_style( 'semantic-ui', plugin_dir_url( __FILE__ ) . 'views/css/semantic-ui.css');
-    wp_enqueue_style( 'site', plugin_dir_url( __FILE__ ) . 'views/css/site.css', false, '2');
+    wp_enqueue_style( 'site', plugin_dir_url( __FILE__ ) . 'views/css/site.css', false, '4');
 
     wp_enqueue_script( 'jquery.min', plugin_dir_url( __FILE__ ) . 'views/javascript/jquery.min.js');
     wp_enqueue_script( 'semantic-ui', plugin_dir_url( __FILE__ ) . 'views/javascript/semantic-ui.js');
     wp_enqueue_script( 'intercom', plugin_dir_url( __FILE__ ) . 'views/javascript/intercom.js');
-    wp_enqueue_script( 'site', plugin_dir_url( __FILE__ ) . 'views/javascript/site-admin.js', false, '3');
+    wp_enqueue_script( 'site', plugin_dir_url( __FILE__ ) . 'views/javascript/site-admin.js', false, '5');
 
   }
   
@@ -257,9 +249,13 @@ function change_footer_admin() {
     }
     
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
-    
+
     if (isset($_POST['has_onesignal_setting'])) {
-      $send_onesignal_notification = $_POST['send_onesignal_notification'];
+      if (array_key_exists('send_onesignal_notification', $_POST)) {
+        $send_onesignal_notification = $_POST['send_onesignal_notification'];
+      } else {
+        $send_onesignal_notification = false;
+      }
     }
     elseif ($old_status !== "publish") {
       $send_onesignal_notification = $onesignal_wp_settings['notification_on_post_from_plugin'];

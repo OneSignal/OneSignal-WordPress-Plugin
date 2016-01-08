@@ -29,24 +29,24 @@ class OneSignal {
                   'prompt_accept_button_text' => "",
                   'prompt_cancel_button_text' => "",
                   'prompt_showcredit' => true,
-                  'bell_position' => 'bottom-right',
-                  'bell_size' => 'medium',
-                  'bell_theme' => 'default',
-                  'bell_enable' => false,
-                  'bell_prenotify' => true,
-                  'bell_showcredit' => true,
-                  'bell_message_prenotify' => '',
-                  'bell_tip_state_unsubscribed' => '',
-                  'bell_tip_state_subscribed' => '',
-                  'bell_tip_state_blocked' => '',
-                  'bell_message_action_subscribed' => '',
-                  'bell_message_action_resubscribed' => '',
-                  'bell_message_action_unsubscribed' => '',
-                  'bell_dialog_main_title' => '',
-                  'bell_dialog_main_button_subscribe' => '',
-                  'bell_dialog_main_button_unsubscribe' => '',
-                  'bell_dialog_blocked_title' => '',
-                  'bell_dialog_blocked_message' => ''
+                  'notifyButton_position' => 'bottom-right',
+                  'notifyButton_size' => 'medium',
+                  'notifyButton_theme' => 'default',
+                  'notifyButton_enable' => 'CALCULATE_SPECIAL_VALUE',
+                  'notifyButton_prenotify' => true,
+                  'notifyButton_showcredit' => true,
+                  'notifyButton_message_prenotify' => '',
+                  'notifyButton_tip_state_unsubscribed' => '',
+                  'notifyButton_tip_state_subscribed' => '',
+                  'notifyButton_tip_state_blocked' => '',
+                  'notifyButton_message_action_subscribed' => '',
+                  'notifyButton_message_action_resubscribed' => '',
+                  'notifyButton_message_action_unsubscribed' => '',
+                  'notifyButton_dialog_main_title' => '',
+                  'notifyButton_dialog_main_button_subscribe' => '',
+                  'notifyButton_dialog_main_button_unsubscribe' => '',
+                  'notifyButton_dialog_blocked_title' => '',
+                  'notifyButton_dialog_blocked_message' => ''
                   );
 
     $legacies = array(
@@ -55,13 +55,16 @@ class OneSignal {
         'send_welcome_notification.default' => true,
         'prompt_auto_register.legacyKey' => 'no_auto_register',
         'prompt_auto_register.invertLegacyValue' => true,
-        'prompt_auto_register.default' => true
+        'prompt_auto_register.default' => false
     );
+
+    $is_new_user = false;
 
     // If not set or empty, load a fresh empty array
     if (!isset($onesignal_wp_settings)) {
       $onesignal_wp_settings = get_option("OneSignalWPSetting");
       if (empty( $onesignal_wp_settings )) {
+         $is_new_user = true;
          $onesignal_wp_settings = array();
       }
     }
@@ -86,16 +89,35 @@ class OneSignal {
                }
             }
         }
+        else if ($value === "CALCULATE_SPECIAL_VALUE") {
+	        // Do nothing, handle below
+        }
         else {
             if (!array_key_exists($key, $onesignal_wp_settings)) {
                $onesignal_wp_settings[$key] = $value;
             }
         }
     }
-    
+
+    // Special case for notify button
+    if (!array_key_exists('notifyButton_enable', $onesignal_wp_settings)) {
+        if ( $is_new_user ) {
+            // Enable the notify button by default for new sites
+            $onesignal_wp_settings['notifyButton_enable'] = true;
+        } else {
+            // Do NOT enable the notify button for existing WordPress sites, since they might have a lot of users
+            $onesignal_wp_settings['notifyButton_enable'] = false;
+        }
+    }
+
+    // Special check for conflict between notify and auto prompt
+    if ($onesignal_wp_settings['notifyButton_enable'] === true) {
+      $onesignal_wp_settings['prompt_auto_register'] = false;
+    }
+
     return $onesignal_wp_settings;
   }
-  
+
   public static function save_onesignal_settings($settings) {
     $onesignal_wp_settings = $settings;
     update_option("OneSignalWPSetting", $onesignal_wp_settings);

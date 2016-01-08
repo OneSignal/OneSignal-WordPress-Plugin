@@ -3,8 +3,8 @@ Contributors: OneSignal
 Donate link: https://onesignal.com
 Tags: chrome, safari, push, push notifications, safari, chrome push, safari push, notifications, web push, notification, notify, mavericks, firefox push, android, android push, android notifications, mobile notifications, mobile, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
-Tested up to: 4.3.1
-Stable tag: 1.6.0
+Tested up to: 4.4.1
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 10,000 developers and marketers including some of the largest brands and websites in the world.
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 10,500 developers and marketers including some of the largest brands and websites in the world.
 
 After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
 
@@ -45,6 +45,12 @@ Features:
 3. Follow the instructions on the Setup page.
 
 == Changelog ==
+= 1.7.0 =
+- Fixed error reporting being enabled in version 1.6.0
+- Rebranded bell widget to notify button
+- Minor fixes to functions that would error but are silent because error reporting is usually disabled
+- Update default settings
+
 = 1.6.0 =
 - Added interactive bell widget for site visitors to manage push notification subscription
 - Improved toggle button text readability

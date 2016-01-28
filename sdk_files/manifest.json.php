@@ -1,11 +1,9 @@
 <?php
 	header("Content-Type: application/json");
-  require '../../../../wp-load.php';
-  
-  $onesignal_wp_options = get_option("OneSignalWPSetting");
+	$gcm_sender_id = preg_replace('/[^0-9]/', '', $_GET["gcm_sender_id"]);
 ?>
 {
   "start_url": "/",
-  "gcm_sender_id": "<?php echo $onesignal_wp_options['gcm_sender_id']; ?>",
+  "gcm_sender_id": "<?php echo $gcm_sender_id; ?>",
   "gcm_user_visible_only": true
 }

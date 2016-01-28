@@ -32,7 +32,12 @@ html {
 #wpfooter {
     visibility: hidden;
 }
-.site.container {
+
+.onesignal.outer.site.container {
+    margin: 50px !important;
+}
+
+.onesignal.site.container {
     position: relative;
     margin: 0;
     padding: 0;
@@ -44,6 +49,12 @@ html {
     line-height: 1.4285em;
     color: rgba(0, 0, 0, 0.87);
     font-smoothing: antialiased;
+
+    /* Reset style conflicts */
+    border: initial !important;
+    width: initial !important;
+    height: initial !important;
+    overflow-y: initial !important;
 }
 * {
     -webkit-font-smoothing: antialiased;
@@ -185,303 +196,345 @@ $color-text: rgb(51, 51, 51);
     padding-left: 0 !important;
 }
 
-.stackable.menu {
-    padding-top: 0;
-}
-
-.ui.segment {
-    padding-top: 0.5em;
-    &.special {
-        margin-left: -0.9em;
-        margin-right: -0.90em;
-    }
-    &.padded {
-        padding: 2em !important;
-    }
-}
-
-.ui.menu {
-    font-size: 1.2rem;
-
-    .item {
-        font-family: 'Open Sans', sans-serif;
-        font-weight: 400;
-
-        &.active {
-            font-weight: 600 !important;
-        }
-    }
-}
-
-.debug {
-    border: 1px solid magenta !important;
-}
-
-.borderless {
-    border: none !important;
-}
-
-.bordered {
-    border: unset !important;
-}
-
-.pull-left {
-    float: left;
-}
-
-.pull-right {
-    float: right;
-}
-
-.shadowless {
-    box-shadow: none !important;
-}
-
-.shadowed {
-    box-shadow: unset !important;
-}
-
-.img-responsive {
-    display: block;
-    max-width: 100%; // Part 1: Set a maximum relative to the parent
-    height: auto; // Part 2: Scale the height according to the width, otherwise you get stretching
-}
-
-.marginless {
-    margin: 0 !important;
-}
-
-.paddingless {
-    padding: 0 !important;
-}
-
-.relative {
-    position: relative;
-}
-
-.small-caps {
-    text-transform: uppercase;
-    font-size: 0.85rem;
-}
-
-.smaller {
-    font-size: 0.85rem;
-}
-
-header {
+header[class=onesignal] {
     background: url('https://onesignal.com/assets/common/bg_gray.png');
     padding-top: $container-width / 2;
     padding-bottom: $container-width / 1.75;
-    box-shadow: inset 0 -7px 9px -7px rgba(0,0,0,0.4);
-}
+    box-shadow: inset 0 -7px 9px -7px rgba(0, 0, 0, 0.4);
 
-.logo {
-    &.onesignal {
+    #logo-onesignal {
         background: url('https://onesignal.com/assets/logo_onesignal_white.svg');
         background-repeat: no-repeat;
         background-size: 100% 100%;
     }
 }
 
-code {
-    background: rgba($color-text, 0.05);
-    padding: 0.25em;
-    border-radius: 4px;
-    font-size: 1.1rem;
-
-    strong, em {
-        font-family: monospace;
-    }
-
-    &.massive {
-        font-size: 1.3rem;
-    }
+#wpcontent {
+    padding-left: 0 !important;
 }
 
-.segment {
-    img {
-        margin: 1em auto;
+.ui.site.onesignal.container {
+    .stackable.menu {
+        padding-top: 0;
+    }
 
-        & + p {
-            margin-top: 3em;
+    .ui.segment {
+        padding-top: 0.5em;
+        &.special {
+            margin-left: -0.9em;
+            margin-right: -0.90em;
+        }
+        &.padded {
+            padding: 2em !important;
         }
     }
-}
 
-.alternate {
-    color: lighten($color-text, 40%) !important;
-    background-color: transparent;
-}
-
-em {
-    font-family: "LusitanaItalic";
-    font-style: normal;
-
-    strong {
-        font-family: 'LusitanaItalicBold';
-        font-style: normal;
-        font-weight: 100;
-    }
-}
-
-strong {
-    font-family: "LusitanaBold";
-    font-style: normal;
-    font-weight: 100;
-
-    em {
-        font-family: 'LusitanaItalicBold';
-        font-style: normal;
-        font-weight: 100;
-    }
-}
-
-p {
-    font-size: 1.3rem;
-    color:$color-text;
-
-    & + dl {
-        padding-top: 1em;
-    }
-
-    &.lato {
-        font-family: 'Lato';
+    .ui.menu {
         font-size: 1.2rem;
-    }
-}
 
-ol,ul {
-    font-size: 1.3rem;
-    line-height: 1.4285em;
-    color:$color-text;
-    list-style: initial !important;
+        .item {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
 
-    li {
-        font-size: inherit;
-        line-height: inherit;
-        margin: 0.5em 0;
-    }
-}
-
-dl {
-    margin: 0;
-
-    dd {
-        color:$color-text;
-        padding-bottom: $dt-margin;
-        padding-top: 0.22em;
-        padding-left: 1em;
-    }
-
-    dt {
-        padding-bottom: $dt-margin;
-        border: 1px solid lighten($color-text, 30%);
-        text-align: center;
-        line-height: $dt-height - 1px;
-        font-family: 'Open Sans', sans-serif;
-        font-weight: 600;
-        border-radius: 50%;
-        color: $color-text;
-        float: left;
-        width: $dt-height;
-        height: $dt-height;
-        vertical-align: middle;
-
-        &.unstyled {
-            padding: initial;
-            border: initial;
-            text-align: initial;
-            border-radius: initial;
-            width: initial;
-            height: initial;
+            &.active {
+                font-weight: 600 !important;
+            }
         }
     }
-}
 
-label {
-    font-family: 'Lato';
-    font-size: 1.2rem !important;
-    font-weight: 500;
+    .debug {
+        border: 1px solid magenta !important;
+    }
+
+    .borderless {
+        border: none !important;
+    }
+
+    .bordered {
+        border: unset !important;
+    }
+
+    .pull-left {
+        float: left;
+    }
+
+    .pull-right {
+        float: right;
+    }
+
+    .shadowless {
+        box-shadow: none !important;
+    }
+
+    .shadowed {
+        box-shadow: unset !important;
+    }
+
+    .img-responsive {
+        display: block;
+        max-width: 100%; // Part 1: Set a maximum relative to the parent
+        height: auto; // Part 2: Scale the height according to the width, otherwise you get stretching
+
+        &.no-center {
+            margin: initial;
+            margin-bottom: 1em;
+        }
+    }
+
+    .marginless {
+        margin: 0 !important;
+    }
+
+    .paddingless {
+        padding: 0 !important;
+    }
+
+    .relative {
+        position: relative;
+    }
+
+    .small-caps {
+        text-transform: uppercase;
+        font-size: 0.85rem;
+    }
+
+    .smaller {
+        font-size: 0.85rem;
+    }
+
+    code {
+        background: rgba($color-text, 0.05);
+        padding: 0.25em;
+        border-radius: 4px;
+        font-size: 1.1rem;
+
+        strong, em {
+            font-family: monospace;
+        }
+
+        &.massive {
+            font-size: 1.3rem;
+        }
+    }
+
+    .segment {
+        img {
+            margin: 1em auto;
+
+            & + p {
+                margin-top: 3em;
+            }
+        }
+    }
 
     .alternate {
-        margin: 0 0.85em;
+        color: lighten($color-text, 40%) !important;
+        background-color: transparent;
+    }
+
+    em {
+        font-family: "LusitanaItalic";
+        font-style: normal;
+
+        strong {
+            font-family: 'LusitanaItalicBold';
+            font-style: normal;
+            font-weight: 100;
+        }
+    }
+
+    strong {
+        font-family: "LusitanaBold";
+        font-style: normal;
+        font-weight: 100;
+
+        em {
+            font-family: 'LusitanaItalicBold';
+            font-style: normal;
+            font-weight: 100;
+        }
+    }
+
+    p {
+        font-size: 1.3rem;
+        color: $color-text;
+
+        & + dl {
+            padding-top: 1em;
+        }
+
+        &.lato {
+            font-family: 'Lato';
+            font-size: 1.2rem;
+        }
+    }
+
+    ol, ul {
+        font-size: 1.3rem;
+        line-height: 1.4285em;
+        color: $color-text;
+        list-style: initial !important;
+
+        li {
+            font-size: inherit;
+            line-height: inherit;
+            margin: 0.5em 0;
+        }
+    }
+
+    dl {
+        margin: 0;
+
+        dd {
+            color: $color-text;
+            padding-bottom: $dt-margin;
+            padding-top: 0.22em;
+            padding-left: 1em;
+        }
+
+        dt {
+            padding-bottom: $dt-margin;
+            border: 1px solid lighten($color-text, 30%);
+            text-align: center;
+            line-height: $dt-height - 1px;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 600;
+            border-radius: 50%;
+            color: $color-text;
+            float: left;
+            width: $dt-height;
+            height: $dt-height;
+            vertical-align: middle;
+
+            &.unstyled {
+                padding: initial;
+                border: initial;
+                text-align: initial;
+                border-radius: initial;
+                width: initial;
+                height: initial;
+            }
+        }
+    }
+
+    label {
+        font-family: 'Lato';
+        font-size: 1.2rem !important;
+        font-weight: 500;
+
+        .alternate {
+            margin: 0 0.85em;
+            font-weight: 400;
+        }
+    }
+
+    .divider {
+        font-family: $font-sourcesans;
+    }
+
+    .grid {
+        padding: 1em 0 !important;
+        margin-top: 1em !important;
+        margin-bottom: 1.5em !important;
+    }
+
+    .piled.segment {
+        padding-top: 1em;
         font-weight: 400;
+
+        h3 {
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 0;
+        }
     }
-}
 
-.divider {
-    font-family: $font-sourcesans;
-}
+    .pinned.icon {
+        position: absolute;
+        left: 0.5em;
+        top: 0.5em;
 
-.grid {
-    padding: 1em 0 !important;
-    margin-top: 1em !important;
-    margin-bottom: 1.5em !important;
-}
-
-.piled.segment {
-    padding-top: 1em;
-    font-weight: 400;
-
-    h3 {
-        text-transform: uppercase;
-        font-weight: 600;
-        margin-top: 0;
+        &.lightgrey {
+            background-color: rgba(0, 0, 0, 0.1) !important;
+        }
     }
-}
 
-.pinned.icon {
-    position: absolute;
-    left: 0.5em;
-    top: 0.5em;
+    .ui.popup {
+        font-family: 'Lato';
 
-    &.lightgrey {
-        background-color: rgba(0, 0, 0, 0.1) !important;
+        p {
+            font-size: 1.0em;
+        }
     }
-}
 
-.ui.popup {
-    font-family: 'Lato';
-
-    p {
-        font-size: 1.0em;
+    .explanation {
+        p {
+            font-family: 'Lato';
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        margin-bottom: 1.1rem;
     }
-}
 
-.explanation {
-    p {
+    i {
+        &[role=popup] {
+            margin-left: 1em;
+        }
+    }
+
+    .wp-core-ui .button, .wp-core-ui .button-primary, .wp-core-ui .button-secondary {
+        height: unset;
+    }
+
+    .ui.button {
+        height: initial !important;
+    }
+
+    .ui.form .field > .selection.dropdown {
+        max-width: 150px;
         font-family: 'Lato';
         font-size: 1.1rem;
         font-weight: 500;
     }
-    margin-bottom: 1.1rem;
-}
-
-i {
-    &[role=popup] {
-        margin-left: 1em;
+    .ui.form .field > label.inline-setting {
+        font-weight: 500;
+        display: inline-block;
+        margin-right: 0.5em;
     }
-}
 
-.wp-core-ui .button, .wp-core-ui .button-primary, .wp-core-ui .button-secondary {
-    height: unset;
-}
+    .ui.form .short.field > label.inline-setting {
+        width: 5em;
+    }
 
-.ui.button {
-    height: initial !important;
-}
+    .notice, div.error, div.updated {
+        box-shadow: none;
+    }
 
-.ui.form .field > .selection.dropdown {
-    max-width: 150px;
-    font-family: 'Lato';
-    font-size: 1.1rem;
-    font-weight: 500;
-}
+    .ui.error.message {
+        padding-top: 0.3em;
+        padding-bottom: 0.3em;
+        padding-left: 2em;
 
-// .ui.form .field > label
+        li {
+            font-family: 'Lato';
+            font-size: 0.85em;
+            font-weight: 500;
+            color: #9f3a38;
+        }
+    }
 
-.ui.form .field > label.inline-setting {
-    font-weight: 500;
-    display: inline-block;
-    margin-right: 0.5em;
+    .ui.inline.nag {
+        font-family: 'Lato';
+        font-size: 1em;
+        font-weight: 500;
+        color: white;
+
+        &.subdomain-http {
+            background: purple;
+        }
+
+        &.save-settings {
+            background: green;
+        }
+    }
 }

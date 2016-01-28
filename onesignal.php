@@ -3,7 +3,7 @@
   * Plugin Name: OneSignal Push Notifications
  * Plugin URI: https://onesignal.com/
  * Description:
- * Version: 1.7.0
+ * Version: 1.7.1
  * Author: OneSignal
  * Author URI: https://onesignal.com
  * License: MIT

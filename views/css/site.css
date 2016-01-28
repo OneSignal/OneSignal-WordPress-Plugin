@@ -318,7 +318,10 @@ html {
 #wpfooter {
   visibility: hidden; }
 
-.site.container {
+.onesignal.outer.site.container {
+  margin: 50px !important; }
+
+.onesignal.site.container {
   position: relative;
   margin: 0;
   padding: 0;
@@ -329,7 +332,12 @@ html {
   font-family: 'Lusitana', 'Raleway', sans-serif;
   line-height: 1.4285em;
   color: rgba(0, 0, 0, 0.87);
-  font-smoothing: antialiased; }
+  font-smoothing: antialiased;
+  /* Reset style conflicts */
+  border: initial !important;
+  width: initial !important;
+  height: initial !important;
+  overflow-y: initial !important; }
 
 * {
   -webkit-font-smoothing: antialiased;
@@ -444,141 +452,123 @@ input::selection {
 #wpcontent {
   padding-left: 0 !important; }
 
-.stackable.menu {
-  padding-top: 0; }
-
-.ui.segment {
-  padding-top: 0.5em; }
-  .ui.segment.special {
-    margin-left: -0.9em;
-    margin-right: -0.90em; }
-  .ui.segment.padded {
-    padding: 2em !important; }
-
-.ui.menu {
-  font-size: 1.2rem; }
-  .ui.menu .item {
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 400; }
-    .ui.menu .item.active {
-      font-weight: 600 !important; }
-
-.debug {
-  border: 1px solid magenta !important; }
-
-.borderless {
-  border: none !important; }
-
-.bordered {
-  border: unset !important; }
-
-.pull-left {
-  float: left; }
-
-.pull-right {
-  float: right; }
-
-.shadowless {
-  box-shadow: none !important; }
-
-.shadowed {
-  box-shadow: unset !important; }
-
-.img-responsive {
-  display: block;
-  max-width: 100%;
-  height: auto; }
-
-.marginless {
-  margin: 0 !important; }
-
-.paddingless {
-  padding: 0 !important; }
-
-.relative {
-  position: relative; }
-
-.small-caps {
-  text-transform: uppercase;
-  font-size: 0.85rem; }
-
-.smaller {
-  font-size: 0.85rem; }
-
-header {
+header[class=onesignal] {
   background: url("https://onesignal.com/assets/common/bg_gray.png");
   padding-top: 35px;
   padding-bottom: 40px;
   box-shadow: inset 0 -7px 9px -7px rgba(0, 0, 0, 0.4); }
+  header[class=onesignal] #logo-onesignal {
+    background: url("https://onesignal.com/assets/logo_onesignal_white.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%; }
 
-.logo.onesignal {
-  background: url("https://onesignal.com/assets/logo_onesignal_white.svg");
-  background-repeat: no-repeat;
-  background-size: 100% 100%; }
+#wpcontent {
+  padding-left: 0 !important; }
 
-code {
+.ui.site.onesignal.container .stackable.menu {
+  padding-top: 0; }
+.ui.site.onesignal.container .ui.segment {
+  padding-top: 0.5em; }
+  .ui.site.onesignal.container .ui.segment.special {
+    margin-left: -0.9em;
+    margin-right: -0.90em; }
+  .ui.site.onesignal.container .ui.segment.padded {
+    padding: 2em !important; }
+.ui.site.onesignal.container .ui.menu {
+  font-size: 1.2rem; }
+  .ui.site.onesignal.container .ui.menu .item {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400; }
+    .ui.site.onesignal.container .ui.menu .item.active {
+      font-weight: 600 !important; }
+.ui.site.onesignal.container .debug {
+  border: 1px solid magenta !important; }
+.ui.site.onesignal.container .borderless {
+  border: none !important; }
+.ui.site.onesignal.container .bordered {
+  border: unset !important; }
+.ui.site.onesignal.container .pull-left {
+  float: left; }
+.ui.site.onesignal.container .pull-right {
+  float: right; }
+.ui.site.onesignal.container .shadowless {
+  box-shadow: none !important; }
+.ui.site.onesignal.container .shadowed {
+  box-shadow: unset !important; }
+.ui.site.onesignal.container .img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto; }
+  .ui.site.onesignal.container .img-responsive.no-center {
+    margin: initial;
+    margin-bottom: 1em; }
+.ui.site.onesignal.container .marginless {
+  margin: 0 !important; }
+.ui.site.onesignal.container .paddingless {
+  padding: 0 !important; }
+.ui.site.onesignal.container .relative {
+  position: relative; }
+.ui.site.onesignal.container .small-caps {
+  text-transform: uppercase;
+  font-size: 0.85rem; }
+.ui.site.onesignal.container .smaller {
+  font-size: 0.85rem; }
+.ui.site.onesignal.container code {
   background: rgba(51, 51, 51, 0.05);
   padding: 0.25em;
   border-radius: 4px;
   font-size: 1.1rem; }
-  code strong, code em {
+  .ui.site.onesignal.container code strong, .ui.site.onesignal.container code em {
     font-family: monospace; }
-  code.massive {
+  .ui.site.onesignal.container code.massive {
     font-size: 1.3rem; }
-
-.segment img {
+.ui.site.onesignal.container .segment img {
   margin: 1em auto; }
-  .segment img + p {
+  .ui.site.onesignal.container .segment img + p {
     margin-top: 3em; }
-
-.alternate {
+.ui.site.onesignal.container .alternate {
   color: #999999 !important;
   background-color: transparent; }
-
-em {
+.ui.site.onesignal.container em {
   font-family: "LusitanaItalic";
   font-style: normal; }
-  em strong {
+  .ui.site.onesignal.container em strong {
     font-family: 'LusitanaItalicBold';
     font-style: normal;
     font-weight: 100; }
-
-strong {
+.ui.site.onesignal.container strong {
   font-family: "LusitanaBold";
   font-style: normal;
   font-weight: 100; }
-  strong em {
+  .ui.site.onesignal.container strong em {
     font-family: 'LusitanaItalicBold';
     font-style: normal;
     font-weight: 100; }
-
-p {
+.ui.site.onesignal.container p {
   font-size: 1.3rem;
   color: #333333; }
-  p + dl {
+  .ui.site.onesignal.container p + dl {
     padding-top: 1em; }
-  p.lato {
+  .ui.site.onesignal.container p.lato {
     font-family: 'Lato';
     font-size: 1.2rem; }
-
-ol, ul {
+.ui.site.onesignal.container ol, .ui.site.onesignal.container ul {
   font-size: 1.3rem;
   line-height: 1.4285em;
   color: #333333;
   list-style: initial !important; }
-  ol li, ul li {
+  .ui.site.onesignal.container ol li, .ui.site.onesignal.container ul li {
     font-size: inherit;
     line-height: inherit;
     margin: 0.5em 0; }
-
-dl {
+.ui.site.onesignal.container dl {
   margin: 0; }
-  dl dd {
+  .ui.site.onesignal.container dl dd {
     color: #333333;
     padding-bottom: 2em;
     padding-top: 0.22em;
     padding-left: 1em; }
-  dl dt {
+  .ui.site.onesignal.container dl dt {
     padding-bottom: 2em;
     border: 1px solid gray;
     text-align: center;
@@ -591,75 +581,85 @@ dl {
     width: 35px;
     height: 35px;
     vertical-align: middle; }
-    dl dt.unstyled {
+    .ui.site.onesignal.container dl dt.unstyled {
       padding: initial;
       border: initial;
       text-align: initial;
       border-radius: initial;
       width: initial;
       height: initial; }
-
-label {
+.ui.site.onesignal.container label {
   font-family: 'Lato';
   font-size: 1.2rem !important;
   font-weight: 500; }
-  label .alternate {
+  .ui.site.onesignal.container label .alternate {
     margin: 0 0.85em;
     font-weight: 400; }
-
-.divider {
+.ui.site.onesignal.container .divider {
   font-family: "Source Sans Pro", "Helvetica Neue", sans-serif; }
-
-.grid {
+.ui.site.onesignal.container .grid {
   padding: 1em 0 !important;
   margin-top: 1em !important;
   margin-bottom: 1.5em !important; }
-
-.piled.segment {
+.ui.site.onesignal.container .piled.segment {
   padding-top: 1em;
   font-weight: 400; }
-  .piled.segment h3 {
+  .ui.site.onesignal.container .piled.segment h3 {
     text-transform: uppercase;
     font-weight: 600;
     margin-top: 0; }
-
-.pinned.icon {
+.ui.site.onesignal.container .pinned.icon {
   position: absolute;
   left: 0.5em;
   top: 0.5em; }
-  .pinned.icon.lightgrey {
+  .ui.site.onesignal.container .pinned.icon.lightgrey {
     background-color: rgba(0, 0, 0, 0.1) !important; }
-
-.ui.popup {
+.ui.site.onesignal.container .ui.popup {
   font-family: 'Lato'; }
-  .ui.popup p {
+  .ui.site.onesignal.container .ui.popup p {
     font-size: 1.0em; }
-
-.explanation {
+.ui.site.onesignal.container .explanation {
   margin-bottom: 1.1rem; }
-  .explanation p {
+  .ui.site.onesignal.container .explanation p {
     font-family: 'Lato';
     font-size: 1.1rem;
     font-weight: 500; }
-
-i[role=popup] {
+.ui.site.onesignal.container i[role=popup] {
   margin-left: 1em; }
-
-.wp-core-ui .button, .wp-core-ui .button-primary, .wp-core-ui .button-secondary {
+.ui.site.onesignal.container .wp-core-ui .button, .ui.site.onesignal.container .wp-core-ui .button-primary, .ui.site.onesignal.container .wp-core-ui .button-secondary {
   height: unset; }
-
-.ui.button {
+.ui.site.onesignal.container .ui.button {
   height: initial !important; }
-
-.ui.form .field > .selection.dropdown {
+.ui.site.onesignal.container .ui.form .field > .selection.dropdown {
   max-width: 150px;
   font-family: 'Lato';
   font-size: 1.1rem;
   font-weight: 500; }
-
-.ui.form .field > label.inline-setting {
+.ui.site.onesignal.container .ui.form .field > label.inline-setting {
   font-weight: 500;
   display: inline-block;
   margin-right: 0.5em; }
+.ui.site.onesignal.container .ui.form .short.field > label.inline-setting {
+  width: 5em; }
+.ui.site.onesignal.container .notice, .ui.site.onesignal.container div.error, .ui.site.onesignal.container div.updated {
+  box-shadow: none; }
+.ui.site.onesignal.container .ui.error.message {
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
+  padding-left: 2em; }
+  .ui.site.onesignal.container .ui.error.message li {
+    font-family: 'Lato';
+    font-size: 0.85em;
+    font-weight: 500;
+    color: #9f3a38; }
+.ui.site.onesignal.container .ui.inline.nag {
+  font-family: 'Lato';
+  font-size: 1em;
+  font-weight: 500;
+  color: white; }
+  .ui.site.onesignal.container .ui.inline.nag.subdomain-http {
+    background: purple; }
+  .ui.site.onesignal.container .ui.inline.nag.save-settings {
+    background: green; }
 
 /*# sourceMappingURL=site.css.map */

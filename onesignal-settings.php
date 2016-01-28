@@ -9,9 +9,11 @@ class OneSignal {
                   'send_welcome_notification' => 'CALCULATE_LEGACY_VALUE',
                   'welcome_notification_title' => '',
                   'welcome_notification_message' => '',
+                  'welcome_notification_url' => '',
                   'notification_on_post' => true,
                   'notification_on_post_from_plugin' => true,
-                  'use_http' => false,
+                  'is_site_https_firsttime' => 'unset',
+                  'is_site_https' => false,
                   'use_modal_prompt' => false,
                   'subdomain' => "",
                   'origin' => "",
@@ -20,6 +22,7 @@ class OneSignal {
                   'default_url' => "",
                   'app_rest_api_key' => "",
                   'safari_web_id' => "",
+                  'prompt_customize_enable' => 'CALCULATE_SPECIAL_VALUE',
                   'prompt_action_message' => "",
                   'prompt_example_notification_title_desktop' => "",
                   'prompt_example_notification_message_desktop' => "",
@@ -34,6 +37,7 @@ class OneSignal {
                   'notifyButton_theme' => 'default',
                   'notifyButton_enable' => 'CALCULATE_SPECIAL_VALUE',
                   'notifyButton_prenotify' => true,
+                  'notifyButton_customize_enable' => 'CALCULATE_SPECIAL_VALUE',
                   'notifyButton_showcredit' => true,
                   'notifyButton_message_prenotify' => '',
                   'notifyButton_tip_state_unsubscribed' => '',
@@ -110,9 +114,60 @@ class OneSignal {
         }
     }
 
-    // Special check for conflict between notify and auto prompt
-    if ($onesignal_wp_settings['notifyButton_enable'] === true) {
-      $onesignal_wp_settings['prompt_auto_register'] = false;
+    // Special case for notify button customization
+    if (!array_key_exists('notifyButton_customize_enable', $onesignal_wp_settings)) {
+      if ( $is_new_user ) {
+        // Initially turn off notifyButton_customize_enable by default for new sites
+        $onesignal_wp_settings['notifyButton_customize_enable'] = true;
+      } else {
+        $text_customize_settings = array(
+          'notifyButton_message_prenotify',
+          'notifyButton_tip_state_unsubscribed',
+          'notifyButton_tip_state_subscribed',
+          'notifyButton_tip_state_blocked',
+          'notifyButton_message_action_subscribed',
+          'notifyButton_message_action_resubscribed',
+          'notifyButton_message_action_unsubscribed',
+          'notifyButton_dialog_main_title',
+          'notifyButton_dialog_main_button_subscribe',
+          'notifyButton_dialog_main_button_unsubscribe',
+          'notifyButton_dialog_blocked_title',
+          'notifyButton_dialog_blocked_message'
+        );
+        $was_customized = false;
+        foreach ($text_customize_settings as $text_customize_setting) {
+          if ($onesignal_wp_settings[$text_customize_setting] !== "") {
+            $was_customized = true;
+          }
+        }
+        $onesignal_wp_settings['notifyButton_customize_enable'] = $was_customized;
+      }
+    }
+
+    // Special case for prompt customization
+    if (!array_key_exists('prompt_customize_enable', $onesignal_wp_settings)) {
+      if ( $is_new_user ) {
+        // Initially turn off prompt_customize_enable by default for new sites
+        $onesignal_wp_settings['prompt_customize_enable'] = true;
+      } else {
+        $text_customize_settings = array(
+          'prompt_action_message',
+          'prompt_example_notification_title_desktop',
+          'prompt_example_notification_message_desktop',
+          'prompt_example_notification_title_mobile',
+          'prompt_example_notification_message_mobile',
+          'prompt_example_notification_caption',
+          'prompt_accept_button_text',
+          'prompt_cancel_button_text'
+        );
+        $was_customized = false;
+        foreach ($text_customize_settings as $text_customize_setting) {
+          if ($onesignal_wp_settings[$text_customize_setting] !== "") {
+            $was_customized = true;
+          }
+        }
+        $onesignal_wp_settings['prompt_customize_enable'] = $was_customized;
+      }
     }
 
     return $onesignal_wp_settings;

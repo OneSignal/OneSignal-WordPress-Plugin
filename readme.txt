@@ -1,10 +1,10 @@
 === OneSignal - Free Web Push Notifications ===
 Contributors: OneSignal
 Donate link: https://onesignal.com
-Tags: chrome, safari, push, push notifications, safari, chrome push, safari push, notifications, web push, notification, notify, mavericks, firefox push, android, android push, android notifications, mobile notifications, mobile, desktop notifications, gcm, push messages, onesignal
+Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
 Tested up to: 4.4.1
-Stable tag: 1.7.0
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,17 +12,15 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 10,500 developers and marketers including some of the largest brands and websites in the world.
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 12,000 developers and marketers including some of the largest brands and websites in the world.
 
 After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
 
 We make it easy to configure delivering notifications at preset intervals, targeting notifications to specific users, and customizing the opt-in process for your visitors.
 
-Best of all, WordPress users that use OneSignal will get a FREE lifetime account.
-
 Features:
 
-* Supports Chrome (Desktop & Android), Safari (Mac OS X), and Firefox (Beta) on both HTTP and HTTPS sites.
+* Supports Chrome (Desktop & Android), Safari (Mac OS X), and Firefox (Desktop) on both HTTP and HTTPS sites.
 
 * **Automatic Notifications** - Send notifications to followers every time you publish a new post. Or set up a reminder that gets automatically sent to them if they haven’t visited for a few days.
 
@@ -44,7 +42,18 @@ Features:
 2. Active the OneSignal plugin from your WordPress settings dashboard.
 3. Follow the instructions on the Setup page.
 
+== Screenshots ==
+
+1. Notifications on Chrome, Safari, and Firefox.
+2. Our detailed setup instructions to get you started.
+3. Another shot of our detailed setup instructions with images.
+4. Our configuration settings allowing you to customize the way users are prompted to subscribe and the notifications they receive.
+
 == Changelog ==
+= 1.7.1 =
+- Organized and clarified plugin settings
+- Add screenshots to plugin description
+
 = 1.7.0 =
 - Fixed error reporting being enabled in version 1.6.0
 - Rebranded bell widget to notify button

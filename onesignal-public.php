@@ -91,10 +91,10 @@ class OneSignal_Public {
       <?php
         $settings = get_option("OneSignalWPSetting");
         $key = 'gcm_sender_id';
-        if (array_key_exists($key, $settings)) {
+        if ($settings !== false && array_key_exists($key, $settings)) {
           $gcm_sender_id = $settings[$key];
         } else {
-          $gcm_sender_id = '';
+          $gcm_sender_id = 'WORDPRESS_NO_SENDER_ID_ENTERED';
         }
       ?>
     <link rel="manifest" href="<?php echo( $current_plugin_url . 'sdk_files/manifest.json.php?gcm_sender_id=' . $gcm_sender_id ) ?>" />
@@ -128,7 +128,17 @@ class OneSignal_Public {
            echo "OneSignal.setDefaultNotificationUrl(\"" . get_site_url() . "\");\n";
         }
         ?>
-        var oneSignal_options = {appId: "<?php echo $onesignal_wp_settings["app_id"] ?>"};
+        var oneSignal_options = {};
+
+        <?php
+        echo "oneSignal_options['wordpress'] = true;\n";
+        echo "oneSignal_options['appId'] = '" . $onesignal_wp_settings["app_id"] . "';\n";
+        ?>
+
+
+      <?php
+          echo "oneSignal_options['wordpress'] = true;\n";
+        ?>
 
         <?php
         if ($onesignal_wp_settings["prompt_auto_register"] == "1") {

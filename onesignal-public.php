@@ -133,14 +133,7 @@ class OneSignal_Public {
         <?php
         echo "oneSignal_options['wordpress'] = true;\n";
         echo "oneSignal_options['appId'] = '" . $onesignal_wp_settings["app_id"] . "';\n";
-        ?>
 
-
-      <?php
-          echo "oneSignal_options['wordpress'] = true;\n";
-        ?>
-
-        <?php
         if ($onesignal_wp_settings["prompt_auto_register"] == "1") {
           echo "oneSignal_options['autoRegister'] = true;\n";
         }

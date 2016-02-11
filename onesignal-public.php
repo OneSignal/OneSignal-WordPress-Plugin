@@ -111,21 +111,21 @@ class OneSignal_Public {
         OneSignal.SERVICE_WORKER_PARAM = { scope: '/' };
 
         <?php if ($onesignal_wp_settings['default_title'] != "") {
-          echo "OneSignal.setDefaultTitle(\"" . $onesignal_wp_settings['default_title'] . "\");\n";
+          echo "OneSignal.setDefaultTitle(\"" . html_entity_decode($onesignal_wp_settings['default_title']) . "\");\n";
         }
         else {
-          echo "OneSignal.setDefaultTitle(\"" . get_bloginfo( 'name' ) . "\");\n";
+          echo "OneSignal.setDefaultTitle(\"" . html_entity_decode(get_bloginfo( 'name' )) . "\");\n";
         }
 
         if ($onesignal_wp_settings['default_icon'] != "") {
-          echo "OneSignal.setDefaultIcon(\"" . $onesignal_wp_settings['default_icon'] . "\");\n";
+          echo "OneSignal.setDefaultIcon(\"" . html_entity_decode($onesignal_wp_settings['default_icon']) . "\");\n";
         }
 
         if ($onesignal_wp_settings['default_url'] != "") {
-          echo "OneSignal.setDefaultNotificationUrl(\"" . $onesignal_wp_settings['default_url'] . "\");";
+          echo "OneSignal.setDefaultNotificationUrl(\"" . html_entity_decode($onesignal_wp_settings['default_url']) . "\");";
         }
         else {
-           echo "OneSignal.setDefaultNotificationUrl(\"" . get_site_url() . "\");\n";
+           echo "OneSignal.setDefaultNotificationUrl(\"" . html_entity_decode(get_site_url()) . "\");\n";
         }
         ?>
         var oneSignal_options = {};
@@ -229,9 +229,9 @@ class OneSignal_Public {
           } else {
             echo "oneSignal_options['notifyButton']['showCredit'] = false;\n";
           }
-            echo "oneSignal_options['notifyButton']['text'] = {};\n";
 
           if (array_key_exists('notifyButton_customize_enable', $onesignal_wp_settings) && $onesignal_wp_settings["notifyButton_customize_enable"] == "1") {
+            echo "oneSignal_options['notifyButton']['text'] = {};\n";
             if ($onesignal_wp_settings["notifyButton_message_prenotify"] != "") {
               echo "oneSignal_options['notifyButton']['text']['message.prenotify'] = '" . $onesignal_wp_settings["notifyButton_message_prenotify"] . "';\n";
             }
@@ -269,7 +269,40 @@ class OneSignal_Public {
               echo "oneSignal_options['notifyButton']['text']['dialog.blocked.message'] = '" . $onesignal_wp_settings["notifyButton_dialog_blocked_message"] . "';\n";
             }
           }
-        } else {
+
+          if (array_key_exists('notifyButton_customize_colors_enable', $onesignal_wp_settings) && $onesignal_wp_settings["notifyButton_customize_colors_enable"] == "1") {
+            echo "oneSignal_options['notifyButton']['colors'] = {};\n";
+            if ($onesignal_wp_settings["notifyButton_color_background"] != "") {
+              echo "oneSignal_options['notifyButton']['colors']['circle.background'] = '" . $onesignal_wp_settings["notifyButton_color_background"] . "';\n";
+            }
+            if ($onesignal_wp_settings["notifyButton_color_foreground"] != "") {
+              echo "oneSignal_options['notifyButton']['colors']['circle.foreground'] = '" . $onesignal_wp_settings["notifyButton_color_foreground"] . "';\n";
+            }
+            if ($onesignal_wp_settings["notifyButton_color_badge_background"] != "") {
+              echo "oneSignal_options['notifyButton']['colors']['badge.background'] = '" . $onesignal_wp_settings["notifyButton_color_badge_background"] . "';\n";
+            }
+            if ($onesignal_wp_settings["notifyButton_color_badge_foreground"] != "") {
+              echo "oneSignal_options['notifyButton']['colors']['badge.foreground'] = '" . $onesignal_wp_settings["notifyButton_color_badge_foreground"] . "';\n";
+            }
+            if ($onesignal_wp_settings["notifyButton_color_badge_border"] != "") {
+              echo "oneSignal_options['notifyButton']['colors']['badge.bordercolor'] = '" . $onesignal_wp_settings["notifyButton_color_badge_border"] . "';\n";
+            }
+            if ($onesignal_wp_settings["notifyButton_color_pulse"] != "") {
+              echo "oneSignal_options['notifyButton']['colors']['pulse.color'] = '" . $onesignal_wp_settings["notifyButton_color_pulse"] . "';\n";
+            }
+            if ($onesignal_wp_settings["notifyButton_color_popup_button_background"] != "") {
+              echo "oneSignal_options['notifyButton']['colors']['dialog.button.background'] = '" . $onesignal_wp_settings["notifyButton_color_popup_button_background"] . "';\n";
+            }
+            if ($onesignal_wp_settings["notifyButton_color_popup_button_background_hover"] != "") {
+              echo "oneSignal_options['notifyButton']['colors']['dialog.button.background.hovering'] = '" . $onesignal_wp_settings["notifyButton_color_popup_button_background_hover"] . "';\n";
+            }
+            if ($onesignal_wp_settings["notifyButton_color_popup_button_background_active"] != "") {
+              echo "oneSignal_options['notifyButton']['colors']['dialog.button.background.active'] = '" . $onesignal_wp_settings["notifyButton_color_popup_button_background_active"] . "';\n";
+            }
+            if ($onesignal_wp_settings["notifyButton_color_popup_button_color"] != "") {
+              echo "oneSignal_options['notifyButton']['colors']['dialog.button.foreground'] = '" . $onesignal_wp_settings["notifyButton_color_popup_button_color"] . "';\n";
+            }
+          }
 
         }
         ?>

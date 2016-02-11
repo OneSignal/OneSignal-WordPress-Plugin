@@ -298,6 +298,14 @@ header[class=onesignal] {
         font-size: 0.85rem;
     }
 
+    .small {
+        font-size: 0.9rem;
+    }
+
+    .normal-weight {
+        font-weight: 400;
+    }
+
     .smaller {
         font-size: 0.85rem;
     }
@@ -306,7 +314,6 @@ header[class=onesignal] {
         background: rgba($color-text, 0.05);
         padding: 0.25em;
         border-radius: 4px;
-        font-size: 1.1rem;
 
         strong, em {
             font-family: monospace;
@@ -314,6 +321,10 @@ header[class=onesignal] {
 
         &.massive {
             font-size: 1.3rem;
+        }
+
+        &.small {
+            font-size: 1rem;
         }
     }
 
@@ -355,7 +366,7 @@ header[class=onesignal] {
         }
     }
 
-    p {
+    p, h4 {
         font-size: 1.3rem;
         color: $color-text;
 
@@ -367,6 +378,11 @@ header[class=onesignal] {
             font-family: 'Lato';
             font-size: 1.2rem;
         }
+    }
+
+    h4 {
+        font-weight: 500;
+        margin-top: 0.5em;
     }
 
     ol, ul {
@@ -469,11 +485,15 @@ header[class=onesignal] {
 
     .explanation {
         p {
-            font-family: 'Lato';
+            font-family: 'Lato', sans-serif;
             font-size: 1.1rem;
             font-weight: 500;
         }
         margin-bottom: 1.1rem;
+    }
+
+    .lato {
+        font-family: 'Lato', sans-serif;
     }
 
     i {

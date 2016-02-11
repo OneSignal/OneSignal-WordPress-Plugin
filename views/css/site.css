@@ -511,17 +511,22 @@ header[class=onesignal] {
 .ui.site.onesignal.container .small-caps {
   text-transform: uppercase;
   font-size: 0.85rem; }
+.ui.site.onesignal.container .small {
+  font-size: 0.9rem; }
+.ui.site.onesignal.container .normal-weight {
+  font-weight: 400; }
 .ui.site.onesignal.container .smaller {
   font-size: 0.85rem; }
 .ui.site.onesignal.container code {
   background: rgba(51, 51, 51, 0.05);
   padding: 0.25em;
-  border-radius: 4px;
-  font-size: 1.1rem; }
+  border-radius: 4px; }
   .ui.site.onesignal.container code strong, .ui.site.onesignal.container code em {
     font-family: monospace; }
   .ui.site.onesignal.container code.massive {
     font-size: 1.3rem; }
+  .ui.site.onesignal.container code.small {
+    font-size: 1rem; }
 .ui.site.onesignal.container .segment img {
   margin: 1em auto; }
   .ui.site.onesignal.container .segment img + p {
@@ -544,14 +549,17 @@ header[class=onesignal] {
     font-family: 'LusitanaItalicBold';
     font-style: normal;
     font-weight: 100; }
-.ui.site.onesignal.container p {
+.ui.site.onesignal.container p, .ui.site.onesignal.container h4 {
   font-size: 1.3rem;
   color: #333333; }
-  .ui.site.onesignal.container p + dl {
+  .ui.site.onesignal.container p + dl, .ui.site.onesignal.container h4 + dl {
     padding-top: 1em; }
-  .ui.site.onesignal.container p.lato {
+  .ui.site.onesignal.container p.lato, .ui.site.onesignal.container h4.lato {
     font-family: 'Lato';
     font-size: 1.2rem; }
+.ui.site.onesignal.container h4 {
+  font-weight: 500;
+  margin-top: 0.5em; }
 .ui.site.onesignal.container ol, .ui.site.onesignal.container ul {
   font-size: 1.3rem;
   line-height: 1.4285em;
@@ -621,9 +629,11 @@ header[class=onesignal] {
 .ui.site.onesignal.container .explanation {
   margin-bottom: 1.1rem; }
   .ui.site.onesignal.container .explanation p {
-    font-family: 'Lato';
+    font-family: 'Lato', sans-serif;
     font-size: 1.1rem;
     font-weight: 500; }
+.ui.site.onesignal.container .lato {
+  font-family: 'Lato', sans-serif; }
 .ui.site.onesignal.container i[role=popup] {
   margin-left: 1em; }
 .ui.site.onesignal.container .wp-core-ui .button, .ui.site.onesignal.container .wp-core-ui .button-primary, .ui.site.onesignal.container .wp-core-ui .button-secondary {

@@ -38,6 +38,7 @@ class OneSignal {
                   'notifyButton_enable' => 'CALCULATE_SPECIAL_VALUE',
                   'notifyButton_prenotify' => true,
                   'notifyButton_customize_enable' => 'CALCULATE_SPECIAL_VALUE',
+                  'notifyButton_customize_colors_enable' => false,
                   'notifyButton_showcredit' => true,
                   'notifyButton_message_prenotify' => '',
                   'notifyButton_tip_state_unsubscribed' => '',

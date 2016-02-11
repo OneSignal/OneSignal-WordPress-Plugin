@@ -619,6 +619,12 @@ if (array_key_exists('app_id', $_POST)) {
               <label>Customize the notify bell text</label>
             </div>
           </div>
+          <div class="field nb-feature">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="notifyButton_customize_colors_enable" value="true" <?php if (array_key_exists('notifyButton_customize_colors_enable', $onesignal_wp_settings) && @$onesignal_wp_settings['notifyButton_customize_colors_enable']) { echo "checked"; } ?>>
+              <label>Customize the notify bell theme colors</label>
+            </div>
+          </div>
           <div class="inline-setting short field nb-feature">
             <label class="inline-setting">Size:</label>
             <select class="ui dropdown" name="notifyButton_size">
@@ -641,6 +647,61 @@ if (array_key_exists('app_id', $_POST)) {
               <option value="inverse" <?php if (array_key_exists('notifyButton_theme', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_theme'] == "inverse") { echo "selected"; } ?>>White</option>
             </select>
           </div>
+          <div class="ui segment nb-feature nb-color-feature">
+            <div class="ui dividing header">
+              <h4>
+                Notify Button Color Customization
+              </h4>
+            </div>
+            <p class="small normal-weight lato">You can override the theme's colors by entering your own. Use any CSS-valid color. For example, <code>white</code>, <code>#FFFFFF</code>, <code>#FFF</code>, <code>rgb(255, 255, 255)</code>, <code>rgba(255, 255, 255, 1.0)</code>, and <code>transparent</code> are all valid values.</p>
+            <div class="field nb-feature nb-color-feature">
+              <label>Main button background color<i class="tiny circular help icon link" role="popup" data-title="Notify Button Background Color" data-content="The background color of the main notify button." data-variation="wide"></i></label>
+              <input type="text" name="notifyButton_color_background" placeholder="#e54b4d" value="<?php echo @$onesignal_wp_settings['notifyButton_color_background']; ?>">
+            </div>
+            <div class="field nb-feature nb-color-feature">
+              <label>Main button foreground color (main bell icon and inner circle)<i class="tiny circular help icon link" role="popup" data-title="Notify Button Foreground Color" data-content="The color of the bell icon and inner circle on the main notify button." data-variation="wide"></i></label>
+              <input type="text" name="notifyButton_color_foreground" placeholder="white" value="<?php echo @$onesignal_wp_settings['notifyButton_color_foreground']; ?>">
+            </div>
+            <div class="field nb-feature nb-color-feature">
+              <label>Pre-notify badge background color<i class="tiny circular help icon link" role="popup" data-title="Notify Button Badge Background Color" data-content="The background color of the small secondary circle on the main notify button. This badge is shown to first-time site visitors only." data-variation="wide"></i></label>
+              <input type="text" name="notifyButton_color_badge_background" placeholder="black" value="<?php echo @$onesignal_wp_settings['notifyButton_color_badge_background']; ?>">
+            </div>
+            <div class="field nb-feature nb-color-feature">
+              <label>Pre-notify badge foreground color<i class="tiny circular help icon link" role="popup" data-title="Notify Button Badge Foreground Color" data-content="The text color on the small secondary circle on the main notify button. This badge is shown to first-time site visitors only." data-variation="wide"></i></label>
+              <input type="text" name="notifyButton_color_badge_foreground" placeholder="white" value="<?php echo @$onesignal_wp_settings['notifyButton_color_badge_foreground']; ?>">
+            </div>
+            <div class="field nb-feature nb-color-feature">
+              <label>Pre-notify badge border color<i class="tiny circular help icon link" role="popup" data-title="Notify Button Badge Border Color" data-content="The border color of the small secondary circle on the main notify button. This badge is shown to first-time site visitors only." data-variation="wide"></i></label>
+              <input type="text" name="notifyButton_color_badge_border" placeholder="white" value="<?php echo @$onesignal_wp_settings['notifyButton_color_badge_border']; ?>">
+            </div>
+            <div class="field nb-feature nb-color-feature">
+              <label>Pulse animation color<i class="tiny circular help icon link" role="popup" data-title="Notify Button Pulse Animation Color" data-content="The color of the quickly expanding circle that's used as an animation when a user clicks on the notify button." data-variation="wide"></i></label>
+              <input type="text" name="notifyButton_color_pulse" placeholder="#e54b4d" value="<?php echo @$onesignal_wp_settings['notifyButton_color_pulse']; ?>">
+            </div>
+            <div class="field nb-feature nb-color-feature">
+              <label>Popup action button background color<i class="tiny circular help icon link" role="popup" data-title="Notify Button Popup - Action Button Background Color" data-content="The color of the action button (SUBSCRIBE/UNSUBSCRIBE) on the notify button popup." data-variation="wide"></i></label>
+              <input type="text" name="notifyButton_color_popup_button_background" placeholder="#e54b4d" value="<?php echo @$onesignal_wp_settings['notifyButton_color_popup_button_background']; ?>">
+            </div>
+            <div class="field nb-feature nb-color-feature">
+              <label>Popup action button background color (on hover)<i class="tiny circular help icon link" role="popup" data-title="Notify Button Popup - Action Button Background Color (on hover)" data-content="The color of the action button (SUBSCRIBE/UNSUBSCRIBE) on the notify button popup when you hover over the button." data-variation="wide"></i></label>
+              <input type="text" name="notifyButton_color_popup_button_background_hover" placeholder="#CC3234" value="<?php echo @$onesignal_wp_settings['notifyButton_color_popup_button_background_hover']; ?>">
+            </div>
+            <div class="field nb-feature nb-color-feature">
+              <label>Popup action button background color (on click)<i class="tiny circular help icon link" role="popup" data-title="Notify Button Popup - Action Button Background Color (on click)" data-content="The color of the action button (SUBSCRIBE/UNSUBSCRIBE) on the notify button popup when you hold down the mouse." data-variation="wide"></i></label>
+              <input type="text" name="notifyButton_color_popup_button_background_active" placeholder="#B2181A" value="<?php echo @$onesignal_wp_settings['notifyButton_color_popup_button_background_active']; ?>">
+            </div>
+            <div class="field nb-feature nb-color-feature">
+              <label>Popup action button text color<i class="tiny circular help icon link" role="popup" data-title="Notify Button Popup - Action Button Text Color" data-content="The color of the quickly expanding circle that's used as an animation when a user clicks on the notify button." data-variation="wide"></i></label>
+              <input type="text" name="notifyButton_color_popup_button_color" placeholder="white" value="<?php echo @$onesignal_wp_settings['notifyButton_color_popup_button_color']; ?>">
+            </div>
+          </div>
+
+          <div class="ui segment nb-feature nb-text-feature">
+            <div class="ui dividing header">
+              <h4>
+                Notify Button Text Customization
+              </h4>
+            </div>
           <div class="field nb-feature nb-text-feature">
             <label>First-time visitor message (on notify button hover)</label>
             <input type="text" name="notifyButton_message_prenotify" placeholder="Click to subscribe to notifications" value="<?php echo @$onesignal_wp_settings['notifyButton_message_prenotify']; ?>">
@@ -688,6 +749,7 @@ if (array_key_exists('app_id', $_POST)) {
           <div class="field nb-feature nb-text-feature">
             <label>Blocked dialog message</label>
             <input type="text" name="notifyButton_dialog_blocked_message" placeholder="Follow these instructions to allow notifications:" value="<?php echo @$onesignal_wp_settings['notifyButton_dialog_blocked_message']; ?>">
+          </div>
           </div>
         </div>
         <div class="popup-modal-settings">

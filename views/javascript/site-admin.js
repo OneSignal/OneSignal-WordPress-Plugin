@@ -17,6 +17,7 @@ jQuery(function() {
   ensureFeaturesVisible({
     'notifyButton_customize_enable': '.nb-text-feature',
     'notifyButton_customize_colors_enable': '.nb-color-feature',
+    'notifyButton_customize_offset_enable': '.nb-position-feature',
     'notifyButton_enable': '.nb-feature',
     'prompt_customize_enable': '.prompt-customize-feature',
     'send_welcome_notification': '.welcome-notification-feature',

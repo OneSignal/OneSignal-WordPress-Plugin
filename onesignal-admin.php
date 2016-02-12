@@ -1,11 +1,12 @@
 <?php
+//include(dirname(__DIR__).'/../../ChromePhp.php');
 
 function change_footer_admin() {
   return '';
 }
 
 class OneSignal_Admin {
-  private static $RESOURCES_VERSION = '11';
+  private static $RESOURCES_VERSION = '12';
 
   public function __construct() {
   }
@@ -16,7 +17,7 @@ class OneSignal_Admin {
       add_action( 'admin_menu', array(__CLASS__, 'add_admin_page') );
     }
     if (current_user_can('publish_posts') || current_user_can('edit_published_posts')) {
-      add_action( 'add_meta_boxes_post', array( __CLASS__, 'add_onesignal_post_options' ) );
+      add_action('admin_init', array( __CLASS__, 'add_onesignal_post_options' ));
     }
     
     add_action( 'transition_post_status', array( __CLASS__, 'on_transition_post_status' ), 10, 3 );
@@ -36,14 +37,32 @@ class OneSignal_Admin {
                    'post',
                    'side',
                    'high');
+    $args = array(
+      'public'   => true,
+      '_builtin' => false
+    );
+    $output = 'names';
+    $operator = 'and';
+    $post_types = get_post_types( $args, $output, $operator );
+    foreach ( $post_types  as $post_type ) {
+      add_meta_box(
+        'onesignal_notif_on_post',
+        'OneSignal',
+        array( __CLASS__, 'onesignal_notif_on_post_html_view' ),
+        $post_type,
+        'side',
+        'high'
+      );
+    }
   }
   
   public static function onesignal_notif_on_post_html_view($post) {
+    $post_type = $post->post_type;
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
     ?>
-      <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($onesignal_wp_settings['notification_on_post'] && $post->post_status != "publish") { echo "checked"; } ?>></input>
+      <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($onesignal_wp_settings['notification_on_post'] && $post->post_status != "publish" && $post->post_type == "post") { echo "checked"; } ?>></input>
       <input type="hidden" name="has_onesignal_setting" value="true"></input>
-      <label> <?php if ($post->post_status == "publish") { echo "Send notification on update"; } else { echo "Send notification on publish"; } ?></label>
+      <label> <?php if ($post->post_status == "publish") { echo "Send notification on " . $post_type . " update"; } else { echo "Send notification on " . $post_type . " publish"; } ?></label>
     <?php
   }
   
@@ -85,6 +104,7 @@ class OneSignal_Admin {
       'notifyButton_showcredit',
       'notifyButton_customize_enable',
       'notifyButton_customize_colors_enable',
+      'notifyButton_customize_offset_enable',
     );
     OneSignal_Admin::saveBooleanSettings($onesignal_wp_settings, $config, $booleanSettings);
 
@@ -115,6 +135,9 @@ class OneSignal_Admin {
       'notifyButton_color_popup_button_background_hover',
       'notifyButton_color_popup_button_background_active',
       'notifyButton_color_popup_button_color',
+      'notifyButton_offset_bottom',
+      'notifyButton_offset_left',
+      'notifyButton_offset_right',
       'notifyButton_message_prenotify',
       'notifyButton_tip_state_unsubscribed',
       'notifyButton_tip_state_subscribed',
@@ -188,8 +211,12 @@ class OneSignal_Admin {
   }
   
   public static function send_notification_on_wp_post($new_status, $old_status, $post) {
-    if (empty( $post ) || get_post_type( $post ) !== 'post' || $new_status !== "publish") {
+    if (empty( $post ) || $new_status !== "publish") {
         return;
+    }
+
+    if ($post->post_type == 'page') {
+      return;
     }
     
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();

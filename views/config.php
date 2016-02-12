@@ -621,6 +621,12 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
           <div class="field nb-feature">
             <div class="ui toggle checkbox">
+              <input type="checkbox" name="notifyButton_customize_offset_enable" value="true" <?php if (array_key_exists('notifyButton_customize_offset_enable', $onesignal_wp_settings) && @$onesignal_wp_settings['notifyButton_customize_offset_enable']) { echo "checked"; } ?>>
+              <label>Customize the notify bell offset position</label>
+            </div>
+          </div>
+          <div class="field nb-feature">
+            <div class="ui toggle checkbox">
               <input type="checkbox" name="notifyButton_customize_colors_enable" value="true" <?php if (array_key_exists('notifyButton_customize_colors_enable', $onesignal_wp_settings) && @$onesignal_wp_settings['notifyButton_customize_colors_enable']) { echo "checked"; } ?>>
               <label>Customize the notify bell theme colors</label>
             </div>
@@ -647,6 +653,27 @@ if (array_key_exists('app_id', $_POST)) {
               <option value="inverse" <?php if (array_key_exists('notifyButton_theme', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_theme'] == "inverse") { echo "selected"; } ?>>White</option>
             </select>
           </div>
+          <div class="ui segment nb-feature nb-position-feature">
+            <div class="ui dividing header">
+              <h4>
+                Notify Button Offset Position Customization
+              </h4>
+            </div>
+            <p class="small normal-weight lato">You can override the notify button's offset position in the X and Y direction using CSS-valid position values. For example, <code>20px</code> is the default value.</p>
+            <div class="field nb-feature nb-position-feature">
+              <label>Bottom offset<i class="tiny circular help icon link" role="popup" data-title="Notify Button Bottom Offset" data-content="The distance to offset the notify button from the bottom of the page. For example, <code>20px</code> is the default value." data-variation="wide"></i></label>
+              <input type="text" name="notifyButton_offset_bottom" placeholder="20px" value="<?php echo @$onesignal_wp_settings['notifyButton_offset_bottom']; ?>">
+            </div>
+            <div class="field nb-feature nb-position-feature nb-position-bottom-left-feature">
+              <label>Left offset<i class="tiny circular help icon link" role="popup" data-title="Notify Button Left Offset" data-content="The distance to offset the notify button from the left of the page. For example, <code>20px</code> is the default value." data-variation="wide"></i></label>
+              <input type="text" name="notifyButton_offset_left" placeholder="20px" value="<?php echo @$onesignal_wp_settings['notifyButton_offset_left']; ?>">
+            </div>
+            <div class="field nb-feature nb-position-feature nb-position-bottom-right-feature">
+              <label>Right offset<i class="tiny circular help icon link" role="popup" data-title="Notify Button Right Offset" data-content="The distance to offset the notify button from the right of the page. For example, <code>20px</code> is the default value." data-variation="wide"></i></label>
+              <input type="text" name="notifyButton_offset_right" placeholder="20px" value="<?php echo @$onesignal_wp_settings['notifyButton_offset_right']; ?>">
+            </div>
+          </div>
+
           <div class="ui segment nb-feature nb-color-feature">
             <div class="ui dividing header">
               <h4>

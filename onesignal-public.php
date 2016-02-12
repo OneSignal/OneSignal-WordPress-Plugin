@@ -1,7 +1,7 @@
 <?php
 
 function debug($var) {
-  print "<div style='position: absolute; top: 30px; left: 160px; font-family: Monaco, monospace; font-size: 13px; background: whitesmoke; border-bottom-right-radius: 8px; color: black;font-weight: 500; z-index: 9999999; padding: 1em; margin: 0em;'><pre>"; print_r($var); echo "</pre></div>";
+  //print "<div style='position: absolute; top: 30px; left: 160px; font-family: Monaco, monospace; font-size: 13px; background: whitesmoke; border-bottom-right-radius: 8px; color: black;font-weight: 500; z-index: 9999999; padding: 1em; margin: 0em;'><pre>"; print_r($var); echo "</pre></div>";
 }
 
 function print_settings() {
@@ -301,6 +301,19 @@ class OneSignal_Public {
             }
             if ($onesignal_wp_settings["notifyButton_color_popup_button_color"] != "") {
               echo "oneSignal_options['notifyButton']['colors']['dialog.button.foreground'] = '" . $onesignal_wp_settings["notifyButton_color_popup_button_color"] . "';\n";
+            }
+          }
+
+          if (array_key_exists('notifyButton_customize_offset_enable', $onesignal_wp_settings) && $onesignal_wp_settings["notifyButton_customize_offset_enable"] == "1") {
+            echo "oneSignal_options['notifyButton']['offset'] = {};\n";
+            if ($onesignal_wp_settings["notifyButton_offset_bottom"] != "") {
+              echo "oneSignal_options['notifyButton']['offset']['bottom'] = '" . $onesignal_wp_settings["notifyButton_offset_bottom"] . "';\n";
+            }
+            if ($onesignal_wp_settings["notifyButton_offset_left"] != "") {
+              echo "oneSignal_options['notifyButton']['offset']['left'] = '" . $onesignal_wp_settings["notifyButton_offset_left"] . "';\n";
+            }
+            if ($onesignal_wp_settings["notifyButton_offset_right"] != "") {
+              echo "oneSignal_options['notifyButton']['offset']['right'] = '" . $onesignal_wp_settings["notifyButton_offset_right"] . "';\n";
             }
           }
 

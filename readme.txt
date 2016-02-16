@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
 Tested up to: 4.4.2
-Stable tag: 1.8.0
+Stable tag: 1.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,10 @@ Features:
 4. Our configuration settings allowing you to customize the way users are prompted to subscribe and the notifications they receive.
 
 == Changelog ==
+= 1.8.1 =
+- Clarified subdomain instructions to not include ".onesignal.com"
+- Improved support for HTML encoded entities
+
 = 1.8.0 =
 - Add bell color customization
 - Add bell offset position customization

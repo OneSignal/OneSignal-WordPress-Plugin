@@ -881,12 +881,6 @@ if (array_key_exists('app_id', $_POST)) {
               <label>Automatically send a push notification when I create a post from the default WordPress editor<i class="tiny circular help icon link" role="popup" data-title="Automatic Push from WordPress Editor" data-content="If checked, when you create a new post, the checkbox 'Send notification on publish' will be automatically checked." data-variation="wide"></i></label>
             </div>
           </div>
-          <div class="field">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" name="notification_on_post_from_plugin" value="true" <?php if (@$onesignal_wp_settings['notification_on_post_from_plugin']) { echo "checked"; } ?>>
-              <label>Automatically send a push notification when I create a post from 3<sup>rd</sup> party plugins<i class="tiny circular help icon link" role="popup" data-title="Automatic Push from 3rd Party Editors" data-content="If checked, when you create a new post from most 3rd party plugins, the checkbox 'Send notification on publish' will be automatically checked." data-variation="wide"></i></label>
-            </div>
-          </div>
         </div>
         <button class="ui large teal button" type="submit">Save</button>
         <div class="ui error message">

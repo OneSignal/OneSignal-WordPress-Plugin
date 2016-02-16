@@ -6,7 +6,7 @@ function change_footer_admin() {
 }
 
 class OneSignal_Admin {
-  private static $RESOURCES_VERSION = '12';
+  private static $RESOURCES_VERSION = '13';
 
   public function __construct() {
   }
@@ -221,22 +221,27 @@ class OneSignal_Admin {
     
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
+    $send_onesignal_notification = false;
     if (isset($_POST['has_onesignal_setting'])) {
       if (array_key_exists('send_onesignal_notification', $_POST)) {
         $send_onesignal_notification = $_POST['send_onesignal_notification'];
-      } else {
-        $send_onesignal_notification = false;
       }
-    }
-    elseif ($old_status !== "publish") {
-      $send_onesignal_notification = $onesignal_wp_settings['notification_on_post_from_plugin'];
     }
     
     if ($send_onesignal_notification === true || $send_onesignal_notification === "true") {  
       $notif_content = html_entity_decode(get_the_title($post->ID), ENT_QUOTES, 'UTF-8');
+
+      $site_title = "";
+      if ($onesignal_wp_settings['default_title'] != "") {
+        $site_title = html_entity_decode($onesignal_wp_settings['default_title'], ENT_HTML401 | ENT_QUOTES, 'UTF-8');
+      }
+      else {
+        $site_title = html_entity_decode(get_bloginfo( 'name' ), ENT_HTML401 | ENT_QUOTES, 'UTF-8');
+      }
       
       $fields = array(
         'app_id' => $onesignal_wp_settings['app_id'],
+        'headings' => array("en" => $site_title),
         'included_segments' => array('All'),
         'isAnyWeb' => true,
         'url' => get_permalink($post->ID),

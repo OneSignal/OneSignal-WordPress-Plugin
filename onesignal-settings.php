@@ -11,7 +11,6 @@ class OneSignal {
                   'welcome_notification_message' => '',
                   'welcome_notification_url' => '',
                   'notification_on_post' => true,
-                  'notification_on_post_from_plugin' => true,
                   'is_site_https_firsttime' => 'unset',
                   'is_site_https' => false,
                   'use_modal_prompt' => false,

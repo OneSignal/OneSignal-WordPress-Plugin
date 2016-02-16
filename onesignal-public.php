@@ -103,6 +103,7 @@ class OneSignal_Public {
     <?php /* <script src="https://192.168.1.206:3000/dev_sdks/OneSignalSDK.js" async></script> */ ?>
     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
     <script>
+
       var OneSignal = OneSignal || [];
 
       OneSignal.push( function() {
@@ -110,22 +111,17 @@ class OneSignal_Public {
         OneSignal.SERVICE_WORKER_PATH = "OneSignalSDKWorker.js.php";
         OneSignal.SERVICE_WORKER_PARAM = { scope: '/' };
 
-        <?php if ($onesignal_wp_settings['default_title'] != "") {
-          echo "OneSignal.setDefaultTitle(\"" . html_entity_decode($onesignal_wp_settings['default_title']) . "\");\n";
-        }
-        else {
-          echo "OneSignal.setDefaultTitle(\"" . html_entity_decode(get_bloginfo( 'name' )) . "\");\n";
-        }
+        <?php
 
         if ($onesignal_wp_settings['default_icon'] != "") {
-          echo "OneSignal.setDefaultIcon(\"" . html_entity_decode($onesignal_wp_settings['default_icon']) . "\");\n";
+          echo "OneSignal.setDefaultIcon(\"" . html_entity_decode($onesignal_wp_settings['default_icon'], ENT_HTML401 | ENT_QUOTES, 'UTF-8') . "\");\n";
         }
 
         if ($onesignal_wp_settings['default_url'] != "") {
-          echo "OneSignal.setDefaultNotificationUrl(\"" . html_entity_decode($onesignal_wp_settings['default_url']) . "\");";
+          echo "OneSignal.setDefaultNotificationUrl(\"" . html_entity_decode($onesignal_wp_settings['default_url'], ENT_HTML401 | ENT_QUOTES, 'UTF-8') . "\");";
         }
         else {
-           echo "OneSignal.setDefaultNotificationUrl(\"" . html_entity_decode(get_site_url()) . "\");\n";
+           echo "OneSignal.setDefaultNotificationUrl(\"" . html_entity_decode(get_site_url(), ENT_HTML401 | ENT_QUOTES, 'UTF-8') . "\");\n";
         }
         ?>
         var oneSignal_options = {};

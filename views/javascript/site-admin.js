@@ -40,7 +40,7 @@ jQuery(function() {
             },
             {
               type   : 'regExp[/^[a-z0-9-]{1,50}$/]',
-              prompt : 'You may only use lowercase letters, numbers, and dashes for your subdomain. Use the same one you entered on our OneSignal dashboard.'
+              prompt : 'You may only use lowercase letters, numbers, and dashes for your subdomain. Do NOT include ".onesignal.com" or "https://".'
             },
             {
               type   : 'minLength[5]',

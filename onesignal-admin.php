@@ -227,6 +227,9 @@ class OneSignal_Admin {
         $send_onesignal_notification = $_POST['send_onesignal_notification'];
       }
     }
+    elseif ($old_status !== "publish" && $post->post_type === "post") {
+      $send_onesignal_notification = $onesignal_wp_settings['notification_on_post_from_plugin'];
+    }
     
     if ($send_onesignal_notification === true || $send_onesignal_notification === "true") {  
       $notif_content = html_entity_decode(get_the_title($post->ID), ENT_QUOTES, 'UTF-8');

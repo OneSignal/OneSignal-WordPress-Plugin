@@ -97,6 +97,7 @@ class OneSignal_Admin {
       'send_welcome_notification',
       'notification_on_post',
       'notification_on_post_from_plugin',
+      'persistNotification',
       'prompt_customize_enable',
       'prompt_showcredit',
       'notifyButton_enable',

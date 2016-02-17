@@ -22,6 +22,7 @@ class OneSignal {
                   'default_url' => "",
                   'app_rest_api_key' => "",
                   'safari_web_id' => "",
+                  'persistNotification' => true,
                   'prompt_customize_enable' => 'CALCULATE_SPECIAL_VALUE',
                   'prompt_action_message' => "",
                   'prompt_example_notification_title_desktop' => "",

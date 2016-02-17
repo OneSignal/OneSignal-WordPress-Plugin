@@ -888,6 +888,20 @@ if (array_key_exists('app_id', $_POST)) {
             </div>
           </div>
         </div>
+        <div class="ui dividing header">
+          <i class="desktop icon"></i>
+          <div class="content">
+            Other Notification Settings
+          </div>
+        </div>
+        <div class="ui borderless shadowless segment">
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="persistNotification" value="true" <?php if ($onesignal_wp_settings['persistNotification']) { echo "checked"; } ?>>
+              <label>Persist notifications<i class="tiny circular help icon link" role="popup" data-title="Persist Notifications" data-content="If checked, when a notifcation is sent, do not automatically dismiss it (supported on Chrome Desktop v47+)" data-variation="wide"></i></label>
+            </div>
+          </div>
+        </div>
         <button class="ui large teal button" type="submit">Save</button>
         <div class="ui error message">
         </div>

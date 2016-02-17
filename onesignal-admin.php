@@ -245,10 +245,20 @@ class OneSignal_Admin {
         $site_title = html_entity_decode(get_bloginfo( 'name' ), ENT_HTML401 | ENT_QUOTES, 'UTF-8');
       }
       
+      $included_segments = array();
+
+      if (has_filter('onesignal_send_notification_included_segments')) {
+        $included_segments = apply_filters('onesignal_send_notification_included_segments', $new_status, $old_status, $post);
+      }
+
+      if (empty($included_segments)) {
+        $included_segments = array('All');
+      }
+
       $fields = array(
         'app_id' => $onesignal_wp_settings['app_id'],
         'headings' => array("en" => $site_title),
-        'included_segments' => array('All'),
+        'included_segments' => $included_segments,
         'isAnyWeb' => true,
         'url' => get_permalink($post->ID),
         'contents' => array("en" => $notif_content)

@@ -160,6 +160,10 @@ class OneSignal_Public {
         if (@$onesignal_wp_settings["safari_web_id"]) {
           echo "oneSignal_options['safari_web_id'] = \"" . $onesignal_wp_settings["safari_web_id"] . "\";\n";
         }
+        
+        if ($onesignal_wp_settings["persistNotification"] == "0") {
+          echo "oneSignal_options['persistNotification'] = false;\n";
+        }
 
 
         if ($onesignal_wp_settings["subdomain"] != "" || $onesignal_wp_settings["use_modal_prompt"] == "1") {

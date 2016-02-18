@@ -123,6 +123,7 @@ class OneSignal_Admin {
       'welcome_notification_title',
       'welcome_notification_message',
       'welcome_notification_url',
+      'includedSegments',
       'notifyButton_size',
       'notifyButton_theme',
       'notifyButton_position',
@@ -245,14 +246,16 @@ class OneSignal_Admin {
         $site_title = html_entity_decode(get_bloginfo( 'name' ), ENT_HTML401 | ENT_QUOTES, 'UTF-8');
       }
       
-      $included_segments = array();
-
-      if (has_filter('onesignal_send_notification_included_segments')) {
-        $included_segments = apply_filters('onesignal_send_notification_included_segments', $new_status, $old_status, $post);
+      if (isset($onesignal_wp_settings['includedSegments'])) {
+        $included_segments = array_filter(explode(',', $onesignal_wp_settings['includedSegments']));
       }
 
       if (empty($included_segments)) {
         $included_segments = array('All');
+      }
+
+      if (has_filter('onesignal_send_notification_included_segments')) {
+        $included_segments = apply_filters('onesignal_send_notification_included_segments', $new_status, $old_status, $post);
       }
 
       $fields = array(

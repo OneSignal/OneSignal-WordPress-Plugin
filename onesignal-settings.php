@@ -24,6 +24,7 @@ class OneSignal {
                   'safari_web_id' => "",
                   'showNotificationIconFromPostThumbnail' => false,
                   'chrome_auto_dismiss_notifications' => false,
+                  'includedSegments' => "",
                   'prompt_customize_enable' => 'CALCULATE_SPECIAL_VALUE',
                   'prompt_action_message' => "",
                   'prompt_example_notification_title_desktop' => "",

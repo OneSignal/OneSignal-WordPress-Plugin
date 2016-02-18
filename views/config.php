@@ -908,6 +908,12 @@ if (array_key_exists('app_id', $_POST)) {
             </div>
           </div>
         </div>
+        <div class="ui borderless shadowless segment">
+          <div class="field">
+            <label>Included Segments<i class="tiny circular help icon link" role="popup" data-title="Included Segments" data-content="What segments you want all notifications to be sent to.  If you want to send to more than one segment, separate them with a comma.  This can also be customized programattically in your theme by adding a custom filter for 'onesignal_send_notification_included_segments'" data-variation="wide"></i></label>
+            <input type="text" placeholder="Defaults to All if blank" name="includedSegments" value="<?php echo @$onesignal_wp_settings['includedSegments']; ?>">
+          </div>
+        </div>
         <button class="ui large teal button" type="submit">Save</button>
         <div class="ui error message">
         </div>

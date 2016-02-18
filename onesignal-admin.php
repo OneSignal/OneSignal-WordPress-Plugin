@@ -213,13 +213,25 @@ class OneSignal_Admin {
   }
   
   public static function send_notification_on_wp_post($new_status, $old_status, $post) {
-    debug('Calling send_notification_on_wp_post(', $new_status, $old_status, $post);
-    if (empty( $post ) || $new_status !== "publish") {
+    if (has_filter('onesignal_send_notification_pre_send_check')) {
+      // don't send a notification on an empty post, ever
+      if (empty( $post )) {
         return;
-    }
+      }
 
-    if ($post->post_type == 'page') {
-      return;
+      $send_notification = apply_filters('onesignal_send_notification_pre_send_check', $new_status, $old_status, $post);
+      if(isset($send_notification) && !$send_notification) {
+        return;
+      }
+    }
+    else {
+      if (empty( $post ) || $new_status !== "publish") {
+          return;
+      }
+
+      if ($post->post_type == 'page') {
+        return;
+      }
     }
     
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();

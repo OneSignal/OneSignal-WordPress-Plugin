@@ -888,6 +888,18 @@ if (array_key_exists('app_id', $_POST)) {
             </div>
           </div>
         </div>
+        <div class="ui dividing header">
+          <i class="desktop icon"></i>
+          <div class="content">
+            Other Notification Settings
+          </div>
+        </div>
+        <div class="ui borderless shadowless segment">
+          <div class="field">
+            <label>Subscriber tags to set<i class="tiny circular help icon link" role="popup" data-title="Subscriber Tags" data-content="Sets the tags for each subscriber to the key:value pairs entered below (comma delimited). This can also be dynamically set by your theme by returning your custom tags as an associative array from the 'onesignal_subscriber_tags' filter hook." data-variation="wide"></i></label>
+            <input type="text" placeholder="<tag>:<value> pairs (comma separated).  Example - myTagName1:myTagValue1,myTagName2:myTagValue2" name="subscriberTags" value="<?php echo @$onesignal_wp_settings['subscriberTags']; ?>">
+          </div>
+        </div>
         <button class="ui large teal button" type="submit">Save</button>
         <div class="ui error message">
         </div>

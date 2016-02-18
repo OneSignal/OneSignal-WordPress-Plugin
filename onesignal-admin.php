@@ -122,6 +122,7 @@ class OneSignal_Admin {
       'welcome_notification_title',
       'welcome_notification_message',
       'welcome_notification_url',
+      'subscriberTags',
       'notifyButton_size',
       'notifyButton_theme',
       'notifyButton_position',

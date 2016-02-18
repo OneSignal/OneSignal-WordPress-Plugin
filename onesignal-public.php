@@ -314,10 +314,34 @@ class OneSignal_Public {
           }
 
         }
+
+        $subscriber_tags = null;
+        $subscriber_tags_json = null;
+        if (array_key_exists('subscriberTags', $onesignal_wp_settings) && $onesignal_wp_settings['subscriberTags'] != "") {
+          $subscriber_tag_string = $onesignal_wp_settings['subscriberTags'];
+          $tagValuePairArray = array_filter(explode(',', $subscriber_tag_string));
+
+          foreach ($tagValuePairArray as $tvp) {
+            $tag_value = explode(':', $tvp);
+            if (count($tag_value) == 2) {
+                $subscriber_tags[$tag_value[0]] = $tag_value[1];
+            }
+          }
+        }
+        if (has_filter('onesignal_subscriber_tags')) {
+          $subscriber_tags = apply_filters('onesignal_subscriber_tags');
+        }
+
+        if (!empty($subscriber_tags)) {
+          $subscriber_tags_json = json_encode($subscriber_tags);
+        }
         ?>
 
         OneSignal.init(oneSignal_options);
       });
+      <?php if(!empty($subscriber_tags_json)) { ?>
+      OneSignal.push(["sendTags", <?php echo $subscriber_tags_json ?>, function(tagsSent) {}]);
+      <?php } ?>
 
       function documentInitOneSignal() {
         var oneSignal_elements = document.getElementsByClassName("OneSignal-prompt");

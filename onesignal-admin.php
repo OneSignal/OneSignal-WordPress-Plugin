@@ -1,5 +1,4 @@
 <?php
-//include(dirname(__DIR__).'/../../ChromePhp.php');
 
 function change_footer_admin() {
   return '';

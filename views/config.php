@@ -898,7 +898,13 @@ if (array_key_exists('app_id', $_POST)) {
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="showNotificationIconFromPostThumbnail" value="true" <?php if ($onesignal_wp_settings['showNotificationIconFromPostThumbnail']) { echo "checked"; } ?>>
-              <label>Show icon image from post thumbnail<i class="tiny circular help icon link" role="popup" data-title="Show icon image from post thumbnail" data-content="If checked, when a notifcation is sent link the post icon in the notification.  Chrome and Firefox Desktop supported." data-variation="wide"></i></label>
+              <label>Use the post's featured image for the notification icon<i class="tiny circular help icon link" role="popup" data-title="Show icon image from post thumbnail" data-content="If checked, when a notifcation is sent link the post icon in the notification.  Chrome and Firefox Desktop supported." data-variation="wide"></i></label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="chrome_auto_dismiss_notifications" value="true" <?php if ($onesignal_wp_settings['chrome_auto_dismiss_notifications']) { echo "checked"; } ?>>
+              <label>Dismiss notifications after ~20 seconds <span class="ui grey horizontal label">Chrome v47<sup>+</sup> Desktop Only</span> <i class="tiny circular help icon link" role="popup" data-title="Persist Notifications" data-html="If checked, dismiss the notification after about 20 seconds. By default, Chrome notifications last indefinitely. <strong class='least-strong'>Supported on Chrome v47+ Desktop only.</strong> The time cannot be modified." data-variation="wide"></i></label>
             </div>
           </div>
         </div>

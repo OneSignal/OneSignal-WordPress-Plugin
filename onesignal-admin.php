@@ -97,6 +97,7 @@ class OneSignal_Admin {
       'notification_on_post',
       'notification_on_post_from_plugin',
       'showNotificationIconFromPostThumbnail',
+      'chrome_auto_dismiss_notifications',
       'prompt_customize_enable',
       'prompt_showcredit',
       'notifyButton_enable',

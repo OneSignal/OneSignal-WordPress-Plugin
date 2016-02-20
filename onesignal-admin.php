@@ -96,6 +96,7 @@ class OneSignal_Admin {
       'send_welcome_notification',
       'notification_on_post',
       'notification_on_post_from_plugin',
+      'showNotificationIconFromPostThumbnail',
       'prompt_customize_enable',
       'prompt_showcredit',
       'notifyButton_enable',
@@ -250,6 +251,18 @@ class OneSignal_Admin {
         'contents' => array("en" => $notif_content)
       );
       
+      if ($onesignal_wp_settings['showNotificationIconFromPostThumbnail'] == "1") {
+        // get the icon image from wordpress if it exists
+        $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
+        $thumbnail_array = wp_get_attachment_image_src($post_thumbnail_id, array( 80, 80 ), true);
+        if (!empty($thumbnail_array)) {
+          $thumbnail = $thumbnail_array[0];
+          // set the icon image for both chrome and firefox-1
+          $fields['chrome_web_icon'] = $thumbnail;
+          $fields['firefox_icon'] = $thumbnail;
+        }
+      }
+
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
       curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json',

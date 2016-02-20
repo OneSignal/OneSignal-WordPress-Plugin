@@ -888,6 +888,20 @@ if (array_key_exists('app_id', $_POST)) {
             </div>
           </div>
         </div>
+        <div class="ui dividing header">
+          <i class="desktop icon"></i>
+          <div class="content">
+            Other Notification Settings
+          </div>
+        </div>
+        <div class="ui borderless shadowless segment">
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="showNotificationIconFromPostThumbnail" value="true" <?php if ($onesignal_wp_settings['showNotificationIconFromPostThumbnail']) { echo "checked"; } ?>>
+              <label>Show icon image from post thumbnail<i class="tiny circular help icon link" role="popup" data-title="Show icon image from post thumbnail" data-content="If checked, when a notifcation is sent link the post icon in the notification.  Chrome and Firefox Desktop supported." data-variation="wide"></i></label>
+            </div>
+          </div>
+        </div>
         <button class="ui large teal button" type="submit">Save</button>
         <div class="ui error message">
         </div>

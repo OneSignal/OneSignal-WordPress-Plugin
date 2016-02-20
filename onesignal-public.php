@@ -1,8 +1,15 @@
 <?php
 
-function debug($var) {
+function debug() {
   if (WP_DEBUG) {
-    error_log('OneSignal: ' . print_r($var, true));
+    $numargs = func_num_args();
+    $arg_list = func_get_args();
+    $output = '';
+    for ($i = 0; $i < $numargs; $i++) {
+      $output = $output . var_export($arg_list[$i], true) . ', ';
+    }
+    $output = substr($output, 0, -2);
+    error_log('OneSignal: ' . $output);
   }
 }
 

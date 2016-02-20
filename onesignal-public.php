@@ -1,70 +1,13 @@
 <?php
 
 function debug($var) {
-  //print "<div style='position: absolute; top: 30px; left: 160px; font-family: Monaco, monospace; font-size: 13px; background: whitesmoke; border-bottom-right-radius: 8px; color: black;font-weight: 500; z-index: 9999999; padding: 1em; margin: 0em;'><pre>"; print_r($var); echo "</pre></div>";
+  if (WP_DEBUG) {
+    error_log('OneSignal: ' . print_r($var, true));
+  }
 }
 
 function print_settings() {
   debug(OneSignal::get_onesignal_settings());
-}
-
-function wipe_settings() {
-  OneSignal::save_onesignal_settings(array());
-}
-
-function wipe_setting($setting) {
-  $settings = OneSignal::get_onesignal_settings();
-  unset($settings[$setting]);
-  OneSignal::save_onesignal_settings($settings);
-}
-
-function set_setting($setting, $yesOrNo) {
-  $settings = OneSignal::get_onesignal_settings();
-  $settings[$setting] = $yesOrNo;
-  OneSignal::save_onesignal_settings($settings);
-}
-
-function wipe_notifyButton_settings() {
-  $settings = OneSignal::get_onesignal_settings();
-  unset($settings['notifyButton_position']);
-  unset($settings['notifyButton_size']);
-  unset($settings['notifyButton_theme']);
-  unset($settings['notifyButton_enable']);
-  unset($settings['notifyButton_prenotify']);
-  unset($settings['notifyButton_showcredit']);
-  unset($settings['notifyButton_message_prenotify']);
-  unset($settings['notifyButton_tip_state_unsubscribed']);
-  unset($settings['notifyButton_tip_state_subscribed']);
-  unset($settings['notifyButton_tip_state_blocked']);
-  unset($settings['notifyButton_message_action_subscribed']);
-  unset($settings['notifyButton_message_action_resubscribed']);
-  unset($settings['notifyButton_message_action_unsubscribed']);
-  unset($settings['notifyButton_dialog_main_title']);
-  unset($settings['notifyButton_dialog_main_button_subscribe']);
-  unset($settings['notifyButton_dialog_main_button_unsubscribe']);
-  unset($settings['notifyButton_dialog_blocked_title']);
-  unset($settings['notifyButton_dialog_blocked_message']);
-  OneSignal::save_onesignal_settings($settings);
-}
-
-function wipe_new_settings() {
-  $settings = OneSignal::get_onesignal_settings();
-  unset($settings['is_site_https_firsttime']);
-  unset($settings['is_site_https']);
-  unset($settings['prompt_customize_enable']);
-  unset($settings['notifyButton_customize_enable']);
-  unset($settings['welcome_notification_url']);
-  OneSignal::save_onesignal_settings($settings);
-}
-
-function test() {
-  //set_setting('no_welcome_notification', true);
-  //wipe_setting('send_welcome_notification');
-  //wipe_notifyButton_settings();
-  //wipe_settings();
-  //wipe_new_settings();
-  //debug('Wiped new settings.');
-  //print_settings();
 }
 
 class OneSignal_Public {
@@ -77,8 +20,6 @@ class OneSignal_Public {
 
   public static function onesignal_header() {
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
-
-    //test();
 
     if ($onesignal_wp_settings["subdomain"] == "") {
       if (strpos(ONESIGNAL_PLUGIN_URL, "http://localhost") === false && strpos(ONESIGNAL_PLUGIN_URL, "http://127.0.0.1") === false) {

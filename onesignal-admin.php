@@ -5,7 +5,7 @@ function change_footer_admin() {
 }
 
 class OneSignal_Admin {
-  private static $RESOURCES_VERSION = '14';
+  private static $RESOURCES_VERSION = '15';
 
   public function __construct() {
   }

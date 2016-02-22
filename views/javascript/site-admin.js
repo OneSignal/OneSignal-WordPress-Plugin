@@ -39,12 +39,8 @@ jQuery(function() {
               prompt : 'Because your site is HTTP, you must enter a subdomain. Use the same one you entered on our OneSignal dashboard.'
             },
             {
-              type   : 'regExp[/^[a-z0-9-]{1,50}$/]',
-              prompt : 'You may only use lowercase letters, numbers, and dashes for your subdomain. Do NOT include ".onesignal.com" or "https://".'
-            },
-            {
-              type   : 'minLength[5]',
-              prompt : 'Your subdomain must be at least 5 characters long. Use the same one you entered on our OneSignal dashboard.'
+              type   : 'minLength[4]',
+              prompt : 'Your subdomain must be at least 4 characters long. Use the same one you entered on our OneSignal dashboard.'
             }
           ]
         }

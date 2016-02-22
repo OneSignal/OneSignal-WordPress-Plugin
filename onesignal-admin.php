@@ -123,6 +123,7 @@ class OneSignal_Admin {
       'welcome_notification_title',
       'welcome_notification_message',
       'welcome_notification_url',
+      'includedSegments',
       'notifyButton_size',
       'notifyButton_theme',
       'notifyButton_position',
@@ -212,13 +213,28 @@ class OneSignal_Admin {
   }
   
   public static function send_notification_on_wp_post($new_status, $old_status, $post) {
-    debug('Calling send_notification_on_wp_post(', $new_status, $old_status, $post);
-    if (empty( $post ) || $new_status !== "publish") {
+    // apply the notification_pre_send_check filter if it is defined.
+    if (has_filter('onesignal_send_notification_pre_send_check')) {
+      // don't send a notification on an empty post, ever
+      if (empty( $post )) {
         return;
-    }
+      }
 
-    if ($post->post_type == 'page') {
-      return;
+      // default to send unless overriden by filter
+      $send_notification = true;
+      $send_notification = apply_filters('onesignal_send_notification_pre_send_check', $send_notification, $new_status, $old_status, $post);
+      if(isset($send_notification) && !$send_notification) {
+        return;
+      }
+    }
+    else {
+      if (empty( $post ) || $new_status !== "publish") {
+          return;
+      }
+
+      if ($post->post_type == 'page') {
+        return;
+      }
     }
     
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
@@ -245,10 +261,22 @@ class OneSignal_Admin {
         $site_title = html_entity_decode(get_bloginfo( 'name' ), ENT_HTML401 | ENT_QUOTES, 'UTF-8');
       }
       
+      if (isset($onesignal_wp_settings['includedSegments'])) {
+        $included_segments = array_filter(explode(',', $onesignal_wp_settings['includedSegments']));
+      }
+
+      if (empty($included_segments)) {
+        $included_segments = array('All');
+      }
+
+      if (has_filter('onesignal_send_notification_included_segments')) {
+        $included_segments = apply_filters('onesignal_send_notification_included_segments', $included_segments, $new_status, $old_status, $post);
+      }
+
       $fields = array(
         'app_id' => $onesignal_wp_settings['app_id'],
         'headings' => array("en" => $site_title),
-        'included_segments' => array('All'),
+        'included_segments' => $included_segments,
         'isAnyWeb' => true,
         'url' => get_permalink($post->ID),
         'contents' => array("en" => $notif_content)

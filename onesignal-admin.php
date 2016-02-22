@@ -213,13 +213,16 @@ class OneSignal_Admin {
   }
   
   public static function send_notification_on_wp_post($new_status, $old_status, $post) {
+    // apply the notification_pre_send_check filter if it is defined.
     if (has_filter('onesignal_send_notification_pre_send_check')) {
       // don't send a notification on an empty post, ever
       if (empty( $post )) {
         return;
       }
 
-      $send_notification = apply_filters('onesignal_send_notification_pre_send_check', $new_status, $old_status, $post);
+      // default to send unless overriden by filter
+      $send_notification = true;
+      $send_notification = apply_filters('onesignal_send_notification_pre_send_check', $send_notification, $new_status, $old_status, $post);
       if(isset($send_notification) && !$send_notification) {
         return;
       }

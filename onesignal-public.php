@@ -329,7 +329,7 @@ class OneSignal_Public {
           }
         }
         if (has_filter('onesignal_subscriber_tags')) {
-          $subscriber_tags = apply_filters('onesignal_subscriber_tags');
+          $subscriber_tags = apply_filters('onesignal_subscriber_tags', $subscriber_tags);
         }
 
         if (!empty($subscriber_tags)) {

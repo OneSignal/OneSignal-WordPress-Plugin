@@ -213,28 +213,9 @@ class OneSignal_Admin {
   }
   
   public static function send_notification_on_wp_post($new_status, $old_status, $post) {
-    // apply the notification_pre_send_check filter if it is defined.
-    if (has_filter('onesignal_send_notification_pre_send_check')) {
-      // don't send a notification on an empty post, ever
-      if (empty( $post )) {
+    onesignal_debug('Calling send_notification_on_wp_post(', $new_status, $old_status, $post);
+    if (empty( $post )) {
         return;
-      }
-
-      // default to send unless overriden by filter
-      $send_notification = true;
-      $send_notification = apply_filters('onesignal_send_notification_pre_send_check', $send_notification, $new_status, $old_status, $post);
-      if(isset($send_notification) && !$send_notification) {
-        return;
-      }
-    }
-    else {
-      if (empty( $post ) || $new_status !== "publish") {
-          return;
-      }
-
-      if ($post->post_type == 'page') {
-        return;
-      }
     }
     
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
@@ -248,7 +229,18 @@ class OneSignal_Admin {
     elseif ($old_status !== "publish" && $post->post_type === "post") {
       $send_onesignal_notification = $onesignal_wp_settings['notification_on_post_from_plugin'];
     }
-    debug('Sending notification: ', $send_onesignal_notification);
+    
+    // default to not send notifications for page post type or unpublished posts
+    if ($new_status !== "publish" || $post->post_type == 'page') {
+      $send_onesignal_notification = false;
+    }
+
+    // apply the notification_pre_send_check filter if it is defined.
+    if (has_filter('onesignal_send_notification_pre_send_check')) {
+      // default to send unless overriden by filter
+      $send_onesignal_notification = apply_filters('onesignal_send_notification_pre_send_check', $send_onesignal_notification, $new_status, $old_status, $post);
+    }
+    onesignal_debug('Sending notification: ', $send_onesignal_notification);
     
     if ($send_onesignal_notification === true || $send_onesignal_notification === "true") {  
       $notif_content = html_entity_decode(get_the_title($post->ID), ENT_QUOTES, 'UTF-8');

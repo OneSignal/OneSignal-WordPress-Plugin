@@ -270,7 +270,7 @@ class OneSignal_Admin {
       }
 
       if (has_filter('onesignal_send_notification_included_segments')) {
-        $included_segments = apply_filters('onesignal_send_notification_included_segments', $new_status, $old_status, $post);
+        $included_segments = apply_filters('onesignal_send_notification_included_segments', $included_segments, $new_status, $old_status, $post);
       }
 
       $fields = array(

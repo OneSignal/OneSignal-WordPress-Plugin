@@ -1,6 +1,6 @@
 <?php
 
-function debug() {
+function onesignal_debug() {
   if (WP_DEBUG) {
     $numargs = func_num_args();
     $arg_list = func_get_args();
@@ -14,7 +14,7 @@ function debug() {
 }
 
 function print_settings() {
-  debug(OneSignal::get_onesignal_settings());
+  onesignal_debug(OneSignal::get_onesignal_settings());
 }
 
 class OneSignal_Public {

@@ -212,7 +212,7 @@ class OneSignal_Admin {
   }
   
   public static function send_notification_on_wp_post($new_status, $old_status, $post) {
-    debug('Calling send_notification_on_wp_post(', $new_status, $old_status, $post);
+    onesignal_debug('Calling send_notification_on_wp_post(', $new_status, $old_status, $post);
     if (empty( $post ) || $new_status !== "publish") {
         return;
     }
@@ -232,7 +232,7 @@ class OneSignal_Admin {
     elseif ($old_status !== "publish" && $post->post_type === "post") {
       $send_onesignal_notification = $onesignal_wp_settings['notification_on_post_from_plugin'];
     }
-    debug('Sending notification: ', $send_onesignal_notification);
+    onesignal_debug('Sending notification: ', $send_onesignal_notification);
     
     if ($send_onesignal_notification === true || $send_onesignal_notification === "true") {  
       $notif_content = html_entity_decode(get_the_title($post->ID), ENT_QUOTES, 'UTF-8');
@@ -256,13 +256,13 @@ class OneSignal_Admin {
 
       $post_has_featured_image = has_post_thumbnail($post);
       $config_use_featured_image_as_icon = $onesignal_wp_settings['showNotificationIconFromPostThumbnail'] == "1";
-      debug('Post has featured image: ', $post_has_featured_image);
-      debug('Use featured image as notification icon: ', $config_use_featured_image_as_icon);
+      onesignal_debug('Post has featured image: ', $post_has_featured_image);
+      onesignal_debug('Use featured image as notification icon: ', $config_use_featured_image_as_icon);
       if ($post_has_featured_image == true && $config_use_featured_image_as_icon) {
         // get the icon image from wordpress if it exists
         $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
         $thumbnail_array = wp_get_attachment_image_src($post_thumbnail_id, array( 80, 80 ), true);
-        debug('Thumbnail array: ', $thumbnail_array);
+        onesignal_debug('Thumbnail array: ', $thumbnail_array);
         if (!empty($thumbnail_array)) {
           $thumbnail = $thumbnail_array[0];
           // set the icon image for both chrome and firefox-1
@@ -289,7 +289,7 @@ class OneSignal_Admin {
   }
   
   public static function on_transition_post_status( $new_status, $old_status, $post ) {
-    debug('Calling on_transition_post_status(', $new_status, $old_status, $post);
+    onesignal_debug('Calling on_transition_post_status(', $new_status, $old_status, $post);
     self::send_notification_on_wp_post($new_status, $old_status, $post);
   }
 }

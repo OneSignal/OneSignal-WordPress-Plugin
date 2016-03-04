@@ -12,5 +12,23 @@ class OneSignalUtils {
 		}
 		return html_entity_decode(str_replace("&apos;", "'", $string), $HTML_ENTITY_DECODE_FLAGS, 'UTF-8');
 	}
+
+	public static function normalize($string) {
+		$string = OneSignalUtils::decode_entities($string);
+		$string = stripslashes($string);
+		return $string;
+	}
+
+	public static function html_safe($string) {
+		$HTML_ENTITY_DECODE_FLAGS = ENT_QUOTES;
+		if (defined('ENT_HTML401')) {
+			$HTML_ENTITY_DECODE_FLAGS = ENT_HTML401 | $HTML_ENTITY_DECODE_FLAGS;
+		}
+		return htmlspecialchars($string, $HTML_ENTITY_DECODE_FLAGS, 'UTF-8');
+	}
+
+	public static function contains($string, $substring) {
+		return strpos($string, $substring) !== false;
+	}
 }
 ?>

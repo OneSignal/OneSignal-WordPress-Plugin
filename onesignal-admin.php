@@ -176,7 +176,9 @@ class OneSignal_Admin {
   public static function saveStringSettings(&$onesignal_wp_settings, &$config, $settings) {
     foreach ($settings as $setting) {
       if (array_key_exists($setting, $config)) {
-        $onesignal_wp_settings[$setting] = $config[$setting];
+        $value = $config[$setting];
+        $value = OneSignalUtils::normalize($value);
+        $onesignal_wp_settings[$setting] = $value;
       }
     }
   }

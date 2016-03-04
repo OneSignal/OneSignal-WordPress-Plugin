@@ -731,51 +731,51 @@ if (array_key_exists('app_id', $_POST)) {
             </div>
           <div class="field nb-feature nb-text-feature">
             <label>First-time visitor message (on notify button hover)</label>
-            <input type="text" name="notifyButton_message_prenotify" placeholder="Click to subscribe to notifications" value="<?php echo @$onesignal_wp_settings['notifyButton_message_prenotify']; ?>">
+            <input type="text" name="notifyButton_message_prenotify" placeholder="Click to subscribe to notifications" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['notifyButton_message_prenotify']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Tip when unsubscribed</label>
-            <input type="text" name="notifyButton_tip_state_unsubscribed" placeholder="Subscribe to notifications" value="<?php echo @$onesignal_wp_settings['notifyButton_tip_state_unsubscribed']; ?>">
+            <input type="text" name="notifyButton_tip_state_unsubscribed" placeholder="Subscribe to notifications" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['notifyButton_tip_state_unsubscribed']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Tip when subscribed</label>
-            <input type="text" name="notifyButton_tip_state_subscribed" placeholder="You're subscribed to notifications" value="<?php echo @$onesignal_wp_settings['notifyButton_tip_state_subscribed']; ?>">
+            <input type="text" name="notifyButton_tip_state_subscribed" placeholder="You're subscribed to notifications" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['notifyButton_tip_state_subscribed']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Tip when blocked</label>
-            <input type="text" name="notifyButton_tip_state_blocked" placeholder="You've blocked notifications" value="<?php echo @$onesignal_wp_settings['notifyButton_tip_state_blocked']; ?>">
+            <input type="text" name="notifyButton_tip_state_blocked" placeholder="You've blocked notifications" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['notifyButton_tip_state_blocked']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Message on subscribed</label>
-            <input type="text" name="notifyButton_message_action_subscribed" placeholder="Thanks for subscribing!" value="<?php echo @$onesignal_wp_settings['notifyButton_message_action_subscribed']; ?>">
+            <input type="text" name="notifyButton_message_action_subscribed" placeholder="Thanks for subscribing!" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['notifyButton_message_action_subscribed']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Message on re-subscribed (after first unsubscribing)</label>
-            <input type="text" name="notifyButton_message_action_resubscribed" placeholder="You're subscribed to notifications" value="<?php echo @$onesignal_wp_settings['notifyButton_message_action_resubscribed']; ?>">
+            <input type="text" name="notifyButton_message_action_resubscribed" placeholder="You're subscribed to notifications" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['notifyButton_message_action_resubscribed']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Message on unsubscribed</label>
-            <input type="text" name="notifyButton_message_action_unsubscribed" placeholder="You won't receive notifications again" value="<?php echo @$onesignal_wp_settings['notifyButton_message_action_unsubscribed']; ?>">
+            <input type="text" name="notifyButton_message_action_unsubscribed" placeholder="You won't receive notifications again" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['notifyButton_message_action_unsubscribed']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Main dialog title</label>
-            <input type="text" name="notifyButton_dialog_main_title" placeholder="Manage Site Notifications" value="<?php echo @$onesignal_wp_settings['notifyButton_dialog_main_title']; ?>">
+            <input type="text" name="notifyButton_dialog_main_title" placeholder="Manage Site Notifications" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['notifyButton_dialog_main_title']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Main dialog subscribe button</label>
-            <input type="text" name="notifyButton_dialog_main_button_subscribe" placeholder="SUBSCRIBE" value="<?php echo @$onesignal_wp_settings['notifyButton_dialog_main_button_subscribe']; ?>">
+            <input type="text" name="notifyButton_dialog_main_button_subscribe" placeholder="SUBSCRIBE" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['notifyButton_dialog_main_button_subscribe']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Main dialog unsubscribe button</label>
-            <input type="text" name="notifyButton_dialog_main_button_unsubscribe" placeholder="UNSUBSCRIBE" value="<?php echo @$onesignal_wp_settings['notifyButton_dialog_main_button_unsubscribe']; ?>">
+            <input type="text" name="notifyButton_dialog_main_button_unsubscribe" placeholder="UNSUBSCRIBE" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['notifyButton_dialog_main_button_unsubscribe']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Blocked dialog title</label>
-            <input type="text" name="notifyButton_dialog_blocked_title" placeholder="Unblock Notifications" value="<?php echo @$onesignal_wp_settings['notifyButton_dialog_blocked_title']; ?>">
+            <input type="text" name="notifyButton_dialog_blocked_title" placeholder="Unblock Notifications" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['notifyButton_dialog_blocked_title']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Blocked dialog message</label>
-            <input type="text" name="notifyButton_dialog_blocked_message" placeholder="Follow these instructions to allow notifications:" value="<?php echo @$onesignal_wp_settings['notifyButton_dialog_blocked_message']; ?>">
+            <input type="text" name="notifyButton_dialog_blocked_message" placeholder="Follow these instructions to allow notifications:" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['notifyButton_dialog_blocked_message']); ?>">
           </div>
           </div>
         </div>
@@ -806,35 +806,35 @@ if (array_key_exists('app_id', $_POST)) {
               </div>
               <div class="field prompt-customize-feature">
                   <label>Action Message</label>
-                  <input type="text" name="prompt_action_message" placeholder="wants to show notifications:" value="<?php echo @$onesignal_wp_settings['prompt_action_message']; ?>">
+                  <input type="text" name="prompt_action_message" placeholder="wants to show notifications:" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['prompt_action_message']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Example Notification Title (Desktop)</label>
-                  <input type="text" name="prompt_example_notification_title_desktop" placeholder="This is an example notification" value="<?php echo @$onesignal_wp_settings['prompt_example_notification_title_desktop']; ?>">
+                  <input type="text" name="prompt_example_notification_title_desktop" placeholder="This is an example notification" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['prompt_example_notification_title_desktop']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Example Notification Message (Desktop)</label>
-                  <input type="text" name="prompt_example_notification_message_desktop" placeholder="Notifications will appear on your desktop" value="<?php echo @$onesignal_wp_settings['prompt_example_notification_message_desktop']; ?>">
+                  <input type="text" name="prompt_example_notification_message_desktop" placeholder="Notifications will appear on your desktop" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['prompt_example_notification_message_desktop']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Example Notification Title (Mobile)</label>
-                  <input type="text" name="prompt_example_notification_title_mobile" placeholder="Example notification" value="<?php echo @$onesignal_wp_settings['prompt_example_notification_title_mobile']; ?>">
+                  <input type="text" name="prompt_example_notification_title_mobile" placeholder="Example notification" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['prompt_example_notification_title_mobile']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Example Notification Message (Mobile)</label>
-                  <input type="text" name="prompt_example_notification_message_mobile" placeholder="Notifications will appear on your device" value="<?php echo @$onesignal_wp_settings['prompt_example_notification_message_mobile']; ?>">
+                  <input type="text" name="prompt_example_notification_message_mobile" placeholder="Notifications will appear on your device" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['prompt_example_notification_message_mobile']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Example Notification Caption</label>
-                  <input type="text" name="prompt_example_notification_caption" placeholder="(you can unsubscribe anytime)" value="<?php echo @$onesignal_wp_settings['prompt_example_notification_caption']; ?>">
+                  <input type="text" name="prompt_example_notification_caption" placeholder="(you can unsubscribe anytime)" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['prompt_example_notification_caption']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Accept Button Text</label>
-                  <input type="text" name="prompt_accept_button_text" placeholder="CONTINUE" value="<?php echo @$onesignal_wp_settings['prompt_accept_button_text']; ?>">
+                  <input type="text" name="prompt_accept_button_text" placeholder="CONTINUE" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['prompt_accept_button_text']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Cancel Button Text</label>
-                  <input type="text" name="prompt_cancel_button_text" placeholder="NO THANKS" value="<?php echo @$onesignal_wp_settings['prompt_cancel_button_text']; ?>">
+                  <input type="text" name="prompt_cancel_button_text" placeholder="NO THANKS" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['prompt_cancel_button_text']); ?>">
               </div>
           </div>
         </div>
@@ -857,11 +857,11 @@ if (array_key_exists('app_id', $_POST)) {
             </div>
             <div class="field welcome-notification-feature">
                 <label>Title<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification Title" data-content="The welcome notification's title. You can localize this to your own language. If not set, the site's title will be used. Set to one space ' ' to clear the title, although this is not recommended." data-variation="wide"></i></label>
-                <input type="text" placeholder="(defaults to your website's title if blank)" name="welcome_notification_title" value="<?php echo @$onesignal_wp_settings['welcome_notification_title']; ?>">
+                <input type="text" placeholder="(defaults to your website's title if blank)" name="welcome_notification_title" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['welcome_notification_title']); ?>">
             </div>
             <div class="field welcome-notification-feature">
                 <label>Message<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification Message" data-content="The welcome notification's message. You can localize this to your own language. A message is required. If left blank, the default of 'Thanks for subscribing!' will be used." data-variation="wide"></i></label>
-                <input type="text" placeholder="Thanks for subscribing!" name="welcome_notification_message" value="<?php echo @$onesignal_wp_settings['welcome_notification_message']; ?>">
+                <input type="text" placeholder="Thanks for subscribing!" name="welcome_notification_message" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['welcome_notification_message']); ?>">
             </div>
           <div class="field welcome-notification-feature">
             <label>URL<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification URL" data-content="The webpage to open when clicking the notification. If left blank, your main site URL will be used as a default." data-variation="wide"></i></label>

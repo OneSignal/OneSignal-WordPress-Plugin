@@ -11,6 +11,7 @@
 
 define( 'ONESIGNAL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
+require_once( plugin_dir_path( __FILE__ ) . 'onesignal-utils.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'onesignal-admin.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'onesignal-public.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'onesignal-settings.php' );

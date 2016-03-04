@@ -1,7 +1,7 @@
 <?php
 
 function onesignal_debug() {
-  if (WP_DEBUG) {
+  if (defined('ONESIGNAL_DEBUG')) {
     $numargs = func_num_args();
     $arg_list = func_get_args();
     $output = '';
@@ -32,7 +32,7 @@ class OneSignal_Public {
       if (strpos(ONESIGNAL_PLUGIN_URL, "http://localhost") === false && strpos(ONESIGNAL_PLUGIN_URL, "http://127.0.0.1") === false) {
         $current_plugin_url = preg_replace("/(http:\/\/)/i", "https://", ONESIGNAL_PLUGIN_URL);
       }
-      else {
+    else {
         $current_plugin_url = ONESIGNAL_PLUGIN_URL;
       }
 ?>
@@ -47,9 +47,13 @@ class OneSignal_Public {
       ?>
     <link rel="manifest" href="<?php echo( $current_plugin_url . 'sdk_files/manifest.json.php?gcm_sender_id=' . $gcm_sender_id ) ?>" />
 <?php } ?>
-    <?php /* <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script> */ ?>
-    <?php /* <script src="https://192.168.1.206:3000/dev_sdks/OneSignalSDK.js" async></script> */ ?>
-    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
+    <?php
+    if (defined('ONESIGNAL_DEBUG')) {
+        echo '<script src="https://localhost:3001/dev_sdks/OneSignalSDK.js" async></script>';
+      } else {
+        echo '<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>';
+      }
+    ?>
     <script>
 
       var OneSignal = OneSignal || [];
@@ -62,14 +66,14 @@ class OneSignal_Public {
         <?php
 
         if ($onesignal_wp_settings['default_icon'] != "") {
-          echo "OneSignal.setDefaultIcon(\"" . html_entity_decode($onesignal_wp_settings['default_icon'], ENT_HTML401 | ENT_QUOTES, 'UTF-8') . "\");\n";
+          echo "OneSignal.setDefaultIcon(\"" . OneSignalUtils::decode_entities($onesignal_wp_settings['default_icon']) . "\");\n";
         }
 
         if ($onesignal_wp_settings['default_url'] != "") {
-          echo "OneSignal.setDefaultNotificationUrl(\"" . html_entity_decode($onesignal_wp_settings['default_url'], ENT_HTML401 | ENT_QUOTES, 'UTF-8') . "\");";
+          echo "OneSignal.setDefaultNotificationUrl(\"" . OneSignalUtils::decode_entities($onesignal_wp_settings['default_url']) . "\");";
         }
         else {
-           echo "OneSignal.setDefaultNotificationUrl(\"" . html_entity_decode(get_site_url(), ENT_HTML401 | ENT_QUOTES, 'UTF-8') . "\");\n";
+           echo "OneSignal.setDefaultNotificationUrl(\"" . OneSignalUtils::decode_entities(get_site_url()) . "\");\n";
         }
         ?>
         var oneSignal_options = {};

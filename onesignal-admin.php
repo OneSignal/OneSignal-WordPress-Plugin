@@ -5,7 +5,7 @@ function change_footer_admin() {
 }
 
 class OneSignal_Admin {
-  private static $RESOURCES_VERSION = '15';
+  private static $RESOURCES_VERSION = '16';
 
   public function __construct() {
   }
@@ -61,7 +61,11 @@ class OneSignal_Admin {
     ?>
       <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($onesignal_wp_settings['notification_on_post'] && $post->post_status != "publish" && $post->post_type == "post") { echo "checked"; } ?>></input>
       <input type="hidden" name="has_onesignal_setting" value="true"></input>
-      <label> <?php if ($post->post_status == "publish") { echo "Send notification on " . $post_type . " update"; } else { echo "Send notification on " . $post_type . " publish"; } ?></label>
+      <label> <?php if ($post->post_status == "publish") {
+          echo "Send notification on " . $post_type . " update";
+        } else {
+          echo "Send notification on " . $post_type . " publish";
+        } ?></label>
     <?php
   }
   
@@ -212,7 +216,6 @@ class OneSignal_Admin {
   }
   
   public static function send_notification_on_wp_post($new_status, $old_status, $post) {
-    onesignal_debug('Calling send_notification_on_wp_post(', $new_status, $old_status, $post);
     if (empty( $post ) || $new_status !== "publish") {
         return;
     }
@@ -220,6 +223,8 @@ class OneSignal_Admin {
     if ($post->post_type == 'page') {
       return;
     }
+
+    onesignal_debug('Calling send_notification_on_wp_post(', $new_status, $old_status, $post);
     
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
@@ -235,14 +240,14 @@ class OneSignal_Admin {
     onesignal_debug('Sending notification: ', $send_onesignal_notification);
     
     if ($send_onesignal_notification === true || $send_onesignal_notification === "true") {  
-      $notif_content = html_entity_decode(get_the_title($post->ID), ENT_QUOTES, 'UTF-8');
+      $notif_content = OneSignalUtils::decode_entities(get_the_title($post->ID));
 
       $site_title = "";
       if ($onesignal_wp_settings['default_title'] != "") {
-        $site_title = html_entity_decode($onesignal_wp_settings['default_title'], ENT_HTML401 | ENT_QUOTES, 'UTF-8');
+        $site_title = OneSignalUtils::decode_entities($onesignal_wp_settings['default_title']);
       }
       else {
-        $site_title = html_entity_decode(get_bloginfo( 'name' ), ENT_HTML401 | ENT_QUOTES, 'UTF-8');
+        $site_title = OneSignalUtils::decode_entities(get_bloginfo('name'));
       }
       
       $fields = array(
@@ -271,18 +276,66 @@ class OneSignal_Admin {
         }
       }
 
+      if (defined('ONESIGNAL_DEBUG')) {
+        // http://blog.kettle.io/debugging-curl-requests-in-php/
+        ob_start();
+        $out = fopen('php://output', 'w');
+      }
+
       $ch = curl_init();
-      curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+
+      $onesignal_post_url = "https://onesignal.com/api/v1/notifications";
+
+      if (defined('ONESIGNAL_DEBUG')) {
+        $onesignal_post_url = "https://localhost:3001/api/v1/notifications";
+      }
+
+      $onesignal_auth_key = $onesignal_wp_settings['app_rest_api_key'];
+
+      if (defined('ONESIGNAL_DEBUG')) {
+        $onesignal_auth_key = "NDQyMjM3OTYtNjBkOC00YjI0LWI2NzMtZDZmODQ3ODU4ZmM2";
+      }
+      curl_setopt($ch, CURLOPT_URL, $onesignal_post_url);
       curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json',
-                             'Authorization: Basic ' . $onesignal_wp_settings['app_rest_api_key']));
+                             'Authorization: Basic ' . $onesignal_auth_key));
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-      curl_setopt($ch, CURLOPT_HEADER, FALSE);
+      curl_setopt($ch, CURLOPT_HEADER, TRUE);
       curl_setopt($ch, CURLOPT_POST, TRUE);
       curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
+      if (defined('ONESIGNAL_DEBUG')) {
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_FAILONERROR, FALSE);
+        curl_setopt($ch, CURLOPT_HTTP200ALIASES, array(400));
+        curl_setopt($ch, CURLOPT_VERBOSE, true);
+        curl_setopt($ch, CURLOPT_STDERR, $out);
+      }
+
       $response = curl_exec($ch);
-      curl_close($ch);
+
+      if (defined('ONESIGNAL_DEBUG')) {
+        fclose($out);
+        $debug_output = ob_get_clean();
+
+        $curl_effective_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+        $curl_http_code     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curl_total_time    = curl_getinfo($ch, CURLINFO_TOTAL_TIME);
+
+        onesignal_debug('cURL POST Fields:', json_encode($fields));
+
+        onesignal_debug('cURL URL:', $curl_effective_url);
+        onesignal_debug('cURL Status Code:', $curl_http_code);
+        onesignal_debug('cURL Request Time:', $curl_total_time, 'seconds');
+
+        onesignal_debug('cURL Error Number:', curl_errno($ch));
+        onesignal_debug('cURL Error Description:', curl_error($ch));
+        onesignal_debug('cURL Response:', print_r($response, true));
+        //onesignal_debug('cURL Log:', $debug_output);  Too much verbose output
+        curl_close($ch);
+      } else {
+        curl_close($ch);
+      }
       
       return $response;
     }

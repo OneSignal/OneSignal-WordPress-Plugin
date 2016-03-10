@@ -1,9 +1,5 @@
 <?php
 $onesignal_wp_settings = OneSignal::get_onesignal_settings();
-
-if (array_key_exists('app_id', $_POST)) {
-  $onesignal_wp_settings = OneSignal_Admin::save_config_page($_POST);
-}
 ?>
 
 <header class="onesignal">

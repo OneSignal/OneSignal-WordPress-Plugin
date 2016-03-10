@@ -1,15 +1,22 @@
 <?php
 
 function onesignal_debug() {
+  $numargs = func_num_args();
+  $arg_list = func_get_args();
+  $output = '';
+  for ($i = 0; $i < $numargs; $i++) {
+    $output = $output . var_export($arg_list[$i], true) . ', ';
+  }
+  $output = substr($output, 0, 1024);
+
   if (defined('ONESIGNAL_DEBUG')) {
-    $numargs = func_num_args();
-    $arg_list = func_get_args();
-    $output = '';
-    for ($i = 0; $i < $numargs; $i++) {
-      $output = $output . var_export($arg_list[$i], true) . ', ';
-    }
-    $output = substr($output, 0, -2);
     error_log('OneSignal: ' . $output);
+  }
+  if (class_exists('WDS_Log_Post')) {
+    $num_log_posts = wp_count_posts('wdslp-wds-log', 'readable');
+    if ($num_log_posts->publish < 500) {
+      WDS_Log_Post::log_message($output, '', 'general');
+    }
   }
 }
 
@@ -22,7 +29,7 @@ class OneSignal_Public {
   public function __construct() {}
 
   public static function init() {
-    add_action( 'wp_head', array( __CLASS__, 'onesignal_header' ), 1 );
+    add_action('wp_head', array(__CLASS__, 'onesignal_header'), 1);
   }
 
   public static function onesignal_header() {

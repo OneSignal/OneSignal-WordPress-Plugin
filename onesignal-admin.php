@@ -5,12 +5,24 @@ function change_footer_admin() {
 }
 
 class OneSignal_Admin {
-  private static $RESOURCES_VERSION = '16';
+  private static $RESOURCES_VERSION = '17';
+  private static $NONCE_KEY = 'onesignal_meta_box_nonce';
+  private static $NONCE_FIELD = 'onesignal_meta_box';
 
   public function __construct() {
   }
 
   public static function init() {
+    function exception_error_handler($errno, $errstr, $errfile, $errline ) {
+      try {
+        onesignal_debug('Exception: ' . $errstr . ' @ ' . $errfile . ':' . $errline);
+        return true;
+      } catch (Exception $ex) {
+        return true;
+      }
+    }
+    set_error_handler("exception_error_handler");
+
     $onesignal = new self();
     if (current_user_can('update_plugins')) {
       add_action( 'admin_menu', array(__CLASS__, 'add_admin_page') );
@@ -21,21 +33,78 @@ class OneSignal_Admin {
     
     add_action( 'transition_post_status', array( __CLASS__, 'on_transition_post_status' ), 10, 3 );
     add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_styles' ) );
-    
+    add_action( 'save_post',      array( __CLASS__, 'on_save_post') );
     return $onesignal;
   }
 
   public static function admin_styles() {
     wp_enqueue_style( 'onesignal-admin-styles', plugin_dir_url( __FILE__ ) . 'views/css/onesignal-menu-styles.css', false, OneSignal_Admin::$RESOURCES_VERSION);
   }
+
+  /**
+   * Save the meta when the post is saved.
+   * @param int $post_id The ID of the post being saved.
+   */
+  public function on_save_post($post_id) {
+    /*
+		 * We need to verify this came from the our screen and with proper authorization,
+		 * because save_post can be triggered at other times.
+		 */
+    // Check if our nonce is set.
+    if (!isset( $_POST[OneSignal_Admin::$NONCE_KEY] ) ) {
+      return $post_id;
+    }
+
+    $nonce = $_POST[OneSignal_Admin::$NONCE_KEY];
+
+    // Verify that the nonce is valid.
+    if (!wp_verify_nonce($nonce, OneSignal_Admin::$NONCE_FIELD)) {
+      return $post_id;
+    }
+
+    /*
+		 * If this is an autosave, our form has not been submitted,
+		 * so we don't want to do anything.
+		 */
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+      return $post_id;
+    }
+
+    // Check the user's permissions.
+    if ( 'page' == $_POST['post_type'] ) {
+      if (!current_user_can( 'edit_page', $post_id)) {
+        return $post_id;
+      }
+    } else {
+      if (!current_user_can('edit_post', $post_id)) {
+        return $post_id;
+      }
+    }
+
+    /*
+     * Never add onesignal_debug() statements above this line or they will recursively output.
+     */
+
+    /* OK, it's safe for us to save the data now. */
+
+    // Sanitize the user input.
+    $checkbox_send_notification = sanitize_text_field($_POST['onesignal_send_notification']);
+    onesignal_debug('In on_save_post:', '$checkbox_send_notification', sanitize_text_field($_POST['onesignal_send_notification']));
+
+    // Update the meta field.
+    update_post_meta( $post_id, 'onesignal_send_notification', $checkbox_send_notification );
+  }
   
   public static function add_onesignal_post_options() {
-      add_meta_box('onesignal_notif_on_post',
-                   'OneSignal',
-                   array( __CLASS__, 'onesignal_notif_on_post_html_view' ),
-                   'post',
-                   'side',
-                   'high');
+    // Add our meta box for the "post" post type (default)
+    add_meta_box('onesignal_notif_on_post',
+                 'OneSignal',
+                 array( __CLASS__, 'onesignal_notif_on_post_html_view' ),
+                 'post',
+                 'side',
+                 'high');
+
+    // Then add our meta box for all other post types that are public but not built in to WordPress
     $args = array(
       'public'   => true,
       '_builtin' => false
@@ -54,18 +123,41 @@ class OneSignal_Admin {
       );
     }
   }
-  
+
+
+  /**
+   * Render Meta Box content.
+   * @param WP_Post $post The post object.
+   */
   public static function onesignal_notif_on_post_html_view($post) {
     $post_type = $post->post_type;
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
+
+    // Add an nonce field so we can check for it later.
+    wp_nonce_field(OneSignal_Admin::$NONCE_FIELD, OneSignal_Admin::$NONCE_KEY );
+
+    // Use get_post_meta to retrieve an existing value from the database.
+    // Since $single is set to true, if a meta field with the given key isn't found for the post, an empty string is returned
+    onesignal_debug('$post', $post);
+    $meta_send_notification = get_post_meta($post->ID, 'onesignal_send_notification', true);
+    onesignal_debug('$meta_send_notification', $meta_send_notification);
+
+    // In our WP plugin config, have we checked "Automatically send a push notification when I create a post from the default WordPress editor"
+    // This condition is truy only when: setting is enabled on Config page, post type is ONLY "post", and the post has not been published (new posts are status "auto-draft")
+    $settings_send_notification_on_standard_post_create = $onesignal_wp_settings['notification_on_post'] && $post->post_type == "post" && $post->post_status !== "publish";
+    onesignal_debug('$settings_send_notification_on_post', $settings_send_notification_on_standard_post_create);
+    $checkbox_send_notification = $settings_send_notification_on_standard_post_create || $meta_send_notification;
+    onesignal_debug('$checkbox_send_notification', $checkbox_send_notification);
+
     ?>
-      <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($onesignal_wp_settings['notification_on_post'] && $post->post_status != "publish" && $post->post_type == "post") { echo "checked"; } ?>></input>
-      <input type="hidden" name="has_onesignal_setting" value="true"></input>
-      <label> <?php if ($post->post_status == "publish") {
+      <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($checkbox_send_notification) { echo "checked"; } ?>></input>
+      <label>
+        <?php if ($post->post_status == "publish") {
           echo "Send notification on " . $post_type . " update";
         } else {
           echo "Send notification on " . $post_type . " publish";
-        } ?></label>
+        } ?>
+      </label>
     <?php
   }
   
@@ -218,143 +310,141 @@ class OneSignal_Admin {
   }
   
   public static function send_notification_on_wp_post($new_status, $old_status, $post) {
-    if (empty( $post ) || $new_status !== "publish") {
-        return;
-    }
+    try {
+      onesignal_debug('send_notification_on_wp_post:', $post);
+      $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
-    if ($post->post_type == 'page') {
-      return;
-    }
-
-    onesignal_debug('Calling send_notification_on_wp_post(', $new_status, $old_status, $post);
-    
-    $onesignal_wp_settings = OneSignal::get_onesignal_settings();
-
-    $send_onesignal_notification = false;
-    if (isset($_POST['has_onesignal_setting'])) {
-      if (array_key_exists('send_onesignal_notification', $_POST)) {
-        $send_onesignal_notification = $_POST['send_onesignal_notification'];
-      }
-    }
-    elseif ($old_status !== "publish" && $post->post_type === "post") {
-      $send_onesignal_notification = $onesignal_wp_settings['notification_on_post_from_plugin'];
-    }
-    onesignal_debug('Sending notification: ', $send_onesignal_notification);
-    
-    if ($send_onesignal_notification === true || $send_onesignal_notification === "true") {  
-      $notif_content = OneSignalUtils::decode_entities(get_the_title($post->ID));
-
-      $site_title = "";
-      if ($onesignal_wp_settings['default_title'] != "") {
-        $site_title = OneSignalUtils::decode_entities($onesignal_wp_settings['default_title']);
-      }
-      else {
-        $site_title = OneSignalUtils::decode_entities(get_bloginfo('name'));
-      }
-
-      if (function_exists('qtrans_getLanguage')) {
-        try {
-          $qtransLang                                = qtrans_getLanguage();
-          $site_title                                = qtrans_use($qtransLang, $site_title, false);
-          $notif_content                             = qtrans_use($qtransLang, $notif_content, false);
-        } catch (Exception $e) {
-          onesignal_debug('Caught qTrans exception:', $e->getMessage());
+      $send_onesignal_notification = false;
+      if (isset($_POST['has_onesignal_setting'])) {
+        if (array_key_exists('send_onesignal_notification', $_POST)) {
+          $send_onesignal_notification = $_POST['send_onesignal_notification'];
         }
+      } elseif ($old_status !== "publish" && $post->post_type === "post") {
+        $send_onesignal_notification = $onesignal_wp_settings['notification_on_post_from_plugin'];
       }
-      
-      $fields = array(
-        'app_id' => $onesignal_wp_settings['app_id'],
-        'headings' => array("en" => $site_title),
-        'included_segments' => array('All'),
-        'isAnyWeb' => true,
-        'url' => get_permalink($post->ID),
-        'contents' => array("en" => $notif_content)
-      );
 
-      $post_has_featured_image = has_post_thumbnail($post);
-      $config_use_featured_image_as_icon = $onesignal_wp_settings['showNotificationIconFromPostThumbnail'] == "1";
-      onesignal_debug('Post has featured image: ', $post_has_featured_image);
-      onesignal_debug('Use featured image as notification icon: ', $config_use_featured_image_as_icon);
-      if ($post_has_featured_image == true && $config_use_featured_image_as_icon) {
-        // get the icon image from wordpress if it exists
-        $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
-        $thumbnail_array = wp_get_attachment_image_src($post_thumbnail_id, array( 80, 80 ), true);
-        onesignal_debug('Thumbnail array: ', $thumbnail_array);
-        if (!empty($thumbnail_array)) {
-          $thumbnail = $thumbnail_array[0];
-          // set the icon image for both chrome and firefox-1
-          $fields['chrome_web_icon'] = $thumbnail;
-          $fields['firefox_icon'] = $thumbnail;
+      if ($send_onesignal_notification === true || $send_onesignal_notification === "true") {
+        $notif_content = OneSignalUtils::decode_entities(get_the_title($post->ID));
+
+        $site_title = "";
+        if ($onesignal_wp_settings['default_title'] != "") {
+          $site_title = OneSignalUtils::decode_entities($onesignal_wp_settings['default_title']);
+        } else {
+          $site_title = OneSignalUtils::decode_entities(get_bloginfo('name'));
         }
+
+        if (function_exists('qtrans_getLanguage')) {
+          try {
+            $qtransLang    = qtrans_getLanguage();
+            $site_title    = qtrans_use($qtransLang, $site_title, false);
+            $notif_content = qtrans_use($qtransLang, $notif_content, false);
+          } catch (Exception $e) {
+            onesignal_debug('Caught qTrans exception:', $e->getMessage());
+          }
+        }
+
+        $fields = array(
+          'app_id'            => $onesignal_wp_settings['app_id'],
+          'headings'          => array("en" => $site_title),
+          'included_segments' => array('All'),
+          'isAnyWeb'          => true,
+          'url'               => get_permalink($post->ID),
+          'contents'          => array("en" => $notif_content)
+        );
+
+        $post_has_featured_image           = has_post_thumbnail($post);
+        $config_use_featured_image_as_icon = $onesignal_wp_settings['showNotificationIconFromPostThumbnail'] == "1";
+        onesignal_debug('Post has featured image: ', $post_has_featured_image);
+        onesignal_debug('Use featured image as notification icon: ', $config_use_featured_image_as_icon);
+        if ($post_has_featured_image == true && $config_use_featured_image_as_icon) {
+          // get the icon image from wordpress if it exists
+          $post_thumbnail_id = get_post_thumbnail_id($post->ID);
+          $thumbnail_array   = wp_get_attachment_image_src($post_thumbnail_id, array(80, 80), true);
+          onesignal_debug('Thumbnail array: ', $thumbnail_array);
+          if (!empty($thumbnail_array)) {
+            $thumbnail = $thumbnail_array[0];
+            // set the icon image for both chrome and firefox-1
+            $fields['chrome_web_icon'] = $thumbnail;
+            $fields['firefox_icon']    = $thumbnail;
+          }
+        }
+
+        if (defined('ONESIGNAL_DEBUG')) {
+          // http://blog.kettle.io/debugging-curl-requests-in-php/
+          ob_start();
+          $out = fopen('php://output', 'w');
+        }
+
+        $ch = curl_init();
+
+        $onesignal_post_url = "https://onesignal.com/api/v1/notifications";
+
+        if (defined('ONESIGNAL_DEBUG')) {
+          $onesignal_post_url = "https://localhost:3001/api/v1/notifications";
+        }
+
+        $onesignal_auth_key = $onesignal_wp_settings['app_rest_api_key'];
+
+        if (defined('ONESIGNAL_DEBUG')) {
+          $onesignal_auth_key = "NDQyMjM3OTYtNjBkOC00YjI0LWI2NzMtZDZmODQ3ODU4ZmM2";
+        }
+        curl_setopt($ch, CURLOPT_URL, $onesignal_post_url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+          'Content-Type: application/json',
+          'Authorization: Basic ' . $onesignal_auth_key
+        ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        if (defined('ONESIGNAL_DEBUG')) {
+          curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+          curl_setopt($ch, CURLOPT_FAILONERROR, false);
+          curl_setopt($ch, CURLOPT_HTTP200ALIASES, array(400));
+          curl_setopt($ch, CURLOPT_VERBOSE, true);
+          curl_setopt($ch, CURLOPT_STDERR, $out);
+        }
+
+        $response = curl_exec($ch);
+
+        if (defined('ONESIGNAL_DEBUG')) {
+          fclose($out);
+          $debug_output = ob_get_clean();
+
+          $curl_effective_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+          $curl_http_code     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+          $curl_total_time    = curl_getinfo($ch, CURLINFO_TOTAL_TIME);
+
+          onesignal_debug('cURL POST Fields:', json_encode($fields));
+
+          onesignal_debug('cURL URL:', $curl_effective_url);
+          onesignal_debug('cURL Status Code:', $curl_http_code);
+          onesignal_debug('cURL Request Time:', $curl_total_time, 'seconds');
+
+          onesignal_debug('cURL Error Number:', curl_errno($ch));
+          onesignal_debug('cURL Error Description:', curl_error($ch));
+          onesignal_debug('cURL Response:', print_r($response, true));
+          //onesignal_debug('cURL Log:', $debug_output);  Too much verbose output
+          curl_close($ch);
+        } else {
+          curl_close($ch);
+        }
+
+        return $response;
       }
-
-      if (defined('ONESIGNAL_DEBUG')) {
-        // http://blog.kettle.io/debugging-curl-requests-in-php/
-        ob_start();
-        $out = fopen('php://output', 'w');
-      }
-
-      $ch = curl_init();
-
-      $onesignal_post_url = "https://onesignal.com/api/v1/notifications";
-
-      if (defined('ONESIGNAL_DEBUG')) {
-        $onesignal_post_url = "https://localhost:3001/api/v1/notifications";
-      }
-
-      $onesignal_auth_key = $onesignal_wp_settings['app_rest_api_key'];
-
-      if (defined('ONESIGNAL_DEBUG')) {
-        $onesignal_auth_key = "NDQyMjM3OTYtNjBkOC00YjI0LWI2NzMtZDZmODQ3ODU4ZmM2";
-      }
-      curl_setopt($ch, CURLOPT_URL, $onesignal_post_url);
-      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json',
-                             'Authorization: Basic ' . $onesignal_auth_key));
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-      curl_setopt($ch, CURLOPT_HEADER, TRUE);
-      curl_setopt($ch, CURLOPT_POST, TRUE);
-      curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
-      if (defined('ONESIGNAL_DEBUG')) {
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-        curl_setopt($ch, CURLOPT_FAILONERROR, FALSE);
-        curl_setopt($ch, CURLOPT_HTTP200ALIASES, array(400));
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-        curl_setopt($ch, CURLOPT_STDERR, $out);
-      }
-
-      $response = curl_exec($ch);
-
-      if (defined('ONESIGNAL_DEBUG')) {
-        fclose($out);
-        $debug_output = ob_get_clean();
-
-        $curl_effective_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
-        $curl_http_code     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curl_total_time    = curl_getinfo($ch, CURLINFO_TOTAL_TIME);
-
-        onesignal_debug('cURL POST Fields:', json_encode($fields));
-
-        onesignal_debug('cURL URL:', $curl_effective_url);
-        onesignal_debug('cURL Status Code:', $curl_http_code);
-        onesignal_debug('cURL Request Time:', $curl_total_time, 'seconds');
-
-        onesignal_debug('cURL Error Number:', curl_errno($ch));
-        onesignal_debug('cURL Error Description:', curl_error($ch));
-        onesignal_debug('cURL Response:', print_r($response, true));
-        //onesignal_debug('cURL Log:', $debug_output);  Too much verbose output
-        curl_close($ch);
-      } else {
-        curl_close($ch);
-      }
-      
-      return $response;
+    }
+    catch (Exception $e) {
+      onesignal_debug('EXCEPTION: ' . $e->getMessage());
     }
   }
   
   public static function on_transition_post_status( $new_status, $old_status, $post ) {
-    onesignal_debug('Calling on_transition_post_status(', $new_status, $old_status, $post);
+    if (empty($post) || $new_status !== "publish" || $post->post_type == 'page' || $post->post_type == 'wdslp-wds-log') {
+      // It's important not to call onesignal_debug() on posts of type wdslp-wds-log, otherwise each post will recursively generate 4 more posts
+      return;
+    }
     self::send_notification_on_wp_post($new_status, $old_status, $post);
   }
 }

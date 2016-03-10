@@ -15,7 +15,28 @@ class OneSignal_Admin {
   public static function init() {
     function exception_error_handler($errno, $errstr, $errfile, $errline ) {
       try {
-        onesignal_debug('Exception: ' . $errstr . ' @ ' . $errfile . ':' . $errline);
+        switch ($errno) {
+          case E_USER_ERROR:
+            onesignal_debug('FATAL ERROR: ' . $errstr . ' @ ' . $errfile . ':' . $errline);
+            exit(1);
+            break;
+
+          case E_USER_WARNING:
+            onesignal_debug('WARNING: ' . $errstr . ' @ ' . $errfile . ':' . $errline);
+            break;
+
+          case E_USER_NOTICE || E_NOTICE:
+            //onesignal_debug('NOTICE: ' . $errstr . ' @ ' . $errfile . ':' . $errline);
+            break;
+
+          case E_STRICT:
+            //onesignal_debug('DEPRECATED: ' . $errstr . ' @ ' . $errfile . ':' . $errline);
+            break;
+
+          default:
+            onesignal_debug('UNKNOWN EXCEPTION (' . $errno . '): ' . $errstr . ' @ ' . $errfile . ':' . $errline);
+            break;
+        }
         return true;
       } catch (Exception $ex) {
         return true;
@@ -88,11 +109,15 @@ class OneSignal_Admin {
     /* OK, it's safe for us to save the data now. */
 
     // Sanitize the user input.
-    $checkbox_send_notification = sanitize_text_field($_POST['onesignal_send_notification']);
-    onesignal_debug('In on_save_post:', '$checkbox_send_notification', sanitize_text_field($_POST['onesignal_send_notification']));
+    $checkbox_send_notification = sanitize_text_field($_POST['send_onesignal_notification']);
+    onesignal_debug('In on_save_post:', '$checkbox_send_notification', $checkbox_send_notification);
 
     // Update the meta field.
-    update_post_meta( $post_id, 'onesignal_send_notification', $checkbox_send_notification );
+    if ($checkbox_send_notification) {
+      update_post_meta( $post_id, 'onesignal_send_notification', true );
+    } else {
+      update_post_meta( $post_id, 'onesignal_send_notification', false);
+    }
   }
   
   public static function add_onesignal_post_options() {
@@ -138,16 +163,19 @@ class OneSignal_Admin {
 
     // Use get_post_meta to retrieve an existing value from the database.
     // Since $single is set to true, if a meta field with the given key isn't found for the post, an empty string is returned
-    onesignal_debug('$post', $post);
     $meta_send_notification = get_post_meta($post->ID, 'onesignal_send_notification', true);
-    onesignal_debug('$meta_send_notification', $meta_send_notification);
+    onesignal_debug('[onesignal_notif_on_post_html_view]', '$meta_send_notification:', $meta_send_notification);
 
     // In our WP plugin config, have we checked "Automatically send a push notification when I create a post from the default WordPress editor"
     // This condition is truy only when: setting is enabled on Config page, post type is ONLY "post", and the post has not been published (new posts are status "auto-draft")
     $settings_send_notification_on_standard_post_create = $onesignal_wp_settings['notification_on_post'] && $post->post_type == "post" && $post->post_status !== "publish";
-    onesignal_debug('$settings_send_notification_on_post', $settings_send_notification_on_standard_post_create);
+    onesignal_debug('[onesignal_notif_on_post_html_view]', '$settings_send_notification_on_standard_post_create:', $settings_send_notification_on_standard_post_create);
+    onesignal_debug('[onesignal_notif_on_post_html_view]', '[settings_send_notification_on_standard_post_create]', '$onesignal_wp_settings[\'notification_on_post\']:', $onesignal_wp_settings['notification_on_post']);
+    onesignal_debug('[onesignal_notif_on_post_html_view]', '[settings_send_notification_on_standard_post_create]', '$post->post_type == "post":', $post->post_type == "post");
+    onesignal_debug('[onesignal_notif_on_post_html_view]', '[settings_send_notification_on_standard_post_create]', '$post->post_status !== "publish:', $post->post_status !== "publish");
+
     $checkbox_send_notification = $settings_send_notification_on_standard_post_create || $meta_send_notification;
-    onesignal_debug('$checkbox_send_notification', $checkbox_send_notification);
+    onesignal_debug('[onesignal_notif_on_post_html_view]', '$checkbox_send_notification:', $checkbox_send_notification);
 
     ?>
       <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($checkbox_send_notification) { echo "checked"; } ?>></input>
@@ -311,19 +339,20 @@ class OneSignal_Admin {
   
   public static function send_notification_on_wp_post($new_status, $old_status, $post) {
     try {
-      onesignal_debug('send_notification_on_wp_post:', $post);
       $onesignal_wp_settings = OneSignal::get_onesignal_settings();
-
-      $send_onesignal_notification = false;
-      if (isset($_POST['has_onesignal_setting'])) {
-        if (array_key_exists('send_onesignal_notification', $_POST)) {
-          $send_onesignal_notification = $_POST['send_onesignal_notification'];
-        }
-      } elseif ($old_status !== "publish" && $post->post_type === "post") {
-        $send_onesignal_notification = $onesignal_wp_settings['notification_on_post_from_plugin'];
-      }
-
-      if ($send_onesignal_notification === true || $send_onesignal_notification === "true") {
+      $meta_send_notification = get_post_meta($post->ID, 'onesignal_send_notification', true);
+      $settings_send_notification_on_third_party_post_create = !$meta_send_notification &&
+                                                               $onesignal_wp_settings['notification_on_post_from_plugin'] &&
+                                                               $post->post_type == "post" &&
+                                                               $post->post_status !== "publish";
+      onesignal_debug('[send_notification_on_wp_post] $meta_send_notification: ' . $meta_send_notification);
+      onesignal_debug('[send_notification_on_wp_post] $settings_send_notification_on_third_party_post_create: ' . $settings_send_notification_on_third_party_post_create);
+      onesignal_debug('[send_notification_on_wp_post] [settings_send_notification_on_third_party_post_create] !$meta_send_notification: ' . !$meta_send_notification);
+      onesignal_debug('[send_notification_on_wp_post] [settings_send_notification_on_third_party_post_create] notification_on_post_from_plugin: ' . $onesignal_wp_settings['notification_on_post_from_plugin']);
+      onesignal_debug('[send_notification_on_wp_post] [settings_send_notification_on_third_party_post_create] post_type: ' . ($post->post_type === "post") . '  (' . $post->post_type . ')');
+      onesignal_debug('[send_notification_on_wp_post] [settings_send_notification_on_third_party_post_create] post_status: ' . ($post->post_status !== "publish") . '  (' . $post->post_status . ')');
+      $do_send_notification = $meta_send_notification || $settings_send_notification_on_third_party_post_create;
+      if ($do_send_notification) {
         $notif_content = OneSignalUtils::decode_entities(get_the_title($post->ID));
 
         $site_title = "";
@@ -354,13 +383,10 @@ class OneSignal_Admin {
 
         $post_has_featured_image           = has_post_thumbnail($post);
         $config_use_featured_image_as_icon = $onesignal_wp_settings['showNotificationIconFromPostThumbnail'] == "1";
-        onesignal_debug('Post has featured image: ', $post_has_featured_image);
-        onesignal_debug('Use featured image as notification icon: ', $config_use_featured_image_as_icon);
         if ($post_has_featured_image == true && $config_use_featured_image_as_icon) {
           // get the icon image from wordpress if it exists
           $post_thumbnail_id = get_post_thumbnail_id($post->ID);
           $thumbnail_array   = wp_get_attachment_image_src($post_thumbnail_id, array(80, 80), true);
-          onesignal_debug('Thumbnail array: ', $thumbnail_array);
           if (!empty($thumbnail_array)) {
             $thumbnail = $thumbnail_array[0];
             // set the icon image for both chrome and firefox-1
@@ -417,15 +443,13 @@ class OneSignal_Admin {
           $curl_http_code     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
           $curl_total_time    = curl_getinfo($ch, CURLINFO_TOTAL_TIME);
 
-          onesignal_debug('cURL POST Fields:', json_encode($fields));
-
-          onesignal_debug('cURL URL:', $curl_effective_url);
-          onesignal_debug('cURL Status Code:', $curl_http_code);
-          onesignal_debug('cURL Request Time:', $curl_total_time, 'seconds');
-
-          onesignal_debug('cURL Error Number:', curl_errno($ch));
-          onesignal_debug('cURL Error Description:', curl_error($ch));
-          onesignal_debug('cURL Response:', print_r($response, true));
+          onesignal_debug('[send_notification_on_wp_post] cURL POST Fields:', json_encode($fields));
+          onesignal_debug('[send_notification_on_wp_post] cURL URL:', $curl_effective_url);
+          onesignal_debug('[send_notification_on_wp_post] cURL Status Code:', $curl_http_code);
+          //onesignal_debug('cURL Request Time:', $curl_total_time, 'seconds');
+          //onesignal_debug('cURL Error Number:', curl_errno($ch));
+          //onesignal_debug('cURL Error Description:', curl_error($ch));
+          //onesignal_debug('cURL Response:', print_r($response, true));
           //onesignal_debug('cURL Log:', $debug_output);  Too much verbose output
           curl_close($ch);
         } else {

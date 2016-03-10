@@ -5,9 +5,25 @@ function onesignal_debug() {
   $arg_list = func_get_args();
   $output = '';
   for ($i = 0; $i < $numargs; $i++) {
-    $output = $output . var_export($arg_list[$i], true) . ', ';
+    $arg = $arg_list[$i];
+
+    if (is_string($arg)) {
+      $arg_output = $arg;
+    } else {
+      $arg_output = var_export($arg, true);
+    }
+
+    if ($arg === "") {
+      $arg_output = "\"\"";
+    }
+    else if ($arg === null) {
+      $arg_output = "null";
+    }
+
+    $output = $output . $arg_output . ' ';
   }
-  $output = substr($output, 0, 1024);
+  $output = substr($output, 0, -1);
+  //$output = substr($output, 0, 1024);
 
   if (defined('ONESIGNAL_DEBUG')) {
     error_log('OneSignal: ' . $output);

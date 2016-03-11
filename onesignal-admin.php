@@ -72,19 +72,6 @@ class OneSignal_Admin {
 		  //spl_autoload_register('foo');
 	  }
 
-	  if (!function_exists('curl_init')) {
-		  add_action( 'admin_notices', 'admin_notice_curl_not_installed');
-
-		  function admin_notice_curl_not_installed() {
-			  ?>
-			  <div class="error notice">
-				  <p><?php echo '<strong>OneSignal Push:</strong> <em>cURL is not installed on this server. cURL is required to send notifications. Please make sure cURL is installed on your server before continuing.</em>'; ?></p>
-			  </div>
-			  <?php
-		  }
-		  return;
-	  }
-
     if (current_user_can('update_plugins')) {
       add_action( 'admin_menu', array(__CLASS__, 'add_admin_page') );
     }
@@ -363,7 +350,34 @@ class OneSignal_Admin {
   }
 
   public static function admin_custom_load() {
-    add_action( 'admin_enqueue_scripts', array(__CLASS__, 'admin_custom_scripts') );
+	  add_action('admin_enqueue_scripts', array(__CLASS__, 'admin_custom_scripts'));
+
+	  $onesignal_wp_settings = OneSignal::get_onesignal_settings();
+	  if (
+		  $onesignal_wp_settings['app_id'] == '' ||
+		  $onesignal_wp_settings['app_rest_api_key'] == ''
+	  ) {
+		  function admin_notice_setup_not_complete() {
+			  ?>
+			  <div class="error notice onesignal-error-notice">
+				  <p><?php echo '<strong>OneSignal Push:</strong> <em>Your setup is not complete. Please follow the Setup guide to set up web push notifications.</em>'; ?></p>
+			  </div>
+			  <?php
+		  }
+
+		  add_action('admin_notices', 'admin_notice_setup_not_complete');
+	  }
+
+	  if (!function_exists('curl_init')) {
+		  function admin_notice_curl_not_installed() {
+			  ?>
+			  <div class="error notice onesignal-error-notice">
+				  <p><?php echo '<strong>OneSignal Push:</strong> <em>cURL is not installed on this server. cURL is required to send notifications. Please make sure cURL is installed on your server before continuing.</em>'; ?></p>
+			  </div>
+			  <?php
+		  }
+		  add_action( 'admin_notices', 'admin_notice_curl_not_installed');
+	  }
   }
   
   public static function admin_custom_scripts() {

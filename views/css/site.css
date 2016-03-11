@@ -446,6 +446,13 @@ input::selection {
 /*******************************
         Global Overrides
 *******************************/
+.onesignal-error-notice {
+  color: #b30024 !important;
+  background: rgba(255, 0, 51, 0.085) !important;
+  margin: 0 !important; }
+  .onesignal-error-notice + .onesignal-error-notice {
+    margin-top: 5px !important; }
+
 /*******************************
          Site Overrides
 *******************************/

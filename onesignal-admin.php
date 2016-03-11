@@ -20,7 +20,7 @@ class OneSignal_Admin {
 			  try {
 				  switch ($errno) {
 					  case E_USER_ERROR:
-						  onesignal_debug('[FATAL ERROR]', $errstr . ' @ ' . $errfile . ':' . $errline);
+						  onesignal_debug('[ERROR]', $errstr . ' @ ' . $errfile . ':' . $errline);
 						  exit(1);
 						  break;
 
@@ -37,7 +37,7 @@ class OneSignal_Admin {
 						  break;
 
 					  default:
-						  onesignal_debug('[UNKNOWN EXCEPTION]', '(' . $errno . '): ' . $errstr . ' @ ' . $errfile . ':' . $errline);
+						  onesignal_debug('[UNKNOWN ERROR]', '(' . $errno . '): ' . $errstr . ' @ ' . $errfile . ':' . $errline);
 						  break;
 				  }
 
@@ -48,6 +48,28 @@ class OneSignal_Admin {
 		  }
 
 		  set_error_handler("exception_error_handler");
+
+		  function fatal_exception_error_handler() {
+			  $error = error_get_last();
+			  try {
+				  switch ($error['type']) {
+					  case E_ERROR:
+					  case E_CORE_ERROR:
+					  case E_COMPILE_ERROR:
+					  case E_USER_ERROR:
+					  case E_RECOVERABLE_ERROR:
+					  case E_CORE_WARNING:
+					  case E_COMPILE_WARNING:
+					  case E_PARSE:
+						  onesignal_debug('[CRITICAL ERROR]', '(' . $error['type'] . ') ' . $error['message'] . ' @ ' . $error['file'] . ':' . $error['line']);
+				  }
+			  } catch (Exception $ex) {
+				  return true;
+			  }
+		  }
+
+		  register_shutdown_function('fatal_exception_error_handler');
+		  //spl_autoload_register('foo');
 	  }
 
     if (current_user_can('update_plugins')) {
@@ -443,6 +465,11 @@ class OneSignal_Admin {
           ob_start();
           $out = fopen('php://output', 'w');
         }
+
+	      if (!function_exists('curl_init')) {
+		      onesignal_debug('curl_init() is not a defined function. cURL needs to be installed on this server!');
+		      return;
+	      }
 
         $ch = curl_init();
 

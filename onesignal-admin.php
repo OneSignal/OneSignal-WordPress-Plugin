@@ -72,6 +72,19 @@ class OneSignal_Admin {
 		  //spl_autoload_register('foo');
 	  }
 
+	  if (!function_exists('curl_init')) {
+		  add_action( 'admin_notices', 'admin_notice_curl_not_installed');
+
+		  function admin_notice_curl_not_installed() {
+			  ?>
+			  <div class="error notice">
+				  <p><?php echo '<strong>OneSignal Push:</strong> <em>cURL is not installed on this server. cURL is required to send notifications. Please make sure cURL is installed on your server before continuing.</em>'; ?></p>
+			  </div>
+			  <?php
+		  }
+		  return;
+	  }
+
     if (current_user_can('update_plugins')) {
       add_action( 'admin_menu', array(__CLASS__, 'add_admin_page') );
     }
@@ -465,11 +478,6 @@ class OneSignal_Admin {
           ob_start();
           $out = fopen('php://output', 'w');
         }
-
-	      if (!function_exists('curl_init')) {
-		      onesignal_debug('curl_init() is not a defined function. cURL needs to be installed on this server!');
-		      return;
-	      }
 
         $ch = curl_init();
 

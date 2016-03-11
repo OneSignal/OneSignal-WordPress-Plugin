@@ -114,10 +114,6 @@ class OneSignal_Admin {
       }
     }
 
-    /*
-     * Never add onesignal_debug() statements above this line or they will recursively output.
-     */
-
     /* OK, it's safe for us to save the data now. */
 
     // Sanitize the user input.
@@ -442,7 +438,7 @@ class OneSignal_Admin {
 		      onesignal_debug('onesignal_send_notification filter $fields result:', $fields);
 	      }
 
-        if (defined('ONESIGNAL_DEBUG')) {
+	      if (class_exists('WDS_Log_Post')) {
           // http://blog.kettle.io/debugging-curl-requests-in-php/
           ob_start();
           $out = fopen('php://output', 'w');
@@ -472,7 +468,7 @@ class OneSignal_Admin {
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-        if (defined('ONESIGNAL_DEBUG')) {
+	      if (class_exists('WDS_Log_Post')) {
           curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
           curl_setopt($ch, CURLOPT_FAILONERROR, false);
           curl_setopt($ch, CURLOPT_HTTP200ALIASES, array(400));
@@ -482,7 +478,7 @@ class OneSignal_Admin {
 
         $response = curl_exec($ch);
 
-        if (defined('ONESIGNAL_DEBUG')) {
+	      if (class_exists('WDS_Log_Post')) {
           fclose($out);
           $debug_output = ob_get_clean();
 

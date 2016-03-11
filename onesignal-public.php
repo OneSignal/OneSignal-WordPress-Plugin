@@ -3,7 +3,8 @@
 function onesignal_debug() {
   $numargs = func_num_args();
   $arg_list = func_get_args();
-  $output = '';
+  $bt = debug_backtrace();
+  $output = '[' . $bt[1]['function'] . '] ';
   for ($i = 0; $i < $numargs; $i++) {
     $arg = $arg_list[$i];
 

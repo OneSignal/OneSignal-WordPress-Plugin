@@ -874,13 +874,13 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="notification_on_post" value="true" <?php if ($onesignal_wp_settings['notification_on_post']) { echo "checked"; } ?>>
-              <label>Automatically send a push notification when I create a post from the default WordPress editor<i class="tiny circular help icon link" role="popup" data-title="Automatic Push from WordPress Editor" data-content="If checked, when you create a new post, the checkbox 'Send notification on publish' will be automatically checked." data-variation="wide"></i></label>
+              <label>Suggest to send a push notification when creating any kind of post<i class="tiny circular help icon link" role="popup" data-title="Automatic Push from WordPress Editor" data-content="If checked, when you create a new post, the checkbox 'Send notification on post publish/update' will be automatically checked." data-variation="wide"></i></label>
             </div>
           </div>
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="notification_on_post_from_plugin" value="true" <?php if (@$onesignal_wp_settings['notification_on_post_from_plugin']) { echo "checked"; } ?>>
-              <label>Automatically send a push notification when I create a post from 3<sup>rd</sup> party plugins<i class="tiny circular help icon link" role="popup" data-title="Automatic Push from 3rd Party Editors" data-content="If checked, when you create a new post from most 3rd party plugins, the checkbox 'Send notification on publish' will be automatically checked." data-variation="wide"></i></label>
+              <label>Automatically send a push notification when I publish a post<i class="tiny circular help icon link" role="popup" data-title="Automatic Push" data-content="If checked, when you publish a post, a push notification will always be sent. Post type must be exactly 'post' and post status must be 'publish'." data-variation="wide"></i></label>
             </div>
           </div>
         </div>

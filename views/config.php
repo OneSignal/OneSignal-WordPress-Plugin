@@ -1,5 +1,9 @@
 <?php
 $onesignal_wp_settings = OneSignal::get_onesignal_settings();
+
+if (array_key_exists('app_id', $_POST)) {
+  $onesignal_wp_settings = OneSignal_Admin::save_config_page($_POST);
+}
 ?>
 
 <header class="onesignal">
@@ -556,11 +560,11 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <input type="text" name="app_rest_api_key" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value="<?php echo $onesignal_wp_settings['app_rest_api_key'] ?>">
           </div>
           <div class="field subdomain-feature">
-            <label>Subdomain<i class="tiny circular help icon link" role="popup" data-title="Subdomain" data-content="Your chosen subdomain. You can find this on Setup > Chrome & Firefox Push > Step 9." data-variation="wide"></i></label>
+            <label>OneSignal Subdomain<i class="tiny circular help icon link" role="popup" data-title="Subdomain" data-content="Your chosen OneSignal subdomain, not your site subdomain. You can find this on Setup > Chrome & Firefox Push > Step 9." data-variation="wide"></i></label>
             <input type="text" name="subdomain" placeholder="example" value="<?php echo $onesignal_wp_settings['subdomain'] ?>">
           </div>
           <div class="field">
-            <label>Safari Web ID<i class="tiny circular help icon link" role="popup" data-title="Safari Web ID" data-content="Your chosen subdomain. You can find this on Setup > Safari Push > Step 5." data-variation="wide"></i></label>
+            <label>Safari Web ID<i class="tiny circular help icon link" role="popup" data-title="Safari Web ID" data-content="Your Safari Web ID. You can find this on Setup > Safari Push > Step 5." data-variation="wide"></i></label>
             <input type="text" name="safari_web_id" placeholder="web.com.example" value="<?php echo @$onesignal_wp_settings['safari_web_id']; ?>">
           </div>
         </div>
@@ -905,7 +909,11 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
         </div>
         <button class="ui large teal button" type="submit">Save</button>
-        <div class="ui error message">
+        <div class="ui inline validation nag">
+            <span class="title">
+              Your OneSignal subdomain cannot be empty or less than 4 characters. Use the same one you entered on the platform settings at onesignal.com.
+            </span>
+          <i class="close icon"></i>
         </div>
       </form>
     </div>

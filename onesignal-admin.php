@@ -5,7 +5,7 @@ function change_footer_admin() {
 }
 
 class OneSignal_Admin {
-  private static $RESOURCES_VERSION = '17';
+  private static $RESOURCES_VERSION = '25';
   private static $NONCE_KEY = 'onesignal_meta_box_nonce';
   private static $NONCE_FIELD = 'onesignal_meta_box';
 
@@ -13,38 +13,43 @@ class OneSignal_Admin {
   }
 
   public static function init() {
-    function exception_error_handler($errno, $errstr, $errfile, $errline ) {
-      try {
-        switch ($errno) {
-          case E_USER_ERROR:
-            onesignal_debug('[FATAL ERROR]', $errstr . ' @ ' . $errfile . ':' . $errline);
-            exit(1);
-            break;
-
-          case E_USER_WARNING:
-            onesignal_debug('[WARNING]', $errstr . ' @ ' . $errfile . ':' . $errline);
-            break;
-
-          case E_USER_NOTICE || E_NOTICE:
-            //onesignal_debug('NOTICE: ' . $errstr . ' @ ' . $errfile . ':' . $errline);
-            break;
-
-          case E_STRICT:
-            //onesignal_debug('DEPRECATED: ' . $errstr . ' @ ' . $errfile . ':' . $errline);
-            break;
-
-          default:
-            onesignal_debug('[UNKNOWN EXCEPTION]', '(' . $errno . '): ' . $errstr . ' @ ' . $errfile . ':' . $errline);
-            break;
-        }
-        return true;
-      } catch (Exception $ex) {
-        return true;
-      }
-    }
-    set_error_handler("exception_error_handler");
-
     $onesignal = new self();
+
+	  if (class_exists('WDS_Log_Post')) {
+		  function exception_error_handler($errno, $errstr, $errfile, $errline) {
+			  try {
+				  switch ($errno) {
+					  case E_USER_ERROR:
+						  onesignal_debug('[FATAL ERROR]', $errstr . ' @ ' . $errfile . ':' . $errline);
+						  exit(1);
+						  break;
+
+					  case E_USER_WARNING:
+						  onesignal_debug('[WARNING]', $errstr . ' @ ' . $errfile . ':' . $errline);
+						  break;
+
+					  case E_USER_NOTICE || E_NOTICE:
+						  //onesignal_debug('NOTICE: ' . $errstr . ' @ ' . $errfile . ':' . $errline);
+						  break;
+
+					  case E_STRICT:
+						  //onesignal_debug('DEPRECATED: ' . $errstr . ' @ ' . $errfile . ':' . $errline);
+						  break;
+
+					  default:
+						  onesignal_debug('[UNKNOWN EXCEPTION]', '(' . $errno . '): ' . $errstr . ' @ ' . $errfile . ':' . $errline);
+						  break;
+				  }
+
+				  return true;
+			  } catch (Exception $ex) {
+				  return true;
+			  }
+		  }
+
+		  set_error_handler("exception_error_handler");
+	  }
+
     if (current_user_can('update_plugins')) {
       add_action( 'admin_menu', array(__CLASS__, 'add_admin_page') );
     }
@@ -77,7 +82,8 @@ class OneSignal_Admin {
 		 */
     // Check if our nonce is set.
     if (!isset( $_POST[OneSignal_Admin::$NONCE_KEY] ) ) {
-	    onesignal_debug('Nonce is not set for post ' . $post->post_title . ' (ID ' . $post_id . ')');
+	    // This is called on every new post ... not necessary to log it.
+	    // onesignal_debug('Nonce is not set for post ' . $post->post_title . ' (ID ' . $post_id . ')');
       return $post_id;
     }
 
@@ -183,7 +189,7 @@ class OneSignal_Admin {
 	  onesignal_debug('$checkbox_send_notification:', $checkbox_send_notification);
     onesignal_debug('[$checkbox_send_notification]', '$settings_send_notification_on_standard_post_create:', $settings_suggest_notification_on_post_create);
     onesignal_debug('[$checkbox_send_notification]', '$post->post_type == "post":', $post->post_type == "post", '(' . $post->post_type . ')');
-    onesignal_debug('[$checkbox_send_notification]', '$post->post_status == "auto-draft:', $post->post_status == "auto-draft", '(' . $post->post_status . ')');
+    onesignal_debug('[$checkbox_send_notification]', '$post->post_status == "auto-draft":', $post->post_status == "auto-draft", '(' . $post->post_status . ')');
 
     ?>
       <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($checkbox_send_notification) { echo "checked"; } ?>></input>
@@ -198,7 +204,6 @@ class OneSignal_Admin {
   }
   
   public static function save_config_page($config) {
-	  onesignal_debug('Called.');
     if (!current_user_can('update_plugins'))
       return;
     
@@ -288,8 +293,6 @@ class OneSignal_Admin {
     OneSignal_Admin::saveStringSettings($onesignal_wp_settings, $config, $stringSettings);
 
     OneSignal::save_onesignal_settings($onesignal_wp_settings);
-
-	  onesignal_debug('Finished saving settings.');
     return $onesignal_wp_settings;
   }
 
@@ -432,6 +435,12 @@ class OneSignal_Admin {
             $fields['firefox_icon']    = $thumbnail;
           }
         }
+
+	      if (has_filter('onesignal_send_notification')) {
+		      onesignal_debug('Applying onesignal_send_notification filter.');
+		      $fields = apply_filters('onesignal_send_notification', $fields, $new_status, $old_status, $post);
+		      onesignal_debug('onesignal_send_notification filter $fields result:', $fields);
+	      }
 
         if (defined('ONESIGNAL_DEBUG')) {
           // http://blog.kettle.io/debugging-curl-requests-in-php/

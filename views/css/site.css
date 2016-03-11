@@ -669,6 +669,9 @@ header[class=onesignal] {
   color: white; }
   .ui.site.onesignal.container .ui.inline.nag.subdomain-http {
     background: purple; }
+  .ui.site.onesignal.container .ui.inline.nag.validation {
+    margin-top: 1em;
+    background: red; }
   .ui.site.onesignal.container .ui.inline.nag.save-settings {
     background: green; }
 

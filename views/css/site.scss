@@ -553,6 +553,11 @@ header[class=onesignal] {
             background: purple;
         }
 
+        &.validation {
+            margin-top: 1em;
+            background: red;
+        }
+
         &.save-settings {
             background: green;
         }

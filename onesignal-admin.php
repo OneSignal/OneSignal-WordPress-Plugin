@@ -397,6 +397,10 @@ class OneSignal_Admin {
   
   public static function send_notification_on_wp_post($new_status, $old_status, $post) {
     try {
+	    if (!function_exists('curl_init')) {
+		    return;
+	    }
+
       $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
 	    /* Looks like on_save_post is called after transition_post_status so we'll have to check POST data in addition to post meta data */

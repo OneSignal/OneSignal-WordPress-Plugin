@@ -560,11 +560,11 @@ if (array_key_exists('app_id', $_POST)) {
             <input type="text" name="app_rest_api_key" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value="<?php echo $onesignal_wp_settings['app_rest_api_key'] ?>">
           </div>
           <div class="field subdomain-feature">
-            <label>Subdomain<i class="tiny circular help icon link" role="popup" data-title="Subdomain" data-content="Your chosen subdomain. You can find this on Setup > Chrome & Firefox Push > Step 9." data-variation="wide"></i></label>
+            <label>OneSignal Subdomain<i class="tiny circular help icon link" role="popup" data-title="Subdomain" data-content="Your chosen OneSignal subdomain, not your site subdomain. You can find this on Setup > Chrome & Firefox Push > Step 9." data-variation="wide"></i></label>
             <input type="text" name="subdomain" placeholder="example" value="<?php echo $onesignal_wp_settings['subdomain'] ?>">
           </div>
           <div class="field">
-            <label>Safari Web ID<i class="tiny circular help icon link" role="popup" data-title="Safari Web ID" data-content="Your chosen subdomain. You can find this on Setup > Safari Push > Step 5." data-variation="wide"></i></label>
+            <label>Safari Web ID<i class="tiny circular help icon link" role="popup" data-title="Safari Web ID" data-content="Your Safari Web ID. You can find this on Setup > Safari Push > Step 5." data-variation="wide"></i></label>
             <input type="text" name="safari_web_id" placeholder="web.com.example" value="<?php echo @$onesignal_wp_settings['safari_web_id']; ?>">
           </div>
         </div>
@@ -878,13 +878,13 @@ if (array_key_exists('app_id', $_POST)) {
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="notification_on_post" value="true" <?php if ($onesignal_wp_settings['notification_on_post']) { echo "checked"; } ?>>
-              <label>Automatically send a push notification when I create a post from the default WordPress editor<i class="tiny circular help icon link" role="popup" data-title="Automatic Push from WordPress Editor" data-content="If checked, when you create a new post, the checkbox 'Send notification on publish' will be automatically checked." data-variation="wide"></i></label>
+              <label>Automatically send a push notification when I create a post from the WordPress editor<i class="tiny circular help icon link" role="popup" data-title="Automatic Push from WordPress Editor" data-content="If checked, when you create a new post from WordPress's editor, the checkbox 'Send notification on post publish/update' will be automatically checked. The checkbox can be unchecked to prevent sending a notification." data-variation="wide"></i></label>
             </div>
           </div>
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="notification_on_post_from_plugin" value="true" <?php if (@$onesignal_wp_settings['notification_on_post_from_plugin']) { echo "checked"; } ?>>
-              <label>Automatically send a push notification when I create a post from 3<sup>rd</sup> party plugins<i class="tiny circular help icon link" role="popup" data-title="Automatic Push from 3rd Party Editors" data-content="If checked, when you create a new post from most 3rd party plugins, the checkbox 'Send notification on publish' will be automatically checked." data-variation="wide"></i></label>
+              <label>Automatically send a push notification when I publish a post from 3<sup>rd</sup> party plugins<i class="tiny circular help icon link" role="popup" data-title="Automatic Push outside WordPress Editor" data-content="If checked, when a post is created outside of WordPress's editor, a push notification will automatically be sent. Must be the built-in WordPress post type 'post' and the post must be published." data-variation="wide"></i></label>
             </div>
           </div>
         </div>
@@ -909,7 +909,11 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
         </div>
         <button class="ui large teal button" type="submit">Save</button>
-        <div class="ui error message">
+        <div class="ui inline validation nag">
+            <span class="title">
+              Your OneSignal subdomain cannot be empty or less than 4 characters. Use the same one you entered on the platform settings at onesignal.com.
+            </span>
+          <i class="close icon"></i>
         </div>
       </form>
     </div>

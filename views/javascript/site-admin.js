@@ -28,24 +28,20 @@ jQuery(function() {
 
   setupModalPopupSwitcharoo();
 
-  $('.ui.form')
-    .form({
-      fields: {
-        subdomain: {
-          identifier: 'subdomain',
-          rules: [
-            {
-              type   : 'empty',
-              prompt : 'Because your site is HTTP, you must enter a subdomain. Use the same one you entered on our OneSignal dashboard.'
-            },
-            {
-              type   : 'minLength[4]',
-              prompt : 'Your subdomain must be at least 4 characters long. Use the same one you entered on our OneSignal dashboard.'
-            }
-          ]
-        }
+  function onFormSubmit(e) {
+    var safariWebId = $('[name=safari_web_id]').val();
+    var subdomain = $('[name=subdomain]').val();
+    if (safariWebId !== '' && subdomain === '') {
+    } else {
+      if (subdomain == '' || subdomain.length < 4) {
+        e.preventDefault();
+        jQuery('.validation.nag').nag('clear');
+        jQuery('.validation.nag').nag('show');
       }
-    });
+    }
+  }
+
+  $('.ui.form').submit(onFormSubmit);
 });
 
 function httpSiteCheck() {

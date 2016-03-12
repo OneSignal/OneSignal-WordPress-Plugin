@@ -1,16 +1,54 @@
 <?php
 
 function onesignal_debug() {
-  if (defined('ONESIGNAL_DEBUG')) {
-    $numargs = func_num_args();
-    $arg_list = func_get_args();
-    $output = '';
-    for ($i = 0; $i < $numargs; $i++) {
-      $output = $output . var_export($arg_list[$i], true) . ', ';
+  if (!defined('ONESIGNAL_DEBUG') && !class_exists('WDS_Log_Post')) {
+    return;
+  }
+  $numargs  = func_num_args();
+  $arg_list = func_get_args();
+  $bt       = debug_backtrace();
+  $output   = '[' . $bt[1]['function'] . '] ';
+  for ($i = 0; $i < $numargs; $i ++) {
+    $arg = $arg_list[ $i ];
+
+    if (is_string($arg)) {
+      $arg_output = $arg;
+    } else {
+      $arg_output = var_export($arg, true);
     }
-    $output = substr($output, 0, -2);
+
+    if ($arg === "") {
+      $arg_output = "\"\"";
+    } else if ($arg === null) {
+      $arg_output = "null";
+    }
+
+    $output = $output . $arg_output . ' ';
+  }
+  $output = substr($output, 0, - 1);
+  $output = substr($output, 0, 1024); // Restrict messages to 1024 characters in length
+  if (defined('ONESIGNAL_DEBUG')) {
     error_log('OneSignal: ' . $output);
   }
+  if (class_exists('WDS_Log_Post')) {
+    $num_log_posts = wp_count_posts('wdslp-wds-log', 'readable');
+    // Limit the total number of log entries to 500
+    if ($num_log_posts->publish < 500) {
+      WDS_Log_Post::log_message($output, '', 'general');
+    }
+  }
+}
+
+function onesignal_debug_post($post) {
+  if (!$post) {
+    return;
+  }
+  return onesignal_debug('Post:', array('ID' => $post->ID,
+                        'Post Date' => $post->post_date,
+                        'Modified Date' => $post->post_modified,
+                        'Title' => $post->post_title,
+                        'Status:' => $post->post_status,
+                        'Type:' => $post->post_type));
 }
 
 function print_settings() {
@@ -22,7 +60,7 @@ class OneSignal_Public {
   public function __construct() {}
 
   public static function init() {
-    add_action( 'wp_head', array( __CLASS__, 'onesignal_header' ), 1 );
+    add_action('wp_head', array(__CLASS__, 'onesignal_header'), 1);
   }
 
   public static function onesignal_header() {

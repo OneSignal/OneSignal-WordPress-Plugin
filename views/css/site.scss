@@ -177,7 +177,15 @@ input::selection {
 /*******************************
         Global Overrides
 *******************************/
+.onesignal-error-notice {
+    color: darken(#ff0033, 15%) !important;
+    background: rgba(255, 0, 51, 0.085) !important;
+    margin: 0 !important;
 
+    &+.onesignal-error-notice {
+        margin-top: 5px !important;
+    }
+}
 
 
 /*******************************
@@ -551,6 +559,11 @@ header[class=onesignal] {
 
         &.subdomain-http {
             background: purple;
+        }
+
+        &.validation {
+            margin-top: 1em;
+            background: red;
         }
 
         &.save-settings {

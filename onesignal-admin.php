@@ -138,24 +138,40 @@ class OneSignal_Admin {
 
     /* OK, it's safe for us to save the data now. */
 
-    // Sanitize the user input.
-    $checkbox_send_notification = sanitize_text_field($_POST['send_onesignal_notification']);
-    onesignal_debug('$checkbox_send_notification:', $checkbox_send_notification);
+	  /* Some WordPress environments seem to be inconstent about whether on_save_post is called before transition_post_status
+		 * Check flag in case we just sent a notification for this post (this on_save_post is called after a successful send)
+		*/
+	  $just_sent_notification = (get_post_meta($post_id, 'onesignal_notification_already_sent', true) == true);
 
-    // Update the meta field.
-    if ($checkbox_send_notification) {
-      update_post_meta( $post_id, 'onesignal_send_notification', true );
-      onesignal_debug('Updated post meta "onesignal_send_notification" to be true.');
-    } else {
-      update_post_meta( $post_id, 'onesignal_send_notification', false);
-      onesignal_debug('Updated post meta "onesignal_send_notification" to be false.');
-    }
+	  if ($just_sent_notification) {
+		  // Reset our flag
+		  update_post_meta($post_id, 'onesignal_notification_already_sent', false);
+		  onesignal_debug('A notification was just sent, so ignoring on_save_post. Resetting check flag.');
+		  return;
+	  }
+
+	  if (array_key_exists('onesignal_meta_box_present', $_POST)) {
+		  update_post_meta($post_id, 'onesignal_meta_box_present', true);
+		  onesignal_debug('Set post metadata "onesignal_meta_box_present" to true.');
+	  } else {
+		  update_post_meta($post_id, 'onesignal_meta_box_present', false);
+		  onesignal_debug('Set post metadata "onesignal_meta_box_present" to false.');
+	  }
+
+	  /* Even though the meta box always contains the checkbox, if an HTML checkbox is not checked, it is not POSTed to the server */
+	  if (array_key_exists('send_onesignal_notification', $_POST)) {
+		  update_post_meta($post_id, 'onesignal_send_notification', true);
+		  onesignal_debug('Set post metadata "onesignal_send_notification" to true.');
+	  } else {
+		  update_post_meta($post_id, 'onesignal_send_notification', false);
+		  onesignal_debug('Set post metadata "onesignal_send_notification" to false.');
+	  }
   }
   
   public static function add_onesignal_post_options() {
     // Add our meta box for the "post" post type (default)
     add_meta_box('onesignal_notif_on_post',
-                 'OneSignal',
+                 'OneSignal Push Notifications',
                  array( __CLASS__, 'onesignal_notif_on_post_html_view' ),
                  'post',
                  'side',
@@ -172,7 +188,7 @@ class OneSignal_Admin {
     foreach ( $post_types  as $post_type ) {
       add_meta_box(
         'onesignal_notif_on_post',
-        'OneSignal',
+        'OneSignal Push Notifications',
         array( __CLASS__, 'onesignal_notif_on_post_html_view' ),
         $post_type,
         'side',
@@ -193,24 +209,21 @@ class OneSignal_Admin {
     // Add an nonce field so we can check for it later.
     wp_nonce_field(OneSignal_Admin::$NONCE_FIELD, OneSignal_Admin::$NONCE_KEY );
 
-//    // Use get_post_meta to retrieve an existing value from the database.
-//    // Since $single is set to true, if a meta field with the given key isn't found for the post, an empty string is returned
-//    $meta_send_notification = get_post_meta($post->ID, 'onesignal_send_notification', true);
-//    onesignal_debug('$meta_send_notification:', $meta_send_notification);
+    // Our plugin config setting "Automatically send a push notification when I publish a post from the WordPress editor"
+    $settings_send_notification_on_wp_editor_post = $onesignal_wp_settings['notification_on_post'];
 
-    // In our WP plugin config, have we checked "Automatically send a push notification when I create a post from the default WordPress editor"
-    // This condition is true only when: setting is enabled on Config page, post type is ONLY "post", and the post has not been published (new posts are status "auto-draft")
-    $settings_suggest_notification_on_post_create = $onesignal_wp_settings['notification_on_post'];
-	  $checkbox_send_notification = $settings_suggest_notification_on_post_create &&
-	                                $post->post_type == "post" &&
-	                                $post->post_status == "auto-draft";
-	  onesignal_debug('$checkbox_send_notification:', $checkbox_send_notification);
-    onesignal_debug('[$checkbox_send_notification]', '$settings_send_notification_on_standard_post_create:', $settings_suggest_notification_on_post_create);
-    onesignal_debug('[$checkbox_send_notification]', '$post->post_type == "post":', $post->post_type == "post", '(' . $post->post_type . ')');
-    onesignal_debug('[$checkbox_send_notification]', '$post->post_status == "auto-draft":', $post->post_status == "auto-draft", '(' . $post->post_status . ')');
+	  // We check the checkbox if: setting is enabled on Config page, post type is ONLY "post", and the post has not been published (new posts are status "auto-draft")
+	  $meta_box_checkbox_send_notification = $settings_send_notification_on_wp_editor_post &&  // If setting is enabled
+	                                $post->post_type == "post" &&  // Post type must be type post for checkbox to be auto-checked
+	                                $post->post_status == "auto-draft";  // Post must be newly created, not updated or already published
+	  onesignal_debug('$meta_box_checkbox_send_notification:', $meta_box_checkbox_send_notification);
+    onesignal_debug('    [$meta_box_checkbox_send_notification]', '$settings_send_notification_on_wp_editor_post:', $settings_send_notification_on_wp_editor_post);
+    onesignal_debug('    [$meta_box_checkbox_send_notification]', '$post->post_type == "post":', $post->post_type == "post", '(' . $post->post_type . ')');
+    onesignal_debug('    [$meta_box_checkbox_send_notification]', '$post->post_status == "auto-draft":', $post->post_status == "auto-draft", '(' . $post->post_status . ')');
 
     ?>
-      <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($checkbox_send_notification) { echo "checked"; } ?>></input>
+	    <input type="hidden" name="onesignal_meta_box_present" value="true"></input>
+      <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($meta_box_checkbox_send_notification) { echo "checked"; } ?>></input>
       <label>
         <?php if ($post->post_status == "publish") {
           echo "Send notification on " . $post_type . " update";
@@ -360,7 +373,7 @@ class OneSignal_Admin {
 		  function admin_notice_setup_not_complete() {
 			  ?>
 			  <div class="error notice onesignal-error-notice">
-				  <p><?php echo '<strong>OneSignal Push:</strong> <em>Your setup is not complete. Please follow the Setup guide to set up web push notifications.</em>'; ?></p>
+				  <p><strong>OneSignal Push:</strong> <em>Your setup is not complete. Please follow the Setup guide to set up web push notifications.</em></p>
 			  </div>
 			  <?php
 		  }
@@ -372,7 +385,7 @@ class OneSignal_Admin {
 		  function admin_notice_curl_not_installed() {
 			  ?>
 			  <div class="error notice onesignal-error-notice">
-				  <p><?php echo '<strong>OneSignal Push:</strong> <em>cURL is not installed on this server. cURL is required to send notifications. Please make sure cURL is installed on your server before continuing.</em>'; ?></p>
+				  <p><strong>OneSignal Push:</strong> <em>cURL is not installed on this server. cURL is required to send notifications. Please make sure cURL is installed on your server before continuing.</em></p>
 			  </div>
 			  <?php
 		  }
@@ -398,6 +411,7 @@ class OneSignal_Admin {
   public static function send_notification_on_wp_post($new_status, $old_status, $post) {
     try {
 	    if (!function_exists('curl_init')) {
+		    onesignal_debug('Canceling send_notification_on_wp_post because curl_init() is not a defined function.');
 		    return;
 	    }
 
@@ -405,44 +419,91 @@ class OneSignal_Admin {
 
 	    /* Looks like on_save_post is called after transition_post_status so we'll have to check POST data in addition to post meta data */
 
+	    /* Settings related to creating a post involving the WordPress editor displaying the OneSignal meta box
+	     **********************************************************************************************************/
+
 	    /* Returns true if there is POST data */
 	    $was_posted = !empty($_POST);
 
-	    /* The meta box checkbox "Send notification on post publish/update" is checked */
-	    $checkbox_send_notification = $was_posted && array_key_exists('send_onesignal_notification', $_POST) && $_POST['send_onesignal_notification'] == 'true';
+	    /* When this post was created or updated, the OneSignal meta box in the WordPress post editor screen was visible */
+	    $onesignal_meta_box_present = $was_posted && array_key_exists('onesignal_meta_box_present', $_POST) && $_POST['onesignal_meta_box_present'] == 'true';
+	    /* The checkbox "Send notification on post publish/update" on the OneSignal meta box is checked */
+	    $onesignal_meta_box_send_notification_checked = $was_posted && array_key_exists('send_onesignal_notification', $_POST) && $_POST['send_onesignal_notification'] == 'true';
 
-	    /* The metadata field "onesignal_send_notification" stored with the post. If set, we send the notification. */
-      $meta_send_notification = get_post_meta($post->ID, 'onesignal_send_notification', true);
+	    /* This is a scheduled post and the OneSignal meta box was present. */
+	    $post_metadata_was_onesignal_meta_box_present = (get_post_meta($post->ID, 'onesignal_meta_box_present', true) == true);
+	    /* This is a scheduled post and the user checked "Send a notification on post publish/update". */
+      $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification', true) == true);
 
-	    /*
-	     * OneSignal plugin setting "Automatically send a push notification when I create a post from 3rd party plugins"
-	     * If set to true, send only if *creating* a post type *post* from *something other than the default WordPress editor*.
+	    /* Either we were just posted from the WordPress post editor form, or this is a scheduled notification and it was previously submitted from the post editor form */
+	    $posted_from_wordpress_editor = $onesignal_meta_box_present || $post_metadata_was_onesignal_meta_box_present;
+	    /* ********************************************************************************************************* */
+
+
+	    /* Settings related to creating a post outside of the WordPress editor NOT displaying the OneSignal meta box
+	     ************************************************************************************************************/
+
+	    /* OneSignal plugin setting "Automatically send a push notification when I create a post from 3rd party plugins"
+	     * If set to true, send only if *publishing* a post type *post* from *something other than the default WordPress editor*.
 	     */
-      $settings_send_notification_on_post_publish = $onesignal_wp_settings['notification_on_post_from_plugin'] &&
-                                                               $post->post_type == "post" &&
-                                                               $old_status !== "publish";
-	    onesignal_debug('New Status:', $new_status);
-	    onesignal_debug('Old Status:', $old_status);
-	    onesignal_debug('Post:', $post);
-      onesignal_debug('Was Posted:', $was_posted);
-      onesignal_debug('$checkbox_send_notification:', $checkbox_send_notification);
-      onesignal_debug('$meta_send_notification:', $meta_send_notification);
-      onesignal_debug('$settings_send_notification_on_third_party_post_create:', $settings_send_notification_on_post_publish);
-      onesignal_debug('[settings_send_notification_on_third_party_post_create]', 'notification_on_post_from_plugin:', $onesignal_wp_settings['notification_on_post_from_plugin']);
-      onesignal_debug('[settings_send_notification_on_third_party_post_create]', 'post_type:', ($post->post_type === "post"), '(' . $post->post_type . ')');
-      onesignal_debug('[settings_send_notification_on_third_party_post_create]' , 'post_status:', ($old_status !== "publish"), '(' . $old_status . ')');
+      $settings_send_notification_on_non_editor_post_publish = $onesignal_wp_settings['notification_on_post_from_plugin'];
+      $non_editor_post_publish_do_send_notification = $settings_send_notification_on_non_editor_post_publish &&
+                                                      $post->post_type == "post" &&
+                                                      $old_status !== "publish";
+	    /* ********************************************************************************************************* */
 
-	    if ($was_posted) {
-		    // If this was just posted, decide to send based on whether the checkbox "Send notification on post publish/update" is checked, because the post meta hasn't been updated yet
-		    $do_send_notification = $checkbox_send_notification ||
-		                            $settings_send_notification_on_post_publish;
+	    if ($posted_from_wordpress_editor) {
+		    // Decide to send based on whether the checkbox "Send notification on post publish/update" is checked
+		    // This post may be scheduled or just submitted from the WordPress editor
+		    // Metadata may not be saved into post yet, so use $_POST form data if metadata not available
+		    $do_send_notification = $onesignal_meta_box_send_notification_checked ||
+		                            $post_metadata_was_send_notification_checked;
 	    } else {
-		    // This was not posted, it was probably scheduled. Base on decision whether to send on attached post metadata
-		    $do_send_notification = $meta_send_notification ||
-	                              $settings_send_notification_on_post_publish;
+		    // This was definitely not submitted via the WordPress editor
+		    // Decide to send based on whether the 3rd-party plugins setting is checked
+		    $do_send_notification = $non_editor_post_publish_do_send_notification;
 	    }
 
+	    onesignal_debug('Post Status:', $old_status, '-->', $new_status);
+	    onesignal_debug_post($post);
+	    onesignal_debug('Posted from WordPress editor:', $posted_from_wordpress_editor);
+	    onesignal_debug('    [Posted from WordPress editor]', 'Just Posted Meta Box Present:', $onesignal_meta_box_present);
+	    onesignal_debug('    [Posted from WordPress editor]', 'Was Meta Box Ever Present:', $post_metadata_was_onesignal_meta_box_present);
+	    onesignal_debug('Editor Post Send:', $posted_from_wordpress_editor && $do_send_notification);
+	    onesignal_debug('    [Editor Post Send]', 'Meta Box Send Notification Just Checked:', $onesignal_meta_box_send_notification_checked);
+	    onesignal_debug('    [Editor Post Send]', 'Meta Box Send Notification Previously Checked:', $post_metadata_was_send_notification_checked);
+	    onesignal_debug('Non-Editor Post Send:', $non_editor_post_publish_do_send_notification);
+	    onesignal_debug('    [Non-Editor Post Send]', 'Auto Send Config Setting:', $settings_send_notification_on_non_editor_post_publish);
+	    onesignal_debug('    [Non-Editor Post Send]', 'Post Type:', ($post->post_type === "post"), '(' . $post->post_type . ')');
+	    onesignal_debug('    [Non-Editor Post Send]', 'Old Post Status:' , ($old_status !== "publish"), '(' . $old_status . ')');
+	    onesignal_debug('Actually Sending Notification:', $do_send_notification);
+
       if ($do_send_notification) {
+
+	      /* Now that all settings our retrieved, and we are actually sending the notification, reset the post's metadata
+				 * If this post is sent through a plugin in the future, existing metadata will interfere with the send condition logic
+				 * If this post is re-sent through the WordPress editor, the metadata will be added back automatically
+				*/
+	      update_post_meta($post->ID, 'onesignal_meta_box_present', false);
+	      update_post_meta($post->ID, 'onesignal_send_notification', false);
+	      onesignal_debug('Removed OneSignal metadata from post.');
+
+	      /* Some WordPress environments seem to be inconstent about whether on_save_post is called before transition_post_status
+	       * This sets the metadata back to true, true and will cause a post to be sent even if the checkbox is not checked the next time
+	       * We remove all related $_POST data to prevent this
+	      */
+	      if ($was_posted) {
+		      if (array_key_exists('onesignal_meta_box_present', $_POST)) {
+			      unset($_POST['onesignal_meta_box_present']);
+			      onesignal_debug('Unset $_POST[\'onesignal_meta_box_present\']');
+		      }
+		      if (array_key_exists('send_onesignal_notification', $_POST)) {
+			      unset($_POST['send_onesignal_notification']);
+			      onesignal_debug('Unset $_POST[\'send_onesignal_notification\']');
+		      }
+	      }
+
+
         $notif_content = OneSignalUtils::decode_entities(get_the_title($post->ID));
 
         $site_title = "";
@@ -491,12 +552,13 @@ class OneSignal_Admin {
 		      onesignal_debug('onesignal_send_notification filter $fields result:', $fields);
 	      }
 
-	      if (class_exists('WDS_Log_Post')) {
+	      if (defined('ONESIGNAL_DEBUG') || class_exists('WDS_Log_Post')) {
           // http://blog.kettle.io/debugging-curl-requests-in-php/
           ob_start();
           $out = fopen('php://output', 'w');
         }
 
+	      onesignal_debug('Initializing cURL.');
         $ch = curl_init();
 
         $onesignal_post_url = "https://onesignal.com/api/v1/notifications";
@@ -521,8 +583,12 @@ class OneSignal_Admin {
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
+	      if (defined('ONESIGNAL_DEBUG')) {
+		      // Turn off host verification for localhost testing since we're using a self-signed certificate
+		      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+	      }
+
 	      if (class_exists('WDS_Log_Post')) {
-          curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
           curl_setopt($ch, CURLOPT_FAILONERROR, false);
           curl_setopt($ch, CURLOPT_HTTP200ALIASES, array(400));
           curl_setopt($ch, CURLOPT_VERBOSE, true);
@@ -531,7 +597,7 @@ class OneSignal_Admin {
 
         $response = curl_exec($ch);
 
-	      if (class_exists('WDS_Log_Post')) {
+	      if (defined('ONESIGNAL_DEBUG') || class_exists('WDS_Log_Post')) {
           fclose($out);
           $debug_output = ob_get_clean();
 
@@ -549,10 +615,8 @@ class OneSignal_Admin {
 		        onesignal_debug('cURL Response:', print_r($response, true));
 		        onesignal_debug('cURL Verbose Log:', $debug_output);
 	        }
-          curl_close($ch);
-        } else {
-          curl_close($ch);
         }
+	      curl_close($ch);
 
         return $response;
       }

@@ -31,13 +31,21 @@ jQuery(function() {
   function onFormSubmit(e) {
     var safariWebId = $('[name=safari_web_id]').val();
     var subdomain = $('[name=subdomain]').val();
-    if (safariWebId !== '' && subdomain === '') {
-    } else {
-      if (subdomain == '' || subdomain.length < 4) {
-        e.preventDefault();
-        jQuery('.validation.nag').nag('clear');
-        jQuery('.validation.nag').nag('show');
-      }
+    var isSiteHttps = isChecked('[name=is_site_https]');
+
+    var missingRequiredSubdomain = (!isSiteHttps &&
+                                    (subdomain == '' || subdomain.length < 4) &&
+                                    safariWebId == '');
+
+    var invalidSubdomainWithSafari = (!isSiteHttps &&
+                                       subdomain !== '' &&
+                                       subdomain.length < 4 &&
+                                       safariWebId !== '');
+
+    if (missingRequiredSubdomain || invalidSubdomainWithSafari) {
+      e.preventDefault();
+      jQuery('.validation.nag').nag('clear');
+      jQuery('.validation.nag').nag('show');
     }
   }
 

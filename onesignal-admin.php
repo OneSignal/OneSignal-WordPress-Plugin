@@ -563,13 +563,13 @@ class OneSignal_Admin {
 
         $onesignal_post_url = "https://onesignal.com/api/v1/notifications";
 
-        if (defined('ONESIGNAL_DEBUG')) {
+        if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
           $onesignal_post_url = "https://localhost:3001/api/v1/notifications";
         }
 
         $onesignal_auth_key = $onesignal_wp_settings['app_rest_api_key'];
 
-        if (defined('ONESIGNAL_DEBUG')) {
+        if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
           $onesignal_auth_key = "NDQyMjM3OTYtNjBkOC00YjI0LWI2NzMtZDZmODQ3ODU4ZmM2";
         }
         curl_setopt($ch, CURLOPT_URL, $onesignal_post_url);

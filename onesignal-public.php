@@ -86,7 +86,7 @@ class OneSignal_Public {
     <link rel="manifest" href="<?php echo( $current_plugin_url . 'sdk_files/manifest.json.php?gcm_sender_id=' . $gcm_sender_id ) ?>" />
 <?php } ?>
     <?php
-    if (defined('ONESIGNAL_DEBUG')) {
+    if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
         echo '<script src="https://localhost:3001/dev_sdks/OneSignalSDK.js" async></script>';
       } else {
         echo '<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>';

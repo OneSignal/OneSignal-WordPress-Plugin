@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
 Tested up to: 4.4.2
-Stable tag: 1.10.1
+Stable tag: 1.10.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 20,500 developers and marketers including some of the largest brands and websites in the world.
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 21,000 developers and marketers including some of the largest brands and websites in the world.
 
 After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
 
@@ -50,6 +50,13 @@ Features:
 4. Our configuration settings allowing you to customize the way users are prompted to subscribe and the notifications they receive.
 
 == Changelog ==
+= 1.10.3 =
+- Fix on_save_post function not being declared statically
+- Fix other PHP warning about property not existing
+
+= 1.10.2 =
+- Forgot to add onesignal-utils.php
+
 = 1.10.1 =
 - Automatic sending functionality has been rewritten
 

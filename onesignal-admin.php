@@ -79,7 +79,7 @@ class OneSignal_Admin {
       add_action('admin_init', array( __CLASS__, 'add_onesignal_post_options' ));
     }
 
-    add_action( 'save_post', array( __CLASS__, 'on_save_post'), 1, 3 );
+    add_action( 'save_post', array(__CLASS__, 'on_save_post'), 1, 3 );
     add_action( 'transition_post_status', array( __CLASS__, 'on_transition_post_status' ), 10, 3 );
     add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_styles' ) );
     return $onesignal;
@@ -93,7 +93,7 @@ class OneSignal_Admin {
    * Save the meta when the post is saved.
    * @param int $post_id The ID of the post being saved.
    */
-  public function on_save_post($post_id, $post, $updated) {
+  public static function on_save_post($post_id, $post, $updated) {
 	  if ($post->post_type == 'wdslp-wds-log') {
 		  // Prevent recursive post logging
 		  return;

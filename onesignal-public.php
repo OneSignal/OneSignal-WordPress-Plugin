@@ -33,7 +33,7 @@ function onesignal_debug() {
   if (class_exists('WDS_Log_Post')) {
     $num_log_posts = wp_count_posts('wdslp-wds-log', 'readable');
     // Limit the total number of log entries to 500
-    if ($num_log_posts->publish < 500) {
+    if ($num_log_posts && property_exists($num_log_posts, 'publish') && $num_log_posts->publish < 500) {
       WDS_Log_Post::log_message($output, '', 'general');
     }
   }

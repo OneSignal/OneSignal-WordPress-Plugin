@@ -550,6 +550,11 @@ class OneSignal_Admin {
 		      onesignal_debug('Applying onesignal_send_notification filter.');
 		      $fields = apply_filters('onesignal_send_notification', $fields, $new_status, $old_status, $post);
 		      onesignal_debug('onesignal_send_notification filter $fields result:', $fields);
+
+		      // If the filter adds "do_send_notification: false", do not send a notification
+		      if (array_key_exists('do_send_notification', $fields) && $fields['do_send_notification'] == false) {
+			      return;
+		      }
 	      }
 
 	      if (defined('ONESIGNAL_DEBUG') || class_exists('WDS_Log_Post')) {

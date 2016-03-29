@@ -42,7 +42,7 @@ if (array_key_exists('app_id', $_POST)) {
           <div class="ui segment">
             <dt>1</dt>
             <dd>
-              <p>Create a <a href="https://console.developers.google.com/project" target="_blank">Google Developers</a> account or log in to your existing account.</p>
+              <p>Create a <a href="https://console.cloud.google.com/project" target="_blank">Google Cloud</a> account or log in to your existing account.</p>
             </dd>
           </div>
           <div class="ui segment">

@@ -3,8 +3,8 @@ Contributors: OneSignal
 Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
-Tested up to: 4.4.2
-Stable tag: 1.10.5
+Tested up to: 4.5
+Stable tag: 1.10.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 24,500 developers and marketers including some of the largest brands and websites in the world.
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 30,000 developers and marketers including some of the largest brands and websites in the world.
 
 After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
 
@@ -50,6 +50,9 @@ Features:
 4. Our configuration settings allowing you to customize the way users are prompted to subscribe and the notifications they receive.
 
 == Changelog ==
+= 1.10.6 =
+- Push notifications should now be sent out for posts created in the default WordPress editor if scheduled, being edited, or awaiting publication
+
 = 1.10.5 =
 - Change console.developers.google.com setup URL --> console.cloud.google.com
 - Modify onesignal_send_notification filter hook to also allow notifications to not be sent

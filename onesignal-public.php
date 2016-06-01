@@ -206,7 +206,7 @@ class OneSignal_Public {
             echo "oneSignal_options['notifyButton']['prenotify'] = false;\n";
           }
 
-          if ($onesignal_wp_settings["notifyButton_showAfterSubscribed"] == "1") {
+          if ($onesignal_wp_settings["notifyButton_showAfterSubscribed"] !== true) {
             echo "oneSignal_options['notifyButton']['displayPredicate'] = function() {
               return OneSignal.isPushNotificationsEnabled()
                       .then(function(isPushEnabled) {

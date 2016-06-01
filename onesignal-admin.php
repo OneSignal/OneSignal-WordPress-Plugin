@@ -277,6 +277,7 @@ class OneSignal_Admin {
       'chrome_auto_dismiss_notifications',
       'prompt_customize_enable',
       'prompt_showcredit',
+      'notifyButton_showAfterSubscribed',
       'notifyButton_enable',
       'notifyButton_prenotify',
       'notifyButton_showcredit',

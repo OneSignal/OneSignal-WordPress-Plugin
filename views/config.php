@@ -36,30 +36,61 @@ if (array_key_exists('app_id', $_POST)) {
         <p>Please follow each step in order! If you're ever stuck or have questions, click the bright red button to chat with us! We read and respond to every message.</p>
         <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/1');">Google Keys</a> to begin.</p>
       </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/1">
-        <p>To begin, we'll create and configure a Google Project. This authorizes us to use Google's web push services for your notifications.</p>
+
+
+
+
+
+        <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/1">
+        <p>To begin, we'll obtain a Google Server API Key and Google Project Number. These keys allow OneSignal to use Google's web push services for your notifications.</p>
         <dl>
           <div class="ui segment">
             <dt>1</dt>
             <dd>
-              <p>Create a <a href="https://console.cloud.google.com/project" target="_blank">Google Cloud</a> account or log in to your existing account.</p>
+              <p>Visit the <a href="https://developers.google.com/mobile/add?platform=android&cntapi=gcm" target="_blank">Google Services Wizard</a>. You'll have to create a Google account if you don't already have one.</p>
             </dd>
           </div>
           <div class="ui segment">
             <dt>2</dt>
             <dd>
-              <p>Once you're logged in, click <strong>Create project</strong>.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-1.jpg" ?>">
-              <p>Choose any name for your project. Here we use <code>example-project</code>. Click <strong>Create</strong>.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-1-2.jpg" ?>">
+              <p>Type any name to create a new app, or select an existing Google app from the dropdown.</p>
+              <p>In this example, we create an app named <code>test-app</code>.</p>
+              <img class="img-responsive" src="https://www.filepicker.io/api/file/q988BycjTOm4mygthGa1">
             </dd>
           </div>
           <div class="ui segment">
             <dt>3</dt>
             <dd>
-              <p>Find your <strong>Project number</strong>.</p>
-              <p>Put this number in the <em>Project Number</em> field of the <em>Configuration</em> tab. You'll also need this number again in the next page, so save it!</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-2.jpg" ?>">
+              <p>We do not use the Android package name, but you must enter a value to continue. Please use the value <code>test.test</code> as shown below.</p>
+              <img class="img-responsive" src="https://www.filepicker.io/api/file/30qjfhAQ6IY7GWLYSp7w">
+            </dd>
+          </div>
+
+          <div class="ui segment">
+            <dt>4</dt>
+            <dd>
+              <p>Click <strong>Choose and configure services</strong> to continue.</p>
+              <p>Wait a minute for the project to be created.</p>
+              <img class="img-responsive" src="https://www.filepicker.io/api/file/Qf9pQtzxRjeyQ1DTZqZH">
+            </dd>
+          </div>
+          <div class="ui segment">
+            <dt>5</dt>
+            <dd>
+              <p>Click <strong>Enable Google Cloud Messaging</strong>.</p>
+              <img class="img-responsive" src="https://www.filepicker.io/api/file/AuBEececTA26O3tnDr8J">
+            </dd>
+          </div>
+          <div class="ui segment">
+            <dt>6</dt>
+            <dd>
+              <p>You'll see two values on this screen: your <strong>Server API Key</strong>, and your <strong>Sender ID</strong> which is also called the <strong>Project Number</strong>.</p>
+              <img class="img-responsive" src="https://www.filepicker.io/api/file/TH0Wu0hcRSCgNFiB1l5U">
+              <ul>
+                <li>Copy your <strong>Project Number (Sender ID)</strong> to the <em>Configuration</em> tab of your WordPress plugin.</li>
+                <li>You'll need your <strong>Server API Key</strong> for the next part of the guide.</li>
+              </ul>
+              <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/2');">Chrome & Firefox Push</a> to continue.</p>
             </dd>
           </div>
 
@@ -69,50 +100,10 @@ if (array_key_exists('app_id', $_POST)) {
             <p>Put this number in the <em>Project Number</em> field of the <em>Configuration</em> tab.
               <br> You'll also need this number again in the next page, so save it!</p>
           </div>
-          <div class="ui segment">
-            <dt>4</dt>
-            <dd>
-              <p>Click <strong>Enable and manage APIs</strong> underneath your Project number.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-3.jpg" ?>">
-              <p>On the right pane, in the search box, type <strong><code>cloud messaging android</code></strong>.</p>
-              <p>Select <strong>Google Cloud Messaging for Android</strong>.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-3-1.jpg" ?>">
-              <p>Click <strong>Enable API</strong>.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-4.jpg" ?>">
-            </dd>
-          </div>
-          <div class="ui segment">
-            <dt>5</dt>
-            <dd>
-              <p>Click <strong>Credentials</strong> on the left sidebar.</p>
-              <p>On the right pane, click <strong>New credentials > API key</strong>.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-5.jpg" ?>">
-              <p>Click <strong>Server Key</strong>.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-6.jpg" ?>">
-              <p><em>Without entering any values</em>, click <strong>Create</strong>.</p>
-              <p class="alternate"><em>Make sure to leave the IP address textbox blank. You may name the key if you'd like, but it's not necessary.</em></p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-7.jpg" ?>">
-              <p>Find your <strong>API Key</strong>.</p>
-              <p>You'll need this number in the next page, so save it!</p>
-              </p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-8.jpg" ?>">
-            </dd>
-          </div>
           <div class="ui center aligned piled segment">
             <i class="big grey pin pinned icon"></i>
             <h3>API Key</h3>
             <p>You'll need this number in the next page, so save it!</p>
-          </div>
-          <div class="ui segment">
-            <dt>6</dt>
-            <dd>
-              <p>You've successfully created and configured your Google project! You should have these two values:</p>
-              <ul>
-                <li>Your <strong>Project Number</strong>. It looks something like <code>703322744261</code>. You should have used this on the <em>Configuration</em> tab.</li>
-                <li>Your <strong>API key</strong>. It looks something like <code>AIzBSyC_N8hcAeDaZEELfPadGnKBWE5zrmAdYfr</code>. You don't need to use this on the <em>Configuration</em> tab, but you do need it on the next page.</li>
-              </ul>
-              <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/2');">Chrome & Firefox Push</a> to continue.</p>
-            </dd>
           </div>
         </dl>
       </div>

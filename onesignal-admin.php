@@ -329,6 +329,7 @@ class OneSignal_Admin {
       'notifyButton_dialog_main_button_unsubscribe',
       'notifyButton_dialog_blocked_title',
       'notifyButton_dialog_blocked_message',
+      'utm_additional_url_params'
     );
     OneSignal_Admin::saveStringSettings($onesignal_wp_settings, $config, $stringSettings);
 
@@ -540,6 +541,11 @@ class OneSignal_Admin {
           'url'               => get_permalink($post->ID),
           'contents'          => array("en" => $notif_content)
         );
+
+        $config_utm_additional_url_params = $onesignal_wp_settings['utm_additional_url_params'];
+        if (!empty($config_utm_additional_url_params)) {
+            $fields['url'] .= '?' . $config_utm_additional_url_params;
+        }
 
         $post_has_featured_image           = has_post_thumbnail($post);
         $config_use_featured_image_as_icon = $onesignal_wp_settings['showNotificationIconFromPostThumbnail'] == "1";

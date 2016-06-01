@@ -582,9 +582,6 @@ class OneSignal_Admin {
 
         $onesignal_auth_key = $onesignal_wp_settings['app_rest_api_key'];
 
-        if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
-          $onesignal_auth_key = "NDQyMjM3OTYtNjBkOC00YjI0LWI2NzMtZDZmODQ3ODU4ZmM2";
-        }
         curl_setopt($ch, CURLOPT_URL, $onesignal_post_url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
           'Content-Type: application/json',

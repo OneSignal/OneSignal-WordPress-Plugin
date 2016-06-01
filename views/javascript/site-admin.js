@@ -259,9 +259,28 @@ function showSupportMessage(type) {
   Intercom('showNewMessage', message);
 }
 
+/**
+ * Returns the correct subdomain if 'https://subdomain.onesignal.com' or something similar is passed.
+ */
+function normalizeSubdomain(subdomain) {
+  subdomain = subdomain.trim();
+  var removeSubstrings = [
+    'http://www.',
+    'https://www.',
+    'http://',
+    'https://',
+    '.onesignal.com/',
+    '.onesignal.com'
+  ];
+  removeSubstrings.forEach(function(removeSubstring) {
+    subdomain = subdomain.replace(removeSubstring, '');
+  });
+  return subdomain.toLowerCase();
+}
 
 function showHttpPopup() {
   var subdomain = jQuery('[name=subdomain]').val();
+  subdomain = normalizeSubdomain(subdomain);
   var message_localization_opts = {
     actionMessage: jQuery('[name=prompt_action_message]').val(),
     exampleNotificationTitleDesktop: jQuery('[name=prompt_example_notification_title_desktop]').val(),

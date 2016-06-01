@@ -594,6 +594,12 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
           <div class="field nb-feature">
             <div class="ui toggle checkbox">
+              <input type="checkbox" name="notifyButton_showAfterSubscribed" value="true" <?php if (array_key_exists('notifyButton_showAfterSubscribed', $onesignal_wp_settings) && @$onesignal_wp_settings['notifyButton_showAfterSubscribed']) { echo "checked"; } ?>>
+              <label>Show the notify button after users have subscribed<i class="tiny circular help icon link" role="popup" data-html="<p>If checked, the notify button will continue to be shown on all pages after the user subscribes.</p><p>If unchecked, the notify button will be hidden not be shown after the user subscribes and refreshes the page.</p>" data-variation="wide"></i></label>
+            </div>
+          </div>
+          <div class="field nb-feature">
+            <div class="ui toggle checkbox">
               <input type="checkbox" name="notifyButton_prenotify" value="true" <?php if (array_key_exists('notifyButton_prenotify', $onesignal_wp_settings) && @$onesignal_wp_settings['notifyButton_prenotify']) { echo "checked"; } ?>>
               <label>Show first-time site visitors an unread message icon<i class="tiny circular help icon link" role="popup" data-html="<p>If checked, a circle indicating 1 unread message will be shown:</p><img src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell-prenotify.jpg" ?>' width=56><p>A message will be displayed when they hover over the notify button. This message can be customized below.</p>" data-variation="wide"></i></label>
             </div>

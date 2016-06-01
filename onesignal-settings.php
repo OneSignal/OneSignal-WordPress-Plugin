@@ -56,6 +56,7 @@ class OneSignal {
                   'notifyButton_offset_left' => '',
                   'notifyButton_offset_right' => '',
                   'notifyButton_showcredit' => true,
+                  'notifyButton_showAfterSubscribed' => true,
                   'notifyButton_message_prenotify' => '',
                   'notifyButton_tip_state_unsubscribed' => '',
                   'notifyButton_tip_state_subscribed' => '',

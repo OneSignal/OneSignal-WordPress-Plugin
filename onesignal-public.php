@@ -206,6 +206,15 @@ class OneSignal_Public {
             echo "oneSignal_options['notifyButton']['prenotify'] = false;\n";
           }
 
+          if ($onesignal_wp_settings["notifyButton_showAfterSubscribed"] == "1") {
+            echo "oneSignal_options['notifyButton']['displayPredicate'] = function() {
+              return OneSignal.isPushNotificationsEnabled()
+                      .then(function(isPushEnabled) {
+                          return !isPushEnabled;
+                      });
+            };\n";
+          }
+
           if ($onesignal_wp_settings["use_modal_prompt"] == "1") {
             echo "oneSignal_options['notifyButton']['modalPrompt'] = true;\n";
           }

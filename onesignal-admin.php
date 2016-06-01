@@ -69,7 +69,6 @@ class OneSignal_Admin {
 		  }
 
 		  register_shutdown_function('fatal_exception_error_handler');
-		  //spl_autoload_register('foo');
 	  }
 
     if (current_user_can('update_plugins')) {

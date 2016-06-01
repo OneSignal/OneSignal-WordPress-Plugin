@@ -51,10 +51,6 @@ function onesignal_debug_post($post) {
                         'Type:' => $post->post_type));
 }
 
-function print_settings() {
-  onesignal_debug(OneSignal::get_onesignal_settings());
-}
-
 class OneSignal_Public {
 
   public function __construct() {}

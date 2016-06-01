@@ -168,7 +168,16 @@ class OneSignal_Admin {
   }
   
   public static function add_onesignal_post_options() {
-    // Add our meta box for the "post" post type (default)
+    // If there is an error message we should display, display it now
+    function admin_notice_send_error() {
+        if ( !empty(( $onesignal_send_notification_error = get_transient( 'onesignal_send_notification_error' ))) ) {
+            delete_transient( 'onesignal_send_notification_error' );
+            echo $onesignal_send_notification_error;
+        }
+    }
+    add_action( 'admin_notices', 'admin_notice_send_error');
+
+      // Add our meta box for the "post" post type (default)
     add_meta_box('onesignal_notif_on_post',
                  'OneSignal Push Notifications',
                  array( __CLASS__, 'onesignal_notif_on_post_html_view' ),
@@ -601,12 +610,20 @@ class OneSignal_Admin {
 
         $response = curl_exec($ch);
 
+        $curl_http_code     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+          onesignal_debug('$curl_http_code:', $curl_http_code);
+        if ($curl_http_code != 200) {
+            set_transient( 'onesignal_send_notification_error', '<div class="error notice onesignal-error-notice">
+                    <p><strong>OneSignal Push:</strong><em> There was a ' . $curl_http_code . ' error sending your notification:</em></p>
+                    <pre>' . print_r($response, true) . '</pre>
+                </div>', 86400 );
+        }
+
 	      if (defined('ONESIGNAL_DEBUG') || class_exists('WDS_Log_Post')) {
           fclose($out);
           $debug_output = ob_get_clean();
 
           $curl_effective_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
-          $curl_http_code     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
           $curl_total_time    = curl_getinfo($ch, CURLINFO_TOTAL_TIME);
 
           onesignal_debug('OneSignal API POST Data:', $fields);

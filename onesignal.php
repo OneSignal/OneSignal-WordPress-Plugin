@@ -17,6 +17,10 @@ require_once( plugin_dir_path( __FILE__ ) . 'onesignal-public.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'onesignal-settings.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'onesignal-widget.php' );
 
+if (file_exists(plugin_dir_path( __FILE__ ) . 'onesignal-extra.php')) {
+    require_once( plugin_dir_path( __FILE__ ) . 'onesignal-extra.php' );
+}
+
 add_action( 'init', array( 'OneSignal_Admin', 'init' ) );
 add_action( 'init', array( 'OneSignal_Public', 'init' ) );
 

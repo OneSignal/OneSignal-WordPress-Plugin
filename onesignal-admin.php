@@ -1,6 +1,6 @@
 <?php
 
-function change_footer_admin() {
+function onesignal_change_footer_admin() {
   return '';
 }
 
@@ -394,7 +394,7 @@ class OneSignal_Admin {
   }
   
   public static function admin_custom_scripts() {
-    add_filter('admin_footer_text', 'change_footer_admin', 9999); // 9999 means priority, execute after the original fn executes
+    add_filter('admin_footer_text', 'onesignal_change_footer_admin', 9999); // 9999 means priority, execute after the original fn executes
 
     wp_enqueue_style( 'icons', plugin_dir_url( __FILE__ ) . 'views/css/icons.css', false,  OneSignal_Admin::$RESOURCES_VERSION);
     wp_enqueue_style( 'semantic-ui', plugin_dir_url( __FILE__ ) . 'views/css/semantic-ui.css', false,  OneSignal_Admin::$RESOURCES_VERSION);

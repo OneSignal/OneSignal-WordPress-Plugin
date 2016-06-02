@@ -484,7 +484,7 @@ class OneSignal_Admin {
 	    }
 
         if (has_filter('onesignal_include_post')) {
-            if (self::onesignal_include_post_filter_include($new_status, $old_status, $post)) {
+            if (apply_filters('onesignal_include_post', $new_status, $old_status, $post)) {
                 onesignal_debug('Will actually send a notification for this post because the filter opted to include the post.');
                 $do_send_notification = true;
             }
@@ -493,9 +493,9 @@ class OneSignal_Admin {
 	    onesignal_debug('Post Status:', $old_status, '-->', $new_status);
 	    onesignal_debug_post($post);
         onesignal_debug('Has onesignal_include_post filter:', has_filter('onesignal_include_post'));
-        onesignal_debug('    [onesignal_include_post Filter]', 'Filter Result:' , self::onesignal_include_post_filter_include($new_status, $old_status, $post));
+        onesignal_debug('    [onesignal_include_post Filter]', 'Filter Result:' , apply_filters('onesignal_include_post', $new_status, $old_status, $post));
         onesignal_debug('Has onesignal_exclude_post filter:', has_filter('onesignal_exclude_post'));
-        onesignal_debug('    [onesignal_exclude_post Filter]', 'Filter Result:' , self::onesignal_exclude_post_filter_exclude($new_status, $old_status, $post));
+        onesignal_debug('    [onesignal_exclude_post Filter]', 'Filter Result:' , apply_filters('onesignal_exclude_post', $new_status, $old_status, $post));
 	    onesignal_debug('Posted from WordPress editor:', $posted_from_wordpress_editor);
 	    onesignal_debug('    [Posted from WordPress editor]', 'Just Posted Meta Box Present:', $onesignal_meta_box_present);
 	    onesignal_debug('    [Posted from WordPress editor]', 'Was Meta Box Ever Present:', $post_metadata_was_onesignal_meta_box_present);
@@ -670,33 +670,6 @@ class OneSignal_Admin {
       onesignal_debug('Caught Exception:', $e->getMessage());
     }
   }
-
-  public static function onesignal_include_post_filter_include($new_status, $old_status, $post) {
-      onesignal_debug('Applying onesignal_include_post filter.');
-      $do_include_post = apply_filters('onesignal_include_post', $new_status, $old_status, $post);
-      onesignal_debug('onesignal_include_post filter $do_include_post result:', $do_include_post);
-
-      // If the filter returns "$do_include_post: false", automatically process this post regardless
-      if ($do_include_post == true) {
-          return true;
-      }
-      else return false;
-  }
-
-  public static function onesignal_exclude_post_filter_exclude($new_status, $old_status, $post) {
-      onesignal_debug('Applying onesignal_exclude_post filter.');
-      $do_exclude_post = apply_filters('onesignal_exclude_post', $new_status, $old_status, $post);
-      onesignal_debug('onesignal_exclude_post filter $do_exclude_post result:', $do_exclude_post);
-
-      // If the filter returns "$do_exclude_post: false", do not process this post at all
-      if ($do_exclude_post == true) {
-          onesignal_debug('Not processing post because the filter opted to exclude the post.');
-          return true;
-      } else {
-          onesignal_debug('Processing post because the exclude filter did not exclude the post.');
-          return false;
-      }
-  }
   
   public static function on_transition_post_status( $new_status, $old_status, $post ) {
     if ($post->post_type == 'wdslp-wds-log') {
@@ -704,15 +677,17 @@ class OneSignal_Admin {
         return;
     }
     if (has_filter('onesignal_include_post')) {
-        if (self::onesignal_include_post_filter_include($new_status, $old_status, $post)) {
-            // If the filter returns "$do_include_post: true", always process this post
-            onesignal_debug('Processing post because the filter opted to include the post.');
-            self::send_notification_on_wp_post($new_status, $old_status, $post);
-            return;
-        }
+      onesignal_debug('Applying onesignal_include_post filter.');
+      if (apply_filters('onesignal_include_post', $new_status, $old_status, $post)) {
+          // If the filter returns "$do_include_post: true", always process this post
+          onesignal_debug('Processing post because the filter opted to include the post.');
+          self::send_notification_on_wp_post($new_status, $old_status, $post);
+          return;
+      }
     }
     if (has_filter('onesignal_exclude_post')) {
-      if (self::onesignal_exclude_post_filter_exclude($new_status, $old_status, $post)) {
+      onesignal_debug('Applying onesignal_exclude_post filter.');
+      if (apply_filters('onesignal_exclude_post', $new_status, $old_status, $post)) {
           // If the filter returns "$do_exclude_post: false", do not process this post at all
           onesignal_debug('Not processing post because the filter opted to exclude the post.');
           return;

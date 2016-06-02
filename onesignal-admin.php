@@ -455,12 +455,14 @@ class OneSignal_Admin {
 
 	    /* OneSignal plugin setting "Automatically send a push notification when I create a post from 3rd party plugins"
 	     * If set to true, send only if *publishing* a post type *post* from *something other than the default WordPress editor*.
+	     * The filter hooks "onesignal_exclude_post" and "onesignal_include_post" can override this behavior as long as the option to automatically send from 3rd party plugins is set.
 	     */
-      $settings_send_notification_on_non_editor_post_publish = $onesignal_wp_settings['notification_on_post_from_plugin'];
-      $non_editor_post_publish_do_send_notification = $settings_send_notification_on_non_editor_post_publish &&
-                                                      $post->post_type == "post" &&
-                                                      $old_status !== "publish";
+        $settings_send_notification_on_non_editor_post_publish = $onesignal_wp_settings['notification_on_post_from_plugin'];
+        $non_editor_post_publish_do_send_notification = $settings_send_notification_on_non_editor_post_publish &&
+                                                        $post->post_type == "post" &&
+                                                        $old_status !== "publish";
 	    /* ********************************************************************************************************* */
+
 
 	    if ($posted_from_wordpress_editor) {
 		    // Decide to send based on whether the checkbox "Send notification on post publish/update" is checked
@@ -474,8 +476,19 @@ class OneSignal_Admin {
 		    $do_send_notification = $non_editor_post_publish_do_send_notification;
 	    }
 
+        if (has_filter('onesignal_include_post')) {
+            if (self::onesignal_include_post_filter_include($new_status, $old_status, $post)) {
+                onesignal_debug('Will actually send a notification for this post because the filter opted to include the post.');
+                $do_send_notification = true;
+            }
+        }
+
 	    onesignal_debug('Post Status:', $old_status, '-->', $new_status);
 	    onesignal_debug_post($post);
+        onesignal_debug('Has onesignal_include_post filter:', has_filter('onesignal_include_post'));
+        onesignal_debug('    [onesignal_include_post Filter]', 'Filter Result:' , self::onesignal_include_post_filter_include($new_status, $old_status, $post));
+        onesignal_debug('Has onesignal_exclude_post filter:', has_filter('onesignal_exclude_post'));
+        onesignal_debug('    [onesignal_exclude_post Filter]', 'Filter Result:' , self::onesignal_exclude_post_filter_exclude($new_status, $old_status, $post));
 	    onesignal_debug('Posted from WordPress editor:', $posted_from_wordpress_editor);
 	    onesignal_debug('    [Posted from WordPress editor]', 'Just Posted Meta Box Present:', $onesignal_meta_box_present);
 	    onesignal_debug('    [Posted from WordPress editor]', 'Was Meta Box Ever Present:', $post_metadata_was_onesignal_meta_box_present);
@@ -650,13 +663,57 @@ class OneSignal_Admin {
       onesignal_debug('Caught Exception:', $e->getMessage());
     }
   }
+
+  public static function onesignal_include_post_filter_include($new_status, $old_status, $post) {
+      onesignal_debug('Applying onesignal_include_post filter.');
+      $do_include_post = apply_filters('onesignal_include_post', $new_status, $old_status, $post);
+      onesignal_debug('onesignal_include_post filter $do_include_post result:', $do_include_post);
+
+      // If the filter returns "$do_include_post: false", automatically process this post regardless
+      if ($do_include_post == true) {
+          return true;
+      }
+      else return false;
+  }
+
+  public static function onesignal_exclude_post_filter_exclude($new_status, $old_status, $post) {
+      onesignal_debug('Applying onesignal_exclude_post filter.');
+      $do_exclude_post = apply_filters('onesignal_exclude_post', $new_status, $old_status, $post);
+      onesignal_debug('onesignal_exclude_post filter $do_exclude_post result:', $do_exclude_post);
+
+      // If the filter returns "$do_exclude_post: false", do not process this post at all
+      if ($do_exclude_post == true) {
+          onesignal_debug('Not processing post because the filter opted to exclude the post.');
+          return true;
+      } else {
+          onesignal_debug('Processing post because the exclude filter did not exclude the post.');
+          return false;
+      }
+  }
   
   public static function on_transition_post_status( $new_status, $old_status, $post ) {
-    if (empty($post) || $new_status !== "publish" || $post->post_type == 'page' || $post->post_type == 'wdslp-wds-log') {
-      // It's important not to call onesignal_debug() on posts of type wdslp-wds-log, otherwise each post will recursively generate 4 more posts
-      return;
+    if ($post->post_type == 'wdslp-wds-log') {
+        // It's important not to call onesignal_debug() on posts of type wdslp-wds-log, otherwise each post will recursively generate 4 more posts
+        return;
     }
-    self::send_notification_on_wp_post($new_status, $old_status, $post);
+    if (has_filter('onesignal_include_post')) {
+        if (self::onesignal_include_post_filter_include($new_status, $old_status, $post)) {
+            // If the filter returns "$do_include_post: true", always process this post
+            onesignal_debug('Processing post because the filter opted to include the post.');
+            self::send_notification_on_wp_post($new_status, $old_status, $post);
+            return;
+        }
+    }
+    if (has_filter('onesignal_exclude_post')) {
+      if (self::onesignal_exclude_post_filter_exclude($new_status, $old_status, $post)) {
+          // If the filter returns "$do_exclude_post: false", do not process this post at all
+          onesignal_debug('Not processing post because the filter opted to exclude the post.');
+          return;
+      }
+    }
+    if (!(empty($post) || $new_status !== "publish" || $post->post_type == 'page')) {
+        self::send_notification_on_wp_post($new_status, $old_status, $post);
+    }
   }
 }
 

@@ -50,6 +50,17 @@ Features:
 4. Our configuration settings allowing you to customize the way users are prompted to subscribe and the notifications they receive.
 
 == Changelog ==
+= 1.11.0 =
+- Add admin UI and filter for custom post types
+- Add filters for overriding post processing behavior
+- Add filter for overriding meta box send notification checkbox behavior
+- Add admin UI for adding UTM tracking code parameters (notification URL parameters)
+- Add admin UI for hiding notify button after subscription
+- Fix Preview Popup not displaying correctly if an 'https://subdomain.onesignal.com' Subdomain textbox value is used
+- Display visible error message if notification fails to send
+- Updated Google Project Setup guide
+- Fix poorly named global function that is conflicting with another template's global function
+
 = 1.10.6 =
 - Push notifications should now be sent out for posts created in the default WordPress editor if scheduled, being edited, or awaiting publication
 

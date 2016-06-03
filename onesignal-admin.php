@@ -170,7 +170,8 @@ class OneSignal_Admin {
   public static function add_onesignal_post_options() {
     // If there is an error message we should display, display it now
     function admin_notice_send_error() {
-        if ( !empty(( $onesignal_send_notification_error = get_transient( 'onesignal_send_notification_error' ))) ) {
+        $onesignal_send_notification_error = get_transient('onesignal_send_notification_error');
+        if ( !empty($onesignal_send_notification_error) ) {
             delete_transient( 'onesignal_send_notification_error' );
             echo $onesignal_send_notification_error;
         }

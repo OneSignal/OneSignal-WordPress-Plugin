@@ -336,7 +336,8 @@ class OneSignal_Admin {
       'notifyButton_dialog_main_button_unsubscribe',
       'notifyButton_dialog_blocked_title',
       'notifyButton_dialog_blocked_message',
-      'utm_additional_url_params'
+      'utm_additional_url_params',
+      'allowed_custom_post_types'
     );
     OneSignal_Admin::saveStringSettings($onesignal_wp_settings, $config, $stringSettings);
 
@@ -465,8 +466,11 @@ class OneSignal_Admin {
 	     * The filter hooks "onesignal_exclude_post" and "onesignal_include_post" can override this behavior as long as the option to automatically send from 3rd party plugins is set.
 	     */
         $settings_send_notification_on_non_editor_post_publish = $onesignal_wp_settings['notification_on_post_from_plugin'];
+        $additional_custom_post_types_string = $onesignal_wp_settings['allowed_custom_post_types'];
+        $additional_custom_post_types_array = array_filter(explode(',', $additional_custom_post_types_string));
+        onesignal_debug('Additional allowed custom post types:', $additional_custom_post_types_string);
         $non_editor_post_publish_do_send_notification = $settings_send_notification_on_non_editor_post_publish &&
-                                                        $post->post_type == "post" &&
+                                                        ($post->post_type == "post" || in_array($post->post_type, $additional_custom_post_types_array)) &&
                                                         $old_status !== "publish";
 	    /* ********************************************************************************************************* */
 
@@ -504,7 +508,7 @@ class OneSignal_Admin {
 	    onesignal_debug('    [Editor Post Send]', 'Meta Box Send Notification Previously Checked:', $post_metadata_was_send_notification_checked);
 	    onesignal_debug('Non-Editor Post Send:', $non_editor_post_publish_do_send_notification);
 	    onesignal_debug('    [Non-Editor Post Send]', 'Auto Send Config Setting:', $settings_send_notification_on_non_editor_post_publish);
-	    onesignal_debug('    [Non-Editor Post Send]', 'Post Type:', ($post->post_type === "post"), '(' . $post->post_type . ')');
+	    onesignal_debug('    [Non-Editor Post Send]', 'Post Type:', ($post->post_type == "post" || in_array($post->post_type, $additional_custom_post_types_array)), '(' . $post->post_type . ')');
 	    onesignal_debug('    [Non-Editor Post Send]', 'Old Post Status:' , ($old_status !== "publish"), '(' . $old_status . ')');
 	    onesignal_debug('Actually Sending Notification:', $do_send_notification);
 

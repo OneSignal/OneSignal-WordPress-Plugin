@@ -904,7 +904,8 @@ if (array_key_exists('app_id', $_POST)) {
               <label>Dismiss notifications after ~20 seconds <span class="ui grey horizontal label">Chrome v47<sup>+</sup> Desktop Only</span> <i class="tiny circular help icon link" role="popup" data-title="Persist Notifications" data-html="<p>If checked, dismiss the notification after about 20 seconds. By default, Chrome notifications last indefinitely. <strong class='least-strong'>Supported on Chrome v47+ Desktop only.</strong> The time cannot be modified.</p><p>Once you've updated this setting, <strong class='least-strong'>visit your site once</strong> for the new setting to take effect. Make sure to clear your cache plugin contents if you use one.</p>" data-variation="wide"></i></label>
             </div>
           </div>
-        </div><div class="ui dividing header">
+        </div>
+        <div class="ui dividing header">
           <i class="area chart icon"></i>
           <div class="content">
             UTM Tracking Settings
@@ -914,6 +915,18 @@ if (array_key_exists('app_id', $_POST)) {
           <div class="field">
             <label>Additional Notification URL Parameters<i class="tiny circular help icon link" role="popup" data-html="Adds the specified string as extra URL parameters to your notification URL so that they can be tracked as an event by your analytics system. <em>Please escape your parameter values</em>; your input will be added as-is to the end of your notification URL. Example:</p>If you want:<em><li><code>utm_medium</code> to be <code>ppc</code></li><li><code>utm_source</code> to be <code>adwords</code></li><li><code>utm_campaign</code> to be <code>snow boots</code></li><li><code>utm_content</code> to be <code>durable snow boots</code></li></em><p><p>Then use the following string:</p><p><code style='word-break: break-all;'>utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots</code></p>" data-variation="wide"></i></label>
             <input type="text" placeholder="utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots" name="utm_additional_url_params" value="<?php echo @$onesignal_wp_settings['utm_additional_url_params']; ?>">
+          </div>
+        </div>
+        <div class="ui dividing header">
+          <i class="lab icon"></i>
+          <div class="content">
+            Advanced Settings
+          </div>
+        </div>
+        <div class="ui borderless shadowless segment">
+          <div class="field">
+            <label>Additional Custom Post Types for Automatic Notifications Created From Plugins<i class="tiny circular help icon link" role="popup" data-html="Enter a comma-separated list of custom post type names. Anytime a post is published with one of the listed post types, a notification will be sent to all your users. <strong class='least-strong'>The setting</strong> <em>Automatically send a push notification when I publish a post from 3rd party plugins</em> <strong class='least-strong'>must be enabled for this feature to work</strong>." data-variation="wide"></i></label>
+            <input type="text" placeholder="forum,reply,topic  (comma separated, no spaces between commas)" name="allowed_custom_post_types" value="<?php echo @$onesignal_wp_settings['allowed_custom_post_types']; ?>">
           </div>
         </div>
         <button class="ui large teal button" type="submit">Save</button>

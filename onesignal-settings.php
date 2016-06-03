@@ -71,6 +71,8 @@ class OneSignal {
                   'notifyButton_dialog_blocked_message' => '',
                   'utm_additional_url_params' => '',
                   'allowed_custom_post_types' => '',
+                  'notification_title' => OneSignalUtils::decode_entities(get_bloginfo('name')),
+                  'send_to_mobile_platforms' => false
                   );
 
     $legacies = array(

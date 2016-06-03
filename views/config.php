@@ -560,6 +560,36 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
         </div>
         <div class="ui dividing header">
+          <i class="desktop icon"></i>
+          <div class="content">
+            Sent Notification Settings
+          </div>
+        </div>
+        <div class="ui borderless shadowless segment">
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="showNotificationIconFromPostThumbnail" value="true" <?php if ($onesignal_wp_settings['showNotificationIconFromPostThumbnail']) { echo "checked"; } ?>>
+              <label>Use the post's featured image for the notification icon<i class="tiny circular help icon link" role="popup" data-title="Show icon image from post thumbnail" data-content="If checked, when a notifcation is sent link the post icon in the notification.  Chrome and Firefox Desktop supported." data-variation="wide"></i></label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="chrome_auto_dismiss_notifications" value="true" <?php if ($onesignal_wp_settings['chrome_auto_dismiss_notifications']) { echo "checked"; } ?>>
+              <label>Dismiss notifications after ~20 seconds <span class="ui grey horizontal label">Chrome v47<sup>+</sup> Desktop Only</span> <i class="tiny circular help icon link" role="popup" data-title="Persist Notifications" data-html="<p>If checked, dismiss the notification after about 20 seconds. By default, Chrome notifications last indefinitely. <strong class='least-strong'>Supported on Chrome v47+ Desktop only.</strong> The time cannot be modified.</p><p>Once you've updated this setting, <strong class='least-strong'>visit your site once</strong> for the new setting to take effect. Make sure to clear your cache plugin contents if you use one.</p>" data-variation="wide"></i></label>
+            </div>
+          </div>
+          <div class="field">
+              <label>Notification Title<i class="tiny circular help icon link" role="popup" data-html="The notification title to use for all outgoing notifications. Defaults to your site's title." data-variation="wide"></i></label>
+              <input type="text" name="notification_title" placeholder="<?php echo OneSignalUtils::decode_entities(get_bloginfo('name')) ?>" value="<?php echo @$onesignal_wp_settings['notification_title']; ?>">
+          </div>
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="send_to_mobile_platforms" value="true" <?php if ($onesignal_wp_settings['send_to_mobile_platforms']) { echo "checked"; } ?>>
+              <label>Send notifications additionally to iOS & Android platforms<i class="tiny circular help icon link" role="popup" data-title="Deliver to iOS & Android" data-html="<p>If checked, the notification will also be sent to Android and iOS <em>if you have those platforms enabled</em> in addition to your web push users. <strong class='least-strong'>Your OneSignal app must have either an active iOS or an Android platform and you must have either iOS or Android users for this to work</strong>.</p>" data-variation="wide"></i></label>
+            </div>
+          </div>
+        </div>
+        <div class="ui dividing header">
           <i class="alarm outline icon"></i>
           <div class="content">
             Prompt Settings & Notify Button
@@ -882,26 +912,6 @@ if (array_key_exists('app_id', $_POST)) {
             <div class="ui toggle checkbox">
               <input type="checkbox" name="notification_on_post_from_plugin" value="true" <?php if (@$onesignal_wp_settings['notification_on_post_from_plugin']) { echo "checked"; } ?>>
               <label>Automatically send a push notification when I publish a post from 3<sup>rd</sup> party plugins<i class="tiny circular help icon link" role="popup" data-title="Automatic Push outside WordPress Editor" data-content="If checked, when a post is created outside of WordPress's editor, a push notification will automatically be sent. Must be the built-in WordPress post type 'post' and the post must be published." data-variation="wide"></i></label>
-            </div>
-          </div>
-        </div>
-        <div class="ui dividing header">
-          <i class="desktop icon"></i>
-          <div class="content">
-            Other Notification Settings
-          </div>
-        </div>
-        <div class="ui borderless shadowless segment">
-          <div class="field">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" name="showNotificationIconFromPostThumbnail" value="true" <?php if ($onesignal_wp_settings['showNotificationIconFromPostThumbnail']) { echo "checked"; } ?>>
-              <label>Use the post's featured image for the notification icon<i class="tiny circular help icon link" role="popup" data-title="Show icon image from post thumbnail" data-content="If checked, when a notifcation is sent link the post icon in the notification.  Chrome and Firefox Desktop supported." data-variation="wide"></i></label>
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" name="chrome_auto_dismiss_notifications" value="true" <?php if ($onesignal_wp_settings['chrome_auto_dismiss_notifications']) { echo "checked"; } ?>>
-              <label>Dismiss notifications after ~20 seconds <span class="ui grey horizontal label">Chrome v47<sup>+</sup> Desktop Only</span> <i class="tiny circular help icon link" role="popup" data-title="Persist Notifications" data-html="<p>If checked, dismiss the notification after about 20 seconds. By default, Chrome notifications last indefinitely. <strong class='least-strong'>Supported on Chrome v47+ Desktop only.</strong> The time cannot be modified.</p><p>Once you've updated this setting, <strong class='least-strong'>visit your site once</strong> for the new setting to take effect. Make sure to clear your cache plugin contents if you use one.</p>" data-variation="wide"></i></label>
             </div>
           </div>
         </div>

@@ -25,7 +25,7 @@ if (array_key_exists('app_id', $_POST)) {
         <a class="item" data-tab="setup/1">Google Keys</a>
         <a class="item" data-tab="setup/2">Chrome & Firefox Push</a>
         <a class="item" data-tab="setup/3">OneSignal Keys</a>
-        <a class="item" data-tab="setup/4">Modify Site</a>
+        <a class="item" data-tab="setup/4">Subscribing Users</a>
         <a class="item" data-tab="setup/5">Safari Push</a>
         <a class="item" data-tab="setup/7">Results</a>
         </div>
@@ -37,9 +37,9 @@ if (array_key_exists('app_id', $_POST)) {
         <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/1');">Google Keys</a> to begin.</p>
         <div class="ui center aligned piled segment">
           <i class="big grey pin pinned icon"></i>
-          <h3>Additional Documentation</h3>
-          <p>You can additionally browse the <a href="https://documentation.onesignal.com/docs/website-push-common-problems#my-http-site-isnt-working" target="_blank">Troubleshooting Website Push</a> section of our documentation for some tips if you're stuck.</p>
-          <p><em>Please do not follow the installation instructions on documentation.onesignal.com.<br/>Our WordPress plugin outputs all required code and no extra code is necessary.</em></p>
+          <h3>Troubleshooting Documentation</h3>
+          <p>You can additionally browse the <a href="https://documentation.onesignal.com/v2.0/docs/website-push-common-problems#my-wordpress-site-isnt-working" target="_blank">Troubleshooting Website Push</a> section of our documentation for some tips if you're stuck.</p>
+          <p><em>Please <strong>do not follow the installation instructions</strong> on documentation.onesignal.com.<br/>Our WordPress plugin outputs all required code and no extra code is necessary.</em></p>
         </div>
       </div>
 
@@ -330,68 +330,72 @@ if (array_key_exists('app_id', $_POST)) {
           <div class="ui segment">
             <dt>3</dt>
             <dd>
-              <p>You're done configuring settings! Continue to <a href="javascript:void(0);" onclick="activateSetupTab('setup/4');">Modify Site</a>.</p>
+              <p>You're done configuring settings! Continue to <a href="javascript:void(0);" onclick="activateSetupTab('setup/4');">Subscribing Users</a>.</p>
             </dd>
           </div>
         </dl>
       </div>
       <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/4">
-        <p>By now, push notifications already work on your site. <strong>But your users still need a way to <em>subscribe</em> to your site's notifications</strong>. There are two ways:
+        <p>If you've finished the guide up to here, push notifications already work on your site. <strong>But your users still need a way to <em>subscribe</em> to your site's notifications</strong>. There are a couple ways:
+          <h4>HTTP Sites:</h4>
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
             <div class="center aligned column">
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell.jpg" ?>" width="60%">
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.png" ?>" width="100%">
             </div>
             <div class="ui vertical divider">
-              Or
+              Or/And
             </div>
             <div class="center aligned column">
-              <code class="massive">&lt;div <strong>class="OneSignal-prompt"</strong>&gt;</code>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell.jpg" ?>" width="60%">
             </div>
           </div>
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-top: 0 !important; padding-top: 0 !important;">
             <div class="center aligned column">
-              <h3>OneSignal Notify Button <span class="ui green horizontal label">EASY</span></h3>
+              <h3>HTTP Prompt <span class="ui orange horizontal label">HTTP Only</span></h3>
             </div>
             <div class="center aligned column">
-              <h3>Custom Implementation <span class="ui purple horizontal label">ADVANCED</span></h3>
+              <h3>Notify Button</h3>
+            </div>
+          </div>
+          <h4>HTTPS Sites:</h4>
+          <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
+            <div class="center aligned column">
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/https-prompt.png" ?>" width="100%">
+            </div>
+            <div class="ui vertical divider">
+              Or/And
+            </div>
+            <div class="center aligned column">
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell.jpg" ?>" width="60%">
+            </div>
+          </div>
+          <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-top: 0 !important; padding-top: 0 !important;">
+            <div class="center aligned column">
+              <h3>HTTPS Prompt <span class="ui green horizontal label">HTTPS Only</span></h3>
+            </div>
+            <div class="center aligned column">
+              <h3>Notify Button</h3>
             </div>
           </div>
           <ol>
-            <li>The notify button is an interactive site widget we developed (enabled by default for new users)</li>
-              <ol>
-                <li>Users see the notify button on the bottom right corner of your site. They can click the notify button to subscribe.</li>
-                <li>The notify button is custom developed by us and does all the work for you! It detects when users are unsubscribed, already subscribed, or have blocked your site and show instructions to unblock. It allows users to easily temporarily subscribe from and resubscribe to notifications.</li>
-              </ol>
-            <li>The custom implementation uses the CSS class <code>OneSignal-prompt</code> on any clickable element</li>
-              <ol>
-                <li>Clicking any element with this CSS class will allow users to subscribe</li>
-                <li>Use the CSS class if your site is highly specialized and needs complete control over styling and positioning. Our SDK detects any elements with the CSS class <code>OneSignal-prompt</code> and prompts the user to subscribe upon clicking those elements.</li>
-              </ol>
-            <li><strong>For HTTPS sites only</strong>, a third way &mdash; auto-prompting users to subscribe &mdash; can be combined with either method above</li>
+            <li><strong>Notify Button:</strong> Enable it in <em>Configuration</em> -> <em>Prompt Settings & Notify Button</em> -> <em>Enable the notify button</em></li>
             <ol>
-              <li>Site visitors will be prompted to subscribe as soon as your site loads</li>
+              <li>The notify button is an interactive site widget.</li>
+              <li>Users see the notify button on the bottom right corner of your site. They can click the notify button to subscribe.</li>
+              <li>The notify button is custom developed by us and does all the work for you! It detects when users are unsubscribed, already subscribed, or have blocked your site and show instructions to unblock. It allows users to easily temporarily subscribe from and resubscribe to notifications.</li>
+            </ol>
+            <li><strong>HTTP/HTTPS Prompt:</strong> Enable it in <em>Configuration</em> -> <em>Prompt Settings & Notify Button</em> -> <em>Automatically prompt new site visitors to subscribe to push notifications</em></li>
+            <ol>
+              <li><a href="https://documentation.onesignal.com/docs/web-push-http-prompt">Read more about it at our documentation.</a></li>
             </ol>
           </ol>
+          <p>If you're a technical user and would like to implement your own subscription process, this is entirely possible. Please see this guide on <a href="https://documentation.onesignal.com/docs/guides-examples#subscribing-users-with-a-link" target="_blank">how to subscribe user with a link</a> using HTML and JavaScript. Our <a href="https://documentation.onesignal.com/docs/website-sdk-api" target="_blank">web SDK JavaScript API</a> is also available and can be called anywhere on the page.</p>
         </p>
 
         <dl>
           <div class="ui segment">
-            <dt>1</dt>
-            <dd>
-              <p>In more detail:</p>
-
-              <p>To add the notify button, go to the Configuration tab and enable it under Prompt Settings.</p>
-              <p>To add the CSS class, add <strong><code>OneSignal-prompt</code></strong> to any element you'd like. Our plugin initializes JavaScript code on your page that, on document ready, searches for all instances of the class and attaches a click event handler.</p>
-
-              <p>For HTTPS sites only, to automatically prompt visitors to subscribe, enable the option under Prompt Settings.</p>
-            </dd>
-          </div>
-          <div class="ui segment">
-            <dt>2</dt>
-            <dd>
               <p>You're done setting up your site for Chrome & Firefox push!</p>
               <p>Your site works completely with Chrome & Firefox push now. You can learn how to add <a href="javascript:void(0);" onclick="activateSetupTab('setup/5')">Safari</a> web push.</p>
-            </dd>
           </div>
         </dl>
       </div>

@@ -48,6 +48,11 @@ Features:
 2. Our detailed setup instructions to get you started.
 3. Another shot of our detailed setup instructions with images.
 4. Our configuration settings allowing you to customize the way users are prompted to subscribe and the notifications they receive.
+5. Our OneSignal dashboard users page, where you can see your subscribed users.
+6. Our OneSignal dashboard sent notifications page, where you can see the status of your sent notifications.
+7. Our OneSignal dashboard notification creation page, with an emoji selector and multi-language support.
+8. Our OneSignal dashboard sent notifications detail page, showing a notification being sent with live click tracking.
+9. Our OneSignal dashboard A/B testing page.
 
 == Changelog ==
 = 1.12.0 =

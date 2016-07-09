@@ -611,7 +611,26 @@ if (array_key_exists('app_id', $_POST)) {
             <div class="field">
               <div class="ui toggle checkbox">
                 <input type="checkbox" name="prompt_auto_register" value="true" <?php if ($onesignal_wp_settings['prompt_auto_register']) { echo "checked"; } ?>>
-                <label>Automatically prompt new site visitors to subscribe to push notifications<i class="tiny circular help icon link" role="popup" data-html="<p>If enabled, your site will automatically present the following without any code required:</p><img src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg" ?>' width=450>" data-variation="flowing"></i></label>
+                <label>
+                  Automatically prompt new site visitors to subscribe to push notifications
+                  <i class="tiny circular help icon link"
+                     role="popup"
+                     data-html="
+                       <p>If enabled, your site will automatically present the following without any code required:</p>
+                       <p>HTTPS Sites:
+                         <img 
+                            src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg" ?>'
+                            width=400>
+                       </p>
+                       <p>HTTP Sites:
+                         <img 
+                            src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.png" ?>'
+                            width=400>
+                       </p>"
+                     width=450
+                     data-variation="flowing">
+                  </i>
+                </label>
               </div>
             </div>
           </div>

@@ -21,7 +21,7 @@ jQuery(function() {
     'notifyButton_enable': '.nb-feature',
     'prompt_customize_enable': '.prompt-customize-feature',
     'send_welcome_notification': '.welcome-notification-feature',
-    'is_site_https': '.modal-prompt-feature, .auto-register-feature'
+    'is_site_https': '.modal-prompt-feature'
   });
 
   httpSiteCheck();

@@ -83,7 +83,7 @@ class OneSignal_Public {
 <?php } ?>
     <?php
     if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
-        echo '<script src="https://localhost:3001/dev_sdks/OneSignalSDK.js" async></script>';
+        echo '<script src="https://localhost:3001/sdks/OneSignalSDK.js" async></script>';
       } else {
         echo '<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>';
       }

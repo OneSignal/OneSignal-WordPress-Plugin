@@ -1,5 +1,6 @@
 <?php
 	header("Content-Type: application/json");
+	header("X-Robots-Tag: none");
 	$gcm_sender_id = preg_replace('/[^0-9]/', '', $_GET["gcm_sender_id"]);
 ?>
 {

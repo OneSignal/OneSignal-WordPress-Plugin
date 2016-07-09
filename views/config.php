@@ -35,6 +35,12 @@ if (array_key_exists('app_id', $_POST)) {
         <p>First you'll get some required keys from Google. Then you'll be on our website creating a new app and setting up web push for each browser. This entire process should take around 15 minutes.</p>
         <p>Please follow each step in order! If you're ever stuck or have questions, click the bright red button to chat with us! We read and respond to every message.</p>
         <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/1');">Google Keys</a> to begin.</p>
+        <div class="ui center aligned piled segment">
+          <i class="big grey pin pinned icon"></i>
+          <h3>Additional Documentation</h3>
+          <p>You can additionally browse the <a href="https://documentation.onesignal.com/docs/website-push-common-problems#my-http-site-isnt-working" target="_blank">Troubleshooting Website Push</a> section of our documentation for some tips if you're stuck.</p>
+          <p><em>Please do not follow the installation instructions on documentation.onesignal.com.<br/>Our WordPress plugin outputs all required code and no extra code is necessary.</em></p>
+        </div>
       </div>
 
 
@@ -391,6 +397,11 @@ if (array_key_exists('app_id', $_POST)) {
       </div>
       <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/5">
         <dl>
+          <div class="ui center aligned piled segment">
+            <i class="big grey pin pinned icon"></i>
+            <h3>Safari on Windows Not Supported</h3>
+            <p>Safari on Windows does not support web push notifications. Please use Safari on Mac OS X. <a href="https://onesignal.com/blog/when-will-web-push-be-supported-in-ios/" target="_blank">Apple also does not support web push notifications on iOS yet.</a></p>
+          </div>
           <div class="ui segment">
             <dt>1</dt>
             <dd>

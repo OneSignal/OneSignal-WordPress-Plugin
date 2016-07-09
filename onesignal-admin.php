@@ -394,7 +394,7 @@ class OneSignal_Admin {
 		  function admin_notice_setup_not_complete() {
 			  ?>
 			  <div class="error notice onesignal-error-notice">
-				  <p><strong>OneSignal Push:</strong> <em>Your setup is not complete. Please follow the Setup guide to set up web push notifications.</em></p>
+				  <p><strong>OneSignal Push:</strong> <em>Your setup is not complete. Please follow the Setup guide to set up web push notifications. Both the App ID and REST API Key fields are required.</em></p>
 			  </div>
 			  <?php
 		  }

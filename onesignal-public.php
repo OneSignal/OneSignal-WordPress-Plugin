@@ -66,10 +66,10 @@ class OneSignal_Public {
       if (strpos(ONESIGNAL_PLUGIN_URL, "http://localhost") === false && strpos(ONESIGNAL_PLUGIN_URL, "http://127.0.0.1") === false) {
         $current_plugin_url = preg_replace("/(http:\/\/)/i", "https://", ONESIGNAL_PLUGIN_URL);
       }
-    else {
+      else {
         $current_plugin_url = ONESIGNAL_PLUGIN_URL;
       }
-?>
+    ?>
       <?php
         $settings = get_option("OneSignalWPSetting");
         $key = 'gcm_sender_id';
@@ -79,8 +79,8 @@ class OneSignal_Public {
           $gcm_sender_id = 'WORDPRESS_NO_SENDER_ID_ENTERED';
         }
       ?>
-    <link rel="manifest" href="<?php echo( $current_plugin_url . 'sdk_files/manifest.json.php?gcm_sender_id=' . $gcm_sender_id ) ?>" />
-<?php } ?>
+      <link rel="manifest" href="<?php echo( $current_plugin_url . 'sdk_files/manifest.json.php?gcm_sender_id=' . $gcm_sender_id ) ?>" />
+    <?php } ?>
     <?php
     if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
         echo '<script src="https://localhost:3001/sdks/OneSignalSDK.js" async></script>';

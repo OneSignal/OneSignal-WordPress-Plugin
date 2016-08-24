@@ -428,6 +428,12 @@ if (array_key_exists('app_id', $_POST)) {
             </span>
             <i class="close icon"></i>
           </div>
+          <?php if ($onesignal_wp_settings['gcm_sender_id'] !== ''): ?>
+          <div class="field">
+            <label>Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Google Project Number" data-content="Your project number. You can find this on Setup > Google Keys > Step 3." data-variation="wide"></i></label>
+            <input type="text" name="gcm_sender_id" placeholder="#############" value="<?php echo $onesignal_wp_settings['gcm_sender_id'] ?>">
+          </div>
+          <?php endif; ?>
           <div class="field">
             <label>App ID<i class="tiny circular help icon link" role="popup" data-title="App ID" data-content="Your 36 character alphanumeric app ID. You can find this on Setup > OneSignal Keys > Step 2." data-variation="wide"></i></label>
             <input type="text" name="app_id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx" value="<?php echo $onesignal_wp_settings['app_id'] ?>">

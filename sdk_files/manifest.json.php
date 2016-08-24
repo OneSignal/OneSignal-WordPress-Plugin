@@ -5,6 +5,6 @@
 ?>
 {
   "start_url": "/",
-  "gcm_sender_id": "<?php echo $gcm_sender_id; ?>",
+  "gcm_sender_id": "<?php echo (empty($gcm_sender_id) ? '482941778795' : $gcm_sender_id); ?>",
   "gcm_user_visible_only": true
 }

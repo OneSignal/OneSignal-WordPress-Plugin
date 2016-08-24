@@ -72,7 +72,8 @@ class OneSignal {
                   'utm_additional_url_params' => '',
                   'allowed_custom_post_types' => '',
                   'notification_title' => OneSignalUtils::decode_entities(get_bloginfo('name')),
-                  'send_to_mobile_platforms' => false
+                  'send_to_mobile_platforms' => false,
+                  'show_gcm_sender_id' => false,
                   );
 
     $legacies = array(

@@ -428,7 +428,7 @@ if (array_key_exists('app_id', $_POST)) {
             </span>
             <i class="close icon"></i>
           </div>
-          <?php if ($onesignal_wp_settings['gcm_sender_id'] !== ''): ?>
+          <?php if ($onesignal_wp_settings['gcm_sender_id'] !== '' || $onesignal_wp_settings['show_gcm_sender_id']): ?>
           <div class="field">
             <label>Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Google Project Number" data-content="Your project number. You can find this on Setup > Google Keys > Step 3." data-variation="wide"></i></label>
             <input type="text" name="gcm_sender_id" placeholder="#############" value="<?php echo $onesignal_wp_settings['gcm_sender_id'] ?>">
@@ -848,6 +848,12 @@ if (array_key_exists('app_id', $_POST)) {
           <div class="field">
             <label>Additional Custom Post Types for Automatic Notifications Created From Plugins<i class="tiny circular help icon link" role="popup" data-html="Enter a comma-separated list of custom post type names. Anytime a post is published with one of the listed post types, a notification will be sent to all your users. <strong class='least-strong'>The setting</strong> <em>Automatically send a push notification when I publish a post from 3rd party plugins</em> <strong class='least-strong'>must be enabled for this feature to work</strong>." data-variation="wide"></i></label>
             <input type="text" placeholder="forum,reply,topic  (comma separated, no spaces between commas)" name="allowed_custom_post_types" value="<?php echo @$onesignal_wp_settings['allowed_custom_post_types']; ?>">
+          </div>
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="show_gcm_sender_id" value="true" <?php if ($onesignal_wp_settings['show_gcm_sender_id']) { echo "checked"; } ?>>
+              <label>Use my own Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Providing Your Own Web Push Keys" data-content="Check this if you'd like to provide your own Google Project Number."></i></label>
+            </div>
           </div>
         </div>
         <button class="ui large teal button" type="submit">Save</button>

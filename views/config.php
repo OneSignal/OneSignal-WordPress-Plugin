@@ -22,19 +22,18 @@ if (array_key_exists('app_id', $_POST)) {
       <div class="ui top secondary pointing menu">
       <div class="ui grid" style="margin: 0 !important; padding: 0 !important;">
         <a class="item" data-tab="setup/0">Overview</a>
-        <a class="item" data-tab="setup/1">Google Keys</a>
-        <a class="item" data-tab="setup/2">Chrome & Firefox Push</a>
-        <a class="item" data-tab="setup/3">OneSignal Keys</a>
-        <a class="item" data-tab="setup/4">Subscribing Users</a>
-        <a class="item" data-tab="setup/5">Safari Push</a>
-        <a class="item" data-tab="setup/7">Results</a>
+        <a class="item" data-tab="setup/1">Chrome & Firefox Push</a>
+        <a class="item" data-tab="setup/2">OneSignal Keys</a>
+        <a class="item" data-tab="setup/3">Subscribing Users</a>
+        <a class="item" data-tab="setup/4">Safari Push</a>
+        <a class="item" data-tab="setup/5">Results</a>
         </div>
       </div>
       <div class="ui tab borderless shadowless segment" data-tab="setup/0">
         <p>We'll guide you through adding web push for Chrome, Safari, and Firefox for your Wordpress blog.</p>
         <p>First you'll get some required keys from Google. Then you'll be on our website creating a new app and setting up web push for each browser. This entire process should take around 15 minutes.</p>
         <p>Please follow each step in order! If you're ever stuck or have questions, click the bright red button to chat with us! We read and respond to every message.</p>
-        <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/1');">Google Keys</a> to begin.</p>
+        <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/1');">Chrome & Firefox Push</a> to begin.</p>
         <div class="ui center aligned piled segment">
           <i class="big grey pin pinned icon"></i>
           <h3>Troubleshooting Documentation</h3>
@@ -42,79 +41,8 @@ if (array_key_exists('app_id', $_POST)) {
           <p><em>Please <strong>do not follow the installation instructions</strong> on documentation.onesignal.com.<br/>Our WordPress plugin outputs all required code and no extra code is necessary.</em></p>
         </div>
       </div>
-
-
-
-
-
-        <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/1">
-        <p>To begin, we'll obtain a Google Server API Key and Google Project Number. These keys allow OneSignal to use Google's web push services for your notifications.</p>
-        <dl>
-          <div class="ui segment">
-            <dt>1</dt>
-            <dd>
-              <p>Visit the <a href="https://developers.google.com/mobile/add?platform=android&cntapi=gcm" target="_blank">Google Services Wizard</a>. You'll have to create a Google account if you don't already have one.</p>
-            </dd>
-          </div>
-          <div class="ui segment">
-            <dt>2</dt>
-            <dd>
-              <p>Type any name to create a new app, or select an existing Google app from the dropdown.</p>
-              <p>In this example, we create an app named <code>test-app</code>.</p>
-              <img class="img-responsive" src="https://www.filepicker.io/api/file/q988BycjTOm4mygthGa1">
-            </dd>
-          </div>
-          <div class="ui segment">
-            <dt>3</dt>
-            <dd>
-              <p>We do not use the Android package name, but you must enter a value to continue. Please use the value <code>test.test</code> as shown below.</p>
-              <img class="img-responsive" src="https://www.filepicker.io/api/file/30qjfhAQ6IY7GWLYSp7w">
-            </dd>
-          </div>
-
-          <div class="ui segment">
-            <dt>4</dt>
-            <dd>
-              <p>Click <strong>Choose and configure services</strong> to continue.</p>
-              <p>Wait a minute for the project to be created.</p>
-              <img class="img-responsive" src="https://www.filepicker.io/api/file/Qf9pQtzxRjeyQ1DTZqZH">
-            </dd>
-          </div>
-          <div class="ui segment">
-            <dt>5</dt>
-            <dd>
-              <p>Click <strong>Enable Google Cloud Messaging</strong>.</p>
-              <img class="img-responsive" src="https://www.filepicker.io/api/file/AuBEececTA26O3tnDr8J">
-            </dd>
-          </div>
-          <div class="ui segment">
-            <dt>6</dt>
-            <dd>
-              <p>You'll see two values on this screen: your <strong>Server API Key</strong>, and your <strong>Sender ID</strong> which is also called the <strong>Project Number</strong>.</p>
-              <img class="img-responsive" src="https://www.filepicker.io/api/file/TH0Wu0hcRSCgNFiB1l5U">
-              <ul>
-                <li>Copy your <strong>Project Number (Sender ID)</strong> to the <em>Configuration</em> tab of your WordPress plugin.</li>
-                <li>You'll need your <strong>Server API Key</strong> for the next part of the guide.</li>
-              </ul>
-              <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/2');">Chrome & Firefox Push</a> to continue.</p>
-            </dd>
-          </div>
-
-          <div class="ui center aligned piled segment">
-            <i class="big grey pin pinned icon"></i>
-            <h3>Project Number</h3>
-            <p>Put this number in the <em>Project Number</em> field of the <em>Configuration</em> tab.
-              <br> You'll also need this number again in the next page, so save it!</p>
-          </div>
-          <div class="ui center aligned piled segment">
-            <i class="big grey pin pinned icon"></i>
-            <h3>API Key</h3>
-            <p>You'll need this number in the next page, so save it!</p>
-          </div>
-        </dl>
-      </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/2">
-        <p>Now that we've set our Google Project Number and API Key, we'll create and configure a OneSignal app.</p>
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/1">
+        <p>To begin, we'll create and configure a OneSignal app.</p>
         <dl>
           <div class="ui segment">
             <dt>1</dt>
@@ -188,15 +116,6 @@ if (array_key_exists('app_id', $_POST)) {
           <div class="ui segment">
             <dt>6</dt>
             <dd>
-              <p>In this step, we focus only on filling out the <em>Google Server API Key</em>.
-                <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-6.jpg" ?>">
-              <p>Enter the <em>API Key</em> you saved from the previous page.</p>
-            </dd>
-          </div>
-
-          <div class="ui segment">
-            <dt>7</dt>
-            <dd>
               <p>In this step, we focus only on filling out the <em>Default Notification Icon URL</em>.
                 <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-7.jpg" ?>">
               <p>Enter the complete URL to your notification icon. Please note:</p>
@@ -211,7 +130,7 @@ if (array_key_exists('app_id', $_POST)) {
             </dd>
           </div>
           <div class="ui segment">
-            <dt>8</dt>
+            <dt>7</dt>
             <dd>
               <p>In this step, we focus only on the <em>HTTP Fallback Mode</em>.</p>
               <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-8.jpg" ?>">
@@ -240,12 +159,12 @@ if (array_key_exists('app_id', $_POST)) {
         <div class="ui center aligned piled segment">
           <i class="big grey announcement pinned icon"></i>
           <h3>Next Steps</h3>
-          <p><strong>Steps 9 &hyphen; 10 only apply if you've checked <code>My site is not fully HTTPS</code>.</strong>
+          <p><strong>Steps 8 &hyphen; 9 only apply if you've checked <code>My site is not fully HTTPS</code>.</strong>
             <br> If you've left the option blank, you may optionally continue to <a href="javascript:void(0);" onclick="activateSetupTab('setup/5');">Safari Push</a>!</p>
         </div>
         <dl>
           <div class="ui segment">
-            <dt>9</dt>
+            <dt>8</dt>
             <dd>
               <p>In this step, we focus only on filling out the <em>Subdomain</em>.
                 <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-9.jpg" ?>">
@@ -269,21 +188,6 @@ if (array_key_exists('app_id', $_POST)) {
           <div class="ui segment">
             <dt>10</dt>
             <dd>
-              <p>In this step, we focus only on filling out the <em>Google Project Number</em>.
-                <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-10.jpg" ?>">
-              <p>Enter the <em>Project Number</em> you saved from the previous page.</p>
-              <p>Please note that changing this Project Number makes all subscribed players under the old Project Number unmessageable.</p>
-            </dd>
-          </div>
-          <div class="ui center aligned piled segment">
-            <i class="big grey warning pinned icon"></i>
-            <h3>Changing Your Project Number</h3>
-            <p>Changing your Project Number makes all subscribed players under the old Project Number unmessageable.
-              <br> It's important to set it up correctly the first time.</p>
-          </div>
-          <div class="ui segment">
-            <dt>11</dt>
-            <dd>
               <p>Click <strong>Save</strong> to commit your Chrome & Firefox push settings <strong>and then exit the dialog</strong>.</p>
               <p>If you get errors please follow the instructions to fix them. If you're still experiencing problems, <a href="javascript:void(0);" onclick="showSupportMessage('chrome-push-settings');">chat with us and we'll help you out</a>. Let us know what your specific issue is.</p>
               <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/3');">OneSignal Keys</a> to continue. This next section is much easier!</p>
@@ -291,7 +195,7 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
         </dl>
       </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/3">
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/2">
         <p>Now that we've set our Chrome & Firefox push settings, we'll get our <em>App ID</em> and <em>REST API Key</em> from the OneSignal dashboard.</p>
         <dl>
           <div class="ui segment">
@@ -335,7 +239,7 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
         </dl>
       </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/4">
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/3">
         <p>If you've finished the guide up to here, push notifications already work on your site. <strong>But your users still need a way to <em>subscribe</em> to your site's notifications</strong>. There are a couple ways:
           <h4>HTTP Sites:</h4>
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
@@ -399,7 +303,7 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
         </dl>
       </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/5">
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/4">
         <dl>
           <div class="ui center aligned piled segment">
             <i class="big grey pin pinned icon"></i>
@@ -481,36 +385,7 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
         </dl>
       </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/6">
-        <dl>
-          <div class="ui segment">
-            <dt>1</dt>
-            <dd>
-              <p>Log in to your OneSignal account, and navigate to the <em>App Settings</em> page of the app you configured in this guide.</p>
-              <p>You should be on this page:</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/safari-1.jpg" ?>">
-              <p>Click <strong>Configure</strong> on the platform <em>Mozilla Firefox</em>.</p>
-            </dd>
-          </div>
-          <div class="ui segment">
-            <dt>2</dt>
-            <dd>
-              <p>A friendly message will tell you no actions are required to activate Mozilla Firefox.</p>
-              <p>Click <strong>Save</strong> to activate Mozilla Firefox push notifications.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/firefox-1.jpg" ?>">
-              <p>If you see a gray colored box saying <em>Chrome Website Push needs to be configured first</em>, please <a href="javascript:void(0);" onclick="activateSetupTab('setup/2');">follow this guide to activate Chrome website push first</a>.</p>
-              <p>If your Chrome web push works correctly, your Firefox web push will automatically work correctly.</p>
-            </dd>
-          </div>
-          <div class="ui segment">
-            <dt>3</dt>
-            <dd>
-              <p>That's it for setting up Firefox push!</p>
-            </dd>
-          </div>
-        </dl>
-      </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/7">
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/5">
         <p>This section shows push notifications working for <em>Chrome</em>, <em>Safari</em>, and <em>Firefox</em> in <em>HTTP</em> and <em>HTTPS</em> mode.</p>
         <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/web-push.jpg" ?>">
         <p></p>
@@ -552,10 +427,6 @@ if (array_key_exists('app_id', $_POST)) {
               This option is disabled when your current URL begins with <code>http://</code>. Please access this page using <code>https://</code> to enable this option.
             </span>
             <i class="close icon"></i>
-          </div>
-          <div class="field">
-            <label>Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Google Project Number" data-content="Your project number. You can find this on Setup > Google Keys > Step 3." data-variation="wide"></i></label>
-            <input type="text" name="gcm_sender_id" placeholder="#############" value="<?php echo $onesignal_wp_settings['gcm_sender_id'] ?>">
           </div>
           <div class="field">
             <label>App ID<i class="tiny circular help icon link" role="popup" data-title="App ID" data-content="Your 36 character alphanumeric app ID. You can find this on Setup > OneSignal Keys > Step 2." data-variation="wide"></i></label>

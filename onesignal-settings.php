@@ -56,7 +56,6 @@ class OneSignal {
                   'notifyButton_offset_left' => '',
                   'notifyButton_offset_right' => '',
                   'notifyButton_showcredit' => true,
-                  'notifyButton_showAfterSubscribed' => true,
                   'notifyButton_message_prenotify' => '',
                   'notifyButton_tip_state_unsubscribed' => '',
                   'notifyButton_tip_state_subscribed' => '',
@@ -69,11 +68,7 @@ class OneSignal {
                   'notifyButton_dialog_main_button_unsubscribe' => '',
                   'notifyButton_dialog_blocked_title' => '',
                   'notifyButton_dialog_blocked_message' => '',
-                  'utm_additional_url_params' => '',
-                  'allowed_custom_post_types' => '',
-                  'notification_title' => OneSignalUtils::decode_entities(get_bloginfo('name')),
-                  'send_to_mobile_platforms' => false,
-                  'show_gcm_sender_id' => false,
+                  'prompt_only_on_posts' => false
                   );
 
     $legacies = array(

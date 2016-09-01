@@ -22,27 +22,102 @@ if (array_key_exists('app_id', $_POST)) {
       <div class="ui top secondary pointing menu">
       <div class="ui grid" style="margin: 0 !important; padding: 0 !important;">
         <a class="item" data-tab="setup/0">Overview</a>
-        <a class="item" data-tab="setup/1">Chrome & Firefox Push</a>
-        <a class="item" data-tab="setup/2">OneSignal Keys</a>
-        <a class="item" data-tab="setup/3">Subscribing Users</a>
-        <a class="item" data-tab="setup/4">Safari Push</a>
-        <a class="item" data-tab="setup/5">Results</a>
+        <a class="item" data-tab="setup/1">Google Keys</a>
+        <a class="item" data-tab="setup/2">Chrome & Firefox Push</a>
+        <a class="item" data-tab="setup/3">OneSignal Keys</a>
+        <a class="item" data-tab="setup/4">Modify Site</a>
+        <a class="item" data-tab="setup/5">Safari Push</a>
+        <a class="item" data-tab="setup/7">Results</a>
         </div>
       </div>
       <div class="ui tab borderless shadowless segment" data-tab="setup/0">
         <p>We'll guide you through adding web push for Chrome, Safari, and Firefox for your Wordpress blog.</p>
         <p>First you'll get some required keys from Google. Then you'll be on our website creating a new app and setting up web push for each browser. This entire process should take around 15 minutes.</p>
         <p>Please follow each step in order! If you're ever stuck or have questions, click the bright red button to chat with us! We read and respond to every message.</p>
-        <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/1');">Chrome & Firefox Push</a> to begin.</p>
-        <div class="ui center aligned piled segment">
-          <i class="big grey pin pinned icon"></i>
-          <h3>Troubleshooting Documentation</h3>
-          <p>You can additionally browse the <a href="https://documentation.onesignal.com/v2.0/docs/website-push-common-problems#my-wordpress-site-isnt-working" target="_blank">Troubleshooting Website Push</a> section of our documentation for some tips if you're stuck.</p>
-          <p><em>Please <strong>do not follow the installation instructions</strong> on documentation.onesignal.com.<br/>Our WordPress plugin outputs all required code and no extra code is necessary.</em></p>
-        </div>
+        <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/1');">Google Keys</a> to begin.</p>
       </div>
       <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/1">
-        <p>To begin, we'll create and configure a OneSignal app.</p>
+        <p>To begin, we'll create and configure a Google Project. This authorizes us to use Google's web push services for your notifications.</p>
+        <dl>
+          <div class="ui segment">
+            <dt>1</dt>
+            <dd>
+              <p>Create a <a href="https://console.cloud.google.com/project" target="_blank">Google Cloud</a> account or log in to your existing account.</p>
+            </dd>
+          </div>
+          <div class="ui segment">
+            <dt>2</dt>
+            <dd>
+              <p>Once you're logged in, click <strong>Create project</strong>.</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-1.jpg" ?>">
+              <p>Choose any name for your project. Here we use <code>example-project</code>. Click <strong>Create</strong>.</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-1-2.jpg" ?>">
+            </dd>
+          </div>
+          <div class="ui segment">
+            <dt>3</dt>
+            <dd>
+              <p>Find your <strong>Project number</strong>.</p>
+              <p>Put this number in the <em>Project Number</em> field of the <em>Configuration</em> tab. You'll also need this number again in the next page, so save it!</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-2.jpg" ?>">
+            </dd>
+          </div>
+
+          <div class="ui center aligned piled segment">
+            <i class="big grey pin pinned icon"></i>
+            <h3>Project Number</h3>
+            <p>Put this number in the <em>Project Number</em> field of the <em>Configuration</em> tab.
+              <br> You'll also need this number again in the next page, so save it!</p>
+          </div>
+          <div class="ui segment">
+            <dt>4</dt>
+            <dd>
+              <p>Click <strong>Enable and manage APIs</strong> underneath your Project number.</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-3.jpg" ?>">
+              <p>On the right pane, in the search box, type <strong><code>cloud messaging android</code></strong>.</p>
+              <p>Select <strong>Google Cloud Messaging for Android</strong>.</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-3-1.jpg" ?>">
+              <p>Click <strong>Enable API</strong>.</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-4.jpg" ?>">
+            </dd>
+          </div>
+          <div class="ui segment">
+            <dt>5</dt>
+            <dd>
+              <p>Click <strong>Credentials</strong> on the left sidebar.</p>
+              <p>On the right pane, click <strong>New credentials > API key</strong>.</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-5.jpg" ?>">
+              <p>Click <strong>Server Key</strong>.</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-6.jpg" ?>">
+              <p><em>Without entering any values</em>, click <strong>Create</strong>.</p>
+              <p class="alternate"><em>Make sure to leave the IP address textbox blank. You may name the key if you'd like, but it's not necessary.</em></p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-7.jpg" ?>">
+              <p>Find your <strong>API Key</strong>.</p>
+              <p>You'll need this number in the next page, so save it!</p>
+              </p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/gcm-8.jpg" ?>">
+            </dd>
+          </div>
+          <div class="ui center aligned piled segment">
+            <i class="big grey pin pinned icon"></i>
+            <h3>API Key</h3>
+            <p>You'll need this number in the next page, so save it!</p>
+          </div>
+          <div class="ui segment">
+            <dt>6</dt>
+            <dd>
+              <p>You've successfully created and configured your Google project! You should have these two values:</p>
+              <ul>
+                <li>Your <strong>Project Number</strong>. It looks something like <code>703322744261</code>. You should have used this on the <em>Configuration</em> tab.</li>
+                <li>Your <strong>API key</strong>. It looks something like <code>AIzBSyC_N8hcAeDaZEELfPadGnKBWE5zrmAdYfr</code>. You don't need to use this on the <em>Configuration</em> tab, but you do need it on the next page.</li>
+              </ul>
+              <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/2');">Chrome & Firefox Push</a> to continue.</p>
+            </dd>
+          </div>
+        </dl>
+      </div>
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/2">
+        <p>Now that we've set our Google Project Number and API Key, we'll create and configure a OneSignal app.</p>
         <dl>
           <div class="ui segment">
             <dt>1</dt>
@@ -116,6 +191,15 @@ if (array_key_exists('app_id', $_POST)) {
           <div class="ui segment">
             <dt>6</dt>
             <dd>
+              <p>In this step, we focus only on filling out the <em>Google Server API Key</em>.
+                <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-6.jpg" ?>">
+              <p>Enter the <em>API Key</em> you saved from the previous page.</p>
+            </dd>
+          </div>
+
+          <div class="ui segment">
+            <dt>7</dt>
+            <dd>
               <p>In this step, we focus only on filling out the <em>Default Notification Icon URL</em>.
                 <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-7.jpg" ?>">
               <p>Enter the complete URL to your notification icon. Please note:</p>
@@ -130,7 +214,7 @@ if (array_key_exists('app_id', $_POST)) {
             </dd>
           </div>
           <div class="ui segment">
-            <dt>7</dt>
+            <dt>8</dt>
             <dd>
               <p>In this step, we focus only on the <em>HTTP Fallback Mode</em>.</p>
               <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-8.jpg" ?>">
@@ -159,12 +243,12 @@ if (array_key_exists('app_id', $_POST)) {
         <div class="ui center aligned piled segment">
           <i class="big grey announcement pinned icon"></i>
           <h3>Next Steps</h3>
-          <p><strong>Steps 8 &hyphen; 9 only apply if you've checked <code>My site is not fully HTTPS</code>.</strong>
+          <p><strong>Steps 9 &hyphen; 10 only apply if you've checked <code>My site is not fully HTTPS</code>.</strong>
             <br> If you've left the option blank, you may optionally continue to <a href="javascript:void(0);" onclick="activateSetupTab('setup/5');">Safari Push</a>!</p>
         </div>
         <dl>
           <div class="ui segment">
-            <dt>8</dt>
+            <dt>9</dt>
             <dd>
               <p>In this step, we focus only on filling out the <em>Subdomain</em>.
                 <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-9.jpg" ?>">
@@ -188,6 +272,21 @@ if (array_key_exists('app_id', $_POST)) {
           <div class="ui segment">
             <dt>10</dt>
             <dd>
+              <p>In this step, we focus only on filling out the <em>Google Project Number</em>.
+                <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-10.jpg" ?>">
+              <p>Enter the <em>Project Number</em> you saved from the previous page.</p>
+              <p>Please note that changing this Project Number makes all subscribed players under the old Project Number unmessageable.</p>
+            </dd>
+          </div>
+          <div class="ui center aligned piled segment">
+            <i class="big grey warning pinned icon"></i>
+            <h3>Changing Your Project Number</h3>
+            <p>Changing your Project Number makes all subscribed players under the old Project Number unmessageable.
+              <br> It's important to set it up correctly the first time.</p>
+          </div>
+          <div class="ui segment">
+            <dt>11</dt>
+            <dd>
               <p>Click <strong>Save</strong> to commit your Chrome & Firefox push settings <strong>and then exit the dialog</strong>.</p>
               <p>If you get errors please follow the instructions to fix them. If you're still experiencing problems, <a href="javascript:void(0);" onclick="showSupportMessage('chrome-push-settings');">chat with us and we'll help you out</a>. Let us know what your specific issue is.</p>
               <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/3');">OneSignal Keys</a> to continue. This next section is much easier!</p>
@@ -195,7 +294,7 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
         </dl>
       </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/2">
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/3">
         <p>Now that we've set our Chrome & Firefox push settings, we'll get our <em>App ID</em> and <em>REST API Key</em> from the OneSignal dashboard.</p>
         <dl>
           <div class="ui segment">
@@ -234,82 +333,73 @@ if (array_key_exists('app_id', $_POST)) {
           <div class="ui segment">
             <dt>3</dt>
             <dd>
-              <p>You're done configuring settings! Continue to <a href="javascript:void(0);" onclick="activateSetupTab('setup/4');">Subscribing Users</a>.</p>
+              <p>You're done configuring settings! Continue to <a href="javascript:void(0);" onclick="activateSetupTab('setup/4');">Modify Site</a>.</p>
             </dd>
           </div>
         </dl>
       </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/3">
-        <p>If you've finished the guide up to here, push notifications already work on your site. <strong>But your users still need a way to <em>subscribe</em> to your site's notifications</strong>. There are a couple ways:
-          <h4>HTTP Sites:</h4>
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/4">
+        <p>By now, push notifications already work on your site. <strong>But your users still need a way to <em>subscribe</em> to your site's notifications</strong>. There are two ways:
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
             <div class="center aligned column">
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.png" ?>" width="100%">
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell.jpg" ?>" width="60%">
             </div>
             <div class="ui vertical divider">
-              Or/And
+              Or
             </div>
             <div class="center aligned column">
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell.jpg" ?>" width="60%">
+              <code class="massive">&lt;div <strong>class="OneSignal-prompt"</strong>&gt;</code>
             </div>
           </div>
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-top: 0 !important; padding-top: 0 !important;">
             <div class="center aligned column">
-              <h3>HTTP Prompt <span class="ui orange horizontal label">HTTP Only</span></h3>
+              <h3>OneSignal Notify Button <span class="ui green horizontal label">EASY</span></h3>
             </div>
             <div class="center aligned column">
-              <h3>Notify Button</h3>
-            </div>
-          </div>
-          <h4>HTTPS Sites:</h4>
-          <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
-            <div class="center aligned column">
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/https-prompt.png" ?>" width="100%">
-            </div>
-            <div class="ui vertical divider">
-              Or/And
-            </div>
-            <div class="center aligned column">
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell.jpg" ?>" width="60%">
-            </div>
-          </div>
-          <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-top: 0 !important; padding-top: 0 !important;">
-            <div class="center aligned column">
-              <h3>HTTPS Prompt <span class="ui green horizontal label">HTTPS Only</span></h3>
-            </div>
-            <div class="center aligned column">
-              <h3>Notify Button</h3>
+              <h3>Custom Implementation <span class="ui purple horizontal label">ADVANCED</span></h3>
             </div>
           </div>
           <ol>
-            <li><strong>Notify Button:</strong> Enable it in <em>Configuration</em> -> <em>Prompt Settings & Notify Button</em> -> <em>Enable the notify button</em></li>
+            <li>The notify button is an interactive site widget we developed (enabled by default for new users)</li>
+              <ol>
+                <li>Users see the notify button on the bottom right corner of your site. They can click the notify button to subscribe.</li>
+                <li>The notify button is custom developed by us and does all the work for you! It detects when users are unsubscribed, already subscribed, or have blocked your site and show instructions to unblock. It allows users to easily temporarily subscribe from and resubscribe to notifications.</li>
+              </ol>
+            <li>The custom implementation uses the CSS class <code>OneSignal-prompt</code> on any clickable element</li>
+              <ol>
+                <li>Clicking any element with this CSS class will allow users to subscribe</li>
+                <li>Use the CSS class if your site is highly specialized and needs complete control over styling and positioning. Our SDK detects any elements with the CSS class <code>OneSignal-prompt</code> and prompts the user to subscribe upon clicking those elements.</li>
+              </ol>
+            <li><strong>For HTTPS sites only</strong>, a third way &mdash; auto-prompting users to subscribe &mdash; can be combined with either method above</li>
             <ol>
-              <li>The notify button is an interactive site widget.</li>
-              <li>Users see the notify button on the bottom right corner of your site. They can click the notify button to subscribe.</li>
-              <li>The notify button is custom developed by us and does all the work for you! It detects when users are unsubscribed, already subscribed, or have blocked your site and show instructions to unblock. It allows users to easily temporarily subscribe from and resubscribe to notifications.</li>
-            </ol>
-            <li><strong>HTTP/HTTPS Prompt:</strong> Enable it in <em>Configuration</em> -> <em>Prompt Settings & Notify Button</em> -> <em>Automatically prompt new site visitors to subscribe to push notifications</em></li>
-            <ol>
-              <li><a href="https://documentation.onesignal.com/docs/web-push-http-prompt">Read more about it at our documentation.</a></li>
+              <li>Site visitors will be prompted to subscribe as soon as your site loads</li>
             </ol>
           </ol>
-          <p>If you're a technical user and would like to implement your own subscription process, this is entirely possible. Please see this guide on <a href="https://documentation.onesignal.com/docs/guides-examples#subscribing-users-with-a-link" target="_blank">how to subscribe user with a link</a> using HTML and JavaScript. Our <a href="https://documentation.onesignal.com/docs/website-sdk-api" target="_blank">web SDK JavaScript API</a> is also available and can be called anywhere on the page.</p>
         </p>
 
         <dl>
           <div class="ui segment">
+            <dt>1</dt>
+            <dd>
+              <p>In more detail:</p>
+
+              <p>To add the notify button, go to the Configuration tab and enable it under Prompt Settings.</p>
+              <p>To add the CSS class, add <strong><code>OneSignal-prompt</code></strong> to any element you'd like. Our plugin initializes JavaScript code on your page that, on document ready, searches for all instances of the class and attaches a click event handler.</p>
+
+              <p>For HTTPS sites only, to automatically prompt visitors to subscribe, enable the option under Prompt Settings.</p>
+            </dd>
+          </div>
+          <div class="ui segment">
+            <dt>2</dt>
+            <dd>
               <p>You're done setting up your site for Chrome & Firefox push!</p>
               <p>Your site works completely with Chrome & Firefox push now. You can learn how to add <a href="javascript:void(0);" onclick="activateSetupTab('setup/5')">Safari</a> web push.</p>
+            </dd>
           </div>
         </dl>
       </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/4">
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/5">
         <dl>
-          <div class="ui center aligned piled segment">
-            <i class="big grey pin pinned icon"></i>
-            <h3>Safari on Windows Not Supported</h3>
-            <p>Safari on Windows does not support web push notifications. Please use Safari on Mac OS X. <a href="https://onesignal.com/blog/when-will-web-push-be-supported-in-ios/" target="_blank">Apple also does not support web push notifications on iOS yet.</a></p>
-          </div>
           <div class="ui segment">
             <dt>1</dt>
             <dd>
@@ -385,7 +475,36 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
         </dl>
       </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/5">
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/6">
+        <dl>
+          <div class="ui segment">
+            <dt>1</dt>
+            <dd>
+              <p>Log in to your OneSignal account, and navigate to the <em>App Settings</em> page of the app you configured in this guide.</p>
+              <p>You should be on this page:</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/safari-1.jpg" ?>">
+              <p>Click <strong>Configure</strong> on the platform <em>Mozilla Firefox</em>.</p>
+            </dd>
+          </div>
+          <div class="ui segment">
+            <dt>2</dt>
+            <dd>
+              <p>A friendly message will tell you no actions are required to activate Mozilla Firefox.</p>
+              <p>Click <strong>Save</strong> to activate Mozilla Firefox push notifications.</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/firefox-1.jpg" ?>">
+              <p>If you see a gray colored box saying <em>Chrome Website Push needs to be configured first</em>, please <a href="javascript:void(0);" onclick="activateSetupTab('setup/2');">follow this guide to activate Chrome website push first</a>.</p>
+              <p>If your Chrome web push works correctly, your Firefox web push will automatically work correctly.</p>
+            </dd>
+          </div>
+          <div class="ui segment">
+            <dt>3</dt>
+            <dd>
+              <p>That's it for setting up Firefox push!</p>
+            </dd>
+          </div>
+        </dl>
+      </div>
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/7">
         <p>This section shows push notifications working for <em>Chrome</em>, <em>Safari</em>, and <em>Firefox</em> in <em>HTTP</em> and <em>HTTPS</em> mode.</p>
         <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/web-push.jpg" ?>">
         <p></p>
@@ -428,12 +547,10 @@ if (array_key_exists('app_id', $_POST)) {
             </span>
             <i class="close icon"></i>
           </div>
-          <?php if ($onesignal_wp_settings['gcm_sender_id'] !== '' || $onesignal_wp_settings['show_gcm_sender_id']): ?>
           <div class="field">
             <label>Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Google Project Number" data-content="Your project number. You can find this on Setup > Google Keys > Step 3." data-variation="wide"></i></label>
             <input type="text" name="gcm_sender_id" placeholder="#############" value="<?php echo $onesignal_wp_settings['gcm_sender_id'] ?>">
           </div>
-          <?php endif; ?>
           <div class="field">
             <label>App ID<i class="tiny circular help icon link" role="popup" data-title="App ID" data-content="Your 36 character alphanumeric app ID. You can find this on Setup > OneSignal Keys > Step 2." data-variation="wide"></i></label>
             <input type="text" name="app_id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx" value="<?php echo $onesignal_wp_settings['app_id'] ?>">
@@ -451,40 +568,26 @@ if (array_key_exists('app_id', $_POST)) {
             <input type="text" name="safari_web_id" placeholder="web.com.example" value="<?php echo @$onesignal_wp_settings['safari_web_id']; ?>">
           </div>
         </div>
+
         <div class="ui dividing header">
-          <i class="desktop icon"></i>
+          <i class="alarm outline icon"></i>
           <div class="content">
-            Sent Notification Settings
+            Prompt Settings
           </div>
         </div>
         <div class="ui borderless shadowless segment">
           <div class="field">
             <div class="ui toggle checkbox">
-              <input type="checkbox" name="showNotificationIconFromPostThumbnail" value="true" <?php if ($onesignal_wp_settings['showNotificationIconFromPostThumbnail']) { echo "checked"; } ?>>
-              <label>Use the post's featured image for the notification icon<i class="tiny circular help icon link" role="popup" data-title="Show icon image from post thumbnail" data-content="If checked, when a notifcation is sent link the post icon in the notification.  Chrome and Firefox Desktop supported." data-variation="wide"></i></label>
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" name="chrome_auto_dismiss_notifications" value="true" <?php if ($onesignal_wp_settings['chrome_auto_dismiss_notifications']) { echo "checked"; } ?>>
-              <label>Dismiss notifications after ~20 seconds <span class="ui grey horizontal label">Chrome v47<sup>+</sup> Desktop Only</span> <i class="tiny circular help icon link" role="popup" data-title="Persist Notifications" data-html="<p>If checked, dismiss the notification after about 20 seconds. By default, Chrome notifications last indefinitely. <strong class='least-strong'>Supported on Chrome v47+ Desktop only.</strong> The time cannot be modified.</p><p>Once you've updated this setting, <strong class='least-strong'>visit your site once</strong> for the new setting to take effect. Make sure to clear your cache plugin contents if you use one.</p>" data-variation="wide"></i></label>
-            </div>
-          </div>
-          <div class="field">
-              <label>Notification Title<i class="tiny circular help icon link" role="popup" data-html="The notification title to use for all outgoing notifications. Defaults to your site's title." data-variation="wide"></i></label>
-              <input type="text" name="notification_title" placeholder="<?php echo OneSignalUtils::decode_entities(get_bloginfo('name')) ?>" value="<?php echo @$onesignal_wp_settings['notification_title']; ?>">
-          </div>
-          <div class="field">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" name="send_to_mobile_platforms" value="true" <?php if ($onesignal_wp_settings['send_to_mobile_platforms']) { echo "checked"; } ?>>
-              <label>Send notifications additionally to iOS & Android platforms<i class="tiny circular help icon link" role="popup" data-title="Deliver to iOS & Android" data-html="<p>If checked, the notification will also be sent to Android and iOS <em>if you have those platforms enabled</em> in addition to your web push users. <strong class='least-strong'>Your OneSignal app must have either an active iOS or an Android platform and you must have either iOS or Android users for this to work</strong>.</p>" data-variation="wide"></i></label>
+              <input type="checkbox" name="prompt_only_on_posts" value="true" <?php if (array_key_exists('prompt_only_on_posts', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_only_on_posts']) { echo "checked"; } ?>>
+              <label>Show prompt only on posts<i class="tiny circular help icon link" role="popup" data-title="Notify Button" data-content="If checked, visitors will only be prompted to subscribe on posts" data-variation="wide"></i></label>
             </div>
           </div>
         </div>
+
         <div class="ui dividing header">
           <i class="alarm outline icon"></i>
           <div class="content">
-            Prompt Settings & Notify Button
+            Notify Button
           </div>
         </div>
         <div class="ui borderless shadowless segment">
@@ -503,26 +606,7 @@ if (array_key_exists('app_id', $_POST)) {
             <div class="field">
               <div class="ui toggle checkbox">
                 <input type="checkbox" name="prompt_auto_register" value="true" <?php if ($onesignal_wp_settings['prompt_auto_register']) { echo "checked"; } ?>>
-                <label>
-                  Automatically prompt new site visitors to subscribe to push notifications
-                  <i class="tiny circular help icon link"
-                     role="popup"
-                     data-html="
-                       <p>If enabled, your site will automatically present the following without any code required:</p>
-                       <p>HTTPS Sites:
-                         <img 
-                            src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg" ?>'
-                            width=400>
-                       </p>
-                       <p>HTTP Sites:
-                         <img 
-                            src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.png" ?>'
-                            width=400>
-                       </p>"
-                     width=450
-                     data-variation="flowing">
-                  </i>
-                </label>
+                <label>Automatically prompt new site visitors to subscribe to push notifications<i class="tiny circular help icon link" role="popup" data-html="<p>If enabled, your site will automatically present the following without any code required:</p><img src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg" ?>' width=450>" data-variation="flowing"></i></label>
               </div>
             </div>
           </div>
@@ -533,12 +617,7 @@ if (array_key_exists('app_id', $_POST)) {
               <label>Enable the notify button<i class="tiny circular help icon link" role="popup" data-title="Notify Button" data-content="If checked, the notify button and its resources will be loaded into your website." data-variation="wide"></i></label>
             </div>
           </div>
-          <div class="field nb-feature">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" name="notifyButton_showAfterSubscribed" value="true" <?php if (array_key_exists('notifyButton_showAfterSubscribed', $onesignal_wp_settings) && @$onesignal_wp_settings['notifyButton_showAfterSubscribed']) { echo "checked"; } ?>>
-              <label>Show the notify button after users have subscribed<i class="tiny circular help icon link" role="popup" data-html="<p>If checked, the notify button will continue to be shown on all pages after the user subscribes.</p><p>If unchecked, the notify button will be hidden not be shown after the user subscribes and refreshes the page.</p>" data-variation="wide"></i></label>
-            </div>
-          </div>
+
           <div class="field nb-feature">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="notifyButton_prenotify" value="true" <?php if (array_key_exists('notifyButton_prenotify', $onesignal_wp_settings) && @$onesignal_wp_settings['notifyButton_prenotify']) { echo "checked"; } ?>>
@@ -827,32 +906,22 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
         </div>
         <div class="ui dividing header">
-          <i class="area chart icon"></i>
+          <i class="desktop icon"></i>
           <div class="content">
-            UTM Tracking Settings
+            Other Notification Settings
           </div>
         </div>
         <div class="ui borderless shadowless segment">
           <div class="field">
-            <label>Additional Notification URL Parameters<i class="tiny circular help icon link" role="popup" data-html="Adds the specified string as extra URL parameters to your notification URL so that they can be tracked as an event by your analytics system. <em>Please escape your parameter values</em>; your input will be added as-is to the end of your notification URL. Example:</p>If you want:<em><li><code>utm_medium</code> to be <code>ppc</code></li><li><code>utm_source</code> to be <code>adwords</code></li><li><code>utm_campaign</code> to be <code>snow boots</code></li><li><code>utm_content</code> to be <code>durable snow boots</code></li></em><p><p>Then use the following string:</p><p><code style='word-break: break-all;'>utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots</code></p>" data-variation="wide"></i></label>
-            <input type="text" placeholder="utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots" name="utm_additional_url_params" value="<?php echo @$onesignal_wp_settings['utm_additional_url_params']; ?>">
-          </div>
-        </div>
-        <div class="ui dividing header">
-          <i class="lab icon"></i>
-          <div class="content">
-            Advanced Settings
-          </div>
-        </div>
-        <div class="ui borderless shadowless segment">
-          <div class="field">
-            <label>Additional Custom Post Types for Automatic Notifications Created From Plugins<i class="tiny circular help icon link" role="popup" data-html="Enter a comma-separated list of custom post type names. Anytime a post is published with one of the listed post types, a notification will be sent to all your users. <strong class='least-strong'>The setting</strong> <em>Automatically send a push notification when I publish a post from 3rd party plugins</em> <strong class='least-strong'>must be enabled for this feature to work</strong>." data-variation="wide"></i></label>
-            <input type="text" placeholder="forum,reply,topic  (comma separated, no spaces between commas)" name="allowed_custom_post_types" value="<?php echo @$onesignal_wp_settings['allowed_custom_post_types']; ?>">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="showNotificationIconFromPostThumbnail" value="true" <?php if ($onesignal_wp_settings['showNotificationIconFromPostThumbnail']) { echo "checked"; } ?>>
+              <label>Use the post's featured image for the notification icon<i class="tiny circular help icon link" role="popup" data-title="Show icon image from post thumbnail" data-content="If checked, when a notifcation is sent link the post icon in the notification.  Chrome and Firefox Desktop supported." data-variation="wide"></i></label>
+            </div>
           </div>
           <div class="field">
             <div class="ui toggle checkbox">
-              <input type="checkbox" name="show_gcm_sender_id" value="true" <?php if ($onesignal_wp_settings['show_gcm_sender_id']) { echo "checked"; } ?>>
-              <label>Use my own Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Providing Your Own Web Push Keys" data-content="Check this if you'd like to provide your own Google Project Number."></i></label>
+              <input type="checkbox" name="chrome_auto_dismiss_notifications" value="true" <?php if ($onesignal_wp_settings['chrome_auto_dismiss_notifications']) { echo "checked"; } ?>>
+              <label>Dismiss notifications after ~20 seconds <span class="ui grey horizontal label">Chrome v47<sup>+</sup> Desktop Only</span> <i class="tiny circular help icon link" role="popup" data-title="Persist Notifications" data-html="<p>If checked, dismiss the notification after about 20 seconds. By default, Chrome notifications last indefinitely. <strong class='least-strong'>Supported on Chrome v47+ Desktop only.</strong> The time cannot be modified.</p><p>Once you've updated this setting, <strong class='least-strong'>visit your site once</strong> for the new setting to take effect. Make sure to clear your cache plugin contents if you use one.</p>" data-variation="wide"></i></label>
             </div>
           </div>
         </div>

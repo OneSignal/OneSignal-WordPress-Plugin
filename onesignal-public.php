@@ -51,6 +51,10 @@ function onesignal_debug_post($post) {
                         'Type:' => $post->post_type));
 }
 
+function print_settings() {
+  onesignal_debug(OneSignal::get_onesignal_settings());
+}
+
 class OneSignal_Public {
 
   public function __construct() {}
@@ -62,14 +66,17 @@ class OneSignal_Public {
   public static function onesignal_header() {
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
+    // Don't do anything if the script isn't enabled on non-posts
+    if (!is_single() && !is_home() && $onesignal_wp_settings['prompt_only_on_posts'] == 1) return false;
+
     if ($onesignal_wp_settings["subdomain"] == "") {
       if (strpos(ONESIGNAL_PLUGIN_URL, "http://localhost") === false && strpos(ONESIGNAL_PLUGIN_URL, "http://127.0.0.1") === false) {
         $current_plugin_url = preg_replace("/(http:\/\/)/i", "https://", ONESIGNAL_PLUGIN_URL);
       }
-      else {
+    else {
         $current_plugin_url = ONESIGNAL_PLUGIN_URL;
       }
-    ?>
+?>
       <?php
         $settings = get_option("OneSignalWPSetting");
         $key = 'gcm_sender_id';
@@ -79,11 +86,11 @@ class OneSignal_Public {
           $gcm_sender_id = 'WORDPRESS_NO_SENDER_ID_ENTERED';
         }
       ?>
-      <link rel="manifest" href="<?php echo( $current_plugin_url . 'sdk_files/manifest.json.php?gcm_sender_id=' . $gcm_sender_id ) ?>" />
-    <?php } ?>
+    <link rel="manifest" href="<?php echo( $current_plugin_url . 'sdk_files/manifest.json.php?gcm_sender_id=' . $gcm_sender_id ) ?>" />
+<?php } ?>
     <?php
     if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
-        echo '<script src="https://localhost:3001/sdks/OneSignalSDK.js" async></script>';
+        echo '<script src="https://localhost:3001/dev_sdks/OneSignalSDK.js" async></script>';
       } else {
         echo '<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>';
       }
@@ -204,15 +211,6 @@ class OneSignal_Public {
             echo "oneSignal_options['notifyButton']['prenotify'] = true;\n";
           } else {
             echo "oneSignal_options['notifyButton']['prenotify'] = false;\n";
-          }
-
-          if ($onesignal_wp_settings["notifyButton_showAfterSubscribed"] !== true) {
-            echo "oneSignal_options['notifyButton']['displayPredicate'] = function() {
-              return OneSignal.isPushNotificationsEnabled()
-                      .then(function(isPushEnabled) {
-                          return !isPushEnabled;
-                      });
-            };\n";
           }
 
           if ($onesignal_wp_settings["use_modal_prompt"] == "1") {

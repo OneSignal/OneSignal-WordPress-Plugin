@@ -37,7 +37,7 @@ if (array_key_exists('app_id', $_POST)) {
         <div class="ui center aligned piled segment">
           <i class="big grey pin pinned icon"></i>
           <h3>Troubleshooting Documentation</h3>
-          <p>You can additionally browse the <a href="https://documentation.onesignal.com/v2.0/docs/website-push-common-problems#my-wordpress-site-isnt-working" target="_blank">Troubleshooting Website Push</a> section of our documentation for some tips if you're stuck.</p>
+          <p>You can additionally browse the <a href="https://documentation.onesignal.com/docs/troubleshooting-web-push" target="_blank">Troubleshooting Website Push</a> section of our documentation for some tips if you're stuck.</p>
           <p><em>Please <strong>do not follow the installation instructions</strong> on documentation.onesignal.com.<br/>Our WordPress plugin outputs all required code and no extra code is necessary.</em></p>
         </div>
       </div>
@@ -290,10 +290,10 @@ if (array_key_exists('app_id', $_POST)) {
             </ol>
             <li><strong>HTTP/HTTPS Prompt:</strong> Enable it in <em>Configuration</em> -> <em>Prompt Settings & Notify Button</em> -> <em>Automatically prompt new site visitors to subscribe to push notifications</em></li>
             <ol>
-              <li><a href="https://documentation.onesignal.com/docs/web-push-http-prompt">Read more about it at our documentation.</a></li>
+              <li><a href="https://documentation.onesignal.com/docs/web-push-prompts">Read more about it at our documentation.</a></li>
             </ol>
           </ol>
-          <p>If you're a technical user and would like to implement your own subscription process, this is entirely possible. Please see this guide on <a href="https://documentation.onesignal.com/docs/guides-examples#subscribing-users-with-a-link" target="_blank">how to subscribe user with a link</a> using HTML and JavaScript. Our <a href="https://documentation.onesignal.com/docs/website-sdk-api" target="_blank">web SDK JavaScript API</a> is also available and can be called anywhere on the page.</p>
+          <p>If you're a technical user and would like to implement your own subscription process, this is entirely possible. Please see this guide on <a href="https://documentation.onesignal.com/docs/web-push-sdk-setup-http#section-subscribing-users-with-a-link" target="_blank">how to subscribe user with a link</a> using HTML and JavaScript. Our <a href="https://documentation.onesignal.com/docs/web-push-sdk" target="_blank">web SDK JavaScript API</a> is also available and can be called anywhere on the page.</p>
         </p>
 
         <dl>

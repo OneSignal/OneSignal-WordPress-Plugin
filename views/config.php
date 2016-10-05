@@ -290,7 +290,7 @@ if (array_key_exists('app_id', $_POST)) {
             </ol>
             <li><strong>HTTP/HTTPS Prompt:</strong> Enable it in <em>Configuration</em> -> <em>Prompt Settings & Notify Button</em> -> <em>Automatically prompt new site visitors to subscribe to push notifications</em></li>
             <ol>
-              <li><a href="https://documentation.onesignal.com/docs/web-push-prompts">Read more about it at our documentation.</a></li>
+              <li><a href="https://documentation.onesignal.com/docs/permission-requests" target="_blank">Read more about it at our documentation.</a></li>
             </ol>
           </ol>
           <p>If you're a technical user and would like to implement your own subscription process, this is entirely possible. Please see this guide on <a href="https://documentation.onesignal.com/docs/web-push-sdk-setup-http#section-subscribing-users-with-a-link" target="_blank">how to subscribe user with a link</a> using HTML and JavaScript. Our <a href="https://documentation.onesignal.com/docs/web-push-sdk" target="_blank">web SDK JavaScript API</a> is also available and can be called anywhere on the page.</p>
@@ -299,7 +299,7 @@ if (array_key_exists('app_id', $_POST)) {
         <dl>
           <div class="ui segment">
               <p>You're done setting up your site for Chrome & Firefox push!</p>
-              <p>Your site works completely with Chrome & Firefox push now. You can learn how to add <a href="javascript:void(0);" onclick="activateSetupTab('setup/5')">Safari</a> web push.</p>
+              <p>Your site works completely with Chrome & Firefox push now. You can learn how to add <a href="javascript:void(0);" onclick="activateSetupTab('setup/4')">Safari</a> web push.</p>
           </div>
         </dl>
       </div>

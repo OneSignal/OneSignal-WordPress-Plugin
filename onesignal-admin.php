@@ -137,7 +137,7 @@ class OneSignal_Admin {
 
     /* OK, it's safe for us to save the data now. */
 
-	  /* Some WordPress environments seem to be inconstent about whether on_save_post is called before transition_post_status
+	  /* Some WordPress environments seem to be inconsistent about whether on_save_post is called before transition_post_status
 		 * Check flag in case we just sent a notification for this post (this on_save_post is called after a successful send)
 		*/
 	  $just_sent_notification = (get_post_meta($post_id, 'onesignal_notification_already_sent', true) == true);
@@ -221,10 +221,14 @@ class OneSignal_Admin {
     // Our plugin config setting "Automatically send a push notification when I publish a post from the WordPress editor"
     $settings_send_notification_on_wp_editor_post = $onesignal_wp_settings['notification_on_post'];
 
+    /* This is a scheduled post and the user checked "Send a notification on post publish/update". */
+    $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification', true) == true);
+
     // We check the checkbox if: setting is enabled on Config page, post type is ONLY "post", and the post has not been published (new posts are status "auto-draft")
-    $meta_box_checkbox_send_notification = $settings_send_notification_on_wp_editor_post &&  // If setting is enabled
-                                $post->post_type == "post" &&  // Post type must be type post for checkbox to be auto-checked
-                                in_array($post->post_status, array("future", "draft", "auto-draft", "pending"));  // Post is scheduled, incomplete, being edited, or is awaiting publication
+    $meta_box_checkbox_send_notification = ($settings_send_notification_on_wp_editor_post &&  // If setting is enabled
+                                            $post->post_type == "post" &&  // Post type must be type post for checkbox to be auto-checked
+                                            in_array($post->post_status, array("future", "draft", "auto-draft", "pending"))) || // Post is scheduled, incomplete, being edited, or is awaiting publication
+                                            ($post_metadata_was_send_notification_checked);
 
     if (has_filter('onesignal_meta_box_send_notification_checkbox_state')) {
       $meta_box_checkbox_send_notification = apply_filters('onesignal_meta_box_send_notification_checkbox_state', $post, $onesignal_wp_settings);
@@ -454,7 +458,7 @@ class OneSignal_Admin {
 	    /* This is a scheduled post and the OneSignal meta box was present. */
 	    $post_metadata_was_onesignal_meta_box_present = (get_post_meta($post->ID, 'onesignal_meta_box_present', true) == true);
 	    /* This is a scheduled post and the user checked "Send a notification on post publish/update". */
-      $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification', true) == true);
+        $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification', true) == true);
 
 	    /* Either we were just posted from the WordPress post editor form, or this is a scheduled notification and it was previously submitted from the post editor form */
 	    $posted_from_wordpress_editor = $onesignal_meta_box_present || $post_metadata_was_onesignal_meta_box_present;
@@ -482,8 +486,8 @@ class OneSignal_Admin {
 		    // Decide to send based on whether the checkbox "Send notification on post publish/update" is checked
 		    // This post may be scheduled or just submitted from the WordPress editor
 		    // Metadata may not be saved into post yet, so use $_POST form data if metadata not available
-		    $do_send_notification = $onesignal_meta_box_send_notification_checked ||
-		                            $post_metadata_was_send_notification_checked;
+		    $do_send_notification = ($was_posted && $onesignal_meta_box_send_notification_checked) ||
+                                    (!$was_posted && $post_metadata_was_send_notification_checked);
 	    } else {
 		    // This was definitely not submitted via the WordPress editor
 		    // Decide to send based on whether the 3rd-party plugins setting is checked
@@ -517,7 +521,7 @@ class OneSignal_Admin {
 
       if ($do_send_notification) {
 
-	      /* Now that all settings our retrieved, and we are actually sending the notification, reset the post's metadata
+	      /* Now that all settings are retrieved, and we are actually sending the notification, reset the post's metadata
 				 * If this post is sent through a plugin in the future, existing metadata will interfere with the send condition logic
 				 * If this post is re-sent through the WordPress editor, the metadata will be added back automatically
 				*/
@@ -525,8 +529,8 @@ class OneSignal_Admin {
 	      update_post_meta($post->ID, 'onesignal_send_notification', false);
 	      onesignal_debug('Removed OneSignal metadata from post.');
 
-	      /* Some WordPress environments seem to be inconstent about whether on_save_post is called before transition_post_status
-	       * This sets the metadata back to true, true and will cause a post to be sent even if the checkbox is not checked the next time
+	      /* Some WordPress environments seem to be inconsistent about whether on_save_post is called before transition_post_status
+	       * This sets the metadata back to true, and will cause a post to be sent even if the checkbox is not checked the next time
 	       * We remove all related $_POST data to prevent this
 	      */
 	      if ($was_posted) {

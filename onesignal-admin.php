@@ -271,7 +271,7 @@ class OneSignal_Admin {
     }
 
     if (array_key_exists('subdomain', $config)) {
-      $onesignal_wp_settings['subdomain'] = $config['subdomain'];
+      $onesignal_wp_settings['subdomain'] = str_replace(' ', '', $config['subdomain']);
     } else {
       $onesignal_wp_settings['subdomain'] = "";
     }

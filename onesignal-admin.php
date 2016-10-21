@@ -589,17 +589,21 @@ class OneSignal_Admin {
             $fields['url'] .= '?' . $config_utm_additional_url_params;
         }
 
-        $post_has_featured_image           = has_post_thumbnail($post);
+        $post_has_featured_image = has_post_thumbnail($post->ID);
+        onesignal_debug('Post has featured image:', $post_has_featured_image);
         $config_use_featured_image_as_icon = $onesignal_wp_settings['showNotificationIconFromPostThumbnail'] == "1";
+        onesignal_debug('Post should use featured image:', $config_use_featured_image_as_icon);
         if ($post_has_featured_image == true && $config_use_featured_image_as_icon) {
           // get the icon image from wordpress if it exists
           $post_thumbnail_id = get_post_thumbnail_id($post->ID);
           $thumbnail_array   = wp_get_attachment_image_src($post_thumbnail_id, array(80, 80), true);
+          onesignal_debug('Featured post image array:', $thumbnail_array);
           if (!empty($thumbnail_array)) {
             $thumbnail = $thumbnail_array[0];
             // set the icon image for both chrome and firefox-1
             $fields['chrome_web_icon'] = $thumbnail;
             $fields['firefox_icon']    = $thumbnail;
+            onesignal_debug('Setting Chrome and Firefox notification icon to:', $thumbnail);
           }
         }
 

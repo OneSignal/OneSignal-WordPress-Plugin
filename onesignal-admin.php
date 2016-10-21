@@ -478,7 +478,7 @@ class OneSignal_Admin {
 	     * The filter hooks "onesignal_exclude_post" and "onesignal_include_post" can override this behavior as long as the option to automatically send from 3rd party plugins is set.
 	     */
         $settings_send_notification_on_non_editor_post_publish = $onesignal_wp_settings['notification_on_post_from_plugin'];
-        $additional_custom_post_types_string = $onesignal_wp_settings['allowed_custom_post_types'];
+        $additional_custom_post_types_string = str_replace(' ', '', $onesignal_wp_settings['allowed_custom_post_types']);
         $additional_custom_post_types_array = array_filter(explode(',', $additional_custom_post_types_string));
         onesignal_debug('Additional allowed custom post types:', $additional_custom_post_types_string);
         $non_editor_post_publish_do_send_notification = $settings_send_notification_on_non_editor_post_publish &&

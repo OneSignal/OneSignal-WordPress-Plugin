@@ -50,7 +50,20 @@ jQuery(function() {
   }
 
   $('.ui.form').submit(onFormSubmit);
+
+  hookHiddenDangerLabels();
 });
+
+function hookHiddenDangerLabels() {
+  var dangerLabels = jQuery('.danger-label').toArray();
+  dangerLabels.forEach(function(dangerLabel) {
+    var targetElement = jQuery(dangerLabel).attr('data-target');
+    jQuery(targetElement).click(dangerLabel, function(e) {
+      var dangerLabel = e.data;
+      jQuery(dangerLabel).removeClass('hidden');
+    });
+  });
+}
 
 function httpSiteCheck() {
   var key = 'is_site_https';

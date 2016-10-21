@@ -430,7 +430,8 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
           <?php if ($onesignal_wp_settings['gcm_sender_id'] !== '' || $onesignal_wp_settings['show_gcm_sender_id']): ?>
           <div class="field">
-            <label>Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Google Project Number" data-content="Your project number. You can find this on Setup > Google Keys > Step 3." data-variation="wide"></i></label>
+            <label>Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Google Project Number" data-content="Your Google Project Number. Do NOT change this as it can cause all existing subscribers to become unreachable." data-variation="wide"></i></label>
+            <p class="hidden danger-label" data-target="[name=gcm_sender_id]">WARNING: Changing this causes all existing subscribers to become unreachable. Please do not change unless instructed to do so!</p>
             <input type="text" name="gcm_sender_id" placeholder="#############" value="<?php echo $onesignal_wp_settings['gcm_sender_id'] ?>">
           </div>
           <?php endif; ?>

@@ -681,5 +681,10 @@ header[class=onesignal] {
     background: red; }
   .ui.site.onesignal.container .ui.inline.nag.save-settings {
     background: green; }
+.ui.site.onesignal.container .danger-label {
+  color: red;
+  font-size: 0.9em;
+  font-weight: bold;
+  font-family: 'Lato'; }
 
 /*# sourceMappingURL=site.css.map */

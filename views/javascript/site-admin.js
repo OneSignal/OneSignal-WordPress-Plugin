@@ -304,6 +304,8 @@ function showHttpPopup() {
     acceptButtonText: jQuery('[name=prompt_accept_button_text]').val(),
     cancelButtonText: jQuery('[name=prompt_cancel_button_text]').val(),
     showCredit: jQuery('[name=prompt_showcredit]').is(':checked'),
+    autoAcceptTitle: jQuery('[name=prompt_auto_accept_title]').val(),
+    siteName: jQuery('[name=prompt_site_name]').val(),
   };
   var message_localization_opts_str = '';
   if (message_localization_opts) {
@@ -314,6 +316,8 @@ function showHttpPopup() {
       'exampleNotificationMessageMobile',
       'exampleNotificationCaption',
       'acceptButtonText',
+      'autoAcceptTitle',
+      'siteName',
       'cancelButtonText',
       'showCredit'];
     for (var i = 0; i < message_localization_params.length; i++) {

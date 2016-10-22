@@ -748,6 +748,14 @@ if (array_key_exists('app_id', $_POST)) {
                   <input type="text" name="prompt_action_message" placeholder="wants to show notifications:" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['prompt_action_message']); ?>">
               </div>
               <div class="field prompt-customize-feature">
+                <label>Auto Accept Title (Click Allow)</label>
+                <input type="text" name="prompt_auto_accept_title" placeholder="Click Allow" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['prompt_auto_accept_title']); ?>">
+              </div>
+              <div class="field prompt-customize-feature">
+                <label>Site Name</label>
+                <input type="text" name="prompt_site_name" placeholder="http://yoursite.com" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['prompt_site_name']); ?>">
+              </div>
+              <div class="field prompt-customize-feature">
                   <label>Example Notification Title (Desktop)</label>
                   <input type="text" name="prompt_example_notification_title_desktop" placeholder="This is an example notification" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['prompt_example_notification_title_desktop']); ?>">
               </div>

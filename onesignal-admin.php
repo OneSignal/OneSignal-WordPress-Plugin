@@ -310,6 +310,8 @@ class OneSignal_Admin {
       'prompt_example_notification_title_mobile',
       'prompt_example_notification_message_mobile',
       'prompt_example_notification_caption',
+      'prompt_auto_accept_title',
+      'prompt_site_name',
       'prompt_cancel_button_text',
       'prompt_accept_button_text',
       'welcome_notification_title',

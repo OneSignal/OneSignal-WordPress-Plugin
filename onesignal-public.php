@@ -179,6 +179,12 @@ class OneSignal_Public {
             if ($onesignal_wp_settings["prompt_cancel_button_text"] != "") {
               echo "oneSignal_options['promptOptions']['cancelButtonText'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_cancel_button_text"]) . "';\n";
             }
+            if ($onesignal_wp_settings["prompt_site_name"] != "") {
+              echo "oneSignal_options['promptOptions']['siteName'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_site_name"]) . "';\n";
+            }
+            if ($onesignal_wp_settings["prompt_auto_accept_title"] != "") {
+              echo "oneSignal_options['promptOptions']['autoAcceptTitle'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_auto_accept_title"]) . "';\n";
+            }
           }
           if (array_key_exists('prompt_showcredit', $onesignal_wp_settings) && $onesignal_wp_settings["prompt_showcredit"] != "1") {
             echo "oneSignal_options['promptOptions']['showCredit'] = false;\n";

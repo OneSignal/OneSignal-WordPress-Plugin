@@ -34,6 +34,8 @@ class OneSignal {
                   'prompt_accept_button_text' => "",
                   'prompt_cancel_button_text' => "",
                   'prompt_showcredit' => true,
+                  'prompt_auto_accept_text' => "",
+                  'prompt_site_name' => "",
                   'notifyButton_position' => 'bottom-right',
                   'notifyButton_size' => 'medium',
                   'notifyButton_theme' => 'default',

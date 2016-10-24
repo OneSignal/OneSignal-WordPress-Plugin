@@ -56,7 +56,7 @@ class OneSignal_Public {
   public function __construct() {}
 
   public static function init() {
-    add_action('wp_head', array(__CLASS__, 'onesignal_header'), 1);
+    add_action('wp_head', array(__CLASS__, 'onesignal_header'), 5);
   }
 
   public static function onesignal_header() {

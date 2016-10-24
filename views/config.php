@@ -32,7 +32,7 @@ if (array_key_exists('app_id', $_POST)) {
       <div class="ui tab borderless shadowless segment" data-tab="setup/0">
         <p>We'll guide you through adding web push for Chrome, Safari, and Firefox for your Wordpress blog.</p>
         <p>First you'll get some required keys from Google. Then you'll be on our website creating a new app and setting up web push for each browser. This entire process should take around 15 minutes.</p>
-        <p>Please follow each step in order! If you're ever stuck or have questions, click the bright red button to chat with us! We read and respond to every message.</p>
+        <p>Please follow each step in order! If you're ever stuck or have questions, email us at <code>support@onesignal.com</code>! We read and respond to every message.</p>
         <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/1');">Chrome & Firefox Push</a> to begin.</p>
         <div class="ui center aligned piled segment">
           <i class="big grey pin pinned icon"></i>
@@ -189,7 +189,7 @@ if (array_key_exists('app_id', $_POST)) {
             <dt>10</dt>
             <dd>
               <p>Click <strong>Save</strong> to commit your Chrome & Firefox push settings <strong>and then exit the dialog</strong>.</p>
-              <p>If you get errors please follow the instructions to fix them. If you're still experiencing problems, <a href="javascript:void(0);" onclick="showSupportMessage('chrome-push-settings');">chat with us and we'll help you out</a>. Let us know what your specific issue is.</p>
+              <p>If you get errors please follow the instructions to fix them. If you're still experiencing problems, email us for support.</p>
               <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/3');">OneSignal Keys</a> to continue. This next section is much easier!</p>
             </dd>
           </div>
@@ -341,7 +341,7 @@ if (array_key_exists('app_id', $_POST)) {
                 </li>
                 <li>
                   <p>Include the correct protocol</p>
-                  <p>If your site uses HTTPS, use <code>https://domain.com</code>. If your site uses a mix of HTTPS/HTTP or only HTTP, use <code>http://domain.com</code>. If you're not sure, <a href="javascript:void(0);" onclick="showSupportMessage('not_sure_protocol')">contact us!</a>.</p>
+                  <p>If your site uses HTTPS, use <code>https://domain.com</code>. If your site uses a mix of HTTPS/HTTP or only HTTP, use <code>http://domain.com</code>.</a>.</p>
                   <p></p>
                 </li>
               </ul>
@@ -367,7 +367,7 @@ if (array_key_exists('app_id', $_POST)) {
             <dt>4</dt>
             <dd>
               <p>Click <strong>Save</strong> to commit your Safari push settings <strong>and then exit the dialog</strong>.</p>
-              <p>If you get errors please follow the instructions to fix them. If you're still experiencing problems, <a href="javascript:void(0);" onclick="showSupportMessage('safari-push-settings');">chat with us and we'll help you out</a>. Let us know what your specific issue is.</p>
+              <p>If you get errors please follow the instructions to fix them. If you're still experiencing problems, email us for support.</p>
             </dd>
           </div>
           <div class="ui segment">

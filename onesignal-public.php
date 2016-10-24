@@ -59,28 +59,47 @@ class OneSignal_Public {
     add_action('wp_head', array(__CLASS__, 'onesignal_header'), 5);
   }
 
+  public static function insert_onesignal_header_manifest($onesignal_wp_settings, $current_plugin_url) {
+    $use_custom_manifest = $onesignal_wp_settings["use_custom_manifest"];
+    $custom_manifest_url = $onesignal_wp_settings["custom_manifest_url"];
+    if ($onesignal_wp_settings !== false && array_key_exists('gcm_sender_id', $onesignal_wp_settings)) {
+      $gcm_sender_id = $onesignal_wp_settings['gcm_sender_id'];
+    } else {
+      $gcm_sender_id = 'WORDPRESS_NO_SENDER_ID_ENTERED';
+    }
+    if ($use_custom_manifest) {
+      ?>
+      <link rel="manifest"
+            href="<?php echo($custom_manifest_url) ?>"/>
+      <?php
+    } else {
+      ?>
+      <link rel="manifest"
+            href="<?php echo($current_plugin_url . 'sdk_files/manifest.json.php?gcm_sender_id=' . $gcm_sender_id) ?>"/>
+      <?php
+    }
+  }
+
+  // For easier debugging of sites by identifying them as WordPress
+  public static function insert_onesignal_stamp() {
+    ?>
+      <meta name="onesignal" content="wordpress-plugin">
+    <?php
+  }
+
   public static function onesignal_header() {
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
     if ($onesignal_wp_settings["subdomain"] == "") {
       if (strpos(ONESIGNAL_PLUGIN_URL, "http://localhost") === false && strpos(ONESIGNAL_PLUGIN_URL, "http://127.0.0.1") === false) {
         $current_plugin_url = preg_replace("/(http:\/\/)/i", "https://", ONESIGNAL_PLUGIN_URL);
-      }
-      else {
+      } else {
         $current_plugin_url = ONESIGNAL_PLUGIN_URL;
       }
+      OneSignal_Public::insert_onesignal_stamp();
+      OneSignal_Public::insert_onesignal_header_manifest($onesignal_wp_settings, $current_plugin_url);
+    }
     ?>
-      <?php
-        $settings = get_option("OneSignalWPSetting");
-        $key = 'gcm_sender_id';
-        if ($settings !== false && array_key_exists($key, $settings)) {
-          $gcm_sender_id = $settings[$key];
-        } else {
-          $gcm_sender_id = 'WORDPRESS_NO_SENDER_ID_ENTERED';
-        }
-      ?>
-      <link rel="manifest" href="<?php echo( $current_plugin_url . 'sdk_files/manifest.json.php?gcm_sender_id=' . $gcm_sender_id ) ?>" />
-    <?php } ?>
     <?php
     if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
         echo '<script src="https://localhost:3001/sdks/OneSignalSDK.js" async></script>';
@@ -146,7 +165,7 @@ class OneSignal_Public {
         if (@$onesignal_wp_settings["safari_web_id"]) {
           echo "oneSignal_options['safari_web_id'] = \"" . $onesignal_wp_settings["safari_web_id"] . "\";\n";
         }
-        
+
         if ($onesignal_wp_settings["chrome_auto_dismiss_notifications"] == "1") {
           echo "oneSignal_options['persistNotification'] = false;\n";
         }

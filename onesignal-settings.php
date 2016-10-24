@@ -76,6 +76,8 @@ class OneSignal {
                   'notification_title' => OneSignalUtils::decode_entities(get_bloginfo('name')),
                   'send_to_mobile_platforms' => false,
                   'show_gcm_sender_id' => false,
+                  'use_custom_manifest' => false,
+                  'custom_manifest_url' => ''
                   );
 
     $legacies = array(

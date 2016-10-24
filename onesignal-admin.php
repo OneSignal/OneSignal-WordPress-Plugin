@@ -5,7 +5,7 @@ function onesignal_change_footer_admin() {
 }
 
 class OneSignal_Admin {
-  private static $RESOURCES_VERSION = '32';
+  private static $RESOURCES_VERSION = '33';
   private static $NONCE_KEY = 'onesignal_meta_box_nonce';
   private static $NONCE_FIELD = 'onesignal_meta_box';
 
@@ -292,6 +292,7 @@ class OneSignal_Admin {
       'notifyButton_customize_offset_enable',
       'send_to_mobile_platforms',
       'show_gcm_sender_id',
+      'use_custom_manifest'
     );
     OneSignal_Admin::saveBooleanSettings($onesignal_wp_settings, $config, $booleanSettings);
 
@@ -341,7 +342,8 @@ class OneSignal_Admin {
       'notifyButton_dialog_blocked_message',
       'utm_additional_url_params',
       'allowed_custom_post_types',
-      'notification_title'
+      'notification_title',
+      'custom_manifest_url'
     );
     OneSignal_Admin::saveStringSettings($onesignal_wp_settings, $config, $stringSettings);
 

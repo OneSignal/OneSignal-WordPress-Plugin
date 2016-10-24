@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
 Tested up to: 4.6
-Stable tag: 1.12.5
+Stable tag: 1.13.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 75,000 developers and marketers including some of the largest brands and websites in the world.
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 80,000 developers and marketers including some of the largest brands and websites in the world.
 
 After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
 
@@ -55,6 +55,22 @@ Features:
 9. Our OneSignal dashboard A/B testing page.
 
 == Changelog ==
+= 1.13.1
+- The web SDK initialization of our plugin can now be fully customized
+- Removed the Intercom live chat support plugin from our plugin. Users can still email support@onesignal.com.
+- Click Allow, Site Title, and the auto accept HTTP prompt title can now be customized
+- Spaces are removed when users save their Subdomain textbox value
+- The meta box checkbox "Send post on notification publish" now correctly *does not* send a notification if unchecked.
+  Previously, there was a logic bug where users could check the box, initially save the post without publishing, and
+  have a notification sent out when later publishing.
+- The default plugin tab is now "Setup" if the user is setting up for the first time, and if their App ID or REST API
+  Key is blank (both values are required)
+- Correctly call has_post_thumbnail for WordPress versions below 4.4
+- Check for admin capabilities is done correctly so as to be compatible for users in stateless mode (DISALLOW_FILE_MODS)
+- Apostrophes and other HTML encoded entities are correctly decoded when using the HTTP prompt
+- Minor: Remove phantom tooltip linking to GCM page
+- Minor: site.css now has a source map
+
 = 1.12.5 =
 - Fix broken documentation link
 

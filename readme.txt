@@ -55,7 +55,8 @@ Features:
 9. Our OneSignal dashboard A/B testing page.
 
 == Changelog ==
-= 1.13.1
+
+= 1.13.1 =
 - The web SDK initialization of our plugin can now be fully customized
 - Removed the Intercom live chat support plugin from our plugin. Users can still email support@onesignal.com.
 - Click Allow, Site Title, and the auto accept HTTP prompt title can now be customized

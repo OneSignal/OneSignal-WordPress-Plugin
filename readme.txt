@@ -56,6 +56,9 @@ Features:
 
 == Changelog ==
 
+= 1.13.2 =
+- Add proper WordPress action/filter hook for OneSignal init
+
 = 1.13.1 =
 - The web SDK initialization of our plugin can now be fully customized
 - Removed the Intercom live chat support plugin from our plugin. Users can still email support@onesignal.com.

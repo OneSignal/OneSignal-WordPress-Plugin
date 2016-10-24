@@ -130,6 +130,7 @@ class OneSignal_Public {
         }
         ?>
         var oneSignal_options = {};
+        window._oneSignalInitOptions = oneSignal_options;
 
         <?php
         echo "oneSignal_options['wordpress'] = true;\n";
@@ -338,9 +339,14 @@ class OneSignal_Public {
           }
 
         }
-        ?>
 
-        OneSignal.init(oneSignal_options);
+        $use_custom_sdk_init = $onesignal_wp_settings['use_custom_sdk_init'];
+        if (!$use_custom_sdk_init) {
+          ?>
+          OneSignal.init(oneSignal_options);
+          <?php
+        }
+        ?>
       });
 
       function documentInitOneSignal() {

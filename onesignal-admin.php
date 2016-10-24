@@ -292,7 +292,8 @@ class OneSignal_Admin {
       'notifyButton_customize_offset_enable',
       'send_to_mobile_platforms',
       'show_gcm_sender_id',
-      'use_custom_manifest'
+      'use_custom_manifest',
+      'use_custom_sdk_init'
     );
     OneSignal_Admin::saveBooleanSettings($onesignal_wp_settings, $config, $booleanSettings);
 

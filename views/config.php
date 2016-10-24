@@ -874,6 +874,12 @@ if (array_key_exists('app_id', $_POST)) {
               <label>Use my own manifest.json<i class="tiny circular help icon link" role="popup" data-title="Providing Your Own manifest.json File" data-content="Check this if you have an existing manifest.json file you'd like to use instead of ours. You might check this if you have existing icons defined in your manifest."></i></label>
             </div>
           </div>
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="use_custom_sdk_init" value="true" <?php if ($onesignal_wp_settings['use_custom_sdk_init']) { echo "checked"; } ?>>
+              <label>Use my own SDK initialization script<i class="tiny circular help icon link" role="popup" data-title="Initializing the Web SDK Using Custom JavaScript" data-content="Check this if you'd like full control over how our web SDK initializes. All the options you've set here in the WordPress plugin will be accessible in a global variable window._oneSignalInitOptions."></i></label>
+            </div>
+          </div>
         </div>
         <button class="ui large teal button" type="submit">Save</button>
         <div class="ui inline validation nag">

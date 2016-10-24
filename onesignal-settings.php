@@ -77,7 +77,8 @@ class OneSignal {
                   'send_to_mobile_platforms' => false,
                   'show_gcm_sender_id' => false,
                   'use_custom_manifest' => false,
-                  'custom_manifest_url' => ''
+                  'custom_manifest_url' => '',
+                  'use_custom_sdk_init' => false
                   );
 
     $legacies = array(

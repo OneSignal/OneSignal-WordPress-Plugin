@@ -71,10 +71,10 @@ class OneSignal_Admin {
 		  register_shutdown_function('fatal_exception_error_handler');
 	  }
 
-    if (current_user_can('update_plugins')) {
+    if (OneSignalUtils::can_modify_plugin_settings()) {
       add_action( 'admin_menu', array(__CLASS__, 'add_admin_page') );
     }
-    if (current_user_can('publish_posts') || current_user_can('edit_published_posts')) {
+    if (OneSignalUtils::can_send_notifications()) {
       add_action('admin_init', array( __CLASS__, 'add_onesignal_post_options' ));
     }
 
@@ -124,17 +124,6 @@ class OneSignal_Admin {
       return $post_id;
     }
 
-    // Check the user's permissions.
-    if ( 'page' == $_POST['post_type'] ) {
-      if (!current_user_can( 'edit_page', $post_id)) {
-        return $post_id;
-      }
-    } else {
-      if (!current_user_can('edit_post', $post_id)) {
-        return $post_id;
-      }
-    }
-
     /* OK, it's safe for us to save the data now. */
 
 	  /* Some WordPress environments seem to be inconsistent about whether on_save_post is called before transition_post_status
@@ -169,14 +158,14 @@ class OneSignal_Admin {
   
   public static function add_onesignal_post_options() {
     // If there is an error message we should display, display it now
-    function admin_notice_send_error() {
-        $onesignal_send_notification_error = get_transient('onesignal_send_notification_error');
-        if ( !empty($onesignal_send_notification_error) ) {
-            delete_transient( 'onesignal_send_notification_error' );
-            echo $onesignal_send_notification_error;
+    function admin_notice_error() {
+        $onesignal_transient_error = get_transient('onesignal_transient_error');
+        if ( !empty($onesignal_transient_error) ) {
+            delete_transient( 'onesignal_transient_error' );
+            echo $onesignal_transient_error;
         }
     }
-    add_action( 'admin_notices', 'admin_notice_send_error');
+    add_action( 'admin_notices', 'admin_notice_error');
 
       // Add our meta box for the "post" post type (default)
     add_meta_box('onesignal_notif_on_post',
@@ -255,8 +244,13 @@ class OneSignal_Admin {
   }
   
   public static function save_config_page($config) {
-    if (!current_user_can('update_plugins'))
-      return;
+    if (!OneSignalUtils::can_modify_plugin_settings()) {
+        onesignal_debug('Not saving plugin settings because the current user is not an administrator.');
+        set_transient( 'onesignal_transient_error', '<div class="error notice onesignal-error-notice">
+                    <p><strong>OneSignal Push:</strong><em> Only administrators are allowed to save plugin settings.</em></p>
+                </div>', 86400 );
+        return;
+    }
     
     $sdk_dir = plugin_dir_path( __FILE__ ) . 'sdk_files/';
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
@@ -665,7 +659,7 @@ class OneSignal_Admin {
         $curl_http_code     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
           onesignal_debug('$curl_http_code:', $curl_http_code);
         if ($curl_http_code != 200) {
-            set_transient( 'onesignal_send_notification_error', '<div class="error notice onesignal-error-notice">
+            set_transient( 'onesignal_transient_error', '<div class="error notice onesignal-error-notice">
                     <p><strong>OneSignal Push:</strong><em> There was a ' . $curl_http_code . ' error sending your notification:</em></p>
                     <pre>' . print_r($response, true) . '</pre>
                 </div>', 86400 );

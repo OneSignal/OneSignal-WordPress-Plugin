@@ -109,7 +109,7 @@ class OneSignal_Public {
     ?>
     <script>
 
-      var OneSignal = OneSignal || [];
+      window.OneSignal = window.OneSignal || [];
 
       OneSignal.push( function() {
         OneSignal.SERVICE_WORKER_UPDATER_PATH = "OneSignalSDKUpdaterWorker.js.php";

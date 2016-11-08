@@ -83,7 +83,7 @@ class OneSignal_Public {
   // For easier debugging of sites by identifying them as WordPress
   public static function insert_onesignal_stamp() {
     ?>
-      <meta name="onesignal" content="wordpress-plugin">
+      <meta name="onesignal" content="wordpress-plugin"/>
     <?php
   }
 

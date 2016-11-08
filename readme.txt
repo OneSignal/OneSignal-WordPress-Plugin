@@ -69,7 +69,7 @@ Features:
 
 = 1.13.1 =
 - The web SDK initialization of our plugin can now be fully customized
-- Removed the Intercom live chat support plugin from our plugin. Users can still email support@onesignal.com.
+- Removed the Intercom live chat support plugin from our plugin. Users can still email support+wp@onesignal.com.
 - Click Allow, Site Title, and the auto accept HTTP prompt title can now be customized
 - Spaces are removed when users save their Subdomain textbox value
 - The meta box checkbox "Send post on notification publish" now correctly *does not* send a notification if unchecked.

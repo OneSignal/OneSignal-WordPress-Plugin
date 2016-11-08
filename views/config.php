@@ -32,7 +32,7 @@ if (array_key_exists('app_id', $_POST)) {
       <div class="ui tab borderless shadowless segment" data-tab="setup/0">
         <p>We'll guide you through adding web push for Chrome, Safari, and Firefox for your Wordpress blog.</p>
         <p>First you'll get some required keys from Google. Then you'll be on our website creating a new app and setting up web push for each browser. This entire process should take around 15 minutes.</p>
-        <p>Please follow each step in order! If you're ever stuck or have questions, email us at <code>support@onesignal.com</code>! We read and respond to every message.</p>
+        <p>Please follow each step in order! If you're ever stuck or have questions, email us at <code>support+wp@onesignal.com</code>! We read and respond to every message.</p>
         <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/1');">Chrome & Firefox Push</a> to begin.</p>
         <div class="ui center aligned piled segment">
           <i class="big grey pin pinned icon"></i>

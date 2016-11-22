@@ -260,7 +260,7 @@ class OneSignal_Admin {
     if( preg_match('/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/', $new_app_id, $m))
       $onesignal_wp_settings['app_id'] = $new_app_id;
     
-    if (is_numeric($config['gcm_sender_id']) || $config['gcm_sender_id'] === '') {
+    if (array_key_exists('gcm_sender_id', $config) && (is_numeric($config['gcm_sender_id']) || $config['gcm_sender_id'] === '')) {
       $onesignal_wp_settings['gcm_sender_id'] = $config['gcm_sender_id'];
     }
 

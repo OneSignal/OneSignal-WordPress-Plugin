@@ -695,9 +695,14 @@ class OneSignal_Admin {
       onesignal_debug('Caught Exception:', $e->getMessage());
     }
   }
+
+  public static function was_post_restored_from_trash($old_status, $new_status) {
+      return $old_status === 'trash' && $new_status === 'publish';
+  }
   
   public static function on_transition_post_status( $new_status, $old_status, $post ) {
-    if ($post->post_type == 'wdslp-wds-log') {
+    if ($post->post_type == 'wdslp-wds-log' ||
+        self::was_post_restored_from_trash($old_status, $new_status)) {
         // It's important not to call onesignal_debug() on posts of type wdslp-wds-log, otherwise each post will recursively generate 4 more posts
         return;
     }
@@ -718,7 +723,9 @@ class OneSignal_Admin {
           return;
       }
     }
-    if (!(empty($post) || $new_status !== "publish" || $post->post_type == 'page')) {
+    if (!(empty($post) ||
+        $new_status !== "publish" ||
+        $post->post_type == 'page')) {
         self::send_notification_on_wp_post($new_status, $old_status, $post);
     }
   }

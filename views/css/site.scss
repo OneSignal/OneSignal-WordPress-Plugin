@@ -578,3 +578,11 @@ header[class=onesignal] {
         font-family: 'Lato';
     }
 }
+
+/* This style is overridden on some sites:
+     .form { display: none; }
+     - https://app.intercom.com/a/apps/344a89aeac3f033e4dec4370781543b948aece6d/inbox/wordpress-team/conversations/5303669476
+*/
+.ui.form {
+    display: block;
+}

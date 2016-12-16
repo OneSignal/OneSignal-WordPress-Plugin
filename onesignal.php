@@ -11,6 +11,11 @@
 
 define( 'ONESIGNAL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
+/**
+ * The number of seconds required to wait between requests.
+ */
+define( 'ONESIGNAL_API_RATE_LIMIT_SECONDS', 55 );
+
 require_once( plugin_dir_path( __FILE__ ) . 'onesignal-utils.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'onesignal-admin.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'onesignal-public.php' );

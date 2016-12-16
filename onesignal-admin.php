@@ -436,13 +436,47 @@ class OneSignal_Admin {
     wp_enqueue_script( 'site', plugin_dir_url( __FILE__ ) . 'views/javascript/site-admin.js', false,  OneSignal_Admin::$RESOURCES_VERSION);
 
   }
-  
+
+ /**
+  * Returns true if more than one notification has been sent in the last minute.
+  */
+  public static function is_over_sending_rate_limit() {
+    onesignal_debug('Called is_over_sending_rate_limit()');
+    $last_send_time = get_option('onesignal.last_send_time');
+    onesignal_debug('    [is_over_sending_rate_limit] Last send time:', $last_send_time);
+    if ($last_send_time) {
+        if (current_time('timestamp') - intval($last_send_time) <= ONESIGNAL_API_RATE_LIMIT_SECONDS) {
+            onesignal_debug('    [is_over_sending_rate_limit] Current send time (' . current_time('timestamp') . ') is less than rate limit time after the last send time.');
+            return true;
+        }
+    }
+    return false;
+  }
+
+  /**
+   * Updates the last sent timestamp, used in rate limiting notifications sent more than 1 per minute.
+   */
+  public static function update_last_sent_timestamp() {
+      update_option('onesignal.last_send_time', current_time('timestamp'));
+  }
+
+ /**
+  * The main function that actually sends a notification to OneSignal.
+  */
   public static function send_notification_on_wp_post($new_status, $old_status, $post) {
     try {
 	    if (!function_exists('curl_init')) {
 		    onesignal_debug('Canceling send_notification_on_wp_post because curl_init() is not a defined function.');
 		    return;
 	    }
+
+
+	    if (self::is_over_sending_rate_limit()) {
+            set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
+                    <p><strong>OneSignal Push:</strong><em> Please try again shortly. Only one notification can be sent every ' . ONESIGNAL_API_RATE_LIMIT_SECONDS . ' seconds.</em></p>
+                </div>', 86400);
+            return;
+        }
 
       $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
@@ -687,6 +721,8 @@ class OneSignal_Admin {
 	        }
         }
 	      curl_close($ch);
+
+        self::update_last_sent_timestamp();
 
         return $response;
       }

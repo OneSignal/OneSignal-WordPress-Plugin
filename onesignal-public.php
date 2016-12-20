@@ -349,12 +349,20 @@ class OneSignal_Public {
               ?>
               OneSignal.init(window._oneSignalInitOptions);
               <?php
+            } else {
+              ?>
+              <!-- OneSignal: onesignal_initialize_sdk filter preventing SDK initialization. -->
+              <?php
             }
           } else {
           ?>
             OneSignal.init(window._oneSignalInitOptions);
           <?php
           }
+        } else {
+          ?>
+          <!-- OneSignal: Using custom SDK initialization. -->
+          <?php
         }
         ?>
       });

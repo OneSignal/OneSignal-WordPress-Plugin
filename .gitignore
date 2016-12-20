@@ -57,3 +57,5 @@ crashlytics-build.properties
 # Created by .ignore support plugin (hsz.mobi)
 
 .DS_Store
+
+onesignal-extra.php

@@ -877,7 +877,7 @@ if (array_key_exists('app_id', $_POST)) {
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="use_custom_sdk_init" value="true" <?php if ($onesignal_wp_settings['use_custom_sdk_init']) { echo "checked"; } ?>>
-              <label>Use my own SDK initialization script<i class="tiny circular help icon link" role="popup" data-title="Initializing the Web SDK Using Custom JavaScript" data-content="Check this if you'd like full control over how our web SDK initializes. All the options you've set here in the WordPress plugin will be accessible in a global variable window._oneSignalInitOptions."></i></label>
+              <label>Disable OneSignal initialization<i class="tiny circular help icon link" role="popup" data-title="Disable OneSignal Initialization" data-content="Check this if you'd like to disable OneSignal's normal initialization. Useful if you are adding a custom initialization script. All the options you've set here in the WordPress plugin will be accessible in a global variable window._oneSignalInitOptions."></i></label>
             </div>
           </div>
         </div>

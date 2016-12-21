@@ -15,6 +15,7 @@ jQuery(function() {
   });
 
   ensureFeaturesVisible({
+    'customize_http_permission_request': '.http-permission-request-modal-customize-feature',
     'notifyButton_customize_enable': '.nb-text-feature',
     'notifyButton_customize_colors_enable': '.nb-color-feature',
     'notifyButton_customize_offset_enable': '.nb-position-feature',

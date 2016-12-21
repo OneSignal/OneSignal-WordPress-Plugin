@@ -78,7 +78,11 @@ class OneSignal {
                   'show_gcm_sender_id' => false,
                   'use_custom_manifest' => false,
                   'custom_manifest_url' => '',
-                  'use_custom_sdk_init' => false
+                  'use_custom_sdk_init' => false,
+                  'use_http_permission_request' => 'CALCULATE_SPECIAL_VALUE',
+                  'http_permission_request_modal_title' => '',
+                  'http_permission_request_modal_message' => '',
+                  'http_permission_request_modal_button_text' => '',
                   );
 
     $legacies = array(
@@ -195,6 +199,17 @@ class OneSignal {
           }
         }
         $onesignal_wp_settings['prompt_customize_enable'] = $was_customized;
+      }
+    }
+
+    // Special case for HTTP permission request
+    if (!array_key_exists('use_http_permission_request', $onesignal_wp_settings)) {
+      if ($is_new_user) {
+        // Enable by default for new sites
+        $onesignal_wp_settings['use_http_permission_request'] = true;
+      } else {
+        // Do NOT enable for existing WordPress sites, since it breaks existing prompt behavior
+        $onesignal_wp_settings['use_http_permission_request'] = false;
       }
     }
 

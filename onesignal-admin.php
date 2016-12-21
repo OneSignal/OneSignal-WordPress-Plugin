@@ -5,7 +5,7 @@ function onesignal_change_footer_admin() {
 }
 
 class OneSignal_Admin {
-  private static $RESOURCES_VERSION = '34';
+  private static $RESOURCES_VERSION = '35';
   private static $NONCE_KEY = 'onesignal_meta_box_nonce';
   private static $NONCE_FIELD = 'onesignal_meta_box';
 
@@ -293,7 +293,9 @@ class OneSignal_Admin {
       'send_to_mobile_platforms',
       'show_gcm_sender_id',
       'use_custom_manifest',
-      'use_custom_sdk_init'
+      'use_custom_sdk_init',
+      'use_http_permission_request',
+      'customize_http_permission_request'
     );
     OneSignal_Admin::saveBooleanSettings($onesignal_wp_settings, $config, $booleanSettings);
 
@@ -344,7 +346,10 @@ class OneSignal_Admin {
       'utm_additional_url_params',
       'allowed_custom_post_types',
       'notification_title',
-      'custom_manifest_url'
+      'custom_manifest_url',
+      'http_permission_request_modal_title',
+      'http_permission_request_modal_message',
+      'http_permission_request_modal_button_text'
     );
     OneSignal_Admin::saveStringSettings($onesignal_wp_settings, $config, $stringSettings);
 

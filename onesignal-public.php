@@ -143,6 +143,17 @@ class OneSignal_Public {
           echo "oneSignal_options['autoRegister'] = false;\n";
         }
 
+        if ($onesignal_wp_settings["use_http_permission_request"] == "1") {
+          echo "oneSignal_options['httpPermissionRequest'] = { };\n";
+          echo "oneSignal_options['httpPermissionRequest']['enable'] = true;\n";
+
+          if (array_key_exists('customize_http_permission_request', $onesignal_wp_settings) && $onesignal_wp_settings["customize_http_permission_request"] == "1") {
+            echo "oneSignal_options['httpPermissionRequest']['modalTitle'] = \"" . OneSignalUtils::html_safe($onesignal_wp_settings["http_permission_request_modal_title"]) . "\";\n";
+            echo "oneSignal_options['httpPermissionRequest']['modalMessage'] = \"" . OneSignalUtils::html_safe($onesignal_wp_settings["http_permission_request_modal_message"]) . "\";\n";
+            echo "oneSignal_options['httpPermissionRequest']['modalButtonText'] = \"" . OneSignalUtils::html_safe($onesignal_wp_settings["http_permission_request_modal_button_text"]) . "\";\n";
+          }
+        }
+
         if ($onesignal_wp_settings["send_welcome_notification"] == "1") {
           echo "oneSignal_options['welcomeNotification'] = { };\n";
           echo "oneSignal_options['welcomeNotification']['title'] = \"" . OneSignalUtils::html_safe($onesignal_wp_settings["welcome_notification_title"]) . "\";\n";

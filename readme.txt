@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
 Tested up to: 4.7
-Stable tag: 1.13.6
+Stable tag: 1.13.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 100,000 developers and marketers including some of the largest brands and websites in the world.
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 106,500 developers and marketers including some of the largest brands and websites in the world.
 
 After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
 
@@ -55,6 +55,18 @@ Features:
 9. Our OneSignal dashboard A/B testing page.
 
 == Changelog ==
+
+= 1.13.7 =
+- Add rate limiting to prevent notifications from being sent too quickly; one notification can be sent every 55 seconds
+- Remove Preview Popup button; users can still follow the screenshot in the section header to match their customized
+  values with the window their users will see
+- Add Configuration page UI option to show the slidedown permission message on HTTPS sites before the browser's native
+  permission request
+- Implement the HTTP permission request as the default for new sites (only for those who turn on Automatic prompting)
+- Clarify "Use my own SDK initialization script" --> renamed as "Disable OneSignal initialization"
+- Add a hidden page comment if users disable OneSignal initialization for easier debugging
+- Our plugin is in https://wordpress.org/plugins-wp but not https://wordpress.org/plugins. Hopefully resubmitting the
+  plugin fixes it
 
 = 1.13.6 =
 - Update style that was being overridden on some sites

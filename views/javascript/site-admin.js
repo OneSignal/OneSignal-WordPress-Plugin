@@ -15,15 +15,15 @@ jQuery(function() {
   });
 
   ensureFeaturesVisible({
-    'customize_http_permission_request': '.http-permission-request-modal-customize-feature',
-    'notifyButton_customize_enable': '.nb-text-feature',
-    'notifyButton_customize_colors_enable': '.nb-color-feature',
-    'notifyButton_customize_offset_enable': '.nb-position-feature',
-    'notifyButton_enable': '.nb-feature',
-    'prompt_customize_enable': '.prompt-customize-feature',
-    'send_welcome_notification': '.welcome-notification-feature',
-    'is_site_https': '.modal-prompt-feature',
-    'use_custom_manifest': '.custom-manifest-feature'
+    'customize_http_permission_request': ['.http-permission-request-modal-customize-feature'],
+    'notifyButton_customize_enable': ['.nb-text-feature'],
+    'notifyButton_customize_colors_enable': ['.nb-color-feature'],
+    'notifyButton_customize_offset_enable': ['.nb-position-feature'],
+    'notifyButton_enable': ['.nb-feature'],
+    'prompt_customize_enable': ['.prompt-customize-feature'],
+    'send_welcome_notification': ['.welcome-notification-feature'],
+    'is_site_https': ['.modal-prompt-feature', '.slidedown-permission-message-https-feature'],
+    'use_custom_manifest': ['.custom-manifest-feature']
   });
 
   httpSiteCheck();
@@ -176,29 +176,31 @@ function ensureFeaturesVisible(map) {
       isSelfChecked = !isSelfChecked;
       key = '!' + key;
     }
-    var featureSelector = map[key];
+    var featureSelectors = map[key];
 
-    // Anytime the 'prompt_auto_register' checkbox is checked
-    if (isSelfChecked) {
-      // featureClass is '.nb-feature'
-      jQuery(featureSelector).show();
-      // If any of the elements we just showed also have their own ensureFeaturesVisible hook, make sure we take care of side effects properly
-      var childElements = jQuery(featureSelector).toArray();
-      childElements.forEach(function(element) {
-        // Get all children elements
-        // We may have just hidden a <div class='nb-feature'><div class='what-we-really-care-about'></div></div> where the nested element might have its own ensureFeaturesVisible trigger
-        var grandchildElements = jQuery(element).find('*').toArray();
-        grandchildElements.forEach(function (grandchildElement) {
-          // If this HTML element has the property name that matches one of those in our map
-          if (map.hasOwnProperty(grandchildElement.name)) {
-            // Trigger this ensureFeaturesVisible hook as well
-            doHideShow(grandchildElement.name);
-          }
+    featureSelectors.forEach(function(featureSelector) {
+      // Anytime the 'prompt_auto_register' checkbox is checked
+      if (isSelfChecked) {
+        // featureClass is '.nb-feature'
+        jQuery(featureSelector).show();
+        // If any of the elements we just showed also have their own ensureFeaturesVisible hook, make sure we take care of side effects properly
+        var childElements = jQuery(featureSelector).toArray();
+        childElements.forEach(function(element) {
+          // Get all children elements
+          // We may have just hidden a <div class='nb-feature'><div class='what-we-really-care-about'></div></div> where the nested element might have its own ensureFeaturesVisible trigger
+          var grandchildElements = jQuery(element).find('*').toArray();
+          grandchildElements.forEach(function (grandchildElement) {
+            // If this HTML element has the property name that matches one of those in our map
+            if (map.hasOwnProperty(grandchildElement.name)) {
+              // Trigger this ensureFeaturesVisible hook as well
+              doHideShow(grandchildElement.name);
+            }
+          });
         });
-      });
-    } else {
-      jQuery(featureSelector).hide();
-    }
+      } else {
+        jQuery(featureSelector).hide();
+      }
+    });
   }
 
   // e.g. key is 'prompt_auto_register'

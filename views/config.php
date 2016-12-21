@@ -527,7 +527,12 @@ if (array_key_exists('app_id', $_POST)) {
               </div>
             </div>
           </div>
-
+          <div class="field slidedown-permission-message-https-feature">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="use_slidedown_permission_message_for_https" value="true" <?php if (array_key_exists('use_slidedown_permission_message_for_https', $onesignal_wp_settings) && $onesignal_wp_settings['use_slidedown_permission_message_for_https']) { echo "checked"; } ?>>
+              <label>Show the slidedown permission message before prompting users to subscribe<i class="tiny circular help icon link" role="popup" data-title="Slidedown Permission Message for HTTPS Sites" data-content="If checked, the slidedown permission message will be shown before the browser's permission request. Please note that this slidedown message cannot replace the browser's native permission request. The browser's native permission request must always be finally shown before the user can be subscribed." data-variation="wide"></i></label>
+            </div>
+          </div>
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="notifyButton_enable" value="true" <?php if (array_key_exists('notifyButton_enable', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_enable']) { echo "checked"; } ?>>

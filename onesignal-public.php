@@ -366,9 +366,17 @@ class OneSignal_Public {
               <?php
             }
           } else {
-          ?>
-            OneSignal.init(window._oneSignalInitOptions);
-          <?php
+            if (array_key_exists('use_slidedown_permission_message_for_https', $onesignal_wp_settings) && $onesignal_wp_settings["use_slidedown_permission_message_for_https"] == "1") {
+              ?>
+              oneSignal_options['autoRegister'] = false;
+              OneSignal.showHttpPrompt();
+              OneSignal.init(window._oneSignalInitOptions);
+              <?php
+            } else {
+              ?>
+              OneSignal.init(window._oneSignalInitOptions);
+              <?php
+            }
           }
         } else {
           ?>

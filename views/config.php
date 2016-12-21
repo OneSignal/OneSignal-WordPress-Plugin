@@ -769,7 +769,7 @@ if (array_key_exists('app_id', $_POST)) {
           </div>
           <img class="img-responsive no-center" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.jpg" ?>" width="360">
           <div class="ui borderless shadowless segment" style="position: relative;">
-              <p class="lato">These settings modify the popup message and button text for all users. Use this to localize the popup to your language. All fields here are limited in the length of text they can display; use the Preview Popup button to preview your changes.</p>
+              <p class="lato">These settings modify the popup message and button text for all users. Use this to localize the popup to your language. All fields here are limited in the length of text they can display.</p>
               <div class="field">
                 <div class="ui toggle checkbox">
                   <input type="checkbox" name="prompt_showcredit" value="true" <?php if (@$onesignal_wp_settings['prompt_showcredit']) { echo "checked"; } ?>>
@@ -781,9 +781,6 @@ if (array_key_exists('app_id', $_POST)) {
                   <input type="checkbox" name="prompt_customize_enable" value="true" <?php if (array_key_exists('prompt_customize_enable', $onesignal_wp_settings) && @$onesignal_wp_settings['prompt_customize_enable']) { echo "checked"; } ?>>
                   <label>Customize the popup text</label>
                 </div>
-              </div>
-              <div class="field prompt-customize-feature">
-                <button class="ui gray button" type="button" onclick="showHttpPopup()">Preview Popup</button>
               </div>
               <div class="field prompt-customize-feature">
                   <label>Action Message</label>

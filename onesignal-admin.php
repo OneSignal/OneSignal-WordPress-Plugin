@@ -1,13 +1,17 @@
 <?php
 
+defined( 'ABSPATH' ) or die('This page may not be accessed directly.');
+
 function onesignal_change_footer_admin() {
   return '';
 }
 
 class OneSignal_Admin {
   private static $RESOURCES_VERSION = '35';
-  private static $NONCE_KEY = 'onesignal_meta_box_nonce';
-  private static $NONCE_FIELD = 'onesignal_meta_box';
+  private static $SAVE_POST_NONCE_KEY = 'onesignal_meta_box_nonce';
+  private static $SAVE_POST_NONCE_ACTION = 'onesignal_meta_box';
+  public static $SAVE_CONFIG_NONCE_KEY = 'onesignal_config_page_nonce';
+  public static $SAVE_CONFIG_NONCE_ACTION = 'onesignal_config_page';
 
   public function __construct() {
   }
@@ -102,16 +106,16 @@ class OneSignal_Admin {
 		 * because save_post can be triggered at other times.
 		 */
     // Check if our nonce is set.
-    if (!isset( $_POST[OneSignal_Admin::$NONCE_KEY] ) ) {
+    if (!isset( $_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY] ) ) {
 	    // This is called on every new post ... not necessary to log it.
 	    // onesignal_debug('Nonce is not set for post ' . $post->post_title . ' (ID ' . $post_id . ')');
       return $post_id;
     }
 
-    $nonce = $_POST[OneSignal_Admin::$NONCE_KEY];
+    $nonce = $_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY];
 
     // Verify that the nonce is valid.
-    if (!wp_verify_nonce($nonce, OneSignal_Admin::$NONCE_FIELD)) {
+    if (!wp_verify_nonce($nonce, OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
 	    onesignal_debug('Nonce is not valid for ' . $post->post_title . ' (ID ' . $post_id . ')');
       return $post_id;
     }
@@ -205,7 +209,7 @@ class OneSignal_Admin {
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
     // Add an nonce field so we can check for it later.
-    wp_nonce_field(OneSignal_Admin::$NONCE_FIELD, OneSignal_Admin::$NONCE_KEY );
+    wp_nonce_field(OneSignal_Admin::$SAVE_POST_NONCE_ACTION, OneSignal_Admin::$SAVE_POST_NONCE_KEY, true);
 
     // Our plugin config setting "Automatically send a push notification when I publish a post from the WordPress editor"
     $settings_send_notification_on_wp_editor_post = $onesignal_wp_settings['notification_on_post'];

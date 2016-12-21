@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) or die('This page may not be accessed directly.');
+
 class OneSignal {
   public static function get_onesignal_settings() {
 

@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) or die('This page may not be accessed directly.');
+
 class OneSignalWidget extends WP_Widget {
   
 	function __construct() {

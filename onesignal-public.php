@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) or die('This page may not be accessed directly.');
+
 function onesignal_debug() {
   if (!defined('ONESIGNAL_DEBUG') && !class_exists('WDS_Log_Post')) {
     return;

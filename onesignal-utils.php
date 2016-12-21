@@ -1,5 +1,6 @@
 <?php
 
+defined( 'ABSPATH' ) or die('This page may not be accessed directly.');
 
 class OneSignalUtils {
 
@@ -31,31 +32,31 @@ class OneSignalUtils {
 		return strpos($string, $substring) !== false;
 	}
 
-    /**
-     * Describes whether the user can view "OneSignal Push" on the left sidebar.
-     */
-    public static function can_modify_plugin_settings() {
-        // Only administrators are allowed to do this, see:
-        //   https://codex.wordpress.org/Roles_and_Capabilities#delete_users
-        return OneSignalUtils::is_admin_user();
-    }
+  /**
+   * Describes whether the user can view "OneSignal Push" on the left sidebar.
+   */
+  public static function can_modify_plugin_settings() {
+      // Only administrators are allowed to do this, see:
+      //   https://codex.wordpress.org/Roles_and_Capabilities#delete_users
+      return OneSignalUtils::is_admin_user();
+  }
 
-    /**
-     * Describes whether the user can send notifications for a post.
-     */
-    public static function can_send_notifications() {
-        // Only administrators are allowed to do this, see:
-        //   https://codex.wordpress.org/Roles_and_Capabilities#delete_users
-        return current_user_can('publish_posts') || current_user_can('edit_published_posts');
-    }
+  /**
+   * Describes whether the user can send notifications for a post.
+   */
+  public static function can_send_notifications() {
+      // Only administrators are allowed to do this, see:
+      //   https://codex.wordpress.org/Roles_and_Capabilities#delete_users
+      return current_user_can('publish_posts') || current_user_can('edit_published_posts');
+  }
 
-    /**
-     * To keep the plugin working the same as it was before, only allow administrators to perform important actions.
-     */
-    public static function is_admin_user() {
-        // Only administrators are allowed to do this, see:
-        //   https://codex.wordpress.org/Roles_and_Capabilities#delete_users
-        return current_user_can('delete_users');
-    }
+  /**
+   * To keep the plugin working the same as it was before, only allow administrators to perform important actions.
+   */
+  public static function is_admin_user() {
+    // Only administrators are allowed to do this, see:
+    //   https://codex.wordpress.org/Roles_and_Capabilities#delete_users
+    return current_user_can('delete_users');
+  }
 }
 ?>

@@ -1,9 +1,21 @@
 <?php
-$onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
+defined( 'ABSPATH' ) or die('This page may not be accessed directly.');
+
+if (!OneSignalUtils::can_modify_plugin_settings()) {
+  // Exit if the current user does not have permission
+  die('Insufficient permissions to access config page.');
+}
+
+// If the user is trying to save the form, require a valid nonce or die
 if (array_key_exists('app_id', $_POST)) {
+  // check_admin_referer dies if not valid; no if statement necessary
+  check_admin_referer(OneSignal_Admin::$SAVE_CONFIG_NONCE_ACTION, OneSignal_Admin::$SAVE_CONFIG_NONCE_KEY);
   $onesignal_wp_settings = OneSignal_Admin::save_config_page($_POST);
 }
+
+// The user is just viewing the config page; this page cannot be accessed directly
+$onesignal_wp_settings = OneSignal::get_onesignal_settings();
 ?>
 
 <header class="onesignal">
@@ -409,6 +421,10 @@ if (array_key_exists('app_id', $_POST)) {
     <div class="ui borderless shadowless active tab segment" style="z-index: 1; padding-top: 0; padding-bottom: 0;" data-tab="configuration">
     <div class="ui special padded raised stack segment">
       <form class="ui form" role="configuration" action="#" method="POST">
+        <?php
+        // Add an nonce field so we can check for it later.
+        wp_nonce_field(OneSignal_Admin::$SAVE_CONFIG_NONCE_ACTION, OneSignal_Admin::$SAVE_CONFIG_NONCE_KEY, true);
+        ?>
         <div class="ui dividing header">
           <i class="setting icon"></i>
           <div class="content">

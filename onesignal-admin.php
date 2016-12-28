@@ -7,7 +7,7 @@ function onesignal_change_footer_admin() {
 }
 
 class OneSignal_Admin {
-  private static $RESOURCES_VERSION = '35';
+  private static $RESOURCES_VERSION = '36';
   private static $SAVE_POST_NONCE_KEY = 'onesignal_meta_box_nonce';
   private static $SAVE_POST_NONCE_ACTION = 'onesignal_meta_box';
   public static $SAVE_CONFIG_NONCE_KEY = 'onesignal_config_page_nonce';

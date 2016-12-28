@@ -586,3 +586,24 @@ header[class=onesignal] {
 .ui.form {
     display: block;
 }
+
+/**
+ * http://www.wpsuperhero.com/add-social-share/ adds .checkbox { display: none } and other conflicting styles
+ * https://app.intercom.com/a/apps/344a89aeac3f033e4dec4370781543b948aece6d/inbox/wordpress-team/conversations/7457509888
+ */
+.ui.toggle.checkbox {
+    border: none;
+
+    label {
+        height: initial;
+        width: initial;
+
+        &::after {
+            transform: none;
+        }
+    }
+
+    input.checkbox {
+        display: block;
+    }
+}

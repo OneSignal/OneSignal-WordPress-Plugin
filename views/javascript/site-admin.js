@@ -295,7 +295,6 @@ function showHttpPopup() {
     exampleNotificationCaption: jQuery('[name=prompt_example_notification_caption]').val(),
     acceptButtonText: jQuery('[name=prompt_accept_button_text]').val(),
     cancelButtonText: jQuery('[name=prompt_cancel_button_text]').val(),
-    showCredit: jQuery('[name=prompt_showcredit]').is(':checked'),
     autoAcceptTitle: jQuery('[name=prompt_auto_accept_title]').val(),
     siteName: jQuery('[name=prompt_site_name]').val(),
   };
@@ -310,8 +309,7 @@ function showHttpPopup() {
       'acceptButtonText',
       'autoAcceptTitle',
       'siteName',
-      'cancelButtonText',
-      'showCredit'];
+      'cancelButtonText'];
     for (var i = 0; i < message_localization_params.length; i++) {
       var key = message_localization_params[i];
       var value = message_localization_opts[key];

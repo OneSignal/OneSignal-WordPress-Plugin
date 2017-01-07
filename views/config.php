@@ -788,12 +788,6 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
               <p class="lato">These settings modify the popup message and button text for all users. Use this to localize the popup to your language. All fields here are limited in the length of text they can display.</p>
               <div class="field">
                 <div class="ui toggle checkbox">
-                  <input type="checkbox" name="prompt_showcredit" value="true" <?php if (@$onesignal_wp_settings['prompt_showcredit']) { echo "checked"; } ?>>
-                  <label>Show the OneSignal logo on the prompt</label>
-                </div>
-              </div>
-              <div class="field">
-                <div class="ui toggle checkbox">
                   <input type="checkbox" name="prompt_customize_enable" value="true" <?php if (array_key_exists('prompt_customize_enable', $onesignal_wp_settings) && @$onesignal_wp_settings['prompt_customize_enable']) { echo "checked"; } ?>>
                   <label>Customize the popup text</label>
                 </div>

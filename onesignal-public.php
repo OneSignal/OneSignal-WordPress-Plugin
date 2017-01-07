@@ -183,45 +183,42 @@ class OneSignal_Public {
         if ($onesignal_wp_settings["chrome_auto_dismiss_notifications"] == "1") {
           echo "oneSignal_options['persistNotification'] = false;\n";
         }
-
-
-        if ($onesignal_wp_settings["subdomain"] != "" || $onesignal_wp_settings["use_modal_prompt"] == "1") {
-          echo "oneSignal_options['promptOptions'] = { };\n";
-          if (array_key_exists('prompt_customize_enable', $onesignal_wp_settings) && $onesignal_wp_settings["prompt_customize_enable"] == "1") {
-            if ($onesignal_wp_settings["prompt_action_message"] != "") {
-              echo "oneSignal_options['promptOptions']['actionMessage'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_action_message"]) . "';\n";
-            }
-            if ($onesignal_wp_settings["prompt_example_notification_title_desktop"] != "") {
-              echo "oneSignal_options['promptOptions']['exampleNotificationTitleDesktop'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_example_notification_title_desktop"]) . "';\n";
-            }
-            if ($onesignal_wp_settings["prompt_example_notification_message_desktop"] != "") {
-              echo "oneSignal_options['promptOptions']['exampleNotificationMessageDesktop'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_example_notification_message_desktop"]) . "';\n";
-            }
-            if ($onesignal_wp_settings["prompt_example_notification_title_mobile"] != "") {
-              echo "oneSignal_options['promptOptions']['exampleNotificationTitleMobile'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_example_notification_title_mobile"]) . "';\n";
-            }
-            if ($onesignal_wp_settings["prompt_example_notification_message_mobile"] != "") {
-              echo "oneSignal_options['promptOptions']['exampleNotificationMessageMobile'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_example_notification_message_mobile"]) . "';\n";
-            }
-            if ($onesignal_wp_settings["prompt_example_notification_caption"] != "") {
-              echo "oneSignal_options['promptOptions']['exampleNotificationCaption'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_example_notification_caption"]) . "';\n";
-            }
-            if ($onesignal_wp_settings["prompt_accept_button_text"] != "") {
-              echo "oneSignal_options['promptOptions']['acceptButtonText'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_accept_button_text"]) . "';\n";
-            }
-            if ($onesignal_wp_settings["prompt_cancel_button_text"] != "") {
-              echo "oneSignal_options['promptOptions']['cancelButtonText'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_cancel_button_text"]) . "';\n";
-            }
-            if ($onesignal_wp_settings["prompt_site_name"] != "") {
-              echo "oneSignal_options['promptOptions']['siteName'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_site_name"]) . "';\n";
-            }
-            if ($onesignal_wp_settings["prompt_auto_accept_title"] != "") {
-              echo "oneSignal_options['promptOptions']['autoAcceptTitle'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_auto_accept_title"]) . "';\n";
-            }
+        
+        echo "oneSignal_options['promptOptions'] = { };\n";
+        if (array_key_exists('prompt_customize_enable', $onesignal_wp_settings) && $onesignal_wp_settings["prompt_customize_enable"] == "1") {
+          if ($onesignal_wp_settings["prompt_action_message"] != "") {
+            echo "oneSignal_options['promptOptions']['actionMessage'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_action_message"]) . "';\n";
           }
-          if (array_key_exists('prompt_showcredit', $onesignal_wp_settings) && $onesignal_wp_settings["prompt_showcredit"] != "1") {
-            echo "oneSignal_options['promptOptions']['showCredit'] = false;\n";
+          if ($onesignal_wp_settings["prompt_example_notification_title_desktop"] != "") {
+            echo "oneSignal_options['promptOptions']['exampleNotificationTitleDesktop'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_example_notification_title_desktop"]) . "';\n";
           }
+          if ($onesignal_wp_settings["prompt_example_notification_message_desktop"] != "") {
+            echo "oneSignal_options['promptOptions']['exampleNotificationMessageDesktop'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_example_notification_message_desktop"]) . "';\n";
+          }
+          if ($onesignal_wp_settings["prompt_example_notification_title_mobile"] != "") {
+            echo "oneSignal_options['promptOptions']['exampleNotificationTitleMobile'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_example_notification_title_mobile"]) . "';\n";
+          }
+          if ($onesignal_wp_settings["prompt_example_notification_message_mobile"] != "") {
+            echo "oneSignal_options['promptOptions']['exampleNotificationMessageMobile'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_example_notification_message_mobile"]) . "';\n";
+          }
+          if ($onesignal_wp_settings["prompt_example_notification_caption"] != "") {
+            echo "oneSignal_options['promptOptions']['exampleNotificationCaption'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_example_notification_caption"]) . "';\n";
+          }
+          if ($onesignal_wp_settings["prompt_accept_button_text"] != "") {
+            echo "oneSignal_options['promptOptions']['acceptButtonText'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_accept_button_text"]) . "';\n";
+          }
+          if ($onesignal_wp_settings["prompt_cancel_button_text"] != "") {
+            echo "oneSignal_options['promptOptions']['cancelButtonText'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_cancel_button_text"]) . "';\n";
+          }
+          if ($onesignal_wp_settings["prompt_site_name"] != "") {
+            echo "oneSignal_options['promptOptions']['siteName'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_site_name"]) . "';\n";
+          }
+          if ($onesignal_wp_settings["prompt_auto_accept_title"] != "") {
+            echo "oneSignal_options['promptOptions']['autoAcceptTitle'] = '" . OneSignalUtils::html_safe($onesignal_wp_settings["prompt_auto_accept_title"]) . "';\n";
+          }
+        }
+        if (array_key_exists('prompt_showcredit', $onesignal_wp_settings) && $onesignal_wp_settings["prompt_showcredit"] != "1") {
+          echo "oneSignal_options['promptOptions']['showCredit'] = false;\n";
         }
 
         if (array_key_exists('notifyButton_enable', $onesignal_wp_settings) && $onesignal_wp_settings["notifyButton_enable"] == "1") {

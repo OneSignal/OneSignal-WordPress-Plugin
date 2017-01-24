@@ -55,7 +55,4 @@ callouts.scss:6
 /Users/jpang/.rvm/gems/ruby-2.2.1/bin/ruby_executable_hooks:15:in `eval'
 /Users/jpang/.rvm/gems/ruby-2.2.1/bin/ruby_executable_hooks:15:in `<main>'
 */
-body:before {
-  white-space: pre;
-  font-family: monospace;
-  content: "Error: Undefined variable: \"$color-teallink\".\A         on line 6 of callouts.scss\A \A 1: $callout-default-color: #777777;\A 2: $callout-primary-color: #428bca;\A 3: $callout-success-color: #5cb85c;\A 4: $callout-danger-color: #d9534f;\A 5: $callout-warning-color: #f0ad4e;\A 6: $callout-info-color: $color-teallink;\A 7: $callout-padding: 10px;\A 8: $callout-width: 4px;\A 9: $callout-border-radius: 3px;\A 10: \A 11: /*"; }
+body:before{white-space:pre;font-family:monospace;content:"Error:Undefined variable:\"$color-teallink\".\A on line 6 of callouts.scss\A \A 1:$callout-default-color:#777;\A 2:$callout-primary-color:#428bca;\A 3:$callout-success-color:#5cb85c;\A 4:$callout-danger-color:#d9534f;\A 5:$callout-warning-color:#f0ad4e;\A 6:$callout-info-color:$color-teallink;\A 7:$callout-padding:10px;\A 8:$callout-width:4px;\A 9:$callout-border-radius:3px;\A 10:\A 11:/*"}

@@ -202,7 +202,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <dd>
               <p>Click <strong>Save</strong> to commit your Chrome & Firefox push settings <strong>and then exit the dialog</strong>.</p>
               <p>If you get errors please follow the instructions to fix them. If you're still experiencing problems, email us for support.</p>
-              <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/3');">OneSignal Keys</a> to continue. This next section is much easier!</p>
+              <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/2');">OneSignal Keys</a> to continue. This next section is much easier!</p>
             </dd>
           </div>
         </dl>
@@ -246,7 +246,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="ui segment">
             <dt>3</dt>
             <dd>
-              <p>You're done configuring settings! Continue to <a href="javascript:void(0);" onclick="activateSetupTab('setup/4');">Subscribing Users</a>.</p>
+              <p>You're done configuring settings! Continue to <a href="javascript:void(0);" onclick="activateSetupTab('setup/3');">Subscribing Users</a>.</p>
             </dd>
           </div>
         </dl>

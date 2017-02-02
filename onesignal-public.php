@@ -161,7 +161,7 @@ class OneSignal_Public {
           echo "oneSignal_options['welcomeNotification']['title'] = \"" . OneSignalUtils::html_safe($onesignal_wp_settings["welcome_notification_title"]) . "\";\n";
           echo "oneSignal_options['welcomeNotification']['message'] = \"" . OneSignalUtils::html_safe($onesignal_wp_settings["welcome_notification_message"]) . "\";\n";
           if ($onesignal_wp_settings["welcome_notification_url"] != "") {
-            echo "oneSignal_options['welcomeNotification']['url'] = \"" . $onesignal_wp_settings["welcome_notification_url"] . "\";\n";
+            echo "oneSignal_options['welcomeNotification']['url'] = \"" . OneSignalUtils::html_safe($onesignal_wp_settings["welcome_notification_url"]) . "\";\n";
           }
         }
         else {

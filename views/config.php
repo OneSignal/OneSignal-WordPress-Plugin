@@ -861,7 +861,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             </div>
           <div class="field welcome-notification-feature">
             <label>URL<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification URL" data-content="The webpage to open when clicking the notification. If left blank, your main site URL will be used as a default." data-variation="wide"></i></label>
-            <input type="text" placeholder="(defaults to your website's URL if blank)" name="welcome_notification_url" value="<?php echo @$onesignal_wp_settings['welcome_notification_url']; ?>">
+            <input type="text" placeholder="(defaults to your website's URL if blank)" name="welcome_notification_url" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['welcome_notification_url']); ?>">
           </div>
         </div>
         <div class="ui dividing header">
@@ -893,7 +893,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
         <div class="ui borderless shadowless segment">
           <div class="field">
             <label>Additional Notification URL Parameters<i class="tiny circular help icon link" role="popup" data-html="Adds the specified string as extra URL parameters to your notification URL so that they can be tracked as an event by your analytics system. <em>Please escape your parameter values</em>; your input will be added as-is to the end of your notification URL. Example:</p>If you want:<em><li><code>utm_medium</code> to be <code>ppc</code></li><li><code>utm_source</code> to be <code>adwords</code></li><li><code>utm_campaign</code> to be <code>snow boots</code></li><li><code>utm_content</code> to be <code>durable snow boots</code></li></em><p><p>Then use the following string:</p><p><code style='word-break: break-all;'>utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots</code></p>" data-variation="wide"></i></label>
-            <input type="text" placeholder="utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots" name="utm_additional_url_params" value="<?php echo @$onesignal_wp_settings['utm_additional_url_params']; ?>">
+            <input type="text" placeholder="utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots" name="utm_additional_url_params" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['utm_additional_url_params']); ?>">
           </div>
         </div>
         <div class="ui dividing header">

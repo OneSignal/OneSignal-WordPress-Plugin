@@ -25,7 +25,7 @@ class OneSignal {
                   'default_url' => "",
                   'app_rest_api_key' => "",
                   'safari_web_id' => "",
-                  'showNotificationIconFromPostThumbnail' => false,
+                  'showNotificationIconFromPostThumbnail' => true,
                   'chrome_auto_dismiss_notifications' => false,
                   'prompt_customize_enable' => 'CALCULATE_SPECIAL_VALUE',
                   'prompt_action_message' => "",

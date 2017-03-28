@@ -444,7 +444,13 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             </span>
             <i class="close icon"></i>
           </div>
-          <?php if ($onesignal_wp_settings['gcm_sender_id'] !== '' || $onesignal_wp_settings['show_gcm_sender_id']): ?>
+          <?php if (
+                     (
+                       $onesignal_wp_settings['gcm_sender_id'] !== '' ||
+                       $onesignal_wp_settings['show_gcm_sender_id']
+                     ) &&
+                     (OneSignalUtils::url_contains_parameter(ONESIGNAL_URI_REVEAL_PROJECT_NUMBER))
+                   ): ?>
           <div class="field">
             <label>Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Google Project Number" data-content="Your Google Project Number. Do NOT change this as it can cause all existing subscribers to become unreachable." data-variation="wide"></i></label>
             <p class="hidden danger-label" data-target="[name=gcm_sender_id]">WARNING: Changing this causes all existing subscribers to become unreachable. Please do not change unless instructed to do so!</p>
@@ -907,12 +913,14 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <label>Additional Custom Post Types for Automatic Notifications Created From Plugins<i class="tiny circular help icon link" role="popup" data-html="Enter a comma-separated list of custom post type names. Anytime a post is published with one of the listed post types, a notification will be sent to all your users. <strong class='least-strong'>The setting</strong> <em>Automatically send a push notification when I publish a post from 3rd party plugins</em> <strong class='least-strong'>must be enabled for this feature to work</strong>." data-variation="wide"></i></label>
             <input type="text" placeholder="forum,reply,topic  (comma separated, no spaces between commas)" name="allowed_custom_post_types" value="<?php echo @$onesignal_wp_settings['allowed_custom_post_types']; ?>">
           </div>
-          <div class="field">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" name="show_gcm_sender_id" value="true" <?php if ($onesignal_wp_settings['show_gcm_sender_id']) { echo "checked"; } ?>>
-              <label>Use my own Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Providing Your Own Web Push Keys" data-content="Check this if you'd like to provide your own Google Project Number."></i></label>
+          <?php if (OneSignalUtils::url_contains_parameter(ONESIGNAL_URI_REVEAL_PROJECT_NUMBER)): ?>
+            <div class="field">
+              <div class="ui toggle checkbox">
+                <input type="checkbox" name="show_gcm_sender_id" value="true" <?php if ($onesignal_wp_settings['show_gcm_sender_id']) { echo "checked"; } ?>>
+                <label>Use my own Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Providing Your Own Web Push Keys" data-content="Check this if you'd like to provide your own Google Project Number."></i></label>
+              </div>
             </div>
-          </div>
+          <?php endif; ?>
           <div class="field custom-manifest-feature">
             <label>Custom manifest.json URL<i class="tiny circular help icon link" role="popup" data-html="<p>Enter the complete URL to your existing manifest.json file to be used in place of our own. Your URL's domain should match that of your main site that users are visiting.</p><p>e.g. <code>https://yoursite.com/manifest.json</code></p>" data-variation="wide"></i></label>
             <input type="text" placeholder="https://yoursite.com/manifest.json" name="custom_manifest_url" value="<?php echo @$onesignal_wp_settings['custom_manifest_url']; ?>">

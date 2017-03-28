@@ -20,6 +20,12 @@ class OneSignalUtils {
 		return $string;
 	}
 
+	public static function url_contains_parameter($text) {
+	  if (array_key_exists('REQUEST_URI', $_SERVER)) {
+      return strpos($_SERVER['REQUEST_URI'], $text);
+    }
+  }
+
 	public static function html_safe($string) {
 		$HTML_ENTITY_DECODE_FLAGS = ENT_QUOTES;
 		if (defined('ENT_HTML401')) {

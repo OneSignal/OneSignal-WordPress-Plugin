@@ -284,6 +284,7 @@ class OneSignal_Admin {
       'notification_on_post',
       'notification_on_post_from_plugin',
       'showNotificationIconFromPostThumbnail',
+      'showNotificationImageFromPostThumbnail',
       'chrome_auto_dismiss_notifications',
       'prompt_customize_enable',
       'notifyButton_showAfterSubscribed',
@@ -449,14 +450,15 @@ class OneSignal_Admin {
  /**
   * Returns true if more than one notification has been sent in the last minute.
   */
-  public static function is_over_sending_rate_limit() {
+  public static function get_sending_rate_limit_wait_time() {
     onesignal_debug('Called is_over_sending_rate_limit()');
     $last_send_time = get_option('onesignal.last_send_time');
     onesignal_debug('    [is_over_sending_rate_limit] Last send time:', $last_send_time);
     if ($last_send_time) {
-        if (current_time('timestamp') - intval($last_send_time) <= ONESIGNAL_API_RATE_LIMIT_SECONDS) {
+        $time_elapsed_since_last_send = ONESIGNAL_API_RATE_LIMIT_SECONDS - (current_time('timestamp') - intval($last_send_time));
+        if ($time_elapsed_since_last_send > 0) {
             onesignal_debug('    [is_over_sending_rate_limit] Current send time (' . current_time('timestamp') . ') is less than rate limit time after the last send time.');
-            return true;
+            return $time_elapsed_since_last_send;
         }
     }
     return false;
@@ -480,9 +482,10 @@ class OneSignal_Admin {
 	    }
 
 
-	    if (self::is_over_sending_rate_limit()) {
+      $time_to_wait = self::get_sending_rate_limit_wait_time();
+	    if ($time_to_wait > 0) {
             set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
-                    <p><strong>OneSignal Push:</strong><em> Please try again shortly. Only one notification can be sent every ' . ONESIGNAL_API_RATE_LIMIT_SECONDS . ' seconds.</em></p>
+                    <p><strong>OneSignal Push:</strong><em> Please try again in ' . $time_to_wait . ' seconds. Only one notification can be sent every ' . ONESIGNAL_API_RATE_LIMIT_SECONDS . ' seconds.</em></p>
                 </div>', 86400);
             return;
         }
@@ -631,21 +634,29 @@ class OneSignal_Admin {
             $fields['url'] .= '?' . $config_utm_additional_url_params;
         }
 
-        $post_has_featured_image = has_post_thumbnail($post->ID);
-        onesignal_debug('Post has featured image:', $post_has_featured_image);
-        $config_use_featured_image_as_icon = $onesignal_wp_settings['showNotificationIconFromPostThumbnail'] == "1";
-        onesignal_debug('Post should use featured image:', $config_use_featured_image_as_icon);
-        if ($post_has_featured_image == true && $config_use_featured_image_as_icon) {
-          // get the icon image from wordpress if it exists
+        if (has_post_thumbnail($post->ID)) {
           $post_thumbnail_id = get_post_thumbnail_id($post->ID);
-          $thumbnail_array   = wp_get_attachment_image_src($post_thumbnail_id, array(80, 80), true);
-          onesignal_debug('Featured post image array:', $thumbnail_array);
-          if (!empty($thumbnail_array)) {
+          $thumbnail_array = wp_get_attachment_image_src($post_thumbnail_id, array(80, 80), true);
+          $post_has_featured_image = !empty($thumbnail_array);
+          onesignal_debug('Post has featured image:', $post_has_featured_image);
+          $config_use_featured_image_as_icon = $onesignal_wp_settings['showNotificationIconFromPostThumbnail'] == "1";
+          onesignal_debug('Post should use featured image for notification icon (small):', $config_use_featured_image_as_icon);
+          $config_use_featured_image_as_image = $onesignal_wp_settings['showNotificationImageFromPostThumbnail'] == "1";
+          onesignal_debug('Post should use featured image for notification image (large):', $config_use_featured_image_as_image);
+          if ($post_has_featured_image == true) {
+            // get the icon image from wordpress if it exists
             $thumbnail = $thumbnail_array[0];
-            // set the icon image for both chrome and firefox-1
-            $fields['chrome_web_icon'] = $thumbnail;
-            $fields['firefox_icon']    = $thumbnail;
-            onesignal_debug('Setting Chrome and Firefox notification icon to:', $thumbnail);
+            onesignal_debug('Featured post image array:', $thumbnail_array);
+            if ($config_use_featured_image_as_icon) {
+              // set the icon image for both chrome and firefox-1
+              $fields['chrome_web_icon'] = $thumbnail;
+              $fields['firefox_icon'] = $thumbnail;
+              onesignal_debug('Setting Chrome and Firefox notification icon to:', $thumbnail);
+            }
+            if ($config_use_featured_image_as_image) {
+              $fields['chrome_web_image'] = $thumbnail;
+              onesignal_debug('Setting Chrome notification large image to:', $thumbnail);
+            }
           }
         }
 

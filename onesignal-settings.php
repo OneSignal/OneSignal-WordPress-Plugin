@@ -26,6 +26,7 @@ class OneSignal {
                   'app_rest_api_key' => "",
                   'safari_web_id' => "",
                   'showNotificationIconFromPostThumbnail' => true,
+                  'showNotificationImageFromPostThumbnail' => 'CALCULATE_SPECIAL_VALUE',
                   'chrome_auto_dismiss_notifications' => false,
                   'prompt_customize_enable' => 'CALCULATE_SPECIAL_VALUE',
                   'prompt_action_message' => "",
@@ -136,6 +137,17 @@ class OneSignal {
                $onesignal_wp_settings[$key] = $value;
             }
         }
+    }
+
+    // Special case for web push images
+    if (!array_key_exists('showNotificationImageFromPostThumbnail', $onesignal_wp_settings)) {
+      if ( $is_new_user ) {
+        // Enable the notify button by default for new sites
+        $onesignal_wp_settings['showNotificationImageFromPostThumbnail'] = true;
+      } else {
+        // Do NOT enable the notify button for existing WordPress sites, since they may not like the way their notification changes
+        $onesignal_wp_settings['showNotificationImageFromPostThumbnail'] = false;
+      }
     }
 
     // Special case for notify button

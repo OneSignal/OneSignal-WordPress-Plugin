@@ -3,8 +3,8 @@ Contributors: OneSignal
 Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
-Tested up to: 4.7
-Stable tag: 1.14.0
+Tested up to: 4.7.3
+Stable tag: 1.14.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 150,000 developers and marketers including some of the largest brands and websites in the world.
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 160,000 developers and marketers including some of the largest brands and websites in the world.
 
 After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
 
@@ -55,6 +55,11 @@ Features:
 9. Our OneSignal dashboard A/B testing page.
 
 == Changelog ==
+
+= 1.14.1 =
+- Remove .htaccess file
+
+  Apache httpd.conf configurations that don't allow custom .htaccess options will error out with a 500 if we place this file there.
 
 = 1.14.0 =
 - Update semantic versioning; update minor version for new backwards-compatible functionality

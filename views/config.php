@@ -75,24 +75,18 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="ui segment">
             <dt>3</dt>
             <dd>
-              <p>Select the <strong>Website Push</strong> platform and click <strong>Next</strong>.</p>
+              <p>Click <strong>&times;</strong> to exit the dialog popup.</p>
+              <p>Click <strong>App Settings</strong> on the left sidebar.</p>
+              <p>Click <strong>Configure</strong> next to <strong>Google Chrome & Mozilla Firefox</strong>.</p>
+              <p>Instructions to set up Safari web push are available at the end of this guide.</p>
               <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-3.jpg" ?>">
             </dd>
           </div>
-
           <div class="ui segment">
             <dt>4</dt>
             <dd>
-              <p>Select the <strong>Google Chrome & Mozilla Firefox</strong> sub-platform and click <strong>Next</strong>.</p>
-              <p>Instructions to set up Safari web push are available at the end of this guide.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-4.jpg" ?>">
-            </dd>
-          </div>
-          <div class="ui segment">
-            <dt>5</dt>
-            <dd>
-              <p>In this step, we focus only on filling out the <em>Site URL</em>.
-                <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-5.jpg" ?>">
+              <p>Add your <em>Site URL</em>.
+                <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-4.jpg" ?>">
               <p>Enter the URL to your site's domain. The purpose of this field is to prevent other sites from hijacking your keys to impersonate you and send push notifications on your behalf. Please note:</p>
               <ul>
                 <li>
@@ -117,53 +111,38 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
                   <p><code>localhost</code></p>
                   <p>You can use this to test locally.</p>
                 </li>
-                <li>
-                  <p><code>*</code></p>
-                  <p>This allows all sites. <em>Please don't use this on production, otherwise any other site can send push notifications on your behalf.</em></p>
-                </li>
               </ul>
             </dd>
           </div>
 
           <div class="ui segment">
-            <dt>6</dt>
+            <dt>5</dt>
             <dd>
-              <p>In this step, we focus only on filling out the <em>Default Notification Icon URL</em>.
-                <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-7.jpg" ?>">
+              <p>Add your <em>Default Notification Icon URL</em>.
+                <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-5.jpg" ?>">
               <p>Enter the complete URL to your notification icon. Please note:</p>
               <ul>
-                <li>
-                  <p>Your notification icon must be <code>80 pixels &times; 80 pixels</code> large</p>
-                  <p>On some platforms, larger icons are forcefully downsized to <code>40 &times; 40</code> and centered with an ugly white 20 pixel margin</p>
-                  <p></p>
-                </li>
+                <li>Your notification icon should be square, at least <code>80 pixels &times; 80 pixels</code> large</li>
+                <li>URL should begin with <code>https://</code></li>
                 <li>The <a href="https://onesignal.com/images/notification_logo.png" target="_blank">default OneSignal notification icon</a> will be used as a default if you don't choose one</li>
               </ul>
             </dd>
           </div>
           <div class="ui segment">
-            <dt>7</dt>
+            <dt>6</dt>
             <dd>
-              <p>In this step, we focus only on the <em>HTTP Fallback Mode</em>.</p>
+              <p>Check the box if your site is not fully HTTPS.</p>
               <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-8.jpg" ?>">
               <div class="relative ui two column middle aligned very relaxed stackable grid">
                 <div class="center aligned column">
                   <code><strong>http</strong>://domain.com</code>
                   <h3>HTTP</h3>
                 </div>
-                <div class="ui vertical divider">
-                  Or
-                </div>
                 <div class="center aligned column">
                   <code><strong>https</strong>://domain.com</code>
                   <h3>HTTPS</h3>
                 </div>
               </div>
-              <p>Check the <em>My site is not fully HTTPS</em> box if:</p>
-              <ul>
-                <li>You already know your site doesn't support HTTPS</li>
-                <li>Your site supports HTTPS, but your site can be viewed on <code><strong>http</strong>://domain.com</code>, without being automatically redirected to <code><strong>https</strong>://domain.com</code></li>
-              </ul>
               <p><strong>Otherwise, do not check the box and leave it blank.</strong></p>
             </dd>
           </div>
@@ -171,37 +150,32 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
         <div class="ui center aligned piled segment">
           <i class="big grey announcement pinned icon"></i>
           <h3>Next Steps</h3>
-          <p><strong>Steps 8 &hyphen; 9 only apply if you've checked <code>My site is not fully HTTPS</code>.</strong>
+          <p><strong>Steps 7 &hyphen; 8 only apply if you've checked <code>My site is not fully HTTPS</code>.</strong>
             <br> If you've left the option blank, you may optionally continue to <a href="javascript:void(0);" onclick="activateSetupTab('setup/5');">Safari Push</a>!</p>
         </div>
         <dl>
           <div class="ui segment">
-            <dt>8</dt>
+            <dt>7</dt>
             <dd>
-              <p>In this step, we focus only on filling out the <em>Subdomain</em>.
-                <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-9.jpg" ?>">
-              <p>Chrome web push notifications don't support HTTP sites, but we work around that by subscribing your users to a subdomain of our site, which <em>is</em> fully HTTPS.</p>
+              <p>Add a name to display for your subdomain.
+              <p>On onesignal.com:</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-7a.jpg" ?>">
+              <p>Copy this value to the <em>Subdomain</em> textbox in the <strong><em>Configuration</em></strong> tab.</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-7b.jpg" ?>">
               <p>Choose any subdomain you like; your push notifications will come from <code>https://yoursubdomain.onesignal.com</code>.</p>
-              <p>Choose your subdomain well the first time! Changing your subdomain in the future has a nasty side effect: all previously subscribed users will see notifications from your old subdomain and new subdomain, unless they clear their browser data.</p>
-              <p>When you're done, <strong>enter this value into the <em>Configuration</em> tab under Subdomain</strong>.</p>
+              <p><strong>Never change your subdomain</strong>.</p>
             </dd>
           </div>
           <div class="ui center aligned piled segment">
-            <i class="big grey pin pinned icon"></i>
-            <h3>Subdomain</h3>
-            <p>Put this value in the <em>Subdomain</em> field of the <em>Configuration</em> tab.</p>
-          </div>
-          <div class="ui center aligned piled segment">
             <i class="big grey warning pinned icon"></i>
-            <h3>Changing Your Subdomain</h3>
-            <p>Changing your subdomain makes all currently subscribed players receive notifications from both
-              <br> your old and new subdomain. It's important to choose your subdomain well the first time.</p>
+            <h3>Never Change Your Subdomain</h3>
+            <p>Users will receive duplicate notifications.</p>
           </div>
           <div class="ui segment">
-            <dt>10</dt>
+            <dt>8</dt>
             <dd>
-              <p>Click <strong>Save</strong> to commit your Chrome & Firefox push settings <strong>and then exit the dialog</strong>.</p>
-              <p>If you get errors please follow the instructions to fix them. If you're still experiencing problems, email us for support.</p>
+              <p>Click <strong>Save</strong> on both pages.</p>
+              <p>If you see errors, please follow the instructions to fix them. If you're still experiencing problems, email us for support.</p>
               <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/2');">OneSignal Keys</a> to continue. This next section is much easier!</p>
             </dd>
           </div>
@@ -213,20 +187,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="ui segment">
             <dt>1</dt>
             <dd>
-              <p>If you're continuing from the previous page:</p>
-              <ol>
-                <li>Close <strong>&times;</strong> the dialog.</li>
-                <li>Click <strong>Yes</strong> to the <em>Finish later?</em> prompt.</li>
-                <li>Click the app you just configured to access the main app's page.</li>
-                <li>Click <strong>App Settings</strong> from the left sidebar.</li>
-              </ol>
-              <p>If you're resuming this setup from another time:</p>
-              <ol>
-                <li>Log in to your OneSignal account.</li>
-                <li>Click the app you configured in the previous page to access the main app's page.</li>
-                <li>Click <strong>App Settings</strong> from the left sidebar.</li>
-              </ol>
-              <p>You should be on this page:</p>
+              <p>Go to App Settings > Keys & IDs:</p>
               <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/keys-1.jpg" ?>">
             </dd>
           </div>
@@ -236,17 +197,17 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
               <p>Click <strong>Keys &amp; IDs</strong> on the right tabbed pane.</p>
               <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/keys-2.jpg" ?>">
               <p>Copy the <strong>REST API Key</strong> and <strong>OneSignal App ID</strong> to the <em>Configuration</em> tab.</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/keys-2b.jpg" ?>">
+              <p>Click save.</p>
+              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/keys-2c.jpg" ?>">
             </dd>
-          </div>
-          <div class="ui center aligned piled segment">
-            <i class="big grey pin pinned icon"></i>
-            <h3>REST API Key &amp; App ID</h3>
-            <p>Copy the <strong>REST API Key</strong> and <strong>OneSignal App ID</strong> to the <em>Configuration</em> tab.</p>
           </div>
           <div class="ui segment">
             <dt>3</dt>
             <dd>
-              <p>You're done configuring settings! Continue to <a href="javascript:void(0);" onclick="activateSetupTab('setup/3');">Subscribing Users</a>.</p>
+              <p>You're done configuring settings!</p>
+              <p><em>You can now subscribe to your own site to test notifications!</em></p>
+              <p>Continue to <a href="javascript:void(0);" onclick="activateSetupTab('setup/3');">Subscribing Users</a>.</p>
             </dd>
           </div>
         </dl>
@@ -257,9 +218,6 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
             <div class="center aligned column">
               <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.png" ?>" width="100%">
-            </div>
-            <div class="ui vertical divider">
-              Or/And
             </div>
             <div class="center aligned column">
               <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell.jpg" ?>" width="60%">
@@ -277,9 +235,6 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
             <div class="center aligned column">
               <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/https-prompt.png" ?>" width="100%">
-            </div>
-            <div class="ui vertical divider">
-              Or/And
             </div>
             <div class="center aligned column">
               <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell.jpg" ?>" width="60%">
@@ -539,12 +494,12 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
                      data-html="
                        <p>If enabled, your site will automatically present the following without any code required:</p>
                        <p>HTTPS Sites:
-                         <img 
+                         <img
                             src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg" ?>'
                             width=400>
                        </p>
                        <p>HTTP Sites:
-                         <img 
+                         <img
                             src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.png" ?>'
                             width=400>
                        </p>"

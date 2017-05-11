@@ -159,7 +159,7 @@ class OneSignal_Admin {
 		  onesignal_debug('Set post metadata "onesignal_send_notification" to false.');
 	  }
   }
-  
+
   public static function add_onesignal_post_options() {
     // If there is an error message we should display, display it now
     function admin_notice_error() {
@@ -246,7 +246,7 @@ class OneSignal_Admin {
       </label>
     <?php
   }
-  
+
   public static function save_config_page($config) {
     if (!OneSignalUtils::can_modify_plugin_settings()) {
         onesignal_debug('Not saving plugin settings because the current user is not an administrator.');
@@ -255,15 +255,15 @@ class OneSignal_Admin {
                 </div>', 86400 );
         return;
     }
-    
+
     $sdk_dir = plugin_dir_path( __FILE__ ) . 'sdk_files/';
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
     $new_app_id = $config['app_id'];
-    
+
     // Validate the UUID
     if( preg_match('/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/', $new_app_id, $m))
       $onesignal_wp_settings['app_id'] = $new_app_id;
-    
+
     if (array_key_exists('gcm_sender_id', $config) && (is_numeric($config['gcm_sender_id']) || $config['gcm_sender_id'] === '')) {
       $onesignal_wp_settings['gcm_sender_id'] = $config['gcm_sender_id'];
     }
@@ -389,7 +389,7 @@ class OneSignal_Admin {
                                     'onesignal-push',
                                     array(__CLASS__, 'admin_menu')
     );
-                       
+
     add_action( 'load-' . $OneSignal_menu, array(__CLASS__, 'admin_custom_load') );
 	}
 
@@ -432,7 +432,7 @@ class OneSignal_Admin {
 		  add_action( 'admin_notices', 'admin_notice_curl_not_installed');
 	  }
   }
-  
+
   public static function admin_custom_scripts() {
     add_filter('admin_footer_text', 'onesignal_change_footer_admin', 9999); // 9999 means priority, execute after the original fn executes
 
@@ -635,28 +635,33 @@ class OneSignal_Admin {
         }
 
         if (has_post_thumbnail($post->ID)) {
+          onesignal_debug('Post has featured image.');
+
           $post_thumbnail_id = get_post_thumbnail_id($post->ID);
-          $thumbnail_array = wp_get_attachment_image_src($post_thumbnail_id, array(80, 80), true);
-          $post_has_featured_image = !empty($thumbnail_array);
-          onesignal_debug('Post has featured image:', $post_has_featured_image);
+          // Higher resolution (2x retina, + a little more) for the notification small icon
+          $thumbnail_sized_images_array = wp_get_attachment_image_src($post_thumbnail_id, array(192, 192), true);
+          // Much higher resolution for the notification large image
+          $large_sized_images_array = wp_get_attachment_image_src($post_thumbnail_id, 'large', true);
+
           $config_use_featured_image_as_icon = $onesignal_wp_settings['showNotificationIconFromPostThumbnail'] == "1";
           onesignal_debug('Post should use featured image for notification icon (small):', $config_use_featured_image_as_icon);
           $config_use_featured_image_as_image = $onesignal_wp_settings['showNotificationImageFromPostThumbnail'] == "1";
           onesignal_debug('Post should use featured image for notification image (large):', $config_use_featured_image_as_image);
-          if ($post_has_featured_image == true) {
-            // get the icon image from wordpress if it exists
-            $thumbnail = $thumbnail_array[0];
-            onesignal_debug('Featured post image array:', $thumbnail_array);
-            if ($config_use_featured_image_as_icon) {
-              // set the icon image for both chrome and firefox-1
-              $fields['chrome_web_icon'] = $thumbnail;
-              $fields['firefox_icon'] = $thumbnail;
-              onesignal_debug('Setting Chrome and Firefox notification icon to:', $thumbnail);
-            }
-            if ($config_use_featured_image_as_image) {
-              $fields['chrome_web_image'] = $thumbnail;
-              onesignal_debug('Setting Chrome notification large image to:', $thumbnail);
-            }
+
+          // get the icon image from wordpress if it exists
+          if ($config_use_featured_image_as_icon) {
+            onesignal_debug('Featured post image thumbnail-sized array:', $thumbnail_sized_images_array);
+            $thumbnail_image = $thumbnail_sized_images_array[0];
+            // set the icon image for both chrome and firefox-1
+            $fields['chrome_web_icon'] = $thumbnail_image;
+            $fields['firefox_icon'] = $thumbnail_image;
+            onesignal_debug('Setting Chrome and Firefox notification icon to:', $thumbnail_image);
+          }
+          if ($config_use_featured_image_as_image) {
+            onesignal_debug('Featured post image large-sized array:', $large_sized_images_array);
+            $large_image = $large_sized_images_array[0];
+            $fields['chrome_web_image'] = $large_image;
+            onesignal_debug('Setting Chrome notification large image to:', $large_image);
           }
         }
 
@@ -755,7 +760,7 @@ class OneSignal_Admin {
   public static function was_post_restored_from_trash($old_status, $new_status) {
       return $old_status === 'trash' && $new_status === 'publish';
   }
-  
+
   public static function on_transition_post_status( $new_status, $old_status, $post ) {
     if ($post->post_type == 'wdslp-wds-log' ||
         self::was_post_restored_from_trash($old_status, $new_status)) {

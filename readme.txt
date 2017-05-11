@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
 Tested up to: 4.7.4
-Stable tag: 1.14.2
+Stable tag: 1.14.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 165,000 developers and marketers including some of the largest brands and websites in the world. We send over a billion notifications a day.
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 175,000 developers and marketers including some of the largest brands and websites in the world. We send over a billion notifications a day.
 
 After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
 
@@ -55,6 +55,14 @@ Features:
 9. Our OneSignal dashboard A/B testing page.
 
 == Changelog ==
+
+= 1.14.3 =
+- Use larger sized icons for the featured image
+
+  Notification small icons and large images previously used the uploaded image closest to size 80x80. For a large uploaded image with no
+  resized variants, there would be no issues. But for uploaded images resized to different sizes by WordPress, this caused the smallest image
+  size to be selected and look blurry. Notification small icons now use the closest available image to 192x192 for a sharper image, whereas
+  large images use the closest available image to 640x480.
 
 = 1.14.2 =
 - Update Setup tab's images and text

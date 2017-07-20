@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) or die('This page may not be accessed directly.');
 class OneSignalWidget extends WP_Widget {
   
 	function __construct() {
-    parent::__construct('OneSignalWidget', 'OneSignal', array( 'description' => 'Subscribe to notifications'));
+    parent::__construct('OneSignalWidget', __( 'OneSignal', 'onesignal-free-web-push-notifications' ), array( 'description' => __( 'Subscribe to notifications', 'onesignal-free-web-push-notificationsones' ) ) );
 	}
   
   // Admin editor
@@ -14,9 +14,9 @@ class OneSignalWidget extends WP_Widget {
     $text = ! empty( $instance['text'] ) ? $instance['text'] : 'Subscribe to notifications';
 		?>
 		<p>
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
+		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'onesignal-free-web-push-notifications' ); ?></label> 
 		<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
-    		<label for="<?php echo $this->get_field_id( 'text' ); ?>"><?php _e( 'Body:' ); ?></label> 
+    		<label for="<?php echo $this->get_field_id( 'text' ); ?>"><?php _e( 'Body:', 'onesignal-free-web-push-notifications' ); ?></label> 
 		<input class="widefat" id="<?php echo $this->get_field_id( 'text' ); ?>" name="<?php echo $this->get_field_name( 'text' ); ?>" type="text" value="<?php echo esc_attr( $text ); ?>">
 		</p>
 		<?php 
@@ -25,7 +25,7 @@ class OneSignalWidget extends WP_Widget {
 	function update($new_instance, $old_instance) {
 		$instance = array();
 		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
-    $instance['text'] = ( ! empty( $new_instance['text'] ) ) ? strip_tags( $new_instance['text'] ) : '';
+    	$instance['text'] = ( ! empty( $new_instance['text'] ) ) ? strip_tags( $new_instance['text'] ) : '';
     
 		return $instance;
 	}

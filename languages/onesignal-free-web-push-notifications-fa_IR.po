@@ -1,0 +1,501 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: OneSignal Push Notifications\n"
+"POT-Creation-Date: 2017-07-04 10:18+0430\n"
+"PO-Revision-Date: 2017-07-04 10:21+0430\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.2\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: onesignal.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#. Plugin Name of the plugin/theme
+#: onesignal-admin.php:176 onesignal-admin.php:193
+msgid "OneSignal Push Notifications"
+msgstr "ارسال اعلان وان سیگنال"
+
+#: onesignal-admin.php:243
+#, php-format
+msgid "Send notification on %s update"
+msgstr "ارسال اعلان در زمان بروزرسانی %s"
+
+#: onesignal-admin.php:246
+#, php-format
+msgid "Send notification on %s publish"
+msgstr "ارسال اعلان در زمان انتشار %s"
+
+#: onesignal-admin.php:254
+msgid ""
+"Not saving plugin settings because the current user is not an administrator."
+msgstr ""
+
+#: onesignal-admin.php:388 onesignal-admin.php:389
+msgid "OneSignal Push"
+msgstr "اعلان وان سیگنال"
+
+#: onesignal-admin.php:418 onesignal-admin.php:430
+msgid "OneSignal Push:"
+msgstr "اعلان وان سیگنال:"
+
+#: onesignal-admin.php:418
+msgid ""
+"Your setup is not complete. Please follow the Setup guide to set up web push "
+"notifications. Both the App ID and REST API Key fields are required."
+msgstr ""
+"راه اندازی شما کامل نیست. لطفاً گام های زیر را برای راه اندازی اعلان وب دنبال "
+"کنید. هر دو فیلد App ID و کلید REST API ضروری هستند."
+
+#: onesignal-admin.php:430
+msgid ""
+"cURL is not installed on this server. cURL is required to send "
+"notifications. Please make sure cURL is installed on your server before "
+"continuing."
+msgstr ""
+"cURL روی سرور شما نصب نیست. برای ارسال اعلان cURL ضروری است. لطفاً قبل از "
+"ادامه مطمئن شوید که cURL روی سرور شما نصب شده است."
+
+#: onesignal-widget.php:17
+msgid "Title:"
+msgstr "عنوان:"
+
+#: onesignal-widget.php:19
+msgid "Body:"
+msgstr "بدنه:"
+
+#: views/config.php:386
+msgid "Account Settings"
+msgstr "تنظیمات حساب"
+
+#: views/config.php:393
+msgid "My site uses an HTTPS connection (SSL)"
+msgstr "سایت من از ارتباط HTTPS استفاده میکند(SSL)"
+
+#: views/config.php:410
+msgid "Google Project Number"
+msgstr "شماره پروژه گوگل"
+
+#: views/config.php:424
+msgid "OneSignal Subdomain"
+msgstr "زیر دامنه وان سیگنال"
+
+#: views/config.php:435
+msgid "Sent Notification Settings"
+msgstr "تنظیمات ارسال اعلان"
+
+#: views/config.php:458
+msgid "Notification Title"
+msgstr "عنوان اعلان"
+
+#: views/config.php:464
+msgid "Send notifications additionally to iOS & Android platforms"
+msgstr ""
+
+#: views/config.php:471
+msgid "Prompt Settings & Notify Button"
+msgstr ""
+
+#: views/config.php:477
+msgid ""
+"Control the way visitors are prompted to subscribe. The notify button is an "
+"interactive widget your site visitors can use to manage their push "
+"notification subscription status. The notify button can be used to initially "
+"subscribe to push notifications, and to unsubscribe."
+msgstr ""
+
+#: views/config.php:483
+msgid ""
+"Use an alternate full-screen prompt when requesting subscription permission "
+"(incompatible with notify button and auto-prompting)"
+msgstr ""
+
+#: views/config.php:491
+msgid ""
+"Automatically prompt new site visitors to subscribe to push notifications"
+msgstr ""
+
+#: views/config.php:516
+msgid ""
+"Show the slidedown permission message before prompting users to subscribe"
+msgstr ""
+
+#: views/config.php:522
+msgid "Enable the notify button"
+msgstr "فعال کردن دکمه اعلان"
+
+#: views/config.php:534
+msgid "Show first-time site visitors an unread message icon"
+msgstr ""
+
+#: views/config.php:540
+msgid "Show the OneSignal logo on the notify button dialog"
+msgstr ""
+
+#: views/config.php:546
+msgid "Customize the notify bell text"
+msgstr "سفارشی کردن متن زنگوله اعلان"
+
+#: views/config.php:552
+msgid "Customize the notify bell offset position"
+msgstr "سفارشی کردن موقعیت زنگوله اعلان"
+
+#: views/config.php:558
+msgid "Customize the notify bell theme colors"
+msgstr "سفارشی کردن رنگ پوسته زنگوله اعلان"
+
+#: views/config.php:562
+msgid "Size:"
+msgstr "اندازه:"
+
+#: views/config.php:564
+msgid "Small"
+msgstr "کوچک"
+
+#: views/config.php:565
+msgid "Medium"
+msgstr "معمولی"
+
+#: views/config.php:570
+msgid "Position:"
+msgstr "مکان:"
+
+#: views/config.php:572
+msgid "Bottom Left"
+msgstr "پایین چپ"
+
+#: views/config.php:573
+msgid "Bottom Right"
+msgstr "پایین راست"
+
+#: views/config.php:577
+msgid "Theme:"
+msgstr "پوسته:"
+
+#: views/config.php:579
+msgid "Red"
+msgstr "قرمز"
+
+#: views/config.php:580
+msgid "White"
+msgstr "سفید"
+
+#: views/config.php:586
+msgid "Notify Button Offset Position Customization"
+msgstr ""
+
+#: views/config.php:591
+#, fuzzy
+#| msgid "Bottom Left"
+msgid "Bottom offset"
+msgstr "پایین چپ"
+
+#: views/config.php:595
+msgid "Left offset"
+msgstr "فاصله از چپ"
+
+#: views/config.php:599
+msgid "Right offset"
+msgstr "فاصله از راست"
+
+#: views/config.php:607
+msgid "Notify Button Color Customization"
+msgstr "سفارشی کردن زنگ دکمه اعلان"
+
+#: views/config.php:612
+msgid "Main button background color"
+msgstr "رنگ اصلی پس زمینه دکه"
+
+#: views/config.php:616
+msgid "Main button foreground color (main bell icon and inner circle)"
+msgstr ""
+
+#: views/config.php:620
+msgid "Pre-notify badge background color"
+msgstr ""
+
+#: views/config.php:624
+msgid "Pre-notify badge foreground color"
+msgstr ""
+
+#: views/config.php:628
+msgid "Pre-notify badge border color"
+msgstr ""
+
+#: views/config.php:632
+msgid "Pulse animation color"
+msgstr ""
+
+#: views/config.php:636
+msgid "Popup action button background color"
+msgstr ""
+
+#: views/config.php:640
+msgid "Popup action button background color (on hover)"
+msgstr ""
+
+#: views/config.php:644
+msgid "Popup action button background color (on click)"
+msgstr ""
+
+#: views/config.php:648
+msgid "Popup action button text color"
+msgstr ""
+
+#: views/config.php:656
+msgid "Notify Button Text Customization"
+msgstr "سفارشی سازی متن دکمه اعلان"
+
+#: views/config.php:660
+msgid "First-time visitor message (on notify button hover)"
+msgstr ""
+
+#: views/config.php:664
+msgid "Tip when unsubscribed"
+msgstr "نکته در زمانی که لغو عضویت انجام شده است"
+
+#: views/config.php:668
+msgid "Tip when subscribed"
+msgstr "نکته در زمانی که عضویت انجام شده است"
+
+#: views/config.php:672
+msgid "Tip when blocked"
+msgstr "نکته زمانی که کاربر اعلان را بلاک کرده است"
+
+#: views/config.php:676
+msgid "Message on subscribed"
+msgstr "پیام در زمانی که عضویت انجام شود"
+
+#: views/config.php:680
+msgid "Message on re-subscribed (after first unsubscribing)"
+msgstr ""
+
+#: views/config.php:684
+msgid "Message on unsubscribed"
+msgstr "پیام در زمانی که لغو عضویت انجام شود"
+
+#: views/config.php:688
+msgid "Main dialog title"
+msgstr "عنوان اصلی دیالوگ"
+
+#: views/config.php:692
+msgid "Main dialog subscribe button"
+msgstr "دکمه اصلی عضویت دیالوگ"
+
+#: views/config.php:696
+msgid "Main dialog unsubscribe button"
+msgstr "دکمه اصلی لغو عضویت دیالوگ"
+
+#: views/config.php:700
+msgid "Blocked dialog title"
+msgstr "عنوان دیالوگ بلاک شده"
+
+#: views/config.php:704
+msgid "Blocked dialog message"
+msgstr "پیام دیالوگ بلاک شده"
+
+#: views/config.php:713
+msgid "HTTP Permission Request Settings"
+msgstr ""
+
+#: views/config.php:718
+msgid ""
+"The HTTP permission request, for HTTP sites, simulates the native permission "
+"request on HTTPS sites."
+msgstr ""
+
+#: views/config.php:722
+msgid "Use the HTTP permission request for prompting users"
+msgstr ""
+
+#: views/config.php:728
+#, fuzzy
+#| msgid "Customize the notify bell text"
+msgid "Customize the post-request modal text"
+msgstr "سفارشی کردن متن زنگوله اعلان"
+
+#: views/config.php:733
+msgid "Modal Title"
+msgstr "عنوان پنجره مدال"
+
+#: views/config.php:737
+msgid "Modal Message"
+msgstr "پیام پنجره مدال"
+
+#: views/config.php:741
+msgid "Modal Button Text"
+msgstr "متن دکمه پنجره مدال"
+
+#: views/config.php:750
+#, fuzzy
+#| msgid "Account Settings"
+msgid "Popup Settings"
+msgstr "تنظیمات حساب"
+
+#: views/config.php:755
+msgid ""
+"These settings modify the popup message and button text for all users. Use "
+"this to localize the popup to your language. All fields here are limited in "
+"the length of text they can display."
+msgstr ""
+
+#: views/config.php:759
+#, fuzzy
+#| msgid "Customize the notify bell text"
+msgid "Customize the popup text"
+msgstr "سفارشی کردن متن زنگوله اعلان"
+
+#: views/config.php:763
+msgid "Action Message"
+msgstr ""
+
+#: views/config.php:767
+msgid "Auto Accept Title (Click Allow)"
+msgstr "عنوان پذیرش خودکار(روی پذیرفتن کلیک کنید)"
+
+#: views/config.php:771
+msgid "Site Name"
+msgstr "نام سایت"
+
+#: views/config.php:775
+msgid "Example Notification Title (Desktop)"
+msgstr "مثال عنوان اعلان(دسکتاپ)"
+
+#: views/config.php:779
+msgid "Example Notification Message (Desktop)"
+msgstr "مثال پیام اعلان (دسکتاپ)"
+
+#: views/config.php:783
+msgid "Example Notification Title (Mobile)"
+msgstr "مثال عنوان اعلان(موبایل)"
+
+#: views/config.php:787
+msgid "Example Notification Message (Mobile)"
+msgstr "مثال پیام اعلان (موبایل)"
+
+#: views/config.php:791
+#, fuzzy
+#| msgid "Notification Title"
+msgid "Example Notification Caption"
+msgstr "عنوان اعلان"
+
+#: views/config.php:795
+msgid "Accept Button Text"
+msgstr "متن دکمه پذیرفتن"
+
+#: views/config.php:799
+msgid "Cancel Button Text"
+msgstr "متن دکمه انصراف"
+
+#: views/config.php:807
+msgid "Welcome Notification Settings"
+msgstr "تنظیمات خوش آمد گویی اعلان"
+
+#: views/config.php:813
+msgid ""
+"A welcome notification is sent to new visitors after subscribing. A new "
+"visitor is someone who hasn't previously registered. If a user's browser "
+"cache is cleared, the user is considered new again."
+msgstr ""
+
+#: views/config.php:818
+msgid "Send new users a welcome push notification after subscribing"
+msgstr ""
+
+#: views/config.php:822
+msgid "Title"
+msgstr "عنوان"
+
+#: views/config.php:826
+msgid "Message"
+msgstr "پیام"
+
+#: views/config.php:830
+msgid "URL"
+msgstr "آدرس URL"
+
+#: views/config.php:837
+#, fuzzy
+#| msgid "Notification Title"
+msgid "Automatic Notification Settings"
+msgstr "عنوان اعلان"
+
+#: views/config.php:844
+msgid ""
+"Automatically send a push notification when I create a post from the "
+"WordPress editor"
+msgstr ""
+
+#: views/config.php:857
+msgid "UTM Tracking Settings"
+msgstr "تنظیمات ردیابی UTM"
+
+#: views/config.php:862
+msgid "Additional Notification URL Parameters"
+msgstr "پارامترهای اضافه URL اعلان"
+
+#: views/config.php:869
+#, fuzzy
+#| msgid "Account Settings"
+msgid "Advanced Settings"
+msgstr "تنظیمات حساب"
+
+#: views/config.php:874
+msgid ""
+"Additional Custom Post Types for Automatic Notifications Created From Plugins"
+msgstr ""
+"نوع پست سفارشی اضافی برای ارسال خودکار اعلان در زمان ایجاد پست از طریق افزونه"
+
+#: views/config.php:881
+#, fuzzy
+#| msgid "Google Project Number"
+msgid "Use my own Google Project Number"
+msgstr "شماره پروژه گوگل"
+
+#: views/config.php:886
+msgid "Custom manifest.json URL"
+msgstr "آدرس URL فایل manifest.json سفارشی"
+
+#: views/config.php:892
+msgid "Use my own manifest.json"
+msgstr "استفاده از فایل manifest.json خودم"
+
+#: views/config.php:898
+msgid "Disable OneSignal initialization"
+msgstr ""
+
+#: views/config.php:902
+msgid "Save"
+msgstr "ذخیره"
+
+#: views/config.php:905
+msgid ""
+"Your OneSignal subdomain cannot be empty or less than 4 characters. Use the "
+"same one you entered on the platform settings at onesignal.com."
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://onesignal.com/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Free web push notifications."
+msgstr "ارسال رایگان اعلان وب."
+
+#. Author of the plugin/theme
+msgid "OneSignal"
+msgstr "وان سیگنال"
+
+#. Author URI of the plugin/theme
+msgid "https://onesignal.com"
+msgstr ""

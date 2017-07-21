@@ -239,9 +239,9 @@ class OneSignal_Admin {
       <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($meta_box_checkbox_send_notification) { echo "checked"; } ?>></input>
       <label>
         <?php if ($post->post_status == "publish") {
-          print_f( __( 'Send notification on %s update', 'onesignal-free-web-push-notifications' ), get_post_type_object( $post_type )->labels->singular_name );
+          printf( __( 'Send notification on %s update', 'onesignal-free-web-push-notifications' ), get_post_type_object( $post_type )->labels->singular_name );
         } else {
-          print_f( __( 'Send notification on %s publish', 'onesignal-free-web-push-notifications' ), get_post_type_object( $post_type )->labels->singular_name );
+          printf( __( 'Send notification on %s publish', 'onesignal-free-web-push-notifications' ), get_post_type_object( $post_type )->labels->singular_name );
         } ?>
       </label>
     <?php

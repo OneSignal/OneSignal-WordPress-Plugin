@@ -353,7 +353,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
         </dl>
       </div>
       <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/5">
-        <p>This section shows push notifications working for <em>Chrome</em>, <em>Safari</em>, and <em>Firefox</em> in <em>HTTP</em> and <em>HTTPS</em> mode.</p>
+        <p><?php _e( 'This section shows push notifications working for <em>Chrome</em>, <em>Safari</em>, and <em>Firefox</em> in <em>HTTP</em> and <em>HTTPS</em> mode.', 'onesignal-free-web-push-notifications');?></p>
         <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/web-push.jpg" ?>">
         <p></p>
         <dl>

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OneSignal Push Notifications\n"
-"POT-Creation-Date: 2017-07-04 10:18+0430\n"
-"PO-Revision-Date: 2017-07-04 10:21+0430\n"
+"POT-Creation-Date: 2017-07-21 07:44+0430\n"
+"PO-Revision-Date: 2017-07-21 07:49+0430\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fa_IR\n"
@@ -26,30 +26,30 @@ msgstr ""
 msgid "OneSignal Push Notifications"
 msgstr "ارسال اعلان وان سیگنال"
 
-#: onesignal-admin.php:243
+#: onesignal-admin.php:242
 #, php-format
 msgid "Send notification on %s update"
 msgstr "ارسال اعلان در زمان بروزرسانی %s"
 
-#: onesignal-admin.php:246
+#: onesignal-admin.php:244
 #, php-format
 msgid "Send notification on %s publish"
 msgstr "ارسال اعلان در زمان انتشار %s"
 
 #: onesignal-admin.php:254
-msgid ""
-"Not saving plugin settings because the current user is not an administrator."
-msgstr ""
+msgid "Only administrators are allowed to save plugin settings."
+msgstr "تنها مدیران اجازه ذخیره تنظیمات افزونه را دارند."
 
-#: onesignal-admin.php:388 onesignal-admin.php:389
+#: onesignal-admin.php:386 onesignal-admin.php:387
 msgid "OneSignal Push"
 msgstr "اعلان وان سیگنال"
 
-#: onesignal-admin.php:418 onesignal-admin.php:430
+#: onesignal-admin.php:416 onesignal-admin.php:428 onesignal-admin.php:488
+#: onesignal-admin.php:725
 msgid "OneSignal Push:"
 msgstr "اعلان وان سیگنال:"
 
-#: onesignal-admin.php:418
+#: onesignal-admin.php:416
 msgid ""
 "Your setup is not complete. Please follow the Setup guide to set up web push "
 "notifications. Both the App ID and REST API Key fields are required."
@@ -57,14 +57,36 @@ msgstr ""
 "راه اندازی شما کامل نیست. لطفاً گام های زیر را برای راه اندازی اعلان وب دنبال "
 "کنید. هر دو فیلد App ID و کلید REST API ضروری هستند."
 
-#: onesignal-admin.php:430
+#: onesignal-admin.php:428
 msgid ""
-"cURL is not installed on this server. cURL is required to send "
-"notifications. Please make sure cURL is installed on your server before "
-"continuing."
+"cURL is not installed on this server. cURL is required to send notifications. "
+"Please make sure cURL is installed on your server before continuing."
 msgstr ""
 "cURL روی سرور شما نصب نیست. برای ارسال اعلان cURL ضروری است. لطفاً قبل از "
 "ادامه مطمئن شوید که cURL روی سرور شما نصب شده است."
+
+#: onesignal-admin.php:488
+#, php-format
+msgid ""
+"Please try again in %d seconds. Only one notification can be sent every %d "
+"seconds."
+msgstr ""
+
+#: onesignal-admin.php:725
+#, php-format
+msgid "There was a %s error sending your notification:"
+msgstr ""
+
+#. Author of the plugin/theme
+#: onesignal-widget.php:8
+msgid "OneSignal"
+msgstr "وان سیگنال"
+
+#: onesignal-widget.php:8 views/config.php:665
+#, fuzzy
+#| msgid "Free web push notifications."
+msgid "Subscribe to notifications"
+msgstr "ارسال رایگان اعلان وب."
 
 #: onesignal-widget.php:17
 msgid "Title:"
@@ -74,32 +96,295 @@ msgstr "عنوان:"
 msgid "Body:"
 msgstr "بدنه:"
 
+#: views/config.php:7
+msgid "Insufficient permissions to access config page."
+msgstr ""
+
+#: views/config.php:29
+msgid "Setup"
+msgstr "راه اندازی"
+
+#: views/config.php:30
+msgid "Configuration"
+msgstr "تنظیمات"
+
+#: views/config.php:36
+msgid "Overview"
+msgstr "پیش نمایش"
+
+#: views/config.php:37
+msgid "Chrome & Firefox Push"
+msgstr "کروم و فایرفاکس"
+
+#: views/config.php:38
+msgid "OneSignal Keys"
+msgstr "کلیدهای وان سیگنال"
+
+#: views/config.php:39
+msgid "Subscribing Users"
+msgstr "عضویت کاربران"
+
+#: views/config.php:40
+msgid "Safari Push"
+msgstr "اعلان مرورگر سافاری"
+
+#: views/config.php:41
+msgid "Results"
+msgstr "نتایج"
+
+#: views/config.php:45
+msgid ""
+"We'll guide you through adding web push for Chrome, Safari, and Firefox for "
+"your Wordpress blog."
+msgstr ""
+
+#: views/config.php:46
+msgid ""
+"First you'll get some required keys from Google. Then you'll be on our "
+"website creating a new app and setting up web push for each browser. This "
+"entire process should take around 15 minutes."
+msgstr ""
+
+#: views/config.php:51
+msgid "Troubleshooting Documentation"
+msgstr "مستندات رفع مشکلات"
+
+#: views/config.php:57
+msgid "To begin, we'll create and configure a OneSignal app."
+msgstr "برای شروع، ما یک اپلیکیشن وان سیگنال ایجاد و آن را تنظیم خواهیم کرد."
+
+#: views/config.php:134
+msgid "Check the box if your site is not fully HTTPS."
+msgstr "اگر سایت شما کاملا از HTTPS پشتیبانی نمی کند، این چک باکس را تیک بزنید."
+
+#: views/config.php:146
+msgid "Otherwise, do not check the box and leave it blank."
+msgstr "در غیر اینصورت، این چک باکس را تیک نزنید و خالی رها کنید."
+
+#: views/config.php:152
+msgid "Next Steps"
+msgstr "گام بعدی"
+
+#: views/config.php:160
+msgid "Add a name to display for your subdomain."
+msgstr ""
+
+#: views/config.php:161
+msgid "On onesignal.com:"
+msgstr "در سایت onesignal.con:"
+
+#: views/config.php:166
+msgid "Never change your subdomain"
+msgstr "هرگز زیر دامنه خود را تغییر ندهید"
+
+#: views/config.php:171
+msgid "Never Change Your Subdomain"
+msgstr "هرگز زیر دامنه خود را تغییر ندهید"
+
+#: views/config.php:172
+msgid "Users will receive duplicate notifications."
+msgstr "کاربران دو اعلان دریافت می کنند."
+
+#: views/config.php:178
+msgid ""
+"If you see errors, please follow the instructions to fix them. If you're "
+"still experiencing problems, email us for support."
+msgstr ""
+
+#: views/config.php:190
+msgid "Go to App Settings > Keys & IDs:"
+msgstr ""
+
+#: views/config.php:208
+msgid "You're done configuring settings!"
+msgstr ""
+
+#: views/config.php:209
+msgid "You can now subscribe to your own site to test notifications!"
+msgstr ""
+
+#: views/config.php:217
+msgid "HTTP Sites:"
+msgstr "سایت های HTTP:"
+
+#: views/config.php:231 views/config.php:248 views/config.php:360
+msgid "Notify Button"
+msgstr "دکمه اعلان"
+
+#: views/config.php:234
+msgid "HTTPS Sites:"
+msgstr "سایت های HTTPS:"
+
+#: views/config.php:254
+msgid "The notify button is an interactive site widget."
+msgstr ""
+
+#: views/config.php:255
+msgid ""
+"Users see the notify button on the bottom right corner of your site. They can "
+"click the notify button to subscribe."
+msgstr ""
+
+#: views/config.php:256
+msgid ""
+"The notify button is custom developed by us and does all the work for you! It "
+"detects when users are unsubscribed, already subscribed, or have blocked your "
+"site and show instructions to unblock. It allows users to easily temporarily "
+"subscribe from and resubscribe to notifications."
+msgstr ""
+
+#: views/config.php:260
+msgid "Read more about it at our documentation."
+msgstr ""
+
+#: views/config.php:277
+msgid "Safari on Windows Not Supported"
+msgstr "سافاری روی ویندوز پشتیبانی نمی شود."
+
+#: views/config.php:284
+msgid "You should be on this page:"
+msgstr "شما باید روی این صفحه باشید:"
+
+#: views/config.php:300
+msgid "Don't include trailing slashes"
+msgstr ""
+
+#: views/config.php:305
+msgid "Don't include subfolders"
+msgstr ""
+
+#: views/config.php:310
+msgid "Include the correct protocol"
+msgstr ""
+
+#: views/config.php:320
+msgid "In this step, we'll focus on uploading your Safari notification icons."
+msgstr ""
+
+#: views/config.php:322
+msgid "Please have your icon in the following sizes:"
+msgstr ""
+
+#: views/config.php:337
+msgid ""
+"If you get errors please follow the instructions to fix them. If you're still "
+"experiencing problems, email us for support."
+msgstr ""
+
+#: views/config.php:345
+msgid "That's it for setting up Safari push!"
+msgstr ""
+
+#: views/config.php:350 views/config.php:428
+msgid "Safari Web ID"
+msgstr "شناسه وب سافاری"
+
+#: views/config.php:356
+msgid ""
+"This section shows push notifications working for <em>Chrome</em>, "
+"<em>Safari</em>, and <em>Firefox</em> in <em>HTTP</em> and <em>HTTPS</em> "
+"mode."
+msgstr ""
+"این بخش حالت های مختلف را برای اعلان در <em>گوگل کروم</em>، <em>موزیلا "
+"فایرفاکس</em>، و <em>سافاری</em> در حالات <em>HTTP</em> و <em>HTTPS</em> نشان "
+"می هد."
+
+#: views/config.php:362
+msgid "Chrome (HTTP)"
+msgstr "گوگل کروم (در حالت HTTP)"
+
+#: views/config.php:364
+msgid "Chrome (HTTPS)"
+msgstr "گوگل کروم (در حالت HTTPS)"
+
+#: views/config.php:366
+msgid "Safari (HTTP & HTTPS)"
+msgstr "سافاری(در حالت HTTP و HTTPS)"
+
+#: views/config.php:368
+msgid "Firefox (HTTP)"
+msgstr "موزیلا فایرفاکس (در حالت HTTP)"
+
+#: views/config.php:370
+msgid "Firefox (HTTPS)"
+msgstr "موزیلا فایرفاکس (در حالت HTTPS)"
+
 #: views/config.php:386
 msgid "Account Settings"
 msgstr "تنظیمات حساب"
-
-#: views/config.php:393
-msgid "My site uses an HTTPS connection (SSL)"
-msgstr "سایت من از ارتباط HTTPS استفاده میکند(SSL)"
 
 #: views/config.php:410
 msgid "Google Project Number"
 msgstr "شماره پروژه گوگل"
 
+#: views/config.php:410
+msgid ""
+"Your Google Project Number. Do NOT change this as it can cause all existing "
+"subscribers to become unreachable."
+msgstr ""
+
+#: views/config.php:416
+msgid "App ID"
+msgstr ""
+
+#: views/config.php:416
+msgid ""
+"Your 36 character alphanumeric app ID. You can find this on Setup > OneSignal "
+"Keys > Step 2."
+msgstr ""
+
+#: views/config.php:420
+msgid "REST API Key"
+msgstr ""
+
+#: views/config.php:420
+msgid "Rest API Key"
+msgstr ""
+
+#: views/config.php:420
+msgid ""
+"Your 48 character alphanumeric REST API Key. You can find this on Setup > "
+"OneSignal Keys > Step 2."
+msgstr ""
+
 #: views/config.php:424
 msgid "OneSignal Subdomain"
 msgstr "زیر دامنه وان سیگنال"
+
+#: views/config.php:424
+msgid "Subdomain"
+msgstr "زیر دامنه"
+
+#: views/config.php:424
+msgid ""
+"Your chosen OneSignal subdomain, not your site subdomain. You can find this "
+"on Setup > Chrome & Firefox Push > Step 9."
+msgstr ""
+
+#: views/config.php:428
+msgid "Your Safari Web ID. You can find this on Setup > Safari Push > Step 5."
+msgstr ""
 
 #: views/config.php:435
 msgid "Sent Notification Settings"
 msgstr "تنظیمات ارسال اعلان"
 
-#: views/config.php:458
-msgid "Notification Title"
-msgstr "عنوان اعلان"
+#: views/config.php:442
+msgid "Use the post's featured image for the notification icon"
+msgstr ""
 
-#: views/config.php:464
-msgid "Send notifications additionally to iOS & Android platforms"
+#: views/config.php:442
+msgid "Use post featured image for notification icon"
+msgstr ""
+
+#: views/config.php:442
+msgid ""
+"If checked, use the post's featured image in the notification icon (small "
+"icon).  Chrome and Firefox Desktop supported."
+msgstr ""
+
+#: views/config.php:448
+msgid "Use the post's featured image for Chrome's large notification image"
 msgstr ""
 
 #: views/config.php:471
@@ -134,9 +419,13 @@ msgstr ""
 msgid "Enable the notify button"
 msgstr "فعال کردن دکمه اعلان"
 
+#: views/config.php:528
+msgid "Show the notify button after users have subscribed"
+msgstr ""
+
 #: views/config.php:534
 msgid "Show first-time site visitors an unread message icon"
-msgstr ""
+msgstr "نمایش آیکون پیام خوانده نشده برای کاربرانی که تازه وارد سایت شده اند."
 
 #: views/config.php:540
 msgid "Show the OneSignal logo on the notify button dialog"
@@ -192,13 +481,11 @@ msgstr "سفید"
 
 #: views/config.php:586
 msgid "Notify Button Offset Position Customization"
-msgstr ""
+msgstr "سفارشی سازی مکان دکمه اعلان"
 
 #: views/config.php:591
-#, fuzzy
-#| msgid "Bottom Left"
 msgid "Bottom offset"
-msgstr "پایین چپ"
+msgstr "فاصله از پایین"
 
 #: views/config.php:595
 msgid "Left offset"
@@ -218,7 +505,7 @@ msgstr "رنگ اصلی پس زمینه دکه"
 
 #: views/config.php:616
 msgid "Main button foreground color (main bell icon and inner circle)"
-msgstr ""
+msgstr "رنگ پس زمینه اصلی دکمه(آیکون زنگوله اصلی و دایره داخل آن)"
 
 #: views/config.php:620
 msgid "Pre-notify badge background color"
@@ -250,7 +537,7 @@ msgstr ""
 
 #: views/config.php:648
 msgid "Popup action button text color"
-msgstr ""
+msgstr "رنگ متن دکمه اکشن پاپ آپ"
 
 #: views/config.php:656
 msgid "Notify Button Text Customization"
@@ -259,6 +546,11 @@ msgstr "سفارشی سازی متن دکمه اعلان"
 #: views/config.php:660
 msgid "First-time visitor message (on notify button hover)"
 msgstr ""
+"پیام بازدید کننده تازه وارد(زمانی که مکان نمای ماوس روی دکمه اعلان قرار گیرد)"
+
+#: views/config.php:661
+msgid "Click to subscribe to notifications"
+msgstr "برای عضویت در اعلان کلیک کنید"
 
 #: views/config.php:664
 msgid "Tip when unsubscribed"
@@ -268,41 +560,81 @@ msgstr "نکته در زمانی که لغو عضویت انجام شده است
 msgid "Tip when subscribed"
 msgstr "نکته در زمانی که عضویت انجام شده است"
 
+#: views/config.php:669 views/config.php:681
+#, fuzzy
+#| msgid "Free web push notifications."
+msgid "You're subscribed to notifications"
+msgstr "ارسال رایگان اعلان وب."
+
 #: views/config.php:672
 msgid "Tip when blocked"
 msgstr "نکته زمانی که کاربر اعلان را بلاک کرده است"
+
+#: views/config.php:673
+#, fuzzy
+#| msgid "Free web push notifications."
+msgid "You've blocked notifications"
+msgstr "ارسال رایگان اعلان وب."
 
 #: views/config.php:676
 msgid "Message on subscribed"
 msgstr "پیام در زمانی که عضویت انجام شود"
 
+#: views/config.php:677
+msgid "Thanks for subscribing!"
+msgstr "از عضویت شما سپاسگذاریم"
+
 #: views/config.php:680
 msgid "Message on re-subscribed (after first unsubscribing)"
-msgstr ""
+msgstr "مدیریت هنگام عضویت مجدد(پس از اولین لغو عضویت)"
 
 #: views/config.php:684
 msgid "Message on unsubscribed"
 msgstr "پیام در زمانی که لغو عضویت انجام شود"
 
+#: views/config.php:685
+msgid "You won't receive notifications again"
+msgstr "شما دیگر اعلان سایت را دریافت نخواهید کرد"
+
 #: views/config.php:688
 msgid "Main dialog title"
 msgstr "عنوان اصلی دیالوگ"
+
+#: views/config.php:689
+msgid "Manage Site Notifications"
+msgstr "مدیریت اعلان سایت"
 
 #: views/config.php:692
 msgid "Main dialog subscribe button"
 msgstr "دکمه اصلی عضویت دیالوگ"
 
+#: views/config.php:693
+msgid "SUBSCRIBE"
+msgstr "عضویت"
+
 #: views/config.php:696
 msgid "Main dialog unsubscribe button"
 msgstr "دکمه اصلی لغو عضویت دیالوگ"
+
+#: views/config.php:697
+msgid "UNSUBSCRIBE"
+msgstr "لغو عضویت"
 
 #: views/config.php:700
 msgid "Blocked dialog title"
 msgstr "عنوان دیالوگ بلاک شده"
 
+#: views/config.php:701
+msgid "Unblock Notificationsone"
+msgstr "خارج کردن از بلاک اعلان"
+
 #: views/config.php:704
 msgid "Blocked dialog message"
 msgstr "پیام دیالوگ بلاک شده"
+
+#: views/config.php:705
+msgid "Follow these instructions to allow notifications:"
+msgstr "این دستورالعمل را برای اجازه دادن اعلان دنبال کنید:"
 
 #: views/config.php:713
 msgid "HTTP Permission Request Settings"
@@ -335,12 +667,6 @@ msgstr "پیام پنجره مدال"
 #: views/config.php:741
 msgid "Modal Button Text"
 msgstr "متن دکمه پنجره مدال"
-
-#: views/config.php:750
-#, fuzzy
-#| msgid "Account Settings"
-msgid "Popup Settings"
-msgstr "تنظیمات حساب"
 
 #: views/config.php:755
 msgid ""
@@ -412,28 +738,79 @@ msgstr ""
 msgid "Send new users a welcome push notification after subscribing"
 msgstr ""
 
+#: views/config.php:818
+msgid "Welcome Notification"
+msgstr "خوش آمد گویی اعلان"
+
+#: views/config.php:818
+msgid ""
+"If enabled, your site will send a welcome push notification to new site "
+"visitors who have just subscribed. The message is customizable below."
+msgstr ""
+
 #: views/config.php:822
 msgid "Title"
 msgstr "عنوان"
+
+#: views/config.php:822
+msgid "Welcome Notification Title"
+msgstr "عنوان خوش آمد گویی اعلان"
+
+#: views/config.php:822
+msgid ""
+"The welcome notification's title. You can localize this to your own language. "
+"If not set, the site's title will be used. Set to one space ' ' to clear the "
+"title, although this is not recommended."
+msgstr ""
 
 #: views/config.php:826
 msgid "Message"
 msgstr "پیام"
 
+#: views/config.php:826
+msgid "Welcome Notification Message"
+msgstr "پیام خوش آمد گویی اعلان"
+
+#: views/config.php:826
+msgid ""
+"The welcome notification's message. You can localize this to your own "
+"language. A message is required. If left blank, the default of 'Thanks for "
+"subscribing!' will be used."
+msgstr ""
+
 #: views/config.php:830
 msgid "URL"
 msgstr "آدرس URL"
 
+#: views/config.php:830
+msgid "Welcome Notification URL"
+msgstr "آدرس لینک خوش آمد گویی اعلان"
+
+#: views/config.php:830
+msgid ""
+"The webpage to open when clicking the notification. If left blank, your main "
+"site URL will be used as a default."
+msgstr ""
+
 #: views/config.php:837
-#, fuzzy
-#| msgid "Notification Title"
 msgid "Automatic Notification Settings"
-msgstr "عنوان اعلان"
+msgstr "تنظیات  اعلان خودکار"
 
 #: views/config.php:844
 msgid ""
 "Automatically send a push notification when I create a post from the "
 "WordPress editor"
+msgstr ""
+
+#: views/config.php:844
+msgid "Automatic Push from WordPress Editor"
+msgstr ""
+
+#: views/config.php:844
+msgid ""
+"If checked, when you create a new post from WordPress's editor, the checkbox "
+"'Send notification on post publish/update' will be automatically checked. The "
+"checkbox can be unchecked to prevent sending a notification."
 msgstr ""
 
 #: views/config.php:857
@@ -462,6 +839,16 @@ msgstr ""
 msgid "Use my own Google Project Number"
 msgstr "شماره پروژه گوگل"
 
+#: views/config.php:881
+msgid "Providing Your Own Web Push Keys"
+msgstr ""
+
+#: views/config.php:881
+#, fuzzy
+#| msgid "Google Project Number"
+msgid "Check this if you'd like to provide your own Google Project Number."
+msgstr "شماره پروژه گوگل"
+
 #: views/config.php:886
 msgid "Custom manifest.json URL"
 msgstr "آدرس URL فایل manifest.json سفارشی"
@@ -470,9 +857,16 @@ msgstr "آدرس URL فایل manifest.json سفارشی"
 msgid "Use my own manifest.json"
 msgstr "استفاده از فایل manifest.json خودم"
 
+#: views/config.php:892
+msgid ""
+"Check this if you have an existing manifest.json file you'd like to use "
+"instead of ours. You might check this if you have existing icons defined in "
+"your manifest."
+msgstr ""
+
 #: views/config.php:898
 msgid "Disable OneSignal initialization"
-msgstr ""
+msgstr "غیر فعالسازی راه اندازی وانسیگنال"
 
 #: views/config.php:902
 msgid "Save"
@@ -492,10 +886,19 @@ msgstr ""
 msgid "Free web push notifications."
 msgstr "ارسال رایگان اعلان وب."
 
-#. Author of the plugin/theme
-msgid "OneSignal"
-msgstr "وان سیگنال"
-
 #. Author URI of the plugin/theme
 msgid "https://onesignal.com"
 msgstr ""
+
+#~ msgid ""
+#~ "Not saving plugin settings because the current user is not an "
+#~ "administrator."
+#~ msgstr "به دلیل اینکه کاربر فعلای مدیر نیست تنظیمات افزونه ذخیره نشد."
+
+#~ msgid "My site uses an HTTPS connection (SSL)"
+#~ msgstr "سایت من از ارتباط HTTPS استفاده میکند(SSL)"
+
+#, fuzzy
+#~| msgid "Account Settings"
+#~ msgid "Popup Settings"
+#~ msgstr "تنظیمات حساب"

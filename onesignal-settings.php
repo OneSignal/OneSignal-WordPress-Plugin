@@ -5,6 +5,12 @@ defined( 'ABSPATH' ) or die('This page may not be accessed directly.');
 class OneSignal {
   public static function get_onesignal_settings() {
 
+    /*
+      During first-time setup, all the keys here will be created with their
+      default values, except for keys with value 'CALCULATE_LEGACY_VALUE' or
+      'CALCULATE_SPECIAL_VALUE'. These special keys aren't created until further
+      below.
+     */
     $defaults = array(
                   'app_id' => '',
                   'gcm_sender_id' => '',
@@ -86,7 +92,8 @@ class OneSignal {
                   'http_permission_request_modal_title' => '',
                   'http_permission_request_modal_message' => '',
                   'http_permission_request_modal_button_text' => '',
-                  'use_slidedown_permission_message_for_https' => false
+                  'use_slidedown_permission_message_for_https' => false,
+                  'persist_notifications' => 'CALCULATE_SPECIAL_VALUE'
                   );
 
     $legacies = array(
@@ -95,7 +102,7 @@ class OneSignal {
         'send_welcome_notification.default' => true,
         'prompt_auto_register.legacyKey' => 'no_auto_register',
         'prompt_auto_register.invertLegacyValue' => true,
-        'prompt_auto_register.default' => false
+        'prompt_auto_register.default' => false,
     );
 
     $is_new_user = false;
@@ -138,6 +145,12 @@ class OneSignal {
             }
         }
     }
+
+    /*
+      For first-time setup users, the array key will not exist since keys aren't
+      created until inside these blocks. The array_key_exists() will return
+      false for first-time users.
+     */
 
     // Special case for web push images
     if (!array_key_exists('showNotificationImageFromPostThumbnail', $onesignal_wp_settings)) {
@@ -225,6 +238,28 @@ class OneSignal {
       } else {
         // Do NOT enable for existing WordPress sites, since it breaks existing prompt behavior
         $onesignal_wp_settings['use_http_permission_request'] = false;
+      }
+    }
+
+    // Special case for persistent notifications
+    if (!array_key_exists('persist_notifications', $onesignal_wp_settings)) {
+      if ( $is_new_user ) {
+        // Initially set persist_notifications to yes by default for new sites,
+        // except on platforms like Mac where a notification manager is used
+        $onesignal_wp_settings['persist_notifications'] = 'yes-except-notification-manager-platforms';
+      } else {
+        // This was the old key name for persist_notifications
+        if (array_key_exists('chrome_auto_dismiss_notifications', $onesignal_wp_settings)) {
+          if ($onesignal_wp_settings['persist_notifications'] == "1") {
+            // The user wants notifications to be dismissed
+            $onesignal_wp_settings['persist_notifications'] = 'platform-default';
+          } else {
+            // The user did not enable this option, and wanted notifications to be persisted (default at that time)
+            $onesignal_wp_settings['persist_notifications'] = 'yes-except-notification-manager-platforms';
+          }
+        } else {
+          $onesignal_wp_settings['persist_notifications'] = 'yes-except-notification-manager-platforms';
+        }
       }
     }
 

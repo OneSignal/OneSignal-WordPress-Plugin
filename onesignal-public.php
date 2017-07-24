@@ -180,8 +180,11 @@ class OneSignal_Public {
           echo "oneSignal_options['safari_web_id'] = \"" . $onesignal_wp_settings["safari_web_id"] . "\";\n";
         }
 
-        if ($onesignal_wp_settings["chrome_auto_dismiss_notifications"] == "1") {
+        if ($onesignal_wp_settings["persist_notifications"] == "platform-default") {
           echo "oneSignal_options['persistNotification'] = false;\n";
+        }
+        else if ($onesignal_wp_settings["persist_notifications"] == "yes-all") {
+          echo "oneSignal_options['persistNotification'] = true;\n";
         }
 
         echo "oneSignal_options['promptOptions'] = { };\n";

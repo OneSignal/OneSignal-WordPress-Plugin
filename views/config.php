@@ -449,10 +449,56 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             </div>
           </div>
           <div class="field">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" name="chrome_auto_dismiss_notifications" value="true" <?php if ($onesignal_wp_settings['chrome_auto_dismiss_notifications']) { echo "checked"; } ?>>
-              <label>Dismiss notifications after ~20 seconds <span class="ui grey horizontal label">Chrome v47<sup>+</sup> Desktop Only</span> <i class="tiny circular help icon link" role="popup" data-title="Persist Notifications" data-html="<p>If checked, dismiss the notification after about 20 seconds. By default, Chrome notifications last indefinitely. <strong class='least-strong'>Supported on Chrome v47+ Desktop only.</strong> The time cannot be modified.</p><p>Once you've updated this setting, <strong class='least-strong'>visit your site once</strong> for the new setting to take effect. Make sure to clear your cache plugin contents if you use one.</p>" data-variation="wide"></i></label>
-            </div>
+            <label>
+              Hide notifications after a few seconds
+              <i class="tiny circular help icon link"
+                  role="popup"
+                  data-html="
+                    <p><strong>Yes</strong></p>
+                    <p>The notification hides itself after some time, depending on the platform.</p>
+                      <ul style='font-size: 95%'>
+                        <li>Windows: Up to 20 seconds</li>
+                        <li>Mac OS X: 3 - 5 seconds</li>
+                        <li>Android: Notifications persist in the notification tray</li>
+                      </ul>
+                    <p><strong>Yes on Mac OS X. No on other platforms.</strong></p>
+                    <p><em>Recommended.</em> Mac OS X notifiations will disappear after a few seconds, but they can still be seen in the Notification Center.</p>
+                    <p><strong>No</strong></p>
+                    <p>This option will lead to a browser settings button being shown on Mac OS X notifications, which reduces the available length for the notification text.</p>
+                    "
+                  width=650
+                  data-variation="wide">
+              </i>
+            </label>
+            <select class="ui dropdown" name="persist_notifications">
+              <option
+                value="platform-default"
+                  <?php
+                    if ((array_key_exists('persist_notifications', $onesignal_wp_settings) &&
+                        $onesignal_wp_settings['persist_notifications'] == "platform-default")) {
+                          echo "selected";
+                    }
+                  ?>>Yes
+              </option>
+              <option
+                value="yes-except-notification-manager-platforms"
+                  <?php
+                    if ((array_key_exists('persist_notifications', $onesignal_wp_settings) &&
+                        $onesignal_wp_settings['persist_notifications'] == "yes-except-notification-manager-platforms")) {
+                          echo "selected";
+                    }
+                  ?>>Yes on Mac OS X. No on other platforms.
+              </option>
+              <option
+                value="yes-all"
+                  <?php
+                    if ((array_key_exists('persist_notifications', $onesignal_wp_settings) &&
+                        $onesignal_wp_settings['persist_notifications'] == "yes-all")) {
+                          echo "selected";
+                    }
+                  ?>>No
+              </option>
+            </select>
           </div>
           <div class="field">
               <label>Notification Title<i class="tiny circular help icon link" role="popup" data-html="The notification title to use for all outgoing notifications. Defaults to your site's title." data-variation="wide"></i></label>

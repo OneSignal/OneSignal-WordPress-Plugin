@@ -4,7 +4,6 @@ defined( 'ABSPATH' ) or die('This page may not be accessed directly.');
 
 class OneSignal {
   public static function get_onesignal_settings() {
-
     /*
       During first-time setup, all the keys here will be created with their
       default values, except for keys with value 'CALCULATE_LEGACY_VALUE' or
@@ -250,7 +249,7 @@ class OneSignal {
       } else {
         // This was the old key name for persist_notifications
         if (array_key_exists('chrome_auto_dismiss_notifications', $onesignal_wp_settings)) {
-          if ($onesignal_wp_settings['persist_notifications'] == "1") {
+          if ($onesignal_wp_settings['chrome_auto_dismiss_notifications'] == "1") {
             // The user wants notifications to be dismissed
             $onesignal_wp_settings['persist_notifications'] = 'platform-default';
           } else {

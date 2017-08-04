@@ -7,7 +7,10 @@ function onesignal_change_footer_admin() {
 }
 
 class OneSignal_Admin {
-  private static $RESOURCES_VERSION = '37';
+  /**
+   * Increment $RESOURCES_VERSION any time the CSS or JavaScript changes to view the latest changes.
+   */
+  private static $RESOURCES_VERSION = '40';
   private static $SAVE_POST_NONCE_KEY = 'onesignal_meta_box_nonce';
   private static $SAVE_POST_NONCE_ACTION = 'onesignal_meta_box';
   public static $SAVE_CONFIG_NONCE_KEY = 'onesignal_config_page_nonce';
@@ -161,12 +164,18 @@ class OneSignal_Admin {
   }
 
   public static function add_onesignal_post_options() {
-    // If there is an error message we should display, display it now
+    // If there is an error or success message we should display, display it now
     function admin_notice_error() {
         $onesignal_transient_error = get_transient('onesignal_transient_error');
         if ( !empty($onesignal_transient_error) ) {
             delete_transient( 'onesignal_transient_error' );
             echo $onesignal_transient_error;
+        }
+
+        $onesignal_transient_success = get_transient('onesignal_transient_success');
+        if ( !empty($onesignal_transient_success) ) {
+            delete_transient( 'onesignal_transient_success' );
+            echo $onesignal_transient_success;
         }
     }
     add_action( 'admin_notices', 'admin_notice_error');
@@ -445,7 +454,6 @@ class OneSignal_Admin {
     wp_enqueue_script( 'semantic-ui', plugin_dir_url( __FILE__ ) . 'views/javascript/semantic-ui.js', false,  OneSignal_Admin::$RESOURCES_VERSION);
     wp_enqueue_script( 'jquery.cookie', plugin_dir_url( __FILE__ ) . 'views/javascript/jquery.cookie.js', false,  OneSignal_Admin::$RESOURCES_VERSION);
     wp_enqueue_script( 'site', plugin_dir_url( __FILE__ ) . 'views/javascript/site-admin.js', false,  OneSignal_Admin::$RESOURCES_VERSION);
-
   }
 
  /**
@@ -700,7 +708,7 @@ class OneSignal_Admin {
           'Authorization: Basic ' . $onesignal_auth_key
         ));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -722,10 +730,36 @@ class OneSignal_Admin {
         $curl_http_code     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
           onesignal_debug('$curl_http_code:', $curl_http_code);
         if ($curl_http_code != 200) {
+          if ($curl_http_code != 0) {
             set_transient( 'onesignal_transient_error', '<div class="error notice onesignal-error-notice">
                     <p><strong>OneSignal Push:</strong><em> There was a ' . $curl_http_code . ' error sending your notification:</em></p>
                     <pre>' . print_r($response, true) . '</pre>
                 </div>', 86400 );
+          } else {
+            // A 0 HTTP status code means the connection couldn't be established
+            set_transient( 'onesignal_transient_error', '<div class="error notice onesignal-error-notice">
+                    <p><strong>OneSignal Push:</strong><em> There was an error establishing a network connection. Please make sure outgoing network connections from cURL are allowed.</em></p>
+                </div>', 86400 );
+          }
+        } else {
+          $parsed_response = json_decode($response, true);
+          if (!empty($parsed_response)) {
+            onesignal_debug('OneSignal API Raw Response:', $response);
+            onesignal_debug('OneSignal API Parsed Response:', $parsed_response);
+            // API can send a 200 OK even if the notification failed to send
+            $recipient_count = $parsed_response['recipients'];
+            $sent_or_scheduled = array_key_exists('send_after', $fields) ? 'scheduled' : 'sent';
+
+            if ($recipient_count != 0) {
+              set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
+                      <p><strong>OneSignal Push:</strong><em> Successfully ' . $sent_or_scheduled . ' a notification to ' . $parsed_response['recipients'] . ' recipients.</em></p>
+                  </div>', 86400);
+            } else {
+              set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
+                      <p><strong>OneSignal Push:</strong><em> A notification was ' . $sent_or_scheduled . ', but there were no recipients.</em></p>
+                  </div>', 86400);
+            }
+          }
         }
 
 	      if (defined('ONESIGNAL_DEBUG') || class_exists('WDS_Log_Post')) {

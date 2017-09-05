@@ -1,7 +1,8 @@
 ChromePhp.php
 onesignal-free-web-push-notifications.zip
 views/images/settings/ParseToOneSignal.png
-	
+.vscode/
+
 .map
 **/*.map
 onesignal-free-push-notifications.zip

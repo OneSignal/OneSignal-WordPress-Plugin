@@ -361,7 +361,7 @@ class OneSignal_Public {
               <?php
             } else {
               ?>
-              <!-- OneSignal: onesignal_initialize_sdk filter preventing SDK initialization. -->
+              /* OneSignal: onesignal_initialize_sdk filter preventing SDK initialization. */
               <?php
             }
           } else {
@@ -379,7 +379,7 @@ class OneSignal_Public {
           }
         } else {
           ?>
-          <!-- OneSignal: Using custom SDK initialization. -->
+          /* OneSignal: Using custom SDK initialization. */
           <?php
         }
         ?>

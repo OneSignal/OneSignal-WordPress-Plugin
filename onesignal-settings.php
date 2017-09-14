@@ -87,6 +87,7 @@ class OneSignal {
                   'use_custom_manifest' => false,
                   'custom_manifest_url' => '',
                   'use_custom_sdk_init' => false,
+                  'show_notification_send_status_message' => true,
                   'use_http_permission_request' => 'CALCULATE_SPECIAL_VALUE',
                   'http_permission_request_modal_title' => '',
                   'http_permission_request_modal_message' => '',

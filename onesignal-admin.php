@@ -307,6 +307,7 @@ class OneSignal_Admin {
       'show_gcm_sender_id',
       'use_custom_manifest',
       'use_custom_sdk_init',
+      'show_notification_send_status_message',
       'use_http_permission_request',
       'customize_http_permission_request',
       'use_slidedown_permission_message_for_https'
@@ -750,14 +751,18 @@ class OneSignal_Admin {
             $recipient_count = $parsed_response['recipients'];
             $sent_or_scheduled = array_key_exists('send_after', $fields) ? 'scheduled' : 'sent';
 
-            if ($recipient_count != 0) {
-              set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
-                      <p><strong>OneSignal Push:</strong><em> Successfully ' . $sent_or_scheduled . ' a notification to ' . $parsed_response['recipients'] . ' recipients.</em></p>
-                  </div>', 86400);
-            } else {
-              set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
-                      <p><strong>OneSignal Push:</strong><em> A notification was ' . $sent_or_scheduled . ', but there were no recipients.</em></p>
-                  </div>', 86400);
+            $config_show_notification_send_status_message = $onesignal_wp_settings['show_notification_send_status_message'] == "1";
+
+            if ($config_show_notification_send_status_message) {
+              if ($recipient_count != 0) {
+                set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
+                        <p><strong>OneSignal Push:</strong><em> Successfully ' . $sent_or_scheduled . ' a notification to ' . $parsed_response['recipients'] . ' recipients.</em></p>
+                    </div>', 86400);
+              } else {
+                set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
+                        <p><strong>OneSignal Push:</strong><em> A notification was ' . $sent_or_scheduled . ', but there were no recipients.</em></p>
+                    </div>', 86400);
+              }
             }
           }
         }

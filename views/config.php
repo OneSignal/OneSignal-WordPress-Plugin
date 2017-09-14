@@ -944,6 +944,13 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
               <label>Disable OneSignal initialization<i class="tiny circular help icon link" role="popup" data-title="Disable OneSignal Initialization" data-content="Check this if you'd like to disable OneSignal's normal initialization. Useful if you are adding a custom initialization script. All the options you've set here in the WordPress plugin will be accessible in a global variable window._oneSignalInitOptions."></i></label>
             </div>
           </div>
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="show_notification_send_status_message" value="true" <?php if ($onesignal_wp_settings['show_notification_send_status_message']) { echo "checked"; } ?>>
+              <label>Show status message after sending notifications<i class="tiny circular help icon link" role="popup" data-title="Show Notification Send Status Message" data-content="If enabled, a notice at the top of your admin interface will show 'Successfully sent a notification to # recipients.' after our plugin sends a notification."></i></label>
+            </div>
+          </div>
+        </div>
         </div>
         <button class="ui large teal button" type="submit">Save</button>
         <div class="ui inline validation nag">

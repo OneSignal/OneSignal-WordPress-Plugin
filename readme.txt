@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
 Tested up to: 4.8.1
-Stable tag: 1.16.0
+Stable tag: 1.16.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 215,000 developers and marketers including some of the largest brands and websites in the world. We send over a billion notifications a day.
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 238,000 developers and marketers including some of the largest brands and websites in the world. We send over a billion notifications a day.
 
 After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
 
@@ -55,6 +55,13 @@ Features:
 9. Our OneSignal dashboard A/B testing page.
 
 == Changelog ==
+
+= 1.16.1 =
+
+This release adds an option to disable the "Successfully sent a notification to X recipients" message, and also includes files for AMP web push (to be used with another AMP plugin) in case you decide to add AMP web push for your site.
+
+- Add option "Show status message after sending notifications"
+- Include amp-helper-frame.html and amp-permission-dialog.html for use with AMP web push
 
 = 1.16.0 =
 

@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<!-- AMP Web Push Permission Dialog -->
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+
+    #subscribe-message {
+      font-size: 22px;
+      font-family: sans-serif;
+      text-align: center;
+    }
+  </style>
+  <script>(function(){var f,g=function(a){return"undefined"!=typeof window&&window===a?a:"undefined"!=typeof global?global:a}(this);function k(a,b){b=void 0===b?"":b;try{return decodeURIComponent(a)}catch(c){return b}};var m=/(?:^[#?]?|&)([^=&]+)(?:=([^&]*))?/g;function n(a){var b=Object.create(null);if(!a)return b;for(var c;c=m.exec(a);){var d=k(c[1],c[1]).trim(),e=c[2]?k(c[2],c[2]).trim():"";b[d]=e}return b};Date.now();self.log=self.log||{user:null,dev:null,userForEmbed:null};var p,q;
+function t(a){var b;p||(p=self.document.createElement("a"),q=self.UrlCache||(self.UrlCache=Object.create(null)));var c=q[a];if(c)return c;var d=p;d.href=a;d.protocol||(d.href=d.href);var e={href:d.href,protocol:d.protocol,host:d.host,hostname:d.hostname,port:"0"==d.port?"":d.port,pathname:d.pathname,search:d.search,hash:d.hash,origin:null};"/"!==e.pathname[0]&&(e.pathname="/"+e.pathname);if("http:"==e.protocol&&80==e.port||"https:"==e.protocol&&443==e.port)e.port="",e.host=e.hostname;e.origin=d.origin&&
+"null"!=d.origin?d.origin:"data:"!=e.protocol&&e.host?e.protocol+"//"+e.host:e.href;var h=e,l=h;return b?l:q[a]=l}function u(a){var b;return k(a,b)};function v(a){a||(a={debug:!1,windowContext:window});this.g={};this.c={};this.s=a.debug;this.h=this.A=this.B=!1;this.i=this.l=this.m=this.b=this.j=null;this.a=a.windowContext||window}f=v.prototype;
+f.listen=function(a){var b=this;return(new Promise(function(c,d){b.h?d(Error("Already connected.")):b.B?d(Error("Already listening for connections.")):Array.isArray(a)?(b.m=b.D.bind(b,a,c,d),b.a.addEventListener("message",b.m)):d(Error("allowedOrigins should be a string array of allowed origins to accept messages from. Got:",a))})).then(function(){b.send(v.Topics.CONNECT_HANDSHAKE,null);b.h=!0})};
+f.D=function(a,b,c,d){var e=d.data,h=d,l=h.ports;a:{for(var h=t(h.origin).origin,r=0;r<a.length;r++)if(t(a[r]).origin===h){a=!0;break a}a=!1}a&&e&&e.topic===v.Topics.CONNECT_HANDSHAKE&&(this.a.removeEventListener("message",this.m),this.b=l[0],this.i=this.u.bind(this),this.b.addEventListener("message",this.i,!1),this.b.start(),b())};
+f.connect=function(a,b){var c=this;return new Promise(function(d,e){a||e(Error("Provide a valid Window context to connect to."));b||e(Error("Provide an expected origin for the remote Window or provide the wildcard *."));c.h?e(Error("Already connected.")):c.A?e(Error("Already connecting.")):(c.j=new MessageChannel,c.b=c.j.port1,c.l=c.C.bind(c,c.b,b,d),c.b.addEventListener("message",c.l),c.b.start(),a.postMessage({topic:v.Topics.CONNECT_HANDSHAKE},"*"===b?"*":t(b).origin,[c.j.port2]))})};
+f.C=function(a,b,c){this.h=!0;a.removeEventListener("message",this.l);this.i=this.u.bind(this);a.addEventListener("message",this.i,!1);c()};f.u=function(a){a=a.data;if(this.g[a.id]&&a.isReply){var b=this.g[a.id];delete this.g[a.id];var c=b.promiseResolver;b.message=a.data;c([a.data,this.w.bind(this,a.id,b.topic)])}else{var d=this.c[a.topic];if(d)for(var e=0;e<d.length;e++)(0,d[e])(a.data,this.w.bind(this,a.id,a.topic))}};f.on=function(a,b){this.c[a]?this.c[a].push(b):this.c[a]=[b]};
+f.off=function(a,b){if(b){var c=this.c[a].indexOf(b);-1!==c&&this.c[a].splice(c,1)}else this.c[a]&&delete this.c[a]};f.w=function(a,b,c){var d=this,e={id:a,topic:b,data:c,isReply:!0};this.b.postMessage(e);return new Promise(function(a){d.g[e.id]={message:c,topic:b,promiseResolver:a}})};f.send=function(a,b){var c=this,d={id:crypto.getRandomValues(new Uint8Array(10)).join(""),topic:a,data:b};this.b.postMessage(d);return new Promise(function(e){c.g[d.id]={message:b,topic:a,promiseResolver:e}})};
+g.Object.defineProperties(v,{Topics:{configurable:!0,enumerable:!0,get:function(){return{CONNECT_HANDSHAKE:"topic-connect-handshake",NOTIFICATION_PERMISSION_STATE:"topic-notification-permission-state",SERVICE_WORKER_STATE:"topic-service-worker-state",SERVICE_WORKER_REGISTRATION:"topic-service-worker-registration",SERVICE_WORKER_QUERY:"topic-service-worker-query"}}}});function w(a){this.s=a&&a.debug;this.a=a.windowContext||window;this.o=new v({debug:this.s,windowContext:this.a})}w.prototype.isCurrentDialogPopup=function(){return!!this.a.opener&&this.a.opener!==this.a};w.prototype.requestNotificationPermission=function(){var a=this;return new Promise(function(b,c){try{a.a.Notification.requestPermission(function(a){return b(a)})}catch(d){c(d)}})};
+w.prototype.run=function(){var a=this;if(this.isCurrentDialogPopup())return this.o.connect(opener,"*"),this.requestNotificationPermission().then(function(b){return a.o.send(v.Topics.NOTIFICATION_PERMISSION_STATE,b)}).then(function(b){var c=b[0];c&&c.closeFrame&&a.a.close()});var b=this.a.fakeLocation||this.a.location,c=n(b.search);if(!c["return"])throw Error("Expecting return URL query parameter to redirect back.");var d=u(c["return"]);return this.requestNotificationPermission().then(function(){a.redirectToUrl(d)})};
+w.prototype.redirectToUrl=function(a){this.a.location.href=a};window._ampWebPushPermissionDialog=new w({debug:!1});window._ampWebPushPermissionDialog.run();})();
+//# sourceMappingURL=amp-web-push-permission-dialog.js.map
+</script>
+<script src="https://cdn.onesignal.com/sdks/amp-permission-dialog.js"></script>
+</head>
+<body>
+  <p id="subscribe-message">Click Allow to receive notifications.</p>
+</body>
+</html>

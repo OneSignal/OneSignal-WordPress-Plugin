@@ -260,7 +260,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
               <li><a href="https://documentation.onesignal.com/docs/permission-requests" target="_blank">Read more about it at our documentation.</a></li>
             </ol>
           </ol>
-          <p>If you're a technical user and would like to implement your own subscription process, this is entirely possible. Please see this guide on <a href="https://documentation.onesignal.com/docs/web-push-sdk-setup-http#section-subscribing-users-with-a-link" target="_blank">how to subscribe user with a link</a> using HTML and JavaScript. Our <a href="https://documentation.onesignal.com/docs/web-push-sdk" target="_blank">web SDK JavaScript API</a> is also available and can be called anywhere on the page.</p>
+          <p>If you're a technical user and would like to implement your own subscription process, this is entirely possible. Please see this guide on <a href="https://documentation.onesignal.com/docs/customize-permission-messages#section-custom-link-permission-message" target="_blank">how to subscribe user with a link</a> using HTML and JavaScript. Our <a href="https://documentation.onesignal.com/docs/web-push-sdk" target="_blank">web SDK JavaScript API</a> is also available and can be called anywhere on the page.</p>
         </p>
 
         <dl>

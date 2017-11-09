@@ -182,7 +182,7 @@ class OneSignal_Admin {
 
       // Add our meta box for the "post" post type (default)
     add_meta_box('onesignal_notif_on_post',
-                 'OneSignal Push Notifications',
+                 __( 'OneSignal Push Notifications', 'onesignal-free-web-push-notifications' ),
                  array( __CLASS__, 'onesignal_notif_on_post_html_view' ),
                  'post',
                  'side',
@@ -199,7 +199,7 @@ class OneSignal_Admin {
     foreach ( $post_types  as $post_type ) {
       add_meta_box(
         'onesignal_notif_on_post',
-        'OneSignal Push Notifications',
+        __( 'OneSignal Push Notifications', 'onesignal-free-web-push-notifications' ),
         array( __CLASS__, 'onesignal_notif_on_post_html_view' ),
         $post_type,
         'side',
@@ -248,9 +248,9 @@ class OneSignal_Admin {
       <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($meta_box_checkbox_send_notification) { echo "checked"; } ?>></input>
       <label>
         <?php if ($post->post_status == "publish") {
-          echo "Send notification on " . $post_type . " update";
+          printf( __( 'Send notification on %s update', 'onesignal-free-web-push-notifications' ), get_post_type_object( $post_type )->labels->singular_name );
         } else {
-          echo "Send notification on " . $post_type . " publish";
+          printf( __( 'Send notification on %s publish', 'onesignal-free-web-push-notifications' ), get_post_type_object( $post_type )->labels->singular_name );
         } ?>
       </label>
     <?php
@@ -260,7 +260,7 @@ class OneSignal_Admin {
     if (!OneSignalUtils::can_modify_plugin_settings()) {
         onesignal_debug('Not saving plugin settings because the current user is not an administrator.');
         set_transient( 'onesignal_transient_error', '<div class="error notice onesignal-error-notice">
-                    <p><strong>OneSignal Push:</strong><em> Only administrators are allowed to save plugin settings.</em></p>
+                    <p><strong>' . esc_htm__( 'OneSignal Push:', 'onesignal-free-web-push-notifications' ) . '</strong><em> ' . esc_html__('Only administrators are allowed to save plugin settings.', 'onesignal-free-web-push-notifications' ) . '</em></p>
                 </div>', 86400 );
         return;
     }
@@ -394,8 +394,8 @@ class OneSignal_Admin {
   }
 
 	public static function add_admin_page() {
-		$OneSignal_menu = add_menu_page('OneSignal Push',
-                                    'OneSignal Push',
+		$OneSignal_menu = add_menu_page( __( 'OneSignal Push', 'onesignal-free-web-push-notifications' ),
+                                    __( 'OneSignal Push', 'onesignal-free-web-push-notifications' ),
                                     'manage_options',
                                     'onesignal-push',
                                     array(__CLASS__, 'admin_menu')
@@ -424,7 +424,7 @@ class OneSignal_Admin {
                   });
               </script>
 			  <div class="error notice onesignal-error-notice">
-				  <p><strong>OneSignal Push:</strong> <em>Your setup is not complete. Please follow the Setup guide to set up web push notifications. Both the App ID and REST API Key fields are required.</em></p>
+				  <p><strong><?php esc_html_e( 'OneSignal Push:', 'onesignal-free-web-push-notifications' );?></strong> <em><?php esc_html_e( 'Your setup is not complete. Please follow the Setup guide to set up web push notifications. Both the App ID and REST API Key fields are required.', 'onesignal-free-web-push-notifications' );?></em></p>
 			  </div>
 			  <?php
 		  }
@@ -436,7 +436,7 @@ class OneSignal_Admin {
 		  function admin_notice_curl_not_installed() {
 			  ?>
 			  <div class="error notice onesignal-error-notice">
-				  <p><strong>OneSignal Push:</strong> <em>cURL is not installed on this server. cURL is required to send notifications. Please make sure cURL is installed on your server before continuing.</em></p>
+				  <p><strong><?php esc_html_e( 'OneSignal Push:', 'onesignal-free-web-push-notifications' );?></strong> <em><?php esc_html_e( 'cURL is not installed on this server. cURL is required to send notifications. Please make sure cURL is installed on your server before continuing.', 'onesignal-free-web-push-notifications' );?></em></p>
 			  </div>
 			  <?php
 		  }
@@ -495,7 +495,7 @@ class OneSignal_Admin {
       $time_to_wait = self::get_sending_rate_limit_wait_time();
 	    if ($time_to_wait > 0) {
             set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
-                    <p><strong>OneSignal Push:</strong><em> Please try again in ' . $time_to_wait . ' seconds. Only one notification can be sent every ' . ONESIGNAL_API_RATE_LIMIT_SECONDS . ' seconds.</em></p>
+                    <p><strong>' . esc_html__( 'OneSignal Push:', 'onesignal-free-web-push-notifications' ) . '</strong><em> ' . sprintf( __( 'Please try again in %d seconds. Only one notification can be sent every %d seconds.' ), $time_to_wait, ONESIGNAL_API_RATE_LIMIT_SECONDS ) . '</em></p>
                 </div>', 86400);
             return;
         }
@@ -733,7 +733,7 @@ class OneSignal_Admin {
         if ($curl_http_code != 200) {
           if ($curl_http_code != 0) {
             set_transient( 'onesignal_transient_error', '<div class="error notice onesignal-error-notice">
-                    <p><strong>OneSignal Push:</strong><em> There was a ' . $curl_http_code . ' error sending your notification:</em></p>
+                    <p><strong>' . esc_html__( 'OneSignal Push:','onesignal-free-web-push-notifications' ) . '</strong><em> ' . sprintf( __( 'There was a %s error sending your notification:' ), $curl_http_code ) . 'There was a ' . $curl_http_code . ' error sending your notification:</em></p>
                     <pre>' . print_r($response, true) . '</pre>
                 </div>', 86400 );
           } else {

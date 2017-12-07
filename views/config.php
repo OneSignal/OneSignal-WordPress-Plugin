@@ -50,7 +50,6 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <i class="big grey pin pinned icon"></i>
           <h3>Troubleshooting Documentation</h3>
           <p>You can additionally browse the <a href="https://documentation.onesignal.com/docs/troubleshooting-web-push" target="_blank">Troubleshooting Website Push</a> section of our documentation for some tips if you're stuck.</p>
-          <p><em>Please <strong>do not follow the installation instructions</strong> on documentation.onesignal.com.<br/>Our WordPress plugin outputs all required code and no extra code is necessary.</em></p>
         </div>
       </div>
       <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/1">
@@ -559,7 +558,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="field slidedown-permission-message-https-feature">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="use_slidedown_permission_message_for_https" value="true" <?php if (array_key_exists('use_slidedown_permission_message_for_https', $onesignal_wp_settings) && $onesignal_wp_settings['use_slidedown_permission_message_for_https']) { echo "checked"; } ?>>
-              <label>Show the slidedown permission message before prompting users to subscribe<i class="tiny circular help icon link" role="popup" data-title="Slidedown Permission Message for HTTPS Sites" data-content="If checked, the slidedown permission message will be shown before the browser's permission request. Please note that this slidedown message cannot replace the browser's native permission request. The browser's native permission request must always be finally shown before the user can be subscribed." data-variation="wide"></i></label>
+              <label>Show the Slide Prompt before prompting users to subscribe<i class="tiny circular help icon link" role="popup" data-title="Slide Prompt for HTTPS Sites" data-content="If checked, the Slide Prompt will be shown before the browser's permission request. Please note that this Slide Prompt cannot replace the browser's native permission request. The browser's native permission request must always be finally shown before the user can be subscribed." data-variation="wide"></i></label>
             </div>
           </div>
           <div class="field">

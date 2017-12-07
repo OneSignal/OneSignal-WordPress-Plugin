@@ -34,26 +34,13 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
       <div class="ui top secondary pointing menu">
       <div class="ui grid" style="margin: 0 !important; padding: 0 !important;">
         <a class="item" data-tab="setup/0">Overview</a>
-        <a class="item" data-tab="setup/1">Chrome & Firefox Push</a>
-        <a class="item" data-tab="setup/2">OneSignal Keys</a>
-        <a class="item" data-tab="setup/3">Subscribing Users</a>
-        <a class="item" data-tab="setup/4">Safari Push</a>
-        <a class="item" data-tab="setup/5">Results</a>
+        <a class="item" data-tab="setup/1">Prompts</a>
+        <a class="item" data-tab="setup/2">Safari Push</a>
+        <a class="item" data-tab="setup/3">Results</a>
         </div>
       </div>
       <div class="ui tab borderless shadowless segment" data-tab="setup/0">
-        <p>We'll guide you through adding web push for Chrome, Safari, and Firefox for your Wordpress blog.</p>
-        <p>First you'll get some required keys from Google. Then you'll be on our website creating a new app and setting up web push for each browser. This entire process should take around 15 minutes.</p>
-        <p>Please follow each step in order! If you're ever stuck or have questions, email us at <code>support+wp@onesignal.com</code>! We read and respond to every message.</p>
-        <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/1');">Chrome & Firefox Push</a> to begin.</p>
-        <div class="ui center aligned piled segment">
-          <i class="big grey pin pinned icon"></i>
-          <h3>Troubleshooting Documentation</h3>
-          <p>You can additionally browse the <a href="https://documentation.onesignal.com/docs/troubleshooting-web-push" target="_blank">Troubleshooting Website Push</a> section of our documentation for some tips if you're stuck.</p>
-        </div>
-      </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/1">
-        <p>To begin, we'll create and configure a OneSignal app.</p>
+        <p>Follow these steps to add Web Push to your Wordpress blog:</p>
         <dl>
           <div class="ui segment">
             <dt>1</dt>
@@ -64,154 +51,40 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="ui segment">
             <dt>2</dt>
             <dd>
-              <p>Click <strong>Add a new app</strong>.</p>
-              <p class="alternate"><em>If you're a new user, a welcome popup will appear. You can click <strong>Add a new app</strong> on the last screen.</em></p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-1.jpg" ?>">
-              <p>Choose any name for your app. Here we use <code>Wordpress Demo</code>. Click <strong>Create</strong>.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-2.jpg" ?>">
+              <p>
+                Create a Web Push app in OneSignal, following the instructions in our
+                <a href="https://documentation.onesignal.com/v4.0/docs/web-push-quickstart" target="_new">Web Push Quickstart guide</a>.
+              </p>
             </dd>
           </div>
           <div class="ui segment">
             <dt>3</dt>
             <dd>
-              <p>Click <strong>&times;</strong> to exit the dialog popup.</p>
-              <p>Click <strong>App Settings</strong> on the left sidebar.</p>
-              <p>Click <strong>Configure</strong> next to <strong>Google Chrome & Mozilla Firefox</strong>.</p>
-              <p>Instructions to set up Safari web push are available at the end of this guide.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-3.jpg" ?>">
+              <p>
+                Set up your Web Push app following the instructions in OneSignal's <strong>Web Push Editor</strong>.
+              </p>
             </dd>
           </div>
-          <div class="ui segment">
-            <dt>4</dt>
-            <dd>
-              <p>Add your <em>Site URL</em>.
-                <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-4.jpg" ?>">
-              <p>Enter the URL to your site's domain. The purpose of this field is to prevent other sites from hijacking your keys to impersonate you and send push notifications on your behalf. Please note:</p>
-              <ul>
-                <li>
-                  <p>Don't include trailing slashes</p>
-                  <p>Instead of using <code>http://domain.com/</code>, use <code>http://domain.com</code> instead.</p>
-                  <p></p>
-                </li>
-                <li>
-                  <p>Don't include subfolders</p>
-                  <p>Even if your WordPress blog is hosted on <code>http://domain.com/resource/blog</code>, use <code>http://domain.com</code></p>
-                  <p></p>
-                </li>
-                <li>
-                  <p>Include the correct protocol</p>
-                  <p>If your site uses HTTPS, use <code>https://domain.com</code>. If your site uses a mix of HTTPS/HTTP or only HTTP, use <code>http://domain.com</code>. If you're not sure, <a href="">contact us!</a>.</p>
-                  <p></p>
-                </li>
-              </ul>
-              <p>You may use two special properties instead of the URL to your site domain:</p>
-              <ul>
-                <li>
-                  <p><code>localhost</code></p>
-                  <p>You can use this to test locally.</p>
-                </li>
-              </ul>
-            </dd>
-          </div>
+        </dl>
 
-          <div class="ui segment">
-            <dt>5</dt>
-            <dd>
-              <p>Add your <em>Default Notification Icon URL</em>.
-                <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-5.jpg" ?>">
-              <p>Enter the complete URL to your notification icon. Please note:</p>
-              <ul>
-                <li>Your notification icon should be square, at least <code>80 pixels &times; 80 pixels</code> large</li>
-                <li>URL should begin with <code>https://</code></li>
-                <li>The <a href="https://onesignal.com/images/notification_logo.png" target="_blank">default OneSignal notification icon</a> will be used as a default if you don't choose one</li>
-              </ul>
-            </dd>
-          </div>
-          <div class="ui segment">
-            <dt>6</dt>
-            <dd>
-              <p>Check the box if your site is not fully HTTPS.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-8.jpg" ?>">
-              <div class="relative ui two column middle aligned very relaxed stackable grid">
-                <div class="center aligned column">
-                  <code><strong>http</strong>://domain.com</code>
-                  <h3>HTTP</h3>
-                </div>
-                <div class="center aligned column">
-                  <code><strong>https</strong>://domain.com</code>
-                  <h3>HTTPS</h3>
-                </div>
-              </div>
-              <p><strong>Otherwise, do not check the box and leave it blank.</strong></p>
-            </dd>
-          </div>
-        </dl>
         <div class="ui center aligned piled segment">
-          <i class="big grey announcement pinned icon"></i>
-          <h3>Next Steps</h3>
-          <p><strong>Steps 7 &hyphen; 8 only apply if you've checked <code>My site is not fully HTTPS</code>.</strong>
-            <br> If you've left the option blank, you may optionally continue to <a href="javascript:void(0);" onclick="activateSetupTab('setup/5');">Safari Push</a>!</p>
+          <i class="big grey pin pinned icon"></i>
+          <h3>Troubleshooting</h3>
+          <p>
+            If you run into issues or need extra guidance, you can follow along each step of our
+            <a href="https://documentation.onesignal.com/v4.0/docs/wordpress" target="_new">Wordpress Setup Guide</a>.
+          </p>
+          <p>
+            If you're ever stuck or have questions, <a href="mailto:support+wp@onesignal.com">email us</a>! We read and respond to every message.
+          </p>
+          <p>
+            If you run into issues getting your plugin to work, you can also browse our
+            <a href="https://documentation.onesignal.com/docs/troubleshooting-web-push" target="_blank">Troubleshooting Website Push</a> documentation.
+          </p>
         </div>
-        <dl>
-          <div class="ui segment">
-            <dt>7</dt>
-            <dd>
-              <p>Add a name to display for your subdomain.
-              <p>On onesignal.com:</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-7a.jpg" ?>">
-              <p>Copy this value to the <em>Subdomain</em> textbox in the <strong><em>Configuration</em></strong> tab.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/create-7b.jpg" ?>">
-              <p>Choose any subdomain you like; your push notifications will come from <code>https://yoursubdomain.onesignal.com</code>.</p>
-              <p><strong>Never change your subdomain</strong>.</p>
-            </dd>
-          </div>
-          <div class="ui center aligned piled segment">
-            <i class="big grey warning pinned icon"></i>
-            <h3>Never Change Your Subdomain</h3>
-            <p>Users will receive duplicate notifications.</p>
-          </div>
-          <div class="ui segment">
-            <dt>8</dt>
-            <dd>
-              <p>Click <strong>Save</strong> on both pages.</p>
-              <p>If you see errors, please follow the instructions to fix them. If you're still experiencing problems, email us for support.</p>
-              <p>Click <a href="javascript:void(0);" onclick="activateSetupTab('setup/2');">OneSignal Keys</a> to continue. This next section is much easier!</p>
-            </dd>
-          </div>
-        </dl>
       </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/2">
-        <p>Now that we've set our Chrome & Firefox push settings, we'll get our <em>App ID</em> and <em>REST API Key</em> from the OneSignal dashboard.</p>
-        <dl>
-          <div class="ui segment">
-            <dt>1</dt>
-            <dd>
-              <p>Go to App Settings > Keys & IDs:</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/keys-1.jpg" ?>">
-            </dd>
-          </div>
-          <div class="ui segment">
-            <dt>2</dt>
-            <dd>
-              <p>Click <strong>Keys &amp; IDs</strong> on the right tabbed pane.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/keys-2.jpg" ?>">
-              <p>Copy the <strong>REST API Key</strong> and <strong>OneSignal App ID</strong> to the <em>Configuration</em> tab.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/keys-2b.jpg" ?>">
-              <p>Click save.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/keys-2c.jpg" ?>">
-            </dd>
-          </div>
-          <div class="ui segment">
-            <dt>3</dt>
-            <dd>
-              <p>You're done configuring settings!</p>
-              <p><em>You can now subscribe to your own site to test notifications!</em></p>
-              <p>Continue to <a href="javascript:void(0);" onclick="activateSetupTab('setup/3');">Subscribing Users</a>.</p>
-            </dd>
-          </div>
-        </dl>
-      </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/3">
+
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/1">
         <p>If you've finished the guide up to here, push notifications already work on your site. <strong>But your users still need a way to <em>subscribe</em> to your site's notifications</strong>. There are a couple ways:
           <h4>HTTP Sites:</h4>
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
@@ -224,7 +97,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-top: 0 !important; padding-top: 0 !important;">
             <div class="center aligned column">
-              <h3>HTTP Prompt <span class="ui orange horizontal label">HTTP Only</span></h3>
+              <h3>Slide Prompt</h3>
             </div>
             <div class="center aligned column">
               <h3>Notify Button</h3>
@@ -241,7 +114,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-top: 0 !important; padding-top: 0 !important;">
             <div class="center aligned column">
-              <h3>HTTPS Prompt <span class="ui green horizontal label">HTTPS Only</span></h3>
+              <h3>Browser Permission Request <span class="ui green horizontal label">HTTPS Only</span></h3>
             </div>
             <div class="center aligned column">
               <h3>Notify Button</h3>
@@ -269,7 +142,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
         </dl>
       </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/4">
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/2">
         <dl>
           <div class="ui center aligned piled segment">
             <i class="big grey pin pinned icon"></i>
@@ -351,7 +224,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
         </dl>
       </div>
-      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/5">
+      <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/3">
         <p>This section shows push notifications working for <em>Chrome</em>, <em>Safari</em>, and <em>Firefox</em> in <em>HTTP</em> and <em>HTTPS</em> mode.</p>
         <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/web-push.jpg" ?>">
         <p></p>
@@ -422,6 +295,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="field subdomain-feature">
             <label>OneSignal Label<i class="tiny circular help icon link" role="popup" data-title="Subdomain" data-content="The label you chose for your site. You can find this in Step 2. Wordpress Site Setup" data-variation="wide"></i></label>
             <input type="text" name="subdomain" placeholder="example" value="<?php echo $onesignal_wp_settings['subdomain'] ?>">
+            <div class="callout info">Once your site is public, <strong>do not change your label</strong>. If you do, users will receive duplicate notifications.</div>
           </div>
           <div class="field">
             <label>Safari Web ID<i class="tiny circular help icon link" role="popup" data-title="Safari Web ID" data-content="Your Safari Web ID. You can find this on Setup > Safari Push > Step 5." data-variation="wide"></i></label>

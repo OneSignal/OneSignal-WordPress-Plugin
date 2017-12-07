@@ -752,43 +752,6 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
           </div>
         </div>
-        <div class="http-permission-request-modal-settings">
-          <div class="ui dividing header">
-            <i class="external share icon"></i>
-            <div class="content">
-              HTTP Permission Request Settings
-            </div>
-          </div>
-          <img class="img-responsive no-center" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/http-permission-request-post-modal.png" ?>" width="360">
-          <div class="ui borderless shadowless segment" style="position: relative;">
-            <p class="lato">The HTTP permission request, for HTTP sites, simulates the native permission request on HTTPS sites.</p>
-            <div class="field">
-              <div class="ui toggle checkbox">
-                <input type="checkbox" name="use_http_permission_request" value="true" <?php if (@$onesignal_wp_settings['use_http_permission_request']) { echo "checked"; } ?>>
-                <label>Use the HTTP permission request for prompting users</label>
-              </div>
-            </div>
-            <div class="field">
-              <div class="ui toggle checkbox">
-                <input type="checkbox" name="customize_http_permission_request" value="true" <?php if (array_key_exists('customize_http_permission_request', $onesignal_wp_settings) && @$onesignal_wp_settings['customize_http_permission_request']) { echo "checked"; } ?>>
-                <label>Customize the post-request modal text</label>
-              </div>
-            </div>
-            <p></p>
-            <div class="field http-permission-request-modal-customize-feature">
-              <label>Modal Title</label>
-              <input type="text" name="http_permission_request_modal_title" placeholder="Thanks for subscribing" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['http_permission_request_modal_title']); ?>">
-            </div>
-            <div class="field http-permission-request-modal-customize-feature">
-              <label>Modal Message</label>
-              <input type="text" name="http_permission_request_modal_message" placeholder="You're now subscribed to notifications. You can unsubscribe at any time." value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['http_permission_request_modal_message']); ?>">
-            </div>
-            <div class="field http-permission-request-modal-customize-feature">
-              <label>Modal Button Text</label>
-              <input type="text" name="http_permission_request_modal_button_text" placeholder="Close" value="<?php echo OneSignalUtils::html_safe(@$onesignal_wp_settings['http_permission_request_modal_button_text']); ?>">
-            </div>
-          </div>
-        </div>
         <div class="popup-modal-settings">
           <div class="ui dividing header">
             <i class="external icon"></i>

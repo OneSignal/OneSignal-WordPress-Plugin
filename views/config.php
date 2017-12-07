@@ -413,15 +413,15 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
           <?php endif; ?>
           <div class="field">
-            <label>App ID<i class="tiny circular help icon link" role="popup" data-title="App ID" data-content="Your 36 character alphanumeric app ID. You can find this on Setup > OneSignal Keys > Step 2." data-variation="wide"></i></label>
+            <label>App ID<i class="tiny circular help icon link" role="popup" data-title="App ID" data-content="Your 36 character alphanumeric app ID. You can find this in App Settings > Keys & IDs." data-variation="wide"></i></label>
             <input type="text" name="app_id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx" value="<?php echo $onesignal_wp_settings['app_id'] ?>">
           </div>
           <div class="field">
-            <label>REST API Key<i class="tiny circular help icon link" role="popup" data-title="Rest API Key" data-content="Your 48 character alphanumeric REST API Key. You can find this on Setup > OneSignal Keys > Step 2." data-variation="wide"></i></label>
+            <label>REST API Key<i class="tiny circular help icon link" role="popup" data-title="Rest API Key" data-content="Your 48 character alphanumeric REST API Key. You can find this in App Settings > Keys & IDs." data-variation="wide"></i></label>
             <input type="text" name="app_rest_api_key" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value="<?php echo $onesignal_wp_settings['app_rest_api_key'] ?>">
           </div>
           <div class="field subdomain-feature">
-            <label>OneSignal Subdomain<i class="tiny circular help icon link" role="popup" data-title="Subdomain" data-content="Your chosen OneSignal subdomain, not your site subdomain. You can find this on Setup > Chrome & Firefox Push > Step 9." data-variation="wide"></i></label>
+            <label>OneSignal Label<i class="tiny circular help icon link" role="popup" data-title="Subdomain" data-content="The label you chose for your site. You can find this in Step 2. Wordpress Site Setup" data-variation="wide"></i></label>
             <input type="text" name="subdomain" placeholder="example" value="<?php echo $onesignal_wp_settings['subdomain'] ?>">
           </div>
           <div class="field">
@@ -445,7 +445,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="showNotificationImageFromPostThumbnail" value="true" <?php if ($onesignal_wp_settings['showNotificationImageFromPostThumbnail']) { echo "checked"; } ?>>
-              <label>Use the post's featured image for Chrome's large notification image<i class="tiny circular help icon link" role="popup" data-title="Use post featured image for notification image (Chrome 56+)" data-html="<p>If checked, use the post's featured image in the notification large image, which is only available in Chrome 56+. See <a target='docs' href='https://documentation.onesignal.com/docs/web-push-notification-icons#section-image'>our documentation on web push images</a>.</p>" data-variation="wide"></i></label>
+              <label>Use the post's featured image for Chrome's large notification image<i class="tiny circular help icon link" role="popup" data-title="Use post featured image for notification image (Chrome only)" data-html="<p>If checked, use the post's featured image in the notification large image (Chrome only). See <a target='docs' href='https://documentation.onesignal.com/docs/web-push-notification-icons#section-image'>our documentation on web push images</a>.</p>" data-variation="wide"></i></label>
             </div>
           </div>
           <div class="field">
@@ -793,16 +793,16 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="ui dividing header">
             <i class="external icon"></i>
             <div class="content">
-              Popup Settings
+              HTTP Pop-Up Settings
             </div>
           </div>
           <img class="img-responsive no-center" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.jpg" ?>" width="360">
           <div class="ui borderless shadowless segment" style="position: relative;">
-              <p class="lato">These settings modify the popup message and button text for all users. Use this to localize the popup to your language. All fields here are limited in the length of text they can display.</p>
+              <p class="lato">These settings modify the HTTP Pop-Up Prompt and button text for all users. Use this to localize the HTTP Pop-Up Prompt to your language. All fields here are limited in the length of text they can display.</p>
               <div class="field">
                 <div class="ui toggle checkbox">
                   <input type="checkbox" name="prompt_customize_enable" value="true" <?php if (array_key_exists('prompt_customize_enable', $onesignal_wp_settings) && @$onesignal_wp_settings['prompt_customize_enable']) { echo "checked"; } ?>>
-                  <label>Customize the popup text</label>
+                  <label>Customize the HTTP Pop-Up Prompt text</label>
                 </div>
               </div>
               <div class="field prompt-customize-feature">

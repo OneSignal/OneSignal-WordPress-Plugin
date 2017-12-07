@@ -347,7 +347,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
           <div class="ui center aligned piled segment">
             <i class="big grey pin pinned icon"></i>
-            <h3>Safari Web ID</h3>
+            <h3>Safari Web ID (optional)</h3>
             <p>Copy the <strong>Safari Web ID</strong> to the <em>Configuration</em> tab.</p>
           </div>
         </dl>

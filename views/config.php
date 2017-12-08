@@ -75,7 +75,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <a href="https://documentation.onesignal.com/v4.0/docs/wordpress" target="_new">Wordpress Setup Guide</a>.
           </p>
           <p>
-            If you're ever stuck or have questions, <a href="mailto:support+wp@onesignal.com">email us</a>! We read and respond to every message.
+            If you're ever stuck or have questions, <a href="mailto:support+wp@onesignal.com">email us</a>!
           </p>
           <p>
             If you run into issues getting your plugin to work, you can also browse our

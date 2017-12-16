@@ -3,8 +3,8 @@ Contributors: OneSignal
 Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
-Tested up to: 4.9
-Stable tag: 1.16.2
+Tested up to: 4.9.1
+Stable tag: 1.16.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 270,000 developers and marketers including some of the largest brands and websites in the world. We send over a billion notifications a day.
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 295,000 developers and marketers including some of the largest brands and websites in the world. We send over a billion notifications a day.
 
 After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
 
@@ -55,6 +55,12 @@ Features:
 9. Our OneSignal dashboard A/B testing page.
 
 == Changelog ==
+
+= 1.16.3 =
+
+This release greatly simplifies the setup guide to follow our documentation instead of an inline guide.
+
+- Update AMP helper files to be centralized instead of hardcoded inlined JavaScript
 
 = 1.16.2 =
 

@@ -17,6 +17,7 @@ class OneSignalUtils {
 	public static function normalize($string) {
 		$string = OneSignalUtils::decode_entities($string);
 		$string = stripslashes($string);
+		$string = trim($string);
 		return $string;
 	}
 

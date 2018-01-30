@@ -1,5 +1,5 @@
 # Note: Keep trailing slash to copy contents of dir, but not dir itself
-WORDPRESS_GIT_SRC_PATH="/Users/jpang/code/OneSignal-WordPress-Plugin/"
+WORDPRESS_GIT_SRC_PATH="/Users/jpang/docker/blog/wordpress/wp-content/plugins/onesignal-free-web-push-notifications/"
 DESTINATION_PATH="/Users/jpang/code/official-wordpress-plugin/trunk/"
 RELEASE_ARCHIVE_FILENAME="onesignal-free-web-push-notifications.zip"
 

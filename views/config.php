@@ -7,13 +7,6 @@ if (!OneSignalUtils::can_modify_plugin_settings()) {
   die('Insufficient permissions to access config page.');
 }
 
-// If the user is trying to save the form, require a valid nonce or die
-if (array_key_exists('app_id', $_POST)) {
-  // check_admin_referer dies if not valid; no if statement necessary
-  check_admin_referer(OneSignal_Admin::$SAVE_CONFIG_NONCE_ACTION, OneSignal_Admin::$SAVE_CONFIG_NONCE_KEY);
-  $onesignal_wp_settings = OneSignal_Admin::save_config_page($_POST);
-}
-
 // The user is just viewing the config page; this page cannot be accessed directly
 $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 ?>

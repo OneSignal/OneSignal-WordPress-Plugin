@@ -402,8 +402,19 @@ class OneSignal_Admin {
                                     array(__CLASS__, 'admin_menu')
     );
 
+    OneSignal_Admin::save_config_settings_form();
+
     add_action( 'load-' . $OneSignal_menu, array(__CLASS__, 'admin_custom_load') );
-	}
+  }
+
+  public static function save_config_settings_form() {
+    // If the user is trying to save the form, require a valid nonce or die
+    if (array_key_exists('app_id', $_POST)) {
+      // check_admin_referer dies if not valid; no if statement necessary
+      check_admin_referer(OneSignal_Admin::$SAVE_CONFIG_NONCE_ACTION, OneSignal_Admin::$SAVE_CONFIG_NONCE_KEY);
+      $onesignal_wp_settings = OneSignal_Admin::save_config_page($_POST);
+    }
+  }
 
 	public static function admin_menu() {
     require_once( plugin_dir_path( __FILE__ ) . '/views/config.php' );

@@ -46,7 +46,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <dd>
               <p>
                 Create a Web Push app in OneSignal, following the instructions in our
-                <a href="https://documentation.onesignal.com/v4.0/docs/web-push-quickstart" target="_new">Web Push Quickstart guide</a>.
+                <a href="https://documentation.onesignal.com/docs/web-push-quickstart" target="_new">Web Push Quickstart guide</a>.
               </p>
             </dd>
           </div>
@@ -65,7 +65,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <h3>Troubleshooting</h3>
           <p>
             If you run into issues or need extra guidance, you can follow along each step of our
-            <a href="https://documentation.onesignal.com/v4.0/docs/wordpress" target="_new">Wordpress Setup Guide</a>.
+            <a href="https://documentation.onesignal.com/docs/wordpress" target="_new">Wordpress Setup Guide</a>.
           </p>
           <p>
             If you're ever stuck or have questions, <a href="mailto:support+wp@onesignal.com">email us</a>!

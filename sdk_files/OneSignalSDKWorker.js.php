@@ -10,6 +10,6 @@
 	if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
 		echo "importScripts('https://localhost:3001/dev_sdks/OneSignalSDK.js');";
 	} else {
-		echo "importScripts('https://cdn.onesignal.com/sdks/OneSignalSDK.js');";
+		echo "importScripts('https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js');";
 	}
 ?>

@@ -12,15 +12,14 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 375,000 developers and marketers including some of the largest brands and websites in the world. We send over a billion notifications a day.
-
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 430,000 developers and marketers including some of the largest brands and websites in the world. We send over 2.7 billion notifications a day.
 After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
-
 We make it easy to configure delivering notifications at preset intervals, targeting notifications to specific users, and customizing the opt-in process for your visitors.
 
 Features:
 
-* **Supports Chrome** (Desktop & Android), **Safari** (Mac OS X), and **Firefox** (Desktop) on both HTTP and HTTPS sites.
+* **Supports Chrome** (Desktop & Android), **Safari** (Mac OS X), **Microsoft Edge** (Desktop & Android), **Opera** (Desktop & Android) and **Firefox** (Desktop & Android) on both HTTP and HTTPS sites.
+
 
 * **Automatic Notifications** - Send notifications to followers every time you publish a new post. Or set up a reminder that gets automatically sent to them if they haven’t visited for a few days.
 
@@ -46,13 +45,12 @@ Features:
 
 1. Notifications on Chrome, Safari, and Firefox.
 2. Our detailed setup instructions to get you started.
-3. Another shot of our detailed setup instructions with images.
-4. Our configuration settings allowing you to customize the way users are prompted to subscribe and the notifications they receive.
-5. Our OneSignal dashboard users page, where you can see your subscribed users.
-6. Our OneSignal dashboard sent notifications page, where you can see the status of your sent notifications.
-7. Our OneSignal dashboard notification creation page, with an emoji selector and multi-language support.
-8. Our OneSignal dashboard sent notifications detail page, showing a notification being sent with live click tracking.
-9. Our OneSignal dashboard A/B testing page.
+3. Our configuration main configuration setup page.
+4. Our OneSignal dashboard users page, where you can see your subscribed users.
+5. Our OneSignal dashboard sent notifications page, where you can see the status of your sent notifications.
+6. Our OneSignal dashboard notification creation page, with show some of the browser settings available.
+7. Our OneSignal Wordpress welcome notification options.
+8. Our OneSignal Wordpress setting for prompting options.
 
 == Changelog ==
 

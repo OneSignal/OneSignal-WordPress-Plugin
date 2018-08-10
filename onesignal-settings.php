@@ -119,31 +119,31 @@ class OneSignal {
     // Assign defaults if the key doesn't exist in $onesignal_wp_settings
     // Except for those with value CALCULATE_LEGACY_VALUE -- we need special logic for legacy values that used to exist in previous plugin versions
     reset($defaults);
-    while (list($key, $value) = each($defaults)) {
-        if ($value === "CALCULATE_LEGACY_VALUE") {
-            if (!array_key_exists($key, $onesignal_wp_settings)) {
-               $legacyKey = $legacies[$key . '.legacyKey'];
-               $inverted = (array_key_exists($key . '.invertLegacyValue', $legacies) && $legacies[$key . '.invertLegacyValue']);
-               $default = $legacies[$key . '.default'];
-               if (array_key_exists($legacyKey, $onesignal_wp_settings)) {
-                 if ($inverted) {
-                    $onesignal_wp_settings[$key] = !$onesignal_wp_settings[$legacyKey];
-                 } else {
-                    $onesignal_wp_settings[$key] = $onesignal_wp_settings[$legacyKey];
-                 }
-               } else {
-                 $onesignal_wp_settings[$key] = $default;
-               }
-            }
-        }
-        else if ($value === "CALCULATE_SPECIAL_VALUE") {
-	        // Do nothing, handle below
-        }
-        else {
-            if (!array_key_exists($key, $onesignal_wp_settings)) {
-               $onesignal_wp_settings[$key] = $value;
-            }
-        }
+    foreach ($defaults as $key => $value) {
+      if ($value === "CALCULATE_LEGACY_VALUE") {
+          if (!array_key_exists($key, $onesignal_wp_settings)) {
+              $legacyKey = $legacies[$key . '.legacyKey'];
+              $inverted = (array_key_exists($key . '.invertLegacyValue', $legacies) && $legacies[$key . '.invertLegacyValue']);
+              $default = $legacies[$key . '.default'];
+              if (array_key_exists($legacyKey, $onesignal_wp_settings)) {
+                if ($inverted) {
+                  $onesignal_wp_settings[$key] = !$onesignal_wp_settings[$legacyKey];
+                } else {
+                  $onesignal_wp_settings[$key] = $onesignal_wp_settings[$legacyKey];
+                }
+              } else {
+                $onesignal_wp_settings[$key] = $default;
+              }
+          }
+      }
+      else if ($value === "CALCULATE_SPECIAL_VALUE") {
+        // Do nothing, handle below
+      }
+      else {
+          if (!array_key_exists($key, $onesignal_wp_settings)) {
+              $onesignal_wp_settings[$key] = $value;
+          }
+      }
     }
 
     /*

@@ -43,6 +43,6 @@ class OneSignalWidget extends WP_Widget {
 	}
 }
 
-add_action('widgets_init', create_function('', 'return register_widget("OneSignalWidget");'));
+add_action('widgets_init', function(){register_widget("OneSignalWidget");});
 
 ?>

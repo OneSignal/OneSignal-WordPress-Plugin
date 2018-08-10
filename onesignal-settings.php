@@ -119,7 +119,8 @@ class OneSignal {
     // Assign defaults if the key doesn't exist in $onesignal_wp_settings
     // Except for those with value CALCULATE_LEGACY_VALUE -- we need special logic for legacy values that used to exist in previous plugin versions
     reset($defaults);
-    while (list($key, $value) = each($defaults)) {
+    //while (list($key, $value) = each($defaults)) {
+    foreach ($defaults as $key => $value) {
         if ($value === "CALCULATE_LEGACY_VALUE") {
             if (!array_key_exists($key, $onesignal_wp_settings)) {
                $legacyKey = $legacies[$key . '.legacyKey'];

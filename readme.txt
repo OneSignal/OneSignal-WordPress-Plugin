@@ -56,7 +56,7 @@ Features:
 
 = 1.16.8 =
 
-This release makes HTTP switch match the dashboard. Renamed to "My site is not fully HTTPS".
+This release makes HTTP switch match the dashboard (renamed to "My site is not fully HTTPS") and removes deprecation warnings for php 7.2.
 
 = 1.16.7 =
 

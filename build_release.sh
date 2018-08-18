@@ -1,6 +1,6 @@
 # Note: Keep trailing slash to copy contents of dir, but not dir itself
-WORDPRESS_GIT_SRC_PATH="/Users/jpang/docker/blog/wordpress/wp-content/plugins/onesignal-free-web-push-notifications/"
-DESTINATION_PATH="/Users/jpang/code/official-wordpress-plugin/trunk/"
+WORDPRESS_GIT_SRC_PATH="."
+DESTINATION_PATH="../onesignal-free-web-push-notifications/trunk/"
 RELEASE_ARCHIVE_FILENAME="onesignal-free-web-push-notifications.zip"
 
 # Prevent accidental rm -rf issues if running as root
@@ -10,8 +10,8 @@ if (( $EUID == 0 )); then
 fi
 
 # Using exclude .* excludes dot files and dot directories like .git, .vscode
-if [[ $DESTINATION_PATH != *wordpress-plugin/trunk/ ]]; then
- echo "Script was going to remove ${DESTINATION_PATH}, but quitting because destination path unexpectedly does not end in ...wordpress-plugin/trunk/. Exiting to prevent removing unexpected directory."
+if [[ $DESTINATION_PATH != *onesignal-free-web-push-notifications/trunk/ ]]; then
+ echo "Script was going to remove ${DESTINATION_PATH}, but quitting because destination path unexpectedly does not end in ...onesignal-free-web-push-notifications/trunk/. Exiting to prevent removing unexpected directory."
  exit
 fi
 

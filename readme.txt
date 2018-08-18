@@ -12,7 +12,7 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 430,000 developers and marketers including some of the largest brands and websites in the world. We send over 2.7 billion notifications a day.
+[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 470,000 developers and marketers including some of the largest brands and websites in the world. We send over 2.7 billion notifications a day.
 After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
 We make it easy to configure delivering notifications at preset intervals, targeting notifications to specific users, and customizing the opt-in process for your visitors.
 

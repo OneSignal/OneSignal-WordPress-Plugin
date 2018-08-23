@@ -3,8 +3,8 @@ Contributors: OneSignal
 Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
-Tested up to: 4.9.8
-Stable tag: 1.16.8
+Tested up to: 4.9.5
+Stable tag: 1.16.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,10 +53,6 @@ Features:
 8. Our OneSignal Wordpress setting for prompting options.
 
 == Changelog ==
-
-= 1.16.8 =
-
-This release makes HTTP switch match the dashboard (renamed to "My site is not fully HTTPS") and removes deprecation warnings for php 7.2.
 
 = 1.16.7 =
 

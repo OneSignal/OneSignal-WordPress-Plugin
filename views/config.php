@@ -252,6 +252,18 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
         </div>
         <div class="ui borderless shadowless segment">
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="is_site_https" <?php if (@$onesignal_wp_settings['is_site_https_firsttime'] === 'unset') { echo "data-unset=\"true\""; }  if (@$onesignal_wp_settings['is_site_https']) { echo "checked"; }  ?>>
+              <label>My site uses an HTTPS connection (SSL)<i class="tiny circular help icon link" role="popup" data-html="<p>Check this if your site uses HTTPS:</p><img src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/https-url.png" ?>' width=619>" data-variation="flowing"></i></label>
+            </div>
+          </div>
+          <div class="ui inline subdomain-http nag">
+            <span class="title">
+              This option is disabled when your current URL begins with <code>http://</code>. Please access this page using <code>https://</code> to enable this option.
+            </span>
+            <i class="close icon"></i>
+          </div>
           <?php if (
                      (
                        $onesignal_wp_settings['gcm_sender_id'] !== '' ||
@@ -273,26 +285,14 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <label>REST API Key<i class="tiny circular help icon link" role="popup" data-title="Rest API Key" data-content="Your 48 character alphanumeric REST API Key. You can find this in App Settings > Keys & IDs." data-variation="wide"></i></label>
             <input type="text" name="app_rest_api_key" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value="<?php echo $onesignal_wp_settings['app_rest_api_key'] ?>">
           </div>
-          <div class="field">
-            <label>Safari Web ID<i class="tiny circular help icon link" role="popup" data-title="Safari Web ID" data-content="Your Safari Web ID. You can find this on Setup > Safari Push > Step 5." data-variation="wide"></i></label>
-            <input type="text" name="safari_web_id" placeholder="web.com.example" value="<?php echo @$onesignal_wp_settings['safari_web_id']; ?>">
-          </div>
-          <div class="field">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" name="use_http" <?php if (@$onesignal_wp_settings['is_site_https_firsttime'] === 'unset') { echo "data-unset=\"true\""; }  if (!@$onesignal_wp_settings['is_site_https']) { echo "checked"; }  ?>>
-              <label>My site is not fully HTTPS<i class="tiny circular help icon link" role="popup" data-html="<p>Check this if your site uses HTTPS:</p><img src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/https-url.png" ?>' width=619>" data-variation="flowing"></i></label>
-            </div>
-          </div>
-          <div class="ui inline subdomain-http nag">
-            <span class="title">
-              This option is disabled when your current URL begins with <code>http://</code>. Please access this page using <code>https://</code> to enable this option.
-            </span>
-            <i class="close icon"></i>
-          </div>
           <div class="field subdomain-feature">
             <label>OneSignal Label<i class="tiny circular help icon link" role="popup" data-title="Subdomain" data-content="The label you chose for your site. You can find this in Step 2. Wordpress Site Setup" data-variation="wide"></i></label>
             <input type="text" name="subdomain" placeholder="example" value="<?php echo $onesignal_wp_settings['subdomain'] ?>">
             <div class="callout info">Once your site is public, <strong>do not change your label</strong>. If you do, users will receive duplicate notifications.</div>
+          </div>
+          <div class="field">
+            <label>Safari Web ID<i class="tiny circular help icon link" role="popup" data-title="Safari Web ID" data-content="Your Safari Web ID. You can find this on Setup > Safari Push > Step 5." data-variation="wide"></i></label>
+            <input type="text" name="safari_web_id" placeholder="web.com.example" value="<?php echo @$onesignal_wp_settings['safari_web_id']; ?>">
           </div>
         </div>
         <div class="ui dividing header">

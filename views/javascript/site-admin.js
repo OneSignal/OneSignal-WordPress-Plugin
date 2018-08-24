@@ -68,45 +68,37 @@ function hookHiddenDangerLabels() {
 }
 
 function httpSiteCheck() {
-  var key = 'use_http';
-  var hidden_key = 'is_site_https';
+  var key = 'is_site_https';
   function runCheck() {
     var protocol = location.protocol;
     var hostname = location.hostname;
     var isHttp = (protocol === 'http:' && hostname !== 'localhost');
     //protocol = 'https:';
-    var selector = selectByName(key);
-    var element = jQuery(selector);
-    var parent = element.parent();
-    var isSelfChecked = isChecked(selector);
-    var isFirstTimeCheck = jQuery(selector).attr('data-unset');
+    var isSelfChecked = isChecked(selectByName(key));
+    var isFirstTimeCheck = jQuery(selectByName(key)).attr('data-unset');
     if (isFirstTimeCheck) {
-      element.removeAttr('data-unset');
+      jQuery(selectByName(key)).removeAttr('data-unset');
       // Determine by URL
-      if (isHttp) {
+      if (!isHttp) {
         // HTTPS protocol, check this (does not fire callbacks)
-        parent.checkbox('set checked');
+        jQuery(selectByName(key)).parent().checkbox('set checked');
         // Allow them to change this state
-        parent.checkbox('set disabled');
+        jQuery(selectByName(key)).parent().checkbox('set enabled');
         // Re-evaluate the isHttp variable since we just set it to checked
         isSelfChecked = isChecked(selectByName(key));
       }
     }
     if (isHttp) {
       // HTTP protocol, uncheck this (does not fire callbacks thanks to Semantic UI)
-      parent.checkbox('set checked');
+      jQuery(selectByName(key)).parent().checkbox('set unchecked');
       // Do not allow them to check this again
-      element.change(function(event) {
-        parent.checkbox('set checked');
+      jQuery(selectByName(key)).change(function(event) {
+        jQuery(selectByName(key)).parent().checkbox('set unchecked');
         jQuery('.subdomain-http.nag').nag('clear');
         jQuery('.subdomain-http.nag').nag('show');
       });
     }
-    if (!isSelfChecked) {
-      if (jQuery(selectByName(hidden_key)).length === 0) {
-        $('<input>').attr('type','hidden').attr('name', hidden_key).val(true).appendTo(parent);
-      }
-      
+    if (isSelfChecked) {
       // Clear subdomain
       // Only if HTTP
       if (!isHttp) {
@@ -115,7 +107,6 @@ function httpSiteCheck() {
         jQuery('.subdomain-feature').hide();
       }
     } else {
-      jQuery(selectByName(hidden_key)).remove();
       jQuery('.subdomain-feature').show();
       jQuery(selectByName('subdomain')).removeAttr('disabled');
     }

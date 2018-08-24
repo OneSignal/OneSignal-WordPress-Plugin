@@ -10,7 +10,7 @@ class OneSignal_Admin {
   /**
    * Increment $RESOURCES_VERSION any time the CSS or JavaScript changes to view the latest changes.
    */
-  private static $RESOURCES_VERSION = '41';
+  private static $RESOURCES_VERSION = '42';
   private static $SAVE_POST_NONCE_KEY = 'onesignal_meta_box_nonce';
   private static $SAVE_POST_NONCE_ACTION = 'onesignal_meta_box';
   public static $SAVE_CONFIG_NONCE_KEY = 'onesignal_config_page_nonce';

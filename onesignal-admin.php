@@ -726,6 +726,18 @@ class OneSignal_Admin {
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
+        // Is WP behind a proxy ?
+        $wp_proxy = new WP_HTTP_Proxy();
+        if ( $wp_proxy->is_enabled() && $wp_proxy->send_through_proxy( $onesignal_post_url ) ) {
+          $proxy_builder = new Requests_Proxy_HTTP( $wp_proxy->host() . ':' . $wp_proxy->port() );
+          if ( $wp_proxy->use_authentication() ) {
+            $proxy_builder->use_authentication = true;
+            $proxy_builder->user = $wp_proxy->username();
+            $proxy_builder->pass = $wp_proxy->password();
+          }
+          $proxy_builder->curl_before_send($ch);
+        }
+
 	      if (defined('ONESIGNAL_DEBUG')) {
 		      // Turn off host verification for localhost testing since we're using a self-signed certificate
 		      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);

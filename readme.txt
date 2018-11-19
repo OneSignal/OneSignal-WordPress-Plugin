@@ -1,10 +1,10 @@
-=== OneSignal - Free Web Push Notifications ===
+=== OneSignal - Web Push Notifications ===
 Contributors: OneSignal
 Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
 Tested up to: 4.9.8
-Stable tag: 1.16.9
+Stable tag: 1.16.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,14 +12,19 @@ Increase engagement and drive more repeat traffic to your WordPress site with de
 
 == Description ==
 
-[OneSignal](https://onesignal.com) is a complete push notification solution for WordPress blogs and websites, trusted by over 470,000 developers and marketers including some of the largest brands and websites in the world. We send over 2.7 billion notifications a day.
-After setup, your visitors can opt-in to receive desktop push notifications when you publish a new post, and visitors receive these notifications even after they’ve left your website.
-We make it easy to configure delivering notifications at preset intervals, targeting notifications to specific users, and customizing the opt-in process for your visitors.
+[OneSignal](https://onesignal.com) is an easy way to increase user engagement. Use OneSignal to send visitors targeted push notifications so they keep coming back. It takes just a few minutes to install.
 
-Features:
+After setup, your visitors opt-in to receive push notifications when you publish a new post. Visitors receive these notifications even after they’ve left your website, thus driving re-engagement. 
 
+You can configure notification delivery at preset intervals, create user segments, and customize the opt-in process for visitors.
+
+OneSignal is free for up to 30,000 subscribers; there are no limits on the number of push notifications you can send. Contact [support@onesignal.com](mailto:support@onesignal.com) if you have any questions. We’d love to hear from you.
+
+= Company =
+OneSignal is trusted by over 550,000 developers and marketing strategists. We power push notifications for everyone from early stage startups to Fortune 500 Companies, sending 4 billion notifications per day. It is the most popular push notification plugin on Wordpress with 90,000+ installations.
+
+= Features =
 * **Supports Chrome** (Desktop & Android), **Safari** (Mac OS X), **Microsoft Edge** (Desktop & Android), **Opera** (Desktop & Android) and **Firefox** (Desktop & Android) on both HTTP and HTTPS sites.
-
 
 * **Automatic Notifications** - Send notifications to followers every time you publish a new post. Or set up a reminder that gets automatically sent to them if they haven’t visited for a few days.
 
@@ -32,8 +37,6 @@ Features:
 * **A/B Testing** - Try out different messages to a smaller set of your visitors to figure out which messages are more effective and then send the more effective message to the rest of your visitors!
 
 * **Scheduled Notifications** - Schedule notifications to be delivered in the future, based on a user’s time zone, or even based on the same time of day they last visited your website.
-
-**All completely free. No fees or limitations.**
 
 == Installation ==
 
@@ -52,7 +55,19 @@ Features:
 7. Our OneSignal Wordpress welcome notification options.
 8. Our OneSignal Wordpress setting for prompting options.
 
+== Frequently Asked Questions ==
+
+= HTTP Site Setup Video =
+[youtube https://www.youtube.com/watch?v=j8qO9gDr9Wg]
+
+= HTTPS Site Setup Video =
+HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
+
 == Changelog ==
+
+= 1.16.10 =
+
+Updated plugin description and added FAQ section.
 
 = 1.16.9 =
 

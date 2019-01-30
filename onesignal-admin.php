@@ -244,6 +244,45 @@ class OneSignal_Admin {
     onesignal_debug('    [$meta_box_checkbox_send_notification]', 'in_array($post->post_status, array("future", "draft", "auto-draft", "pending"):', in_array($post->post_status, array("future", "draft", "auto-draft", "pending")), '(' . $post->post_status . ')');
 
     ?>
+
+    <!-- code to handle checkbox issue on wordpress 5.0.0+ (may need to modify for future versions of WP)-->
+    <script>
+      /**
+       * Prompt confirmation upon post publish with onesignal checkbox clicked
+       * Unchecks box automatically once post is published
+       *    - mitigates issue where users publish, edit, and republish post (duplicate notifications)
+       */
+      function uncheckBox(){
+        var willSend = document.getElementsByName("send_onesignal_notification")[0].checked;
+        if (willSend && confirm("Publishing post. Are you sure you want to notify your subscribers?")) {
+          setTimeout(function(){document.getElementsByName("send_onesignal_notification")[0].checked=!willSend},300);
+        } else if (willSend)  {
+          document.getElementsByName("send_onesignal_notification")[0].checked=!willSend;
+        }
+      }
+      
+      /**
+       * Mount listeners to publish buttons
+       */
+      var addListeners = function(){
+        try{
+          var button = document.getElementsByClassName('editor-post-publish-button')[0];
+          
+          if (button) {
+            // publish button exists - add uncheckBox as callback
+            button.addEventListener("click", uncheckBox);
+          } else {
+            // publish button doesn't exist yet - add this function to pre-publish button
+            document.getElementsByClassName('editor-post-publish-panel__toggle')[0].addEventListener("click", function(){setTimeout(addListeners, 300)});
+          }
+        } catch(e) {
+          console.log(e);
+        }
+      }
+      
+      window.onload = addListeners;
+    </script>
+    
 	    <input type="hidden" name="onesignal_meta_box_present" value="true"></input>
       <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($meta_box_checkbox_send_notification) { echo "checked"; } ?>></input>
       <label>

@@ -252,12 +252,12 @@ class OneSignal_Admin {
        * Unchecks box automatically once post is published
        *    - mitigates issue where users publish, edit, and republish post (duplicate notifications)
        */
-      function uncheckBox(){
+      function handlePostPublish(){
         var willSend = document.getElementsByName("send_onesignal_notification")[0].checked;
         if (willSend && confirm("Publishing post. Are you sure you want to notify your subscribers?")) {
           setTimeout(function(){document.getElementsByName("send_onesignal_notification")[0].checked=!willSend},300);
         } else if (willSend)  {
-          document.getElementsByName("send_onesignal_notification")[0].checked=!willSend;
+          document.getElementsByName("send_onesignal_notification")[0].checked=false;
         }
       }
       
@@ -266,14 +266,15 @@ class OneSignal_Admin {
        */
       var addListeners = function(){
         try{
-          var button = document.getElementsByClassName('editor-post-publish-button')[0];
+          var publishButton = document.getElementsByClassName('editor-post-publish-button')[0];
           
-          if (button) {
-            // publish button exists - add uncheckBox as callback
-            button.addEventListener("click", uncheckBox);
+          if (publishButton) {
+            // publish button exists - add handlePostPublish as callback
+            publishButton.addEventListener("click", handlePostPublish);
           } else {
             // publish button doesn't exist yet - add this function to pre-publish button
-            document.getElementsByClassName('editor-post-publish-panel__toggle')[0].addEventListener("click", function(){setTimeout(addListeners, 300)});
+            var prePublishButton = document.getElementsByClassName('editor-post-publish-panel__toggle')[0];
+            prePublishButton.addEventListener("click", function(){setTimeout(addListeners, 300)});
           }
         } catch(e) {
           console.log(e);

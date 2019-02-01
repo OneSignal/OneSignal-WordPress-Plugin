@@ -636,7 +636,19 @@ class OneSignal_Admin {
           }
         }
 
+        /**
+         * hashes notification content and converts it into a uuid
+         * meant to prevent duplicate notification issue started with wp5.0.0 
+         */
+        function uuid($content) {
+          $content = (string)$content;
+          $sha1 = substr(sha1($content), 0, 32);
+          return substr($sha1, 0, 8).'-'.substr($sha1, 8, 4).'-'.substr($sha1, 12, 4).'-'.substr($sha1, 16, 4).'-'.substr($sha1, 20, 12);
+        }
+
+
         $fields = array(
+          'external_id'       => uuid($notif_content),
           'app_id'            => $onesignal_wp_settings['app_id'],
           'headings'          => array("en" => $site_title),
           'included_segments' => array('All'),

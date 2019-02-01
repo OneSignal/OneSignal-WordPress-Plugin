@@ -255,7 +255,7 @@ class OneSignal_Admin {
       function handlePostPublish(){
         var willSend = document.getElementsByName("send_onesignal_notification")[0].checked;
         if (willSend && confirm("Publishing post. Are you sure you want to notify your subscribers?")) {
-          setTimeout(function(){document.getElementsByName("send_onesignal_notification")[0].checked=!willSend},300);
+          setTimeout(function(){document.getElementsByName("send_onesignal_notification")[0].checked=false},300);
         } else if (willSend)  {
           document.getElementsByName("send_onesignal_notification")[0].checked=false;
         }

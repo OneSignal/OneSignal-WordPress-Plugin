@@ -494,6 +494,35 @@ class OneSignal_Admin {
       update_option('onesignal.last_send_time', current_time('timestamp'));
   }
 
+
+/**
+ * hashes notification-title+timestamp and converts it into a uuid
+ * meant to prevent duplicate notification issue started with wp5.0.0 
+ * @title - title of post
+ * return - uuid of sha1 hash of post title + post timestamp
+ */
+public static function uuid($title) {
+  $now = explode(':', date("z:H:i"));
+  $now_minutes = $now[0] * 60 * 24 + $now[1] * 60 + $now[2];
+  $prev_minutes = get_option('TimeLastUpdated');
+  $prehash = (string)$title; 
+
+  if ($prev_minutes !== false && ($now_minutes - $prev_minutes) > 60) {
+	update_option('TimeLastUpdated', $now_minutes);
+	$timestamp = $now_minutes;
+  } else if ($prev_minutes == false) {
+	add_option('TimeLastUpdated', $now_minutes);
+	$timestamp = $now_minutes;
+  } else {
+	$timestamp = $prev_minutes;
+  }
+
+  $prehash = $prehash . $timestamp;
+
+  $sha1 = substr(sha1($prehash), 0, 32);
+  return substr($sha1, 0, 8) . '-' . substr($sha1, 8, 4) . '-' . substr($sha1, 12, 4) . '-' . substr($sha1, 16, 4) . '-' . substr($sha1, 20, 12);
+}
+
  /**
   * The main function that actually sends a notification to OneSignal.
   */
@@ -637,19 +666,8 @@ class OneSignal_Admin {
           }
         }
 
-        /**
-         * hashes notification content and converts it into a uuid
-         * meant to prevent duplicate notification issue started with wp5.0.0 
-         */
-        function uuid($content) {
-          $content = (string)$content;
-          $sha1 = substr(sha1($content), 0, 32);
-          return substr($sha1, 0, 8).'-'.substr($sha1, 8, 4).'-'.substr($sha1, 12, 4).'-'.substr($sha1, 16, 4).'-'.substr($sha1, 20, 12);
-        }
-
-
         $fields = array(
-          'external_id'       => uuid($notif_content),
+          'external_id'       => self::uuid($notif_content),
           'app_id'            => $onesignal_wp_settings['app_id'],
           'headings'          => array("en" => $site_title),
           'included_segments' => array('All'),

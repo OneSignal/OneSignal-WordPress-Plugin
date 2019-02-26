@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
 Tested up to: 5.0.3
-Stable tag: 1.16.12
+Stable tag: 1.16.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,10 @@ OneSignal is trusted by over 600,000 developers and marketing strategists. We po
 HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 
 == Changelog ==
+
+= 1.16.13 =
+
+- Added timestamp to allow re-pushing notifications upon editing an existing post after 1 hr
 
 = 1.16.12 =
 

@@ -752,9 +752,10 @@ public static function uuid($title) {
 	);
 
 	$response = wp_remote_post($onesignal_post_url, $request);
+	$status = $response['response']['code'];
 
-        if ($response['status'] != 200) {
-          if ($response['status'] != 0) {
+        if ($status != 200) {
+          if ($status != 0) {
             set_transient( 'onesignal_transient_error', '<div class="error notice onesignal-error-notice">
                     <p><strong>OneSignal Push:</strong><em> There was a ' . $curl_http_code . ' error sending your notification:</em></p>
                     <pre>' . print_r($response, true) . '</pre>
@@ -766,21 +767,19 @@ public static function uuid($title) {
                 </div>', 86400 );
           }
         } else {
-          $parsed_response = json_decode($response, true);
-          if (!empty($parsed_response)) {
+          if (!empty($response)) {
             onesignal_debug('OneSignal API Raw Response:', $response);
-            onesignal_debug('OneSignal API Parsed Response:', $parsed_response);
             // API can send a 200 OK even if the notification failed to send
-            $recipient_count = $parsed_response['recipients'];
+	    $recipient_count = json_decode($response["body"], true)["recipients"];
             $sent_or_scheduled = array_key_exists('send_after', $fields) ? 'scheduled' : 'sent';
-
+	    error_log("Recipients:".$recipient_count);
             $config_show_notification_send_status_message = $onesignal_wp_settings['show_notification_send_status_message'] == "1";
 
             if ($config_show_notification_send_status_message) {
               if ($recipient_count != 0) {
 		      set_transient('onesignal_transient_success', '<div class="components-notice is-success is-dismissible">
 			      <div class="components-notice__content">
-			      <p><strong>OneSignal Push:</strong><em> Successfully ' . $sent_or_scheduled . ' a notification to ' . $parsed_response['recipients'] . ' recipients.</em></p>
+			      <p><strong>OneSignal Push:</strong><em> Successfully ' . $sent_or_scheduled . ' a notification to ' . $recipient_count . ' recipients.</em></p>
 			      </div>
                     </div>', 86400);
               } else {

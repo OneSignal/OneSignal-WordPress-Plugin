@@ -33,3 +33,10 @@ last_dir=$(pwd)
 cd ${WORDPRESS_GIT_SRC_PATH}
 zip -qr -x ".*" -x="build_release.sh" -x="*.zip" -x="onesignal-free-web-push-notifications" ${RELEASE_ARCHIVE_FILENAME} ./*
 cd $last_dir
+
+rm ../onesignal-free-web-push-notifications/trunk/README.md
+rm ../onesignal-free-web-push-notifications/trunk/index.php
+rm ../onesignal-free-web-push-notifications/trunk/views/css/*.scss
+rm ../onesignal-free-web-push-notifications/trunk/views/css/callout.css
+rm ../onesignal-free-web-push-notifications/trunk/views/css/link.css
+rm -r ../onesignal-free-web-push-notifications/trunk/views/css/semantic-ui

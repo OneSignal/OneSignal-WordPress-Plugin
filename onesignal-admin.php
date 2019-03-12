@@ -786,7 +786,9 @@ public static function uuid($title) {
 		update_post_meta($post->ID, "error_message", $response->get_error_message());
 	} elseif ( isset( $response_body["errors"] ) ) {
 		update_post_meta($post->ID, "error_message", $response_body["errors"][0]);	
-	} elseif ( isset( $response['response'] ) ) {
+	}
+
+	if ( isset( $response['response'] ) ) {
 		$status = $response['response']['code'];
 	}
 

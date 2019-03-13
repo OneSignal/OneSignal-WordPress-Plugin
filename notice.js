@@ -1,12 +1,12 @@
 jQuery(document).ready(function() {
-  if (!wp.data) {
+  const editor = wp.data.select("core/editor");
+  if (!editor) {
     console.warn(
       "OneSignal Push: couldn't load wp.data. https://bit.ly/2F4G0bt"
     );
     return;
   }
 
-  const editor = wp.data.select("core/editor");
   const get_wp_attr = attr => {
     return editor.getEditedPostAttribute(attr);
   };

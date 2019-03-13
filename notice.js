@@ -1,6 +1,6 @@
 jQuery(document).ready(function() {
-  if ( !isWpCoreEditorDefined() ) {
-  	return;
+  if (!isWpCoreEditorDefined()) {
+    return;
   }
 
   const editor = wp.data.select("core/editor");
@@ -133,24 +133,23 @@ jQuery(document).ready(function() {
       isDismissible: true
     });
   };
-
 });
 const isWpCoreEditorDefined = () => {
-  var unloadable = ""; 	// variable that couldn't be loaded
-  if (!wp || !wp.data || !wp.data.select("core/editor") ) {
-      if ( !wp ) {
-          unloadable = "wp";
-  } else if ( !wp.data ) {
+  var unloadable = ""; // variable that couldn't be loaded
+  if (!wp || !wp.data || !wp.data.select("core/editor")) {
+    if (!wp) {
+      unloadable = "wp";
+    } else if (!wp.data) {
       unloadable = "wp.data";
-  } else if ( !wp.data.select("core/editor") ) {
-      unloadable = "wp.data.select(\"core/editor\")";
-  }
+    } else if (!wp.data.select("core/editor")) {
+      unloadable = 'wp.data.select("core/editor")';
+    }
 
-  console.warn(
+    console.warn(
       `OneSignal Push: could not load ${unloadable}. https:\/\/bit.ly/2F4G0bt`
-  );
-  return false;
-} else {
-  return true;
-}
-}
+    );
+    return false;
+  } else {
+    return true;
+  }
+};

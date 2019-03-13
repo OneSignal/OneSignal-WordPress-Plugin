@@ -1,8 +1,5 @@
 jQuery(document).ready(function() {
-  if (!wp.data) {
-    console.warn(
-      "OneSignal Push: couldn't load wp.data. https://bit.ly/2F4G0bt"
-    );
+  if (!isWpCoreEditorDefined()) {
     return;
   }
 
@@ -137,3 +134,22 @@ jQuery(document).ready(function() {
     });
   };
 });
+const isWpCoreEditorDefined = () => {
+  var unloadable = ""; // variable that couldn't be loaded
+  if (!wp || !wp.data || !wp.data.select("core/editor")) {
+    if (!wp) {
+      unloadable = "wp";
+    } else if (!wp.data) {
+      unloadable = "wp.data";
+    } else if (!wp.data.select("core/editor")) {
+      unloadable = 'wp.data.select("core/editor")';
+    }
+
+    console.warn(
+      `OneSignal Push: could not load ${unloadable}. https:\/\/bit.ly/2F4G0bt`
+    );
+    return false;
+  } else {
+    return true;
+  }
+};

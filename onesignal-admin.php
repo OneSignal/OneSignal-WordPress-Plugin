@@ -24,9 +24,14 @@ function has_metadata() {
 	$status = get_post_meta($post_id, "status")[0];
 	$error_message = get_post_meta($post_id, "error_message")[0];
 	$data =  array('recipients' => $recipients, 'status_code' => $status, 'error_message' => $error_message);
+
+	// reset meta
+	delete_post_meta($post_id, "status");
+	delete_post_meta($post_id, "recipients");
+	delete_post_meta($post_id, "error_message");
+
 	echo json_encode($data);
 	exit;	
-
 }
 
 class OneSignal_Admin {
@@ -775,6 +780,8 @@ public static function uuid($title) {
 	);
 
 	$response = wp_remote_post($onesignal_post_url, $request);
+	sleep(15);
+
 
 	if ( isset( $response['body'] ) ) {
 		$response_body = json_decode($response["body"], true);
@@ -791,7 +798,6 @@ public static function uuid($title) {
 	if ( isset( $response['response'] ) ) {
 		$status = $response['response']['code'];
 	}
-
 
 	update_post_meta($post->ID, "status", $status);
 	
@@ -835,7 +841,8 @@ public static function uuid($title) {
 			      <p><strong>OneSignal Push:</strong><em> Successfully ' . $sent_or_scheduled . ' a notification to ' . $recipient_count . ' recipients.</em></p>
 			      </div>
                     </div>', 86400);
-              } else {
+	      } else {
+		error_log("RECIPIENTS ZERO ".json_encode($response));
                 set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
                         <p><strong>OneSignal Push:</strong><em>There were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in an hour.</em></p>
                     </div>', 86400);

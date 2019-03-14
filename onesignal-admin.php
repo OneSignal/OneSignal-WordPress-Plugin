@@ -780,8 +780,6 @@ public static function uuid($title) {
 	);
 
 	$response = wp_remote_post($onesignal_post_url, $request);
-	sleep(15);
-
 
 	if ( isset( $response['body'] ) ) {
 		$response_body = json_decode($response["body"], true);
@@ -842,7 +840,6 @@ public static function uuid($title) {
 			      </div>
                     </div>', 86400);
 	      } else {
-		error_log("RECIPIENTS ZERO ".json_encode($response));
                 set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
                         <p><strong>OneSignal Push:</strong><em>There were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in an hour.</em></p>
                     </div>', 86400);

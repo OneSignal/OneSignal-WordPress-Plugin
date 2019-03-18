@@ -14,7 +14,10 @@ function load_javascript() {
 	global $post;
 	wp_register_script('notice_script', plugins_url('notice.js', __FILE__), array('jquery'), '1.1', true);
 	wp_enqueue_script('notice_script');
-	wp_localize_script('notice_script', 'ajax_object', array('ajax_url' => admin_url("admin-ajax.php"), 'post_id' => $post->ID));
+    if($post){
+        wp_localize_script('notice_script', 'ajax_object', array('ajax_url' => admin_url("admin-ajax.php"), 'post_id' => $post->ID));
+    
+    }
 }
 
 add_action( 'wp_ajax_has_metadata', 'has_metadata' );

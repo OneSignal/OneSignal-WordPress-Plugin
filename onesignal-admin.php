@@ -39,7 +39,8 @@ function has_metadata() {
 	}
 	
 	$data =  array('recipients' => $recipients, 'status_code' => $status, 'error_message' => $error_message);
-    
+    echo json_encode($data);
+
     // reset meta
 	delete_post_meta($post_id, "status");
 	delete_post_meta($post_id, "recipients");

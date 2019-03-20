@@ -25,8 +25,12 @@ jQuery(document).ready(function() {
     // runs with each change in wp state
     const post = wp.data.select("core/editor").getCurrentPost();
 
+    if(!post || post === {}){
+      return;
+    }
+
     // runs until post data loads
-    if (!state.first_modified && post !== {}) {
+    if (!state.first_modified) {
       // captures last modified date of loaded post
       state.first_modified = post.modified;	
     }
@@ -81,7 +85,7 @@ jQuery(document).ready(function() {
           error_notice("OneSignal Push: " + error_message);
         }
 
-	reset_state();
+        reset_state();
         return;
       }
 
@@ -137,7 +141,7 @@ jQuery(document).ready(function() {
     state.interval = undefined;
     state.interval_count = 0;
     state.started = false;
-    state.first_modified = null;
+    state.first_modified = undefined;
   }
 
 });

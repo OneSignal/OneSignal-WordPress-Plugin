@@ -21,32 +21,38 @@ function load_javascript() {
 
 add_action( 'wp_ajax_has_metadata', 'has_metadata' );
 function has_metadata() {
-	$post_id = $_GET['post_id'];
+  $post_id = $_GET['post_id'];
+  
+  if(is_null($post_id)){
+    error_log("OneSignal: could not get post_id");
+    $data = array('error' => "could not get post id");
+  }else{
+    $recipients = get_post_meta($post_id, "recipients");
+    if($recipients && is_array($recipients)){
+      $recipients = $recipients[0];
+    }
+    
+    $status = get_post_meta($post_id, "status");
+    if($status && is_array($status)){
+      $status = $status[0];
+    }
+    
+    $error_message = get_post_meta($post_id, "error_message");
+    if($error_message && is_array($error_message)){
+      $error_message = $error_message[0];
+    }
+    
+    $data =  array('recipients' => $recipients, 'status_code' => $status, 'error_message' => $error_message);
+  }
 
-	$recipients = get_post_meta($post_id, "recipients");
-	if($recipients && is_array($recipients)){
-		$recipients = $recipients[0];
-	}
-	
-	$status = get_post_meta($post_id, "status");
-	if($status && is_array($status)){
-		$status = $status[0];
-	}
-	
-	$error_message = get_post_meta($post_id, "error_message");
-	if($error_message && is_array($error_message)){
-		$error_message = $error_message[0];
-	}
-	
-	$data =  array('recipients' => $recipients, 'status_code' => $status, 'error_message' => $error_message);
-    echo json_encode($data);
+  echo json_encode($data);
 
-    // reset meta
+  // reset meta
 	delete_post_meta($post_id, "status");
 	delete_post_meta($post_id, "recipients");
 	delete_post_meta($post_id, "error_message");
     
-    exit;	
+  exit;	
 
 }
 

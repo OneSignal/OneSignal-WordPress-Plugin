@@ -803,15 +803,18 @@ public static function uuid($title) {
 
 	$response = wp_remote_post($onesignal_post_url, $request);
 
-	if ( isset( $response['body'] ) ) {
-		$response_body = json_decode($response["body"], true);
-	}
-	
 	if ( is_wp_error($response) || !is_array( $response ) || !isset( $response['body']) ) {
 		$status = $response->get_error_code(); 				// custom code for WP_ERROR
 		error_log("There was a ".$status." error returned from OneSignal");	
 		update_post_meta($post->ID, "error_message", $response->get_error_message());
-	} elseif ( isset( $response_body["errors"] ) ) {
+        return;
+    } 
+    
+    if ( isset( $response['body'] ) ) {
+		$response_body = json_decode($response["body"], true);
+	}
+    
+    if ( isset( $response_body["errors"] ) ) {
 		update_post_meta($post->ID, "error_message", $response_body["errors"][0]);	
 	}
 

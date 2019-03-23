@@ -12,20 +12,47 @@ function onesignal_change_footer_admin() {
 add_action('admin_enqueue_scripts', 'load_javascript');
 function load_javascript() {
 	global $post;
-	wp_register_script('notice_script', plugins_url('notice.js', __FILE__), array('jquery'), '1.1', true);
-	wp_enqueue_script('notice_script');
-	wp_localize_script('notice_script', 'ajax_object', array('ajax_url' => admin_url("admin-ajax.php"), 'post_id' => $post->ID));
+    if($post){
+        wp_register_script('notice_script', plugins_url('notice.js', __FILE__), array('jquery'), '1.1', true);
+        wp_enqueue_script('notice_script');
+        wp_localize_script('notice_script', 'ajax_object', array('ajax_url' => admin_url("admin-ajax.php"), 'post_id' => $post->ID));
+    }
 }
 
 add_action( 'wp_ajax_has_metadata', 'has_metadata' );
 function has_metadata() {
-	$post_id = $_GET['post_id'];
-	$recipients = get_post_meta($post_id, "recipients")[0];
-	$status = get_post_meta($post_id, "status")[0];
-	$error_message = get_post_meta($post_id, "error_message")[0];
-	$data =  array('recipients' => $recipients, 'status_code' => $status, 'error_message' => $error_message);
-	echo json_encode($data);
-	exit;	
+  $post_id = $_GET['post_id'];
+  
+  if(is_null($post_id)){
+    error_log("OneSignal: could not get post_id");
+    $data = array('error' => "could not get post id");
+  }else{
+    $recipients = get_post_meta($post_id, "recipients");
+    if($recipients && is_array($recipients)){
+      $recipients = $recipients[0];
+    }
+    
+    $status = get_post_meta($post_id, "status");
+    if($status && is_array($status)){
+      $status = $status[0];
+    }
+    
+    $error_message = get_post_meta($post_id, "error_message");
+    if($error_message && is_array($error_message)){
+      $error_message = $error_message[0];
+    }
+    
+    // reset meta
+    delete_post_meta($post_id, "status");
+    delete_post_meta($post_id, "recipients");
+    delete_post_meta($post_id, "error_message");
+    
+    $data =  array('recipients' => $recipients, 'status_code' => $status, 'error_message' => $error_message);
+  }
+
+  echo json_encode($data);
+
+  exit;	
 
 }
 
@@ -776,15 +803,18 @@ public static function uuid($title) {
 
 	$response = wp_remote_post($onesignal_post_url, $request);
 
-	if ( isset( $response['body'] ) ) {
-		$response_body = json_decode($response["body"], true);
-	}
-	
 	if ( is_wp_error($response) || !is_array( $response ) || !isset( $response['body']) ) {
 		$status = $response->get_error_code(); 				// custom code for WP_ERROR
 		error_log("There was a ".$status." error returned from OneSignal");	
 		update_post_meta($post->ID, "error_message", $response->get_error_message());
-	} elseif ( isset( $response_body["errors"] ) ) {
+        return;
+    } 
+    
+    if ( isset( $response['body'] ) ) {
+		$response_body = json_decode($response["body"], true);
+	}
+    
+    if ( isset( $response_body["errors"] ) ) {
 		update_post_meta($post->ID, "error_message", $response_body["errors"][0]);	
 	}
 

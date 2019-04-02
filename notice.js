@@ -68,7 +68,7 @@ jQuery(document).ready(function() {
   
       // status 0: HTTP request failed
       if (status_code == 0) {
-        error_notice("OneSignal Push: HTTP request failed");
+        error_notice("OneSignal Push: request failed. "+error_message);
         reset_state();
 	return;
       }

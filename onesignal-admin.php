@@ -805,8 +805,9 @@ public static function uuid($title) {
 
 	if ( is_wp_error($response) || !is_array( $response ) || !isset( $response['body']) ) {
 		$status = $response->get_error_code(); 				// custom code for WP_ERROR
-		error_log("There was a ".$status." error returned from OneSignal");	
-		update_post_meta($post->ID, "error_message", $response->get_error_message());
+        $error_message = $response->get_error_message();
+        error_log("There was a ".$status." error returned from OneSignal: ".$error_message);	
+		update_post_meta($post->ID, "error_message", $error_message);
         return;
     } 
     

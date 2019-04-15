@@ -1,4 +1,6 @@
-jQuery(document).ready(function() {
+jQuery(document).ready(notice);
+    
+function notice() {
   if (!isWpCoreEditorDefined()) {
     return;
   }
@@ -65,12 +67,16 @@ jQuery(document).ready(function() {
     jQuery.get(ajax_object.ajax_url, data, function(response) {
       response = JSON.parse(response);
       const { recipients, status_code, error_message } = response;
-  
+
+      if(window.DEBUG_MODE){
+        console.log(response);
+      }
+
       // status 0: HTTP request failed
-      if (status_code == 0) {
-        error_notice("OneSignal Push: request failed. "+error_message);
+      if (status_code === 0) {
+        error_notice("OneSignal Push: request failed with status code 0. "+error_message);
         reset_state();
-	return;
+        return;
       }
 
       // 400 & 500 level errors
@@ -144,7 +150,8 @@ jQuery(document).ready(function() {
     state.first_modified = undefined;
   }
 
-});
+};
+
 const isWpCoreEditorDefined = () => {
   var unloadable = ""; // variable name that couldn't be loaded
   if (!wp || !wp.data || !wp.data.select("core/editor")) {
@@ -163,4 +170,11 @@ const isWpCoreEditorDefined = () => {
   } else {
     return true;
   }
+};
+
+const OneSignal = {
+    debug : () => {
+        window.DEBUG_MODE = window.DEBUG_MODE ? !window.DEBUG_MODE : true;
+        notice();
+    }
 };

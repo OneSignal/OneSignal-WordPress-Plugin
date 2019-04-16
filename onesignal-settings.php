@@ -263,7 +263,7 @@ class OneSignal {
       }
     }
 
-    return $onesignal_wp_settings;
+    return apply_filters( 'onesignal_get_settings', $onesignal_wp_settings );
   }
 
   public static function save_onesignal_settings($settings) {

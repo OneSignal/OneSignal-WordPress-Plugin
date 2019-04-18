@@ -58,9 +58,43 @@ class OneSignal_Public {
   public function __construct() {}
 
   public static function init() {
-    add_action('wp_head', array(__CLASS__, 'onesignal_header'), 10);
+    add_action('wp_head', array(__CLASS__, 'insert_onesignal_stamp'), 10);
+
+    add_action('wp_head', array(__CLASS__, 'add_scripts'), 10);
+
+    add_action(
+      'wp_front_service_worker',
+      function ( WP_Service_Worker_Scripts $scripts ) {
+        $scripts->register(
+          'onesignal',
+          function() {
+            return sprintf( 'importScripts( %s );', wp_json_encode( 'https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js' ) );
+          }
+        );
+      }
+    );
+
+    if ( class_exists( 'WP_Web_App_Manifest' ) ) {
+      add_filter(__CLASS__, 'amend_manifest');
+    } else {
+      add_action('wp_head', array(__CLASS__, 'add_manifest_link'), 10);
+    }
   }
 
+  public static function amend_manifest( $manifest ) {
+    $onesignal_wp_settings = OneSignal::get_onesignal_settings();
+    if ($onesignal_wp_settings !== false && array_key_exists('gcm_sender_id', $onesignal_wp_settings)) {
+      $manifest['gcm_sender_id'] = $onesignal_wp_settings['gcm_sender_id'];
+    } else {
+      $manifest['gcm_sender_id'] = 'WORDPRESS_NO_SENDER_ID_ENTERED'; // Or 482941778795?
+    }
+    $manifest['gcm_user_visible_only'] = true;
+    return $manifest;
+  }
+
+  /**
+   * @deprecated When PWA feature plugin is active, this is not used.
+   */
   public static function insert_onesignal_header_manifest($onesignal_wp_settings, $current_plugin_url) {
     $use_custom_manifest = $onesignal_wp_settings["use_custom_manifest"];
     $custom_manifest_url = $onesignal_wp_settings["custom_manifest_url"];
@@ -89,7 +123,10 @@ class OneSignal_Public {
     <?php
   }
 
-  public static function onesignal_header() {
+  /**
+   * @deprecated When PWA feature plugin is active, this is not used.
+   */
+  public static function add_manifest_link() {
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
     if ($onesignal_wp_settings["subdomain"] == "") {
@@ -98,8 +135,22 @@ class OneSignal_Public {
       } else {
         $current_plugin_url = ONESIGNAL_PLUGIN_URL;
       }
-      OneSignal_Public::insert_onesignal_stamp();
       OneSignal_Public::insert_onesignal_header_manifest($onesignal_wp_settings, $current_plugin_url);
+    }
+  }
+
+  /**
+   * @todo The service worker registration in here needs to be disabled in favor of WP_Service_Worker_Scripts.
+   */
+  public static function add_scripts() {
+    if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
+      return;
+    }
+    $onesignal_wp_settings = OneSignal::get_onesignal_settings();
+    if (strpos(ONESIGNAL_PLUGIN_URL, "http://localhost") === false && strpos(ONESIGNAL_PLUGIN_URL, "http://127.0.0.1") === false) {
+      $current_plugin_url = preg_replace("/(http:\/\/)/i", "https://", ONESIGNAL_PLUGIN_URL);
+    } else {
+      $current_plugin_url = ONESIGNAL_PLUGIN_URL;
     }
     ?>
     <?php

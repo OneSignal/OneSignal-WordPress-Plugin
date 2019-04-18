@@ -134,7 +134,7 @@ jQuery(document).ready(function() {
   const error_notice = error => {
     wp.data.dispatch("core/notices").createNotice("error", error, {
         isDismissible: true,
-        id:'onesignal-notice'
+        id:'onesignal-error'
     });
   };
 

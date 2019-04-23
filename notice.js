@@ -177,6 +177,18 @@ const isWpCoreEditorDefined = () => {
   }
 };
 
+/**
+ * - use the debug method in the console to show data about the request
+ * - works in Gutenberg editor
+ *
+ * returns an object in the format
+ *  { status : "200",
+ *    recipients : "1374",
+ *    error_message : []
+ *  }
+ *
+ *  - if the recipient number is "0", the error_message will contain the entire HTTP response as JSON
+ */
 window.OneSignal = {
     debug : () => {
         window.DEBUG_MODE = window.DEBUG_MODE ? !window.DEBUG_MODE : true;

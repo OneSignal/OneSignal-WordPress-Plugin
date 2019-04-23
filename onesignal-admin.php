@@ -798,7 +798,8 @@ public static function uuid($title) {
           		"content-type" => "application/json;charset=utf-8",
           		"Authorization" => "Basic " . $onesignal_auth_key
 		),
-		"body" => json_encode($fields)
+    "body" => json_encode($fields),
+    "timeout" => 60
 	);
 
 	$response = wp_remote_post($onesignal_post_url, $request);
@@ -823,6 +824,9 @@ public static function uuid($title) {
 		$status = $response['response']['code'];
 	}
 
+    if ($response_body['recipients'] == "0") {
+        update_post_meta($post->ID, "error_message", json_encode($response_body));
+    }
 
 	update_post_meta($post->ID, "status", $status);
 	

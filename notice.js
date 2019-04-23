@@ -1,4 +1,14 @@
-jQuery(document).ready(function() {
+jQuery(document).ready(notice);
+
+var state = {
+    post_id : ajax_object.post_id,
+    first_modified : undefined,
+    started : false,
+    interval: undefined,
+    interval_count : 0
+  }
+    
+function notice() {
   if (!isWpCoreEditorDefined()) {
     return;
   }
@@ -7,14 +17,6 @@ jQuery(document).ready(function() {
   const get_wp_attr = attr => {
     return editor.getEditedPostAttribute(attr);
   };
- 
-  var state = {
-    post_id : ajax_object.post_id,
-    first_modified : undefined,
-    started : false,
-    interval: undefined,
-    interval_count : 0
-  }
 
   /*
    * Subscribes function to WP's state-change listener
@@ -65,48 +67,58 @@ jQuery(document).ready(function() {
     jQuery.get(ajax_object.ajax_url, data, function(response) {
       response = JSON.parse(response);
       const { recipients, status_code, error_message } = response;
-  
-      // status 0: HTTP request failed
-      if (status_code == 0) {
-        error_notice("OneSignal Push: request failed. "+error_message);
-        reset_state();
-	return;
+
+      if(window.DEBUG_MODE){
+        console.log(response);
       }
 
-      // 400 & 500 level errors
-      if (status_code >= 400) {
-        if (!error_message) {
-          error_notice(
-            "OneSignal Push: there was a " +
-              status_code +
-              " error sending your notification"
-          );
-        } else {
-          error_notice("OneSignal Push: " + error_message);
+      const is_status_empty = status_code === [];
+      const is_recipients_empty = recipients === [];
+
+      if(!is_status_empty && !is_recipients_empty){
+        // status 0: HTTP request failed
+        if (status_code === 0) {
+          error_notice("OneSignal Push: request failed with status code 0. "+error_message);
+          reset_state();
+          return;
         }
 
-        reset_state();
-        return;
+        // 400 & 500 level errors
+        if (status_code >= 400) {
+          if (!error_message) {
+            error_notice(
+              "OneSignal Push: there was a " +
+                status_code +
+                " error sending your notification"
+            );
+          } else {
+            error_notice("OneSignal Push: " + error_message);
+          }
+
+          reset_state();
+          return;
+        }
+
+        if (recipients == 0) {
+          error_notice(
+            "OneSignal Push: there were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in an hour. Learn more: https://bit.ly/2UDplAS"
+          );
+          reset_state();
+
+        } else if (recipients) {
+          show_notice(recipients);
+          reset_state();
+        }
+
+        // try for 1 minute
+        if (state.interval_count > 20) {
+          error_notice(
+            "OneSignal Push: Did not receive a response status from last notification sent"
+          );
+          reset_state();
+        }
       }
 
-      if (recipients == 0) {
-        error_notice(
-          "OneSignal Push: there were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in an hour. Learn more: https://bit.ly/2UDplAS"
-        );
-        reset_state();
-
-      } else if (recipients) {
-        show_notice(recipients);
-        reset_state();
-      }
-
-      // try for 1 minute
-      if (state.interval_count > 20) {
-        error_notice(
-          "OneSignal Push: Did not receive a response status from last notification sent"
-        );
-        reset_state();
-      }
     });
     state.interval_count += 1;
   };
@@ -143,8 +155,8 @@ jQuery(document).ready(function() {
     state.started = false;
     state.first_modified = undefined;
   }
+};
 
-});
 const isWpCoreEditorDefined = () => {
   var unloadable = ""; // variable name that couldn't be loaded
   if (!wp || !wp.data || !wp.data.select("core/editor")) {
@@ -163,4 +175,23 @@ const isWpCoreEditorDefined = () => {
   } else {
     return true;
   }
+};
+
+/**
+ * - use the debug method in the console to show data about the request
+ * - works in Gutenberg editor
+ *
+ * returns an object in the format
+ *  { status : "200",
+ *    recipients : "1374",
+ *    error_message : []
+ *  }
+ *
+ *  - if the recipient number is "0", the error_message will contain the entire HTTP response as JSON
+ */
+window.OneSignal = {
+    debug : () => {
+        window.DEBUG_MODE = window.DEBUG_MODE ? !window.DEBUG_MODE : true;
+        notice();
+    }
 };

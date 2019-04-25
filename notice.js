@@ -141,14 +141,16 @@ function notice() {
           " recipient" +
           plural,
         {
-          isDismissible: true
+            id:'onesignal-notice',
+            isDismissible: true
         }
       );
   };
 
   const error_notice = error => {
     wp.data.dispatch("core/notices").createNotice("error", error, {
-      isDismissible: true
+        isDismissible: true,
+        id:'onesignal-error'
     });
   };
 

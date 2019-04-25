@@ -1,11 +1,11 @@
 jQuery(document).ready(notice);
 
 var state = {
-    post_id : ajax_object.post_id,
-    first_modified : undefined,
-    started : false,
-    interval: undefined,
-    interval_count : 0
+    post_id : ajax_object.post_id,  // post id sent from php backend
+    first_modified : undefined,     // when the post was first modified
+    started : false,                // post notification requests started
+    interval: undefined,            // global interval for reattempting requests
+    interval_count : 0              // how many times has the request been attempted
   }
     
 function notice() {
@@ -25,19 +25,20 @@ function notice() {
    */
   wp.data.subscribe(() => {
     // runs with each change in wp state
-    const post = wp.data.select("core/editor").getCurrentPost();
+    const post = editor.getCurrentPost();
 
+    // runs until post data loads
     if(!post || post === {}){
       return;
     }
 
-    // runs until post data loads
+    // post is defined now 
     if (!state.first_modified) {
       // captures last modified date of loaded post
       state.first_modified = post.modified;	
     }
 
-    // latest modified date
+    // latest modified date, status of the post
     const { modified, status } = post;
 
     // is checked
@@ -45,11 +46,14 @@ function notice() {
       "checked"
     );
 
+    // if last modified differs from first modified times, post_modified = true
     const post_modified = modified !== state.first_modified;
-    
-    // if hasn't started and change is detected
-    if (!state.started && post_modified && send_os_notif && (status === "publish")) {
-      state.interval = setInterval(get_metadata, 3000);
+
+    const is_published = status === "publish";
+
+    // if hasn't started, change detected, box checked, and the status is 'publish'
+    if (!state.started && post_modified && send_os_notif && is_published) {
+      state.interval = setInterval(get_metadata, 3000); // starts requests
       state.started = true;
     }
   });
@@ -77,7 +81,7 @@ function notice() {
 
       if(!is_status_empty && !is_recipients_empty){
         // status 0: HTTP request failed
-        if (status_code === 0) {
+        if (status_code === "0") {
           error_notice("OneSignal Push: request failed with status code 0. "+error_message);
           reset_state();
           return;
@@ -92,14 +96,14 @@ function notice() {
                 " error sending your notification"
             );
           } else {
-            error_notice("OneSignal Push: " + error_message);
+            error_notice("OneSignal Push: there was a " + status_code + " error sending your notification: " + error_message);
           }
 
           reset_state();
           return;
         }
 
-        if (recipients == 0) {
+        if (recipients === "0") {
           error_notice(
             "OneSignal Push: there were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in an hour. Learn more: https://bit.ly/2UDplAS"
           );
@@ -110,7 +114,7 @@ function notice() {
           reset_state();
         }
 
-        // try for 1 minute
+        // try for 1 minute (each interval = 3s)
         if (state.interval_count > 20) {
           error_notice(
             "OneSignal Push: Did not receive a response status from last notification sent"

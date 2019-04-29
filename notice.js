@@ -76,8 +76,8 @@ function notice() {
         console.log(response);
       }
 
-      const is_status_empty = status_code === [];
-      const is_recipients_empty = recipients === [];
+      const is_status_empty = status_code.length == 0;
+      const is_recipients_empty = recipients.length == 0;
 
       if(!is_status_empty && !is_recipients_empty){
         // status 0: HTTP request failed
@@ -113,15 +113,15 @@ function notice() {
           show_notice(recipients);
           reset_state();
         }
-
-        // try for 1 minute (each interval = 3s)
-        if (state.interval_count > 20) {
-          error_notice(
-            "OneSignal Push: Did not receive a response status from last notification sent"
-          );
-          reset_state();
-        }
       }
+
+    // try for 1 minute (each interval = 3s)
+    if (state.interval_count > 20) {
+      error_notice(
+        "OneSignal Push: Did not receive a response status from last notification sent"
+      );
+      reset_state();
+    }
 
     });
     state.interval_count += 1;

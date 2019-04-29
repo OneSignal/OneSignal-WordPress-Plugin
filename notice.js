@@ -114,6 +114,7 @@ function notice() {
           reset_state();
         }
       }
+    });
 
     // try for 1 minute (each interval = 3s)
     if (state.interval_count > 20) {
@@ -122,8 +123,7 @@ function notice() {
       );
       reset_state();
     }
-
-    });
+    
     state.interval_count += 1;
   };
 

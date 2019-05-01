@@ -557,7 +557,7 @@ public static function uuid($title) {
   $prev_minutes = get_option('TimeLastUpdated');
   $prehash = (string)$title; 
 
-  if ($prev_minutes !== false && ($now_minutes - $prev_minutes) > 60) {
+  if ($prev_minutes !== false && ($now_minutes - $prev_minutes) > 2) {
 	update_option('TimeLastUpdated', $now_minutes);
 	$timestamp = $now_minutes;
   } else if ($prev_minutes == false) {

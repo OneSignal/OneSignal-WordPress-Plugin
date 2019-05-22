@@ -68,7 +68,7 @@ HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 
 = 1.17.4 = 
 
-- Changed time limiter to 2 minutes
+- Changed time limiter to 2 minutes from 1 hour to ease restrictions on sending update notifications
 
 = 1.17.3 =
 

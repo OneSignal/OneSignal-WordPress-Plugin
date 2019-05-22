@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
 Tested up to: 5.1
-Stable tag: 1.17.3
+Stable tag: 1.17.4
 
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -65,6 +65,10 @@ OneSignal is trusted by over 650,000 developers and marketing strategists. We po
 HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 
 == Changelog ==
+
+= 1.17.4 = 
+
+- Changed time limiter to 2 minutes from 1 hour to ease restrictions on sending update notifications
 
 = 1.17.3 =
 

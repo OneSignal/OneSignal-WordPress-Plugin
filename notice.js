@@ -105,7 +105,7 @@ function notice() {
 
         if (recipients === "0") {
           error_notice(
-            "OneSignal Push: there were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in an hour. Learn more: https://bit.ly/2UDplAS"
+            "OneSignal Push: there were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in three minutes. Learn more: https://bit.ly/2UDplAS"
           );
           reset_state();
 

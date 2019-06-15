@@ -714,7 +714,16 @@ public static function uuid($title) {
             onesignal_debug('Caught qTrans exception:', $e->getMessage());
           }
         }
+  
+        $post_time = get_post_time('D M d Y G:i:', true, $post);
 
+        if(!$post_time){
+          error_log("OneSignal: Couldn't get post_time");
+          return;
+        } else {
+          $post_time = $post_time."00 GMT-0:00";
+        }
+	
         $fields = array(
           "external_id"       => self::uuid($notif_content),
           "app_id"            => $onesignal_wp_settings["app_id"],
@@ -722,7 +731,8 @@ public static function uuid($title) {
           "included_segments" => array("All"),
           "isAnyWeb"          => true,
           "url"               => get_permalink($post->ID),
-          "contents"          => array("en" => $notif_content)
+	  "contents"          => array("en" => $notif_content),
+	  "send_after"	      => $post_time 
         );
 
         $send_to_mobile_platforms = $onesignal_wp_settings['send_to_mobile_platforms'];
@@ -792,7 +802,6 @@ public static function uuid($title) {
 
         $onesignal_auth_key = $onesignal_wp_settings['app_rest_api_key'];
 
-
 	$request = array(
     "headers" => array(
           		"content-type" => "application/json;charset=utf-8",
@@ -803,7 +812,6 @@ public static function uuid($title) {
 	);
 
 	$response = wp_remote_post($onesignal_post_url, $request);
-
     if ( is_wp_error($response) || !is_array( $response ) || !isset( $response['body']) ) {
         $status = $response->get_error_code(); 				// custom code for WP_ERROR
         $error_message = $response->get_error_message();
@@ -831,8 +839,7 @@ public static function uuid($title) {
 	update_post_meta($post->ID, "status", $status);
 	
 	if ($status != 200) {
-    error_log("There was a ".$status." error sending your notification.");
-    error_log("Response from OneSignal:", json_encode($response));
+          error_log("There was a ".$status." error sending your notification.");
           if ($status != 0) {	  
 		        set_transient( 'onesignal_transient_error', '<div class="error notice onesignal-error-notice">
                     <p><strong>OneSignal Push:</strong><em> There was a ' . $status . ' error sending your notification.</em></p>
@@ -874,7 +881,7 @@ public static function uuid($title) {
                     </div>', 86400);
               } else {
                 set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
-                        <p><strong>OneSignal Push:</strong><em>There were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in an hour.</em></p>
+                        <p><strong>OneSignal Push:</strong><em>There were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in three minutes. Learn more: https://bit.ly/2UDplAS </em></p>
                     </div>', 86400);
               }
             }
@@ -902,11 +909,16 @@ public static function uuid($title) {
   }
 
   public static function on_transition_post_status( $new_status, $old_status, $post ) {
-    if ($post->post_type == 'wdslp-wds-log' ||
-        self::was_post_restored_from_trash($old_status, $new_status)) {
+    if ($post->post_type == 'wdslp-wds-log' || self::was_post_restored_from_trash($old_status, $new_status)) {
         // It's important not to call onesignal_debug() on posts of type wdslp-wds-log, otherwise each post will recursively generate 4 more posts
         return;
     }
+
+    if ($new_status == "future") {
+      self::send_notification_on_wp_post($new_status, $old_status, $post);
+      return;
+    }
+
     if (has_filter('onesignal_include_post')) {
       onesignal_debug('Applying onesignal_include_post filter.');
       if (apply_filters('onesignal_include_post', $new_status, $old_status, $post)) {
@@ -916,6 +928,7 @@ public static function uuid($title) {
           return;
       }
     }
+
     if (has_filter('onesignal_exclude_post')) {
       onesignal_debug('Applying onesignal_exclude_post filter.');
       if (apply_filters('onesignal_exclude_post', $new_status, $old_status, $post)) {
@@ -924,6 +937,7 @@ public static function uuid($title) {
           return;
       }
     }
+
     if (!(empty($post) ||
         $new_status !== "publish" ||
         $post->post_type == 'page')) {

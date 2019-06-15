@@ -9,11 +9,6 @@ function onesignal_change_footer_admin() {
  * Loads js script that includes ajax call with post id
  */
 
-add_action('transition_post_status', 'schedule_function', '10',1);
-function schedule_function(){
-    error_log('SCHEDULED');
-}
-
 add_action('admin_enqueue_scripts', 'load_javascript');
 function load_javascript() {
 	global $post;
@@ -817,7 +812,6 @@ public static function uuid($title) {
 	);
 
 	$response = wp_remote_post($onesignal_post_url, $request);
-	error_log('RESPONSE '.json_encode($response));
     if ( is_wp_error($response) || !is_array( $response ) || !isset( $response['body']) ) {
         $status = $response->get_error_code(); 				// custom code for WP_ERROR
         $error_message = $response->get_error_message();
@@ -915,19 +909,16 @@ public static function uuid($title) {
   }
 
   public static function on_transition_post_status( $new_status, $old_status, $post ) {
-    error_log("ON_TRANSITION".get_post_status($post)." ".$new_status." ".$old_status);	  
     if ($post->post_type == 'wdslp-wds-log' || self::was_post_restored_from_trash($old_status, $new_status)) {
         // It's important not to call onesignal_debug() on posts of type wdslp-wds-log, otherwise each post will recursively generate 4 more posts
         return;
     }
     if ($new_status == "future") {
-      error_log("FUTURE QUEUED");	    
       self::send_notification_on_wp_post($new_status, $old_status, $post);
       return;
     }
 
     if (has_filter('onesignal_include_post')) {
-      error_log("Applying INCLUDE");	  
       onesignal_debug('Applying onesignal_include_post filter.');
       if (apply_filters('onesignal_include_post', $new_status, $old_status, $post)) {
           // If the filter returns "$do_include_post: true", always process this post
@@ -939,7 +930,6 @@ public static function uuid($title) {
 
 
     if (has_filter('onesignal_exclude_post')) {
-      error_log("Applying EXCLUDE");	  
       onesignal_debug('Applying onesignal_exclude_post filter.');
       if (apply_filters('onesignal_exclude_post', $new_status, $old_status, $post)) {
           // If the filter returns "$do_exclude_post: false", do not process this post at all

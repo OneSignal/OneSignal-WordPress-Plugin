@@ -714,15 +714,15 @@ public static function uuid($title) {
             onesignal_debug('Caught qTrans exception:', $e->getMessage());
           }
         }
-	
-	$post_time = get_post_time('D M d Y G:i:', true, $post);
+  
+        $post_time = get_post_time('D M d Y G:i:', true, $post);
 
-  if(!$post_time){
-		error_log("OneSignal: Couldn't get post_time");
-		return;
-	} else {
-	   $post_time = $post_time."00 GMT-0:00";
-	}
+        if(!$post_time){
+          error_log("OneSignal: Couldn't get post_time");
+          return;
+        } else {
+          $post_time = $post_time."00 GMT-0:00";
+        }
 	
         $fields = array(
           "external_id"       => self::uuid($notif_content),

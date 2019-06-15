@@ -716,8 +716,8 @@ public static function uuid($title) {
         }
 	
 	$post_time = get_post_time('D M d Y G:i:', true, $post);
-	error_log("ERROR_LOG:".$post_time);
-	if(!$post_time){
+
+  if(!$post_time){
 		error_log("OneSignal: Couldn't get post_time");
 		return;
 	} else {
@@ -913,6 +913,7 @@ public static function uuid($title) {
         // It's important not to call onesignal_debug() on posts of type wdslp-wds-log, otherwise each post will recursively generate 4 more posts
         return;
     }
+
     if ($new_status == "future") {
       self::send_notification_on_wp_post($new_status, $old_status, $post);
       return;
@@ -928,7 +929,6 @@ public static function uuid($title) {
       }
     }
 
-
     if (has_filter('onesignal_exclude_post')) {
       onesignal_debug('Applying onesignal_exclude_post filter.');
       if (apply_filters('onesignal_exclude_post', $new_status, $old_status, $post)) {
@@ -937,11 +937,11 @@ public static function uuid($title) {
           return;
       }
     }
+
     if (!(empty($post) ||
         $new_status !== "publish" ||
         $post->post_type == 'page')) {
         self::send_notification_on_wp_post($new_status, $old_status, $post);
-        error_log("Applying ELSE");	  
     }
   }
 }

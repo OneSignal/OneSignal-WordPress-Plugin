@@ -887,7 +887,7 @@ public static function uuid($title) {
                     </div>', 86400);
               } else {
                 set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
-                        <p><strong>OneSignal Push:</strong><em>There were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in an hour.</em></p>
+                        <p><strong>OneSignal Push:</strong><em>There were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in three minutes. Learn more: https://bit.ly/2UDplAS </em></p>
                     </div>', 86400);
               }
             }

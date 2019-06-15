@@ -5,7 +5,8 @@ var state = {
     first_modified : undefined,     // when the post was first modified
     started : false,                // post notification requests started
     interval: undefined,            // global interval for reattempting requests
-    interval_count : 0              // how many times has the request been attempted
+    interval_count : 0,             // how many times has the request been attempted
+    status : undefined              // whether the post is scheduled or published
   }
     
 function notice() {
@@ -40,6 +41,7 @@ function notice() {
 
     // latest modified date, status of the post
     const { modified, status } = post;
+    state.status = status;
 
     // is checked
     const send_os_notif = jQuery("[name=send_onesignal_notification]").attr(
@@ -50,9 +52,10 @@ function notice() {
     const post_modified = modified !== state.first_modified;
 
     const is_published = status === "publish";
+    const is_scheduled = status === "future"; 
 
     // if hasn't started, change detected, box checked, and the status is 'publish'
-    if (!state.started && post_modified && send_os_notif && is_published) {
+    if (!state.started && post_modified && send_os_notif && (is_published || is_scheduled)) {
       state.interval = setInterval(get_metadata, 3000); // starts requests
       state.started = true;
     }
@@ -132,11 +135,18 @@ function notice() {
    */
   const show_notice = recipients => {
     const plural = recipients == 1 ? "" : "s";
+    
+    if (state.status === "publish") {
+      var notice_text = "OneSignal Push: Successfully sent a notification to ";
+    } else if (state.status === "future"){
+      var notice_text = "OneSignal Push: Successfully scheduled a notification for ";
+    }
+
     wp.data
       .dispatch("core/notices")
       .createNotice(
         "info",
-        "OneSignal Push: Successfully sent a notification to " +
+        notice_text +
           recipients +
           " recipient" +
           plural,

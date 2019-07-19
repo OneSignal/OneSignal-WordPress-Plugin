@@ -18,7 +18,7 @@ After setup, your visitors opt-in to receive push notifications when you publish
 
 You can configure notification delivery at preset intervals, create user segments, and customize the opt-in process for visitors.
 
-OneSignal is free for up to 30,000 subscribers; there are no limits on the number of push notifications you can send. Contact [support@onesignal.com](mailto:support@onesignal.com) if you have any questions. We’d love to hear from you.
+OneSignal’s free plan allows targeting up to 30,000 subscribers with push notifications. Contact support@onesignal.com if you have any questions. We’d love to hear from you!
 
 = Company =
 OneSignal is trusted by over 690,000 developers and marketing strategists. We power push notifications for everyone from early stage startups to Fortune 500 Companies, sending 4 billion notifications per day. It is the most popular push notification plugin on Wordpress with 90,000+ installations.

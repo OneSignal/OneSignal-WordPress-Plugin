@@ -920,9 +920,8 @@ public static function uuid($title) {
   }
 
   public static function cancel_scheduled_notification($post) {
-    $notification_id = get_post_meta($post->ID, "notification_id");
+    $notification_id = get_post_meta($post->ID, "notification_id")[0];
     $onesignal_wp_settings = OneSignal::get_onesignal_settings();
-
     $onesignal_post_url = "https://onesignal.com/api/v1/notifications/".$notification_id."?app_id=".$onesignal_wp_settings["app_id"];
     $onesignal_auth_key = $onesignal_wp_settings['app_rest_api_key'];
 
@@ -931,6 +930,7 @@ public static function uuid($title) {
                 "content-type" => "application/json;charset=utf-8",
                 "Authorization" => "Basic " . $onesignal_auth_key
       ),
+      "method" => 'DELETE',
       "timeout" => 60
     );
 
@@ -951,11 +951,6 @@ public static function uuid($title) {
     }
 
     if ($new_status == "future") {
-      if (get_post_meta($post->ID, "notification_id") !== NULL) {
-        // previous notification scheduled
-        self::cancel_scheduled_notification($post);  
-      }
-
       self::send_notification_on_wp_post($new_status, $old_status, $post);
       return;
     }

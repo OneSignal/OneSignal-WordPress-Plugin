@@ -731,8 +731,8 @@ public static function uuid($title) {
           "included_segments" => array("All"),
           "isAnyWeb"          => true,
           "url"               => get_permalink($post->ID),
-	  "contents"          => array("en" => $notif_content),
-	  "send_after"	      => $post_time 
+	        "contents"          => array("en" => $notif_content),
+	        "send_after"	      => $post_time 
         );
 
         $send_to_mobile_platforms = $onesignal_wp_settings['send_to_mobile_platforms'];
@@ -812,19 +812,20 @@ public static function uuid($title) {
 	);
 
 	$response = wp_remote_post($onesignal_post_url, $request);
-    if ( is_wp_error($response) || !is_array( $response ) || !isset( $response['body']) ) {
-        $status = $response->get_error_code(); 				// custom code for WP_ERROR
-        $error_message = $response->get_error_message();
-        error_log("There was a ".$status." error returned from OneSignal: ".$error_message);	
-        update_post_meta($post->ID, "error_message", $error_message);
-        return;
-    } 
+  
+  if ( is_wp_error($response) || !is_array( $response ) || !isset( $response['body']) ) {
+    $status = $response->get_error_code(); 				// custom code for WP_ERROR
+    $error_message = $response->get_error_message();
+    error_log("There was a ".$status." error returned from OneSignal: ".$error_message);	
+    update_post_meta($post->ID, "error_message", $error_message);
+    return;
+  } 
     
-    if ( isset( $response['body'] ) ) {
+  if ( isset( $response['body'] ) ) {
 		$response_body = json_decode($response["body"], true);
 	}
     
-    if ( isset( $response_body["errors"] ) ) {
+  if ( isset( $response_body["errors"] ) ) {
 		update_post_meta($post->ID, "error_message", $response_body["errors"][0]);	
 	}
 
@@ -832,9 +833,9 @@ public static function uuid($title) {
 		$status = $response['response']['code'];
 	}
 
-    if ($response_body['recipients'] == "0") {
-        update_post_meta($post->ID, "error_message", json_encode($response_body));
-    }
+  if ($response_body['recipients'] == "0") {
+    update_post_meta($post->ID, "error_message", json_encode($response_body));
+  }
 
 	update_post_meta($post->ID, "status", $status);
 	
@@ -857,17 +858,27 @@ public static function uuid($title) {
 	    // API can send a 200 OK even if the notification failed to send
 	    if ( isset( $response["body"]) ) {
 		    $response_body = json_decode($response["body"], true);
-		    if ( isset ( $response_body["recipients"] ) ) {
+        
+        if ( isset ( $response_body["recipients"] ) ) {
 		    	$recipient_count = $response_body["recipients"];
 		    } else {
 		    	error_log("OneSignal: recipients not set in response body");
-		    }
+        }
+
+        if ( isset ($response_body["id"] )) {
+          $notification_id = $response_body["id"];
+        } else {
+          error_log("OneSignal: notification id not set in response body");
+        }
 	    } else {
 		    error_log("OneSignal: body not set in HTTP response");
 	    }
 	    
 	    // updates meta so that recipient count is available for GET request from client 
-	    update_post_meta($post->ID, "recipients", $recipient_count);	
+      update_post_meta($post->ID, "recipients", $recipient_count);
+      
+      // updates meta for use in cancelling scheduled notifs
+      update_post_meta($post->ID, "notification_id", $notification_id);
 	    
 	    $sent_or_scheduled = array_key_exists('send_after', $fields) ? 'scheduled' : 'sent';
             $config_show_notification_send_status_message = $onesignal_wp_settings['show_notification_send_status_message'] == "1";
@@ -908,6 +919,31 @@ public static function uuid($title) {
       return $old_status === 'trash' && $new_status === 'publish';
   }
 
+  public static function cancel_scheduled_notification($post) {
+    $notification_id = get_post_meta($post->ID, "notification_id");
+    $onesignal_wp_settings = OneSignal::get_onesignal_settings();
+
+    $onesignal_post_url = "https://onesignal.com/api/v1/notifications/".$notification_id."?app_id=".$onesignal_wp_settings["app_id"];
+    $onesignal_auth_key = $onesignal_wp_settings['app_rest_api_key'];
+
+    $request = array(
+      "headers" => array(
+                "content-type" => "application/json;charset=utf-8",
+                "Authorization" => "Basic " . $onesignal_auth_key
+      ),
+      "timeout" => 60
+    );
+
+  	$response = wp_remote_post($onesignal_post_url, $request);
+    
+    if ( is_wp_error($response) || !is_array( $response ) || !isset( $response['body']) ) {
+      $status = $response->get_error_code(); 				// custom code for WP_ERROR
+      $error_message = $response->get_error_message();
+      error_log("Couldn't cancel notification: There was a ".$status." error returned from OneSignal: ".$error_message);	
+      return;
+    } 
+  }
+
   public static function on_transition_post_status( $new_status, $old_status, $post ) {
     if ($post->post_type == 'wdslp-wds-log' || self::was_post_restored_from_trash($old_status, $new_status)) {
         // It's important not to call onesignal_debug() on posts of type wdslp-wds-log, otherwise each post will recursively generate 4 more posts
@@ -915,6 +951,11 @@ public static function uuid($title) {
     }
 
     if ($new_status == "future") {
+      if (get_post_meta($post->ID, "notification_id") !== NULL) {
+        // previous notification scheduled
+        self::cancel_scheduled_notification($post);  
+      }
+
       self::send_notification_on_wp_post($new_status, $old_status, $post);
       return;
     }

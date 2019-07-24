@@ -757,6 +757,8 @@ class OneSignal_Admin
                     return;
                 } else {
                     $post_time = $post_time.'00 GMT-0:00';
+                    error_log("OneSignal: post_time: ".$post_time);
+                    error_log("OneSignal: current_time: ".current_time("D M d Y G:i:", 1)); 
                 }
 
                 $old_uuid_array = get_post_meta($post->ID, 'uuid');
@@ -767,18 +769,28 @@ class OneSignal_Admin
                     if ($old_uuid_array[0] != $uuid) {
                         self::cancel_scheduled_notification($post);
                     }
+                    
+                    $fields = array(
+                      'external_id' => $uuid,
+                      'app_id' => $onesignal_wp_settings['app_id'],
+                      'headings' => array('en' => $site_title),
+                      'included_segments' => array('All'),
+                      'isAnyWeb' => true,
+                      'url' => get_permalink($post->ID),
+                      'contents' => array('en' => $notif_content),
+                      'send_after' => $post_time,
+                    );
+                } else if ($new_status == 'publish') {
+                    $fields = array(
+                      'external_id' => $uuid,
+                      'app_id' => $onesignal_wp_settings['app_id'],
+                      'headings' => array('en' => $site_title),
+                      'included_segments' => array('All'),
+                      'isAnyWeb' => true,
+                      'url' => get_permalink($post->ID),
+                      'contents' => array('en' => $notif_content),
+                    );
                 }
-
-                $fields = array(
-          'external_id' => $uuid,
-          'app_id' => $onesignal_wp_settings['app_id'],
-          'headings' => array('en' => $site_title),
-          'included_segments' => array('All'),
-          'isAnyWeb' => true,
-          'url' => get_permalink($post->ID),
-            'contents' => array('en' => $notif_content),
-            'send_after' => $post_time,
-        );
 
                 $send_to_mobile_platforms = $onesignal_wp_settings['send_to_mobile_platforms'];
                 if ($send_to_mobile_platforms == true) {

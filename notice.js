@@ -73,7 +73,7 @@ function notice() {
 
     jQuery.get(ajax_object.ajax_url, data, function(response) {
       response = JSON.parse(response);
-      const { recipients, status_code, error_message } = response;
+      const { recipients, status_code, response_body } = response;
 
       if(window.DEBUG_MODE){
         console.log(response);
@@ -85,21 +85,21 @@ function notice() {
       if(!is_status_empty && !is_recipients_empty){
         // status 0: HTTP request failed
         if (status_code === "0") {
-          error_notice("OneSignal Push: request failed with status code 0. "+error_message);
+          error_notice("OneSignal Push: request failed with status code 0. "+response_body);
           reset_state();
           return;
         }
 
         // 400 & 500 level errors
         if (status_code >= 400) {
-          if (!error_message) {
+          if (!response_body) {
             error_notice(
               "OneSignal Push: there was a " +
                 status_code +
                 " error sending your notification"
             );
           } else {
-            error_notice("OneSignal Push: there was a " + status_code + " error sending your notification: " + error_message);
+            error_notice("OneSignal Push: there was a " + status_code + " error sending your notification: " + response_body);
           }
 
           reset_state();
@@ -108,7 +108,7 @@ function notice() {
 
         if (recipients === "0") {
           error_notice(
-            "OneSignal Push: there were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in one minute. Learn more: https://bit.ly/2UDplAS"
+            "OneSignal Push: there were no recipients."
           );
           reset_state();
 
@@ -200,10 +200,8 @@ const isWpCoreEditorDefined = () => {
  * returns an object in the format
  *  { status : "200",
  *    recipients : "1374",
- *    error_message : []
+ *    response_body : []
  *  }
- *
- *  - if the recipient number is "0", the error_message will contain the entire HTTP response as JSON
  */
 window.OneSignal = {
     debug : () => {

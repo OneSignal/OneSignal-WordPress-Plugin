@@ -40,17 +40,17 @@ function has_metadata()
             $status = $status[0];
         }
 
-        $error_message = get_post_meta($post_id, 'error_message');
-        if ($error_message && is_array($error_message)) {
-            $error_message = $error_message[0];
+        $response_body = get_post_meta($post_id, 'response_body');
+        if ($response_body && is_array($response_body)) {
+            $response_body = $response_body[0];
         }
 
         // reset meta
         delete_post_meta($post_id, 'status');
         delete_post_meta($post_id, 'recipients');
-        delete_post_meta($post_id, 'error_message');
+        delete_post_meta($post_id, 'response_body');
 
-        $data = array('recipients' => $recipients, 'status_code' => $status, 'error_message' => $error_message);
+        $data = array('recipients' => $recipients, 'status_code' => $status, 'response_body' => $response_body);
     }
 
     echo json_encode($data);
@@ -862,7 +862,6 @@ class OneSignal_Admin
                     $status = $response->get_error_code(); 				// custom code for WP_ERROR
                     $error_message = $response->get_error_message();
                     error_log('There was a '.$status.' error returned from OneSignal: '.$error_message);
-                    update_post_meta($post->ID, 'error_message', $error_message);
 
                     return;
                 }
@@ -871,16 +870,11 @@ class OneSignal_Admin
                     $response_body = json_decode($response['body'], true);
                 }
 
-                if (isset($response_body['errors'])) {
-                    update_post_meta($post->ID, 'error_message', $response_body['errors'][0]);
-                }
-
                 if (isset($response['response'])) {
                     $status = $response['response']['code'];
                 }
 
-                update_post_meta($post->ID, 'error_message', json_encode($response_body));
-
+                update_post_meta($post->ID, 'response_body', json_encode($response_body));
                 update_post_meta($post->ID, 'status', $status);
 
                 if ($status != 200) {
@@ -936,7 +930,7 @@ class OneSignal_Admin
                     </div>', 86400);
                             } else {
                                 set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
-                        <p><strong>OneSignal Push:</strong><em>There were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in three minutes. Learn more: https://bit.ly/2UDplAS </em></p>
+                        <p><strong>OneSignal Push:</strong><em>There were no recipients.</em></p>
                     </div>', 86400);
                             }
                         }

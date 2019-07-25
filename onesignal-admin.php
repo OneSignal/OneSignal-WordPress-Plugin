@@ -763,22 +763,23 @@ class OneSignal_Admin
                 $uuid = self::uuid($notif_content);
                 update_post_meta($post->ID, 'uuid', $uuid);
 
+                $fields = array(
+                  'external_id' => $uuid,
+                  'app_id' => $onesignal_wp_settings['app_id'],
+                  'headings' => array('en' => $site_title),
+                  'included_segments' => array('All'),
+                  'isAnyWeb' => true,
+                  'url' => get_permalink($post->ID),
+                  'contents' => array('en' => $notif_content),
+                );
+                
                 if ($new_status == 'future' && $old_uuid_array) {
                     if ($old_uuid_array[0] != $uuid) {
                         self::cancel_scheduled_notification($post);
                     }
+                    
+                    $fields['send_after'] = $post_time;
                 }
-
-                $fields = array(
-          'external_id' => $uuid,
-          'app_id' => $onesignal_wp_settings['app_id'],
-          'headings' => array('en' => $site_title),
-          'included_segments' => array('All'),
-          'isAnyWeb' => true,
-          'url' => get_permalink($post->ID),
-            'contents' => array('en' => $notif_content),
-            'send_after' => $post_time,
-        );
 
                 $send_to_mobile_platforms = $onesignal_wp_settings['send_to_mobile_platforms'];
                 if ($send_to_mobile_platforms == true) {

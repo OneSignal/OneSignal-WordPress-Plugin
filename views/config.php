@@ -287,7 +287,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
           <div class="field subdomain-feature">
             <label>OneSignal Label<i class="tiny circular help icon link" role="popup" data-title="Subdomain" data-content="The label you chose for your site. You can find this in Step 2. Wordpress Site Setup" data-variation="wide"></i></label>
-            <input type="text" name="subdomain" placeholder="example" value="<?php echo $onesignal_wp_settings['subdomain'] ?>">
+            <input type="text" name="subdomain" placeholder="example" value="<?php echo filter_var($onesignal_wp_settings['subdomain'], FILTER_SANITIZE_STRING) ?>">
             <div class="callout info">Once your site is public, <strong>do not change your label</strong>. If you do, users will receive duplicate notifications.</div>
           </div>
           <div class="field">

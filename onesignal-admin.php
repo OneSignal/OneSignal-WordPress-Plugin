@@ -773,8 +773,8 @@ class OneSignal_Admin
                   'contents' => array('en' => $notif_content),
                 );
                 
-                if ($new_status == 'future' && $old_uuid_array) {
-                    if ($old_uuid_array[0] != $uuid) {
+                if ($new_status == 'future') {
+                    if ($old_uuid_array && $old_uuid_array[0] != $uuid) {
                         self::cancel_scheduled_notification($post);
                     }
                     

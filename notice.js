@@ -150,7 +150,7 @@ function notice() {
           recipients +
           " recipient" +
           plural +
-          "Go to your app's \"Delivery\" tab to check sent and scheduled messages: https://app.onesignal.com/apps/",
+          ". Go to your app's \"Delivery\" tab to check sent and scheduled messages: https://app.onesignal.com/apps/",
         {
             id:'onesignal-notice',
             isDismissible: true

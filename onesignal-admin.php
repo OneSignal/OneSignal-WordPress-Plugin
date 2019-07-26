@@ -926,7 +926,7 @@ class OneSignal_Admin
                             if ($recipient_count != 0) {
                                 set_transient('onesignal_transient_success', '<div class="components-notice is-success is-dismissible">
                   <div class="components-notice__content">
-                  <p><strong>OneSignal Push:</strong><em> Successfully '.$sent_or_scheduled.' a notification to '.$recipient_count.' recipients. Go to your app\'s "Delivery" tab to check sent and scheduled messages: <a href="https://app.onesignal.com/apps/">https://app.onesignal.com/apps/</a></em></p>
+                  <p><strong>OneSignal Push:</strong><em> Successfully '.$sent_or_scheduled.' a notification to '.$recipient_count.' recipients. Go to your app\'s "Delivery" tab to check sent and scheduled messages: <a target="_blank" href="https://app.onesignal.com/apps/">https://app.onesignal.com/apps/</a></em></p>
                   </div>
                     </div>', 86400);
                             } else {

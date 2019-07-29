@@ -67,7 +67,7 @@ HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 
 = 1.17.8 =
 
-- Sanitize subdomain field in OneSignal config, bug fixes
+- Added escaping to fields in OneSignal config to remove invalid characters, bug fixes
 
 = 1.17.7 =
 

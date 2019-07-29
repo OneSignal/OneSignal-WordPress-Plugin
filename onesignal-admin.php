@@ -959,7 +959,7 @@ class OneSignal_Admin
 
     public static function cancel_scheduled_notification($post)
     {
-        $notification_id = get_post_meta($post->ID, 'notification_id')[0];
+        $notification_id = get_post_meta($post->ID, 'notification_id', true);
         $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
         $onesignal_delete_url = 'https://onesignal.com/api/v1/notifications/'.$notification_id.'?app_id='.$onesignal_wp_settings['app_id'];

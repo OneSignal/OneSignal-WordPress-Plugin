@@ -773,8 +773,8 @@ class OneSignal_Admin
                   'contents' => array('en' => $notif_content),
                 );
                 
-                if ($new_status == 'future' && $old_uuid_array) {
-                    if ($old_uuid_array[0] != $uuid) {
+                if ($new_status == 'future') {
+                    if ($old_uuid_array && $old_uuid_array[0] != $uuid) {
                         self::cancel_scheduled_notification($post);
                     }
                     
@@ -926,7 +926,7 @@ class OneSignal_Admin
                             if ($recipient_count != 0) {
                                 set_transient('onesignal_transient_success', '<div class="components-notice is-success is-dismissible">
                   <div class="components-notice__content">
-                  <p><strong>OneSignal Push:</strong><em> Successfully '.$sent_or_scheduled.' a notification to '.$recipient_count.' recipients.</em></p>
+                  <p><strong>OneSignal Push:</strong><em> Successfully '.$sent_or_scheduled.' a notification to '.$recipient_count.' recipients. Go to your app\'s "Delivery" tab to check sent and scheduled messages: <a target="_blank" href="https://app.onesignal.com/apps/">https://app.onesignal.com/apps/</a></em></p>
                   </div>
                     </div>', 86400);
                             } else {
@@ -959,7 +959,7 @@ class OneSignal_Admin
 
     public static function cancel_scheduled_notification($post)
     {
-        $notification_id = get_post_meta($post->ID, 'notification_id')[0];
+        $notification_id = get_post_meta($post->ID, 'notification_id', true);
         $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
         $onesignal_delete_url = 'https://onesignal.com/api/v1/notifications/'.$notification_id.'?app_id='.$onesignal_wp_settings['app_id'];

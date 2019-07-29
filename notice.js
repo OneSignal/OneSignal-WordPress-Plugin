@@ -149,7 +149,8 @@ function notice() {
         notice_text +
           recipients +
           " recipient" +
-          plural,
+          plural +
+          ". Go to your app's \"Delivery\" tab to check sent and scheduled messages: https://app.onesignal.com/apps/",
         {
             id:'onesignal-notice',
             isDismissible: true

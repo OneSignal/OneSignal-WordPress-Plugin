@@ -756,7 +756,7 @@ class OneSignal_Admin
 
                     return;
                 } else {
-                    $post_time = $post_time.'00 GMT-0:00';
+                    $post_time = $post_time.'30 GMT-0:00';
                 }
 
                 $old_uuid_array = get_post_meta($post->ID, 'uuid');

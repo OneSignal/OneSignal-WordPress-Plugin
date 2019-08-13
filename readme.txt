@@ -65,6 +65,10 @@ HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 
 == Changelog ==
 
+= 1.17.9 =
+
+- Added 30 second delay to scheduled notification send time, bug fixes
+
 = 1.17.8 =
 
 - Added escaping to fields in OneSignal config to remove invalid characters, bug fixes

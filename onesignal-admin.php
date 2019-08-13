@@ -584,7 +584,7 @@ class OneSignal_Admin
      * @title - title of post
      * return - uuid of sha1 hash of post title + post timestamp
      */
-    public static function uuid($title)
+    public static function uuid($title, $time)
     {
         $now = explode(':', date('z:H:i'));
         $now_minutes = $now[0] * 60 * 24 + $now[1] * 60 + $now[2];
@@ -601,7 +601,8 @@ class OneSignal_Admin
             $timestamp = $prev_minutes;
         }
 
-        $prehash = $prehash.$timestamp;
+        // hash will be a function of the title, last updated time, and scheduled post time
+        $prehash = $prehash.$timestamp.$time;
 
         $sha1 = substr(sha1($prehash), 0, 32);
 
@@ -756,11 +757,11 @@ class OneSignal_Admin
 
                     return;
                 } else {
-                    $post_time = $post_time.'00 GMT-0:00';
+                    $post_time = $post_time.'30 GMT-0:00';
                 }
 
                 $old_uuid_array = get_post_meta($post->ID, 'uuid');
-                $uuid = self::uuid($notif_content);
+                $uuid = self::uuid($notif_content, $post_time);
                 update_post_meta($post->ID, 'uuid', $uuid);
 
                 $fields = array(
@@ -772,12 +773,12 @@ class OneSignal_Admin
                   'url' => get_permalink($post->ID),
                   'contents' => array('en' => $notif_content),
                 );
-                
+
                 if ($new_status == 'future') {
                     if ($old_uuid_array && $old_uuid_array[0] != $uuid) {
                         self::cancel_scheduled_notification($post);
                     }
-                    
+
                     $fields['send_after'] = $post_time;
                 }
 

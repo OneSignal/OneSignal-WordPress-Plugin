@@ -757,6 +757,8 @@ class OneSignal_Admin
 
                     return;
                 } else {
+                    // delays scheduled notifications by 30 seconds
+                    // slow-to-publish servers would result in 404's since the notification went out faster, this should fix the problem 
                     $post_time = $post_time.'30 GMT-0:00';
                 }
 

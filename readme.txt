@@ -67,7 +67,7 @@ HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 
 = 1.17.9 =
 
-- Added 30 second delay to scheduled notification send time, bug fixes
+- Added 30 second delay to scheduled notification send time, bug fixes, removed custom manifest.json config
 
 = 1.17.8 =
 

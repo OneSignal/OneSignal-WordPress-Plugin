@@ -811,18 +811,6 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
               </div>
             </div>
           <?php endif; ?>
-          <div class="field custom-manifest-feature">
-            <label>Custom manifest.json URL<i class="tiny circular help icon link" role="popup" data-html="<p>Enter the complete URL to your existing manifest.json file to be used in place of our own. Your URL's domain should match that of your main site that users are visiting.</p><p>e.g. <code>https://yoursite.com/manifest.json</code></p>" data-variation="wide"></i></label>
-            <input type="text" placeholder="https://yoursite.com/manifest.json" name="custom_manifest_url" value="<?php echo esc_attr(@$onesignal_wp_settings['custom_manifest_url']); ?>">
-          </div>
-          <div class="field">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" name="use_custom_manifest" value="true" <?php if ($onesignal_wp_settings['use_custom_manifest']) {
-                      echo 'checked';
-                  } ?>>
-              <label>Use my own manifest.json<i class="tiny circular help icon link" role="popup" data-title="Providing Your Own manifest.json File" data-content="Check this if you have an existing manifest.json file you'd like to use instead of ours. You might check this if you have existing icons defined in your manifest."></i></label>
-            </div>
-          </div>
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="use_custom_sdk_init" value="true" <?php if ($onesignal_wp_settings['use_custom_sdk_init']) {

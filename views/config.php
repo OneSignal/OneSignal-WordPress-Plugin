@@ -1,10 +1,10 @@
 <?php
 
-defined( 'ABSPATH' ) or die('This page may not be accessed directly.');
+defined('ABSPATH') or die('This page may not be accessed directly.');
 
 if (!OneSignalUtils::can_modify_plugin_settings()) {
-  // Exit if the current user does not have permission
-  die('Insufficient permissions to access config page.');
+    // Exit if the current user does not have permission
+    die('Insufficient permissions to access config page.');
 }
 
 // The user is just viewing the config page; this page cannot be accessed directly
@@ -274,25 +274,25 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="field">
             <label>Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Google Project Number" data-content="Your Google Project Number. Do NOT change this as it can cause all existing subscribers to become unreachable." data-variation="wide"></i></label>
             <p class="hidden danger-label" data-target="[name=gcm_sender_id]">WARNING: Changing this causes all existing subscribers to become unreachable. Please do not change unless instructed to do so!</p>
-            <input type="text" name="gcm_sender_id" placeholder="#############" value="<?php echo $onesignal_wp_settings['gcm_sender_id'] ?>">
+            <input type="text" name="gcm_sender_id" placeholder="#############" value="<?php echo esc_attr($onesignal_wp_settings['gcm_sender_id']); ?>">
           </div>
           <?php endif; ?>
           <div class="field">
             <label>App ID<i class="tiny circular help icon link" role="popup" data-title="App ID" data-content="Your 36 character alphanumeric app ID. You can find this in App Settings > Keys & IDs." data-variation="wide"></i></label>
-            <input type="text" name="app_id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx" value="<?php echo $onesignal_wp_settings['app_id'] ?>">
+            <input type="text" name="app_id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx" value="<?php echo esc_attr($onesignal_wp_settings['app_id']); ?>">
           </div>
           <div class="field">
             <label>REST API Key<i class="tiny circular help icon link" role="popup" data-title="Rest API Key" data-content="Your 48 character alphanumeric REST API Key. You can find this in App Settings > Keys & IDs." data-variation="wide"></i></label>
-            <input type="text" name="app_rest_api_key" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value="<?php echo $onesignal_wp_settings['app_rest_api_key'] ?>">
+            <input type="text" name="app_rest_api_key" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value="<?php echo esc_attr($onesignal_wp_settings['app_rest_api_key']); ?>">
           </div>
           <div class="field subdomain-feature">
             <label>OneSignal Label<i class="tiny circular help icon link" role="popup" data-title="Subdomain" data-content="The label you chose for your site. You can find this in Step 2. Wordpress Site Setup" data-variation="wide"></i></label>
-            <input type="text" name="subdomain" placeholder="example" value="<?php echo $onesignal_wp_settings['subdomain'] ?>">
+            <input type="text" name="subdomain" placeholder="example" value="<?php echo esc_attr($onesignal_wp_settings['subdomain']); ?>">
             <div class="callout info">Once your site is public, <strong>do not change your label</strong>. If you do, users will receive duplicate notifications.</div>
           </div>
           <div class="field">
             <label>Safari Web ID<i class="tiny circular help icon link" role="popup" data-title="Safari Web ID" data-content="Your Safari Web ID. You can find this on Setup > Safari Push > Step 5." data-variation="wide"></i></label>
-            <input type="text" name="safari_web_id" placeholder="web.com.example" value="<?php echo @$onesignal_wp_settings['safari_web_id']; ?>">
+            <input type="text" name="safari_web_id" placeholder="web.com.example" value="<?php echo esc_attr(@$onesignal_wp_settings['safari_web_id']); ?>">
           </div>
         </div>
         <div class="ui dividing header">
@@ -368,7 +368,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
           <div class="field">
               <label>Notification Title<i class="tiny circular help icon link" role="popup" data-html="The notification title to use for all outgoing notifications. Defaults to your site's title." data-variation="wide"></i></label>
-              <input type="text" name="notification_title" placeholder="<?php echo OneSignalUtils::decode_entities(get_bloginfo('name')) ?>" value="<?php echo @$onesignal_wp_settings['notification_title']; ?>">
+              <input type="text" name="notification_title" placeholder="<?php echo OneSignalUtils::decode_entities(get_bloginfo('name')); ?>" value="<?php echo esc_attr(@$onesignal_wp_settings['notification_title']); ?>">
           </div>
           <div class="field">
             <div class="ui toggle checkbox">
@@ -501,15 +501,15 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <p class="small normal-weight lato">You can override the Subscription Bell's offset position in the X and Y direction using CSS-valid position values. For example, <code>20px</code> is the default value.</p>
             <div class="field nb-feature nb-position-feature">
               <label>Bottom offset<i class="tiny circular help icon link" role="popup" data-title="Subscription Bell Bottom Offset" data-content="The distance to offset the Subscription Bell from the bottom of the page. For example, <code>20px</code> is the default value." data-variation="wide"></i></label>
-              <input type="text" name="notifyButton_offset_bottom" placeholder="20px" value="<?php echo @$onesignal_wp_settings['notifyButton_offset_bottom']; ?>">
+              <input type="text" name="notifyButton_offset_bottom" placeholder="20px" value="<?php echo esc_attr(@$onesignal_wp_settings['notifyButton_offset_bottom']); ?>">
             </div>
             <div class="field nb-feature nb-position-feature nb-position-bottom-left-feature">
               <label>Left offset<i class="tiny circular help icon link" role="popup" data-title="Subscription Bell Left Offset" data-content="The distance to offset the Subscription Bell from the left of the page. For example, <code>20px</code> is the default value." data-variation="wide"></i></label>
-              <input type="text" name="notifyButton_offset_left" placeholder="20px" value="<?php echo @$onesignal_wp_settings['notifyButton_offset_left']; ?>">
+              <input type="text" name="notifyButton_offset_left" placeholder="20px" value="<?php echo esc_attr(@$onesignal_wp_settings['notifyButton_offset_left']); ?>">
             </div>
             <div class="field nb-feature nb-position-feature nb-position-bottom-right-feature">
               <label>Right offset<i class="tiny circular help icon link" role="popup" data-title="Subscription Bell Right Offset" data-content="The distance to offset the Subscription Bell from the right of the page. For example, <code>20px</code> is the default value." data-variation="wide"></i></label>
-              <input type="text" name="notifyButton_offset_right" placeholder="20px" value="<?php echo @$onesignal_wp_settings['notifyButton_offset_right']; ?>">
+              <input type="text" name="notifyButton_offset_right" placeholder="20px" value="<?php echo esc_attr(@$onesignal_wp_settings['notifyButton_offset_right']); ?>">
             </div>
           </div>
 
@@ -522,43 +522,43 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <p class="small normal-weight lato">You can override the theme's colors by entering your own. Use any CSS-valid color. For example, <code>white</code>, <code>#FFFFFF</code>, <code>#FFF</code>, <code>rgb(255, 255, 255)</code>, <code>rgba(255, 255, 255, 1.0)</code>, and <code>transparent</code> are all valid values.</p>
             <div class="field nb-feature nb-color-feature">
               <label>Main button background color<i class="tiny circular help icon link" role="popup" data-title="Subscription Bell Background Color" data-content="The background color of the main Subscription Bell." data-variation="wide"></i></label>
-              <input type="text" name="notifyButton_color_background" placeholder="#e54b4d" value="<?php echo @$onesignal_wp_settings['notifyButton_color_background']; ?>">
+              <input type="text" name="notifyButton_color_background" placeholder="#e54b4d" value="<?php echo esc_attr(@$onesignal_wp_settings['notifyButton_color_background']); ?>">
             </div>
             <div class="field nb-feature nb-color-feature">
               <label>Main button foreground color (main bell icon and inner circle)<i class="tiny circular help icon link" role="popup" data-title="Subscription Bell Foreground Color" data-content="The color of the bell icon and inner circle on the main Subscription Bell." data-variation="wide"></i></label>
-              <input type="text" name="notifyButton_color_foreground" placeholder="white" value="<?php echo @$onesignal_wp_settings['notifyButton_color_foreground']; ?>">
+              <input type="text" name="notifyButton_color_foreground" placeholder="white" value="<?php echo esc_attr(@$onesignal_wp_settings['notifyButton_color_foreground']); ?>">
             </div>
             <div class="field nb-feature nb-color-feature">
               <label>Pre-notify badge background color<i class="tiny circular help icon link" role="popup" data-title="Subscription Bell Badge Background Color" data-content="The background color of the small secondary circle on the main Subscription Bell. This badge is shown to first-time site visitors only." data-variation="wide"></i></label>
-              <input type="text" name="notifyButton_color_badge_background" placeholder="black" value="<?php echo @$onesignal_wp_settings['notifyButton_color_badge_background']; ?>">
+              <input type="text" name="notifyButton_color_badge_background" placeholder="black" value="<?php echo esc_attr(@$onesignal_wp_settings['notifyButton_color_badge_background']); ?>">
             </div>
             <div class="field nb-feature nb-color-feature">
               <label>Pre-notify badge foreground color<i class="tiny circular help icon link" role="popup" data-title="Subscription Bell Badge Foreground Color" data-content="The text color on the small secondary circle on the main Subscription Bell. This badge is shown to first-time site visitors only." data-variation="wide"></i></label>
-              <input type="text" name="notifyButton_color_badge_foreground" placeholder="white" value="<?php echo @$onesignal_wp_settings['notifyButton_color_badge_foreground']; ?>">
+              <input type="text" name="notifyButton_color_badge_foreground" placeholder="white" value="<?php echo esc_attr(@$onesignal_wp_settings['notifyButton_color_badge_foreground']); ?>">
             </div>
             <div class="field nb-feature nb-color-feature">
               <label>Pre-notify badge border color<i class="tiny circular help icon link" role="popup" data-title="Subscription Bell Badge Border Color" data-content="The border color of the small secondary circle on the main Subscription Bell. This badge is shown to first-time site visitors only." data-variation="wide"></i></label>
-              <input type="text" name="notifyButton_color_badge_border" placeholder="white" value="<?php echo @$onesignal_wp_settings['notifyButton_color_badge_border']; ?>">
+              <input type="text" name="notifyButton_color_badge_border" placeholder="white" value="<?php echo esc_attr(@$onesignal_wp_settings['notifyButton_color_badge_border']); ?>">
             </div>
             <div class="field nb-feature nb-color-feature">
               <label>Pulse animation color<i class="tiny circular help icon link" role="popup" data-title="Subscription Bell Pulse Animation Color" data-content="The color of the quickly expanding circle that's used as an animation when a user clicks on the Subscription Bell." data-variation="wide"></i></label>
-              <input type="text" name="notifyButton_color_pulse" placeholder="#e54b4d" value="<?php echo @$onesignal_wp_settings['notifyButton_color_pulse']; ?>">
+              <input type="text" name="notifyButton_color_pulse" placeholder="#e54b4d" value="<?php echo esc_attr(@$onesignal_wp_settings['notifyButton_color_pulse']); ?>">
             </div>
             <div class="field nb-feature nb-color-feature">
               <label>Popup action button background color<i class="tiny circular help icon link" role="popup" data-title="Subscription Bell Popup - Action Button Background Color" data-content="The color of the action button (SUBSCRIBE/UNSUBSCRIBE) on the Subscription Bell popup." data-variation="wide"></i></label>
-              <input type="text" name="notifyButton_color_popup_button_background" placeholder="#e54b4d" value="<?php echo @$onesignal_wp_settings['notifyButton_color_popup_button_background']; ?>">
+              <input type="text" name="notifyButton_color_popup_button_background" placeholder="#e54b4d" value="<?php echo esc_attr(@$onesignal_wp_settings['notifyButton_color_popup_button_background']); ?>">
             </div>
             <div class="field nb-feature nb-color-feature">
               <label>Popup action button background color (on hover)<i class="tiny circular help icon link" role="popup" data-title="Subscription Bell Popup - Action Button Background Color (on hover)" data-content="The color of the action button (SUBSCRIBE/UNSUBSCRIBE) on the Subscription Bell popup when you hover over the button." data-variation="wide"></i></label>
-              <input type="text" name="notifyButton_color_popup_button_background_hover" placeholder="#CC3234" value="<?php echo @$onesignal_wp_settings['notifyButton_color_popup_button_background_hover']; ?>">
+              <input type="text" name="notifyButton_color_popup_button_background_hover" placeholder="#CC3234" value="<?php echo esc_attr(@$onesignal_wp_settings['notifyButton_color_popup_button_background_hover']); ?>">
             </div>
             <div class="field nb-feature nb-color-feature">
               <label>Popup action button background color (on click)<i class="tiny circular help icon link" role="popup" data-title="Subscription Bell Popup - Action Button Background Color (on click)" data-content="The color of the action button (SUBSCRIBE/UNSUBSCRIBE) on the Subscription Bell popup when you hold down the mouse." data-variation="wide"></i></label>
-              <input type="text" name="notifyButton_color_popup_button_background_active" placeholder="#B2181A" value="<?php echo @$onesignal_wp_settings['notifyButton_color_popup_button_background_active']; ?>">
+              <input type="text" name="notifyButton_color_popup_button_background_active" placeholder="#B2181A" value="<?php echo esc_attr(@$onesignal_wp_settings['notifyButton_color_popup_button_background_active']); ?>">
             </div>
             <div class="field nb-feature nb-color-feature">
               <label>Popup action button text color<i class="tiny circular help icon link" role="popup" data-title="Subscription Bell Popup - Action Button Text Color" data-content="The color of the quickly expanding circle that's used as an animation when a user clicks on the Subscription Bell." data-variation="wide"></i></label>
-              <input type="text" name="notifyButton_color_popup_button_color" placeholder="white" value="<?php echo @$onesignal_wp_settings['notifyButton_color_popup_button_color']; ?>">
+              <input type="text" name="notifyButton_color_popup_button_color" placeholder="white" value="<?php echo esc_attr(@$onesignal_wp_settings['notifyButton_color_popup_button_color']); ?>">
             </div>
           </div>
 
@@ -747,7 +747,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
         <div class="ui borderless shadowless segment">
           <div class="field">
             <label>Additional Custom Post Types for Automatic Notifications Created From Plugins<i class="tiny circular help icon link" role="popup" data-html="Enter a comma-separated list of custom post type names. Anytime a post is published with one of the listed post types, a notification will be sent to all your users. <strong class='least-strong'>The setting</strong> <em>Automatically send a push notification when I publish a post from 3rd party plugins</em> <strong class='least-strong'>must be enabled for this feature to work</strong>." data-variation="wide"></i></label>
-            <input type="text" placeholder="forum,reply,topic  (comma separated, no spaces between commas)" name="allowed_custom_post_types" value="<?php echo @$onesignal_wp_settings['allowed_custom_post_types']; ?>">
+            <input type="text" placeholder="forum,reply,topic  (comma separated, no spaces between commas)" name="allowed_custom_post_types" value="<?php echo esc_attr(@$onesignal_wp_settings['allowed_custom_post_types']); ?>">
           </div>
           <?php if (OneSignalUtils::url_contains_parameter(ONESIGNAL_URI_REVEAL_PROJECT_NUMBER)): ?>
             <div class="field">
@@ -757,6 +757,10 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
               </div>
             </div>
           <?php endif; ?>
+          <div class="field custom-manifest-feature">
+            <label>Custom manifest.json URL<i class="tiny circular help icon link" role="popup" data-html="<p>Enter the complete URL to your existing manifest.json file to be used in place of our own. Your URL's domain should match that of your main site that users are visiting.</p><p>e.g. <code>https://yoursite.com/manifest.json</code></p>" data-variation="wide"></i></label>
+            <input type="text" placeholder="https://yoursite.com/manifest.json" name="custom_manifest_url" value="<?php echo esc_attr(@$onesignal_wp_settings['custom_manifest_url']); ?>">
+          </div>
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="use_custom_sdk_init" value="true" <?php if ($onesignal_wp_settings['use_custom_sdk_init']) {

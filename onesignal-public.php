@@ -67,28 +67,6 @@ class OneSignal_Public
         add_action('wp_head', array(__CLASS__, 'onesignal_header'), 10);
     }
 
-    public static function insert_onesignal_header_manifest($onesignal_wp_settings, $current_plugin_url)
-    {
-        $use_custom_manifest = $onesignal_wp_settings['use_custom_manifest'];
-        $custom_manifest_url = $onesignal_wp_settings['custom_manifest_url'];
-        if ($onesignal_wp_settings !== false && array_key_exists('gcm_sender_id', $onesignal_wp_settings)) {
-            $gcm_sender_id = $onesignal_wp_settings['gcm_sender_id'];
-        } else {
-            $gcm_sender_id = 'WORDPRESS_NO_SENDER_ID_ENTERED';
-        }
-        if ($use_custom_manifest) {
-            ?>
-      <link rel="manifest"
-            href="<?php echo $custom_manifest_url; ?>"/>
-      <?php
-        } else {
-            ?>
-      <link rel="manifest"
-            href="<?php echo $current_plugin_url.'sdk_files/manifest.json.php?gcm_sender_id='.$gcm_sender_id; ?>"/>
-      <?php
-        }
-    }
-
     // For easier debugging of sites by identifying them as WordPress
     public static function insert_onesignal_stamp()
     {
@@ -108,7 +86,6 @@ class OneSignal_Public
                 $current_plugin_url = ONESIGNAL_PLUGIN_URL;
             }
             OneSignal_Public::insert_onesignal_stamp();
-            OneSignal_Public::insert_onesignal_header_manifest($onesignal_wp_settings, $current_plugin_url);
         } ?>
     <?php
     if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {

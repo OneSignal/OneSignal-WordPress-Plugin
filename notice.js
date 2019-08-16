@@ -5,8 +5,7 @@ var state = {
     first_modified : undefined,     // when the post was first modified
     started : false,                // post notification requests started
     interval: undefined,            // global interval for reattempting requests
-    interval_count : 0,             // how many times has the request been attempted
-    status : undefined              // whether the post is scheduled or published
+    interval_count : 0              // how many times has the request been attempted
   }
     
 function notice() {
@@ -41,7 +40,6 @@ function notice() {
 
     // latest modified date, status of the post
     const { modified, status } = post;
-    state.status = status;
 
     // is checked
     const send_os_notif = jQuery("[name=send_onesignal_notification]").attr(
@@ -52,10 +50,9 @@ function notice() {
     const post_modified = modified !== state.first_modified;
 
     const is_published = status === "publish";
-    const is_scheduled = status === "future"; 
 
     // if hasn't started, change detected, box checked, and the status is 'publish'
-    if (!state.started && post_modified && send_os_notif && (is_published || is_scheduled)) {
+    if (!state.started && post_modified && send_os_notif && is_published) {
       state.interval = setInterval(get_metadata, 3000); // starts requests
       state.started = true;
     }
@@ -73,7 +70,7 @@ function notice() {
 
     jQuery.get(ajax_object.ajax_url, data, function(response) {
       response = JSON.parse(response);
-      const { recipients, status_code, response_body } = response;
+      const { recipients, status_code, error_message } = response;
 
       if(window.DEBUG_MODE){
         console.log(response);
@@ -85,21 +82,21 @@ function notice() {
       if(!is_status_empty && !is_recipients_empty){
         // status 0: HTTP request failed
         if (status_code === "0") {
-          error_notice("OneSignal Push: request failed with status code 0. "+response_body);
+          error_notice("OneSignal Push: request failed with status code 0. "+error_message);
           reset_state();
           return;
         }
 
         // 400 & 500 level errors
         if (status_code >= 400) {
-          if (!response_body) {
+          if (!error_message) {
             error_notice(
               "OneSignal Push: there was a " +
                 status_code +
                 " error sending your notification"
             );
           } else {
-            error_notice("OneSignal Push: there was a " + status_code + " error sending your notification: " + response_body);
+            error_notice("OneSignal Push: there was a " + status_code + " error sending your notification: " + error_message);
           }
 
           reset_state();
@@ -108,7 +105,7 @@ function notice() {
 
         if (recipients === "0") {
           error_notice(
-            "OneSignal Push: there were no recipients."
+            "OneSignal Push: there were no recipients. You either 1) have no subscribers yet or 2) you hit the rate-limit. Please try again in three minutes. Learn more: https://bit.ly/2UDplAS"
           );
           reset_state();
 
@@ -135,18 +132,11 @@ function notice() {
    */
   const show_notice = recipients => {
     const plural = recipients == 1 ? "" : "s";
-    
-    if (state.status === "publish") {
-      var notice_text = "OneSignal Push: Successfully sent a notification to ";
-    } else if (state.status === "future"){
-      var notice_text = "OneSignal Push: Successfully scheduled a notification for ";
-    }
-
     wp.data
       .dispatch("core/notices")
       .createNotice(
         "info",
-        notice_text +
+        "OneSignal Push: Successfully sent a notification to " +
           recipients +
           " recipient" +
           plural +
@@ -201,8 +191,10 @@ const isWpCoreEditorDefined = () => {
  * returns an object in the format
  *  { status : "200",
  *    recipients : "1374",
- *    response_body : []
+ *    error_message : []
  *  }
+ *
+ *  - if the recipient number is "0", the error_message will contain the entire HTTP response as JSON
  */
 window.OneSignal = {
     debug : () => {

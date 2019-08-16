@@ -139,8 +139,7 @@ function notice() {
         "OneSignal Push: Successfully sent a notification to " +
           recipients +
           " recipient" +
-          plural +
-          ". Go to your app's \"Delivery\" tab to check sent and scheduled messages: https://app.onesignal.com/apps/",
+          plural,
         {
             id:'onesignal-notice',
             isDismissible: true

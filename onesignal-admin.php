@@ -591,7 +591,7 @@ class OneSignal_Admin
         $prev_minutes = get_option('TimeLastUpdated');
         $prehash = (string) $title;
 
-        if ($prev_minutes !== false && ($now_minutes - $prev_minutes) > 2) {
+        if ($prev_minutes !== false && ($now_minutes - $prev_minutes) > 0) {
             update_option('TimeLastUpdated', $now_minutes);
             $timestamp = $now_minutes;
         } elseif ($prev_minutes == false) {

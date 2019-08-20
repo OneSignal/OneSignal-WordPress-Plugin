@@ -52,10 +52,9 @@ function notice() {
     const post_modified = modified !== state.first_modified;
 
     const is_published = status === "publish";
-    const is_scheduled = status === "future"; 
 
     // if hasn't started, change detected, box checked, and the status is 'publish'
-    if (!state.started && post_modified && send_os_notif && (is_published || is_scheduled)) {
+    if (!state.started && post_modified && send_os_notif && is_published ) {
       state.interval = setInterval(get_metadata, 3000); // starts requests
       state.started = true;
     }

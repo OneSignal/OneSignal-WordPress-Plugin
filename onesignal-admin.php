@@ -158,6 +158,8 @@ class OneSignal_Admin
      * Save the meta when the post is saved.
      *
      * @param int $post_id the ID of the post being saved
+     * @param \WP_Post $post Post being saved
+     * @param bool $updated edit or new post?
      */
     public static function on_save_post($post_id, $post, $updated)
     {
@@ -173,16 +175,16 @@ class OneSignal_Admin
         if (!isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY])) {
             // This is called on every new post ... not necessary to log it.
             // onesignal_debug('Nonce is not set for post ' . $post->post_title . ' (ID ' . $post_id . ')');
-            return $post_id;
+            return $post->ID;
         }
 
         $nonce = $_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY];
 
         // Verify that the nonce is valid.
         if (!wp_verify_nonce($nonce, OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
-            onesignal_debug('Nonce is not valid for '.$post->post_title.' (ID '.$post_id.')');
+            onesignal_debug('Nonce is not valid for '.$post->post_title.' (ID '.$post->ID.')');
 
-            return $post_id;
+            return $post->ID;
         }
 
         /*
@@ -190,7 +192,7 @@ class OneSignal_Admin
              * so we don't want to do anything.
              */
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return $post_id;
+            return $post->ID;
         }
 
         /* OK, it's safe for us to save the data now. */
@@ -198,30 +200,35 @@ class OneSignal_Admin
         /* Some WordPress environments seem to be inconsistent about whether on_save_post is called before transition_post_status
            * Check flag in case we just sent a notification for this post (this on_save_post is called after a successful send)
           */
-        $just_sent_notification = (get_post_meta($post_id, 'onesignal_notification_already_sent', true) == true);
+        $just_sent_notification = (get_post_meta($post->ID, 'onesignal_notification_already_sent', true) == true);
 
         if ($just_sent_notification) {
             // Reset our flag
-            update_post_meta($post_id, 'onesignal_notification_already_sent', false);
+            update_post_meta($post->ID, 'onesignal_notification_already_sent', false);
             onesignal_debug('A notification was just sent, so ignoring on_save_post. Resetting check flag.');
 
             return;
         }
 
         if (array_key_exists('onesignal_meta_box_present', $_POST)) {
-            update_post_meta($post_id, 'onesignal_meta_box_present', true);
+            update_post_meta($post->ID, 'onesignal_meta_box_present', true);
             onesignal_debug('Set post metadata "onesignal_meta_box_present" to true.');
         } else {
-            update_post_meta($post_id, 'onesignal_meta_box_present', false);
+            update_post_meta($post->ID, 'onesignal_meta_box_present', false);
             onesignal_debug('Set post metadata "onesignal_meta_box_present" to false.');
+        }
+
+        /* Don't change anything for scheduled posts. We use this to track the checkbox. */
+        if ($post->post_status == 'future') {
+            return;
         }
 
         /* Even though the meta box always contains the checkbox, if an HTML checkbox is not checked, it is not POSTed to the server */
         if (array_key_exists('send_onesignal_notification', $_POST)) {
-            update_post_meta($post_id, 'onesignal_send_notification', true);
+            update_post_meta($post->ID, 'onesignal_send_notification', true);
             onesignal_debug('Set post metadata "onesignal_send_notification" to true.');
         } else {
-            update_post_meta($post_id, 'onesignal_send_notification', false);
+            update_post_meta($post->ID, 'onesignal_send_notification', false);
             onesignal_debug('Set post metadata "onesignal_send_notification" to false.');
         }
     }
@@ -309,7 +316,8 @@ class OneSignal_Admin
         onesignal_debug('    [$meta_box_checkbox_send_notification]', '$post->post_type == "post":', $post->post_type == 'post', '('.$post->post_type.')');
         onesignal_debug('    [$meta_box_checkbox_send_notification]', 'in_array($post->post_status, array("future", "draft", "auto-draft", "pending"):', in_array($post->post_status, array('future', 'draft', 'auto-draft', 'pending')), '('.$post->post_status.')'); ?>
     
-	    <input type="hidden" name="onesignal_meta_box_present" value="true"></input>
+      <input type="hidden" name="onesignal_meta_box_was_checked" value="<?php echo ($meta_box_checkbox_send_notification ? 'true' : 'false'); ?>">
+      <input type="hidden" name="onesignal_meta_box_present" value="true"></input>
       <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($meta_box_checkbox_send_notification) {
             echo 'checked';
         } ?>></input>
@@ -682,6 +690,15 @@ class OneSignal_Admin
                 $do_send_notification = $non_editor_post_publish_do_send_notification;
             }
 
+            // Was the checkbox unchecked?
+            if ($was_posted && !$do_send_notification && isset($_POST['onesignal_meta_box_was_checked']) && $_POST['onesignal_meta_box_was_checked'] == 'true') {
+                update_post_meta($post->ID, 'onesignal_meta_box_present', false);
+                update_post_meta($post->ID, 'onesignal_send_notification', false);
+                onesignal_debug('Cancelling scheduled notification - user unchecked.');
+                self::cancel_scheduled_notification($post);
+                return;
+            }
+
             if (has_filter('onesignal_include_post')) {
                 if (apply_filters('onesignal_include_post', $new_status, $old_status, $post)) {
                     onesignal_debug('Will actually send a notification for this post because the filter opted to include the post.');
@@ -713,7 +730,10 @@ class OneSignal_Admin
                        * If this post is re-sent through the WordPress editor, the metadata will be added back automatically
                       */
                 update_post_meta($post->ID, 'onesignal_meta_box_present', false);
-                update_post_meta($post->ID, 'onesignal_send_notification', false);
+                /* However, don't do this for scheduled posts. We use the checkbox' state to track whether we do have a notification or not.
+                 * This allows us to reschedule or cancel notifications. The flag will be cleared once this post is finally published.
+                 */
+                update_post_meta($post->ID, 'onesignal_send_notification', $new_status == 'future');
                 onesignal_debug('Removed OneSignal metadata from post.');
 
                 /* Some WordPress environments seem to be inconsistent about whether on_save_post is called before transition_post_status
@@ -969,13 +989,13 @@ class OneSignal_Admin
         $onesignal_auth_key = $onesignal_wp_settings['app_rest_api_key'];
 
         $request = array(
-      'headers' => array(
+            'headers' => array(
                 'content-type' => 'application/json;charset=utf-8',
                 'Authorization' => 'Basic '.$onesignal_auth_key,
-    ),
-      'method' => 'DELETE',
-      'timeout' => 60,
-    );
+        ),
+            'method' => 'DELETE',
+            'timeout' => 60,
+        );
 
         $response = wp_remote_get($onesignal_delete_url, $request);
 
@@ -999,6 +1019,11 @@ class OneSignal_Admin
             self::send_notification_on_wp_post($new_status, $old_status, $post);
 
             return;
+        }
+
+        // This post was scheduled for later and unless the user unchecked the notification, it too came out.
+        if ($old_status == 'future' && $new_status == 'publish') {
+            update_post_meta($post->ID, 'onesignal_send_notification', false);
         }
 
         if (has_filter('onesignal_include_post')) {

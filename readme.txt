@@ -67,7 +67,7 @@ HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 
 = 1.17.9 =
 
-- Rolled back hard-scheduling feature
+- Rolled back sending notifications on scheduled posts to be when its status changes to published
 
 = 1.17.8 =
 
@@ -78,6 +78,10 @@ HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 - Fixed bug from 1.17.6 where updating old posts would result in 400 level errors
 
 = 1.17.6 =
+
+- Fixed bug where scheduled posts would send notifications immediately, added Gutenberg support for scheduled notifications
+
+= 1.17.5 =
 
 - Updated notice message to reflect changes to time limiter, removed extra newline from description
 

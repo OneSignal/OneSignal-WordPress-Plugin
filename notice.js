@@ -52,10 +52,9 @@ function notice() {
     const post_modified = modified !== state.first_modified;
 
     const is_published = status === "publish";
-    const is_scheduled = status === "future"; 
 
     // if hasn't started, change detected, box checked, and the status is 'publish'
-    if (!state.started && post_modified && send_os_notif && (is_published || is_scheduled)) {
+    if (!state.started && post_modified && send_os_notif && is_published ) {
       state.interval = setInterval(get_metadata, 3000); // starts requests
       state.started = true;
     }
@@ -135,9 +134,11 @@ function notice() {
    */
   const show_notice = recipients => {
     const plural = recipients == 1 ? "" : "s";
-    
+    var delivery_link_text = "";
+
     if (state.status === "publish") {
       var notice_text = "OneSignal Push: Successfully sent a notification to ";
+      delivery_link_text = ". Go to your app's \"Delivery\" tab to check sent messages: https://app.onesignal.com/apps";
     } else if (state.status === "future"){
       var notice_text = "OneSignal Push: Successfully scheduled a notification for ";
     }
@@ -146,11 +147,7 @@ function notice() {
       .dispatch("core/notices")
       .createNotice(
         "info",
-        notice_text +
-          recipients +
-          " recipient" +
-          plural +
-          ". Go to your app's \"Delivery\" tab to check sent and scheduled messages: https://app.onesignal.com/apps/",
+        notice_text + recipients + " recipient" + plural + delivery_link_text,
         {
             id:'onesignal-notice',
             isDismissible: true

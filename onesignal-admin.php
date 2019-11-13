@@ -53,7 +53,7 @@ function has_metadata()
         $data = array('recipients' => $recipients, 'status_code' => $status, 'response_body' => $response_body);
     }
 
-    echo json_encode($data);
+    echo wp_json_encode($data);
 
     exit;
 }
@@ -161,7 +161,7 @@ class OneSignal_Admin
      */
     public static function on_save_post($post_id, $post, $updated)
     {
-        if ($post->post_type == 'wdslp-wds-log') {
+        if ($post->post_type === 'wdslp-wds-log') {
             // Prevent recursive post logging
             return;
         }
@@ -170,7 +170,7 @@ class OneSignal_Admin
              * because save_post can be triggered at other times.
              */
         // Check if our nonce is set.
-        if (!isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY])) {
+        if ($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) {
             // This is called on every new post ... not necessary to log it.
             // onesignal_debug('Nonce is not set for post ' . $post->post_title . ' (ID ' . $post_id . ')');
             return $post_id;
@@ -198,7 +198,7 @@ class OneSignal_Admin
         /* Some WordPress environments seem to be inconsistent about whether on_save_post is called before transition_post_status
            * Check flag in case we just sent a notification for this post (this on_save_post is called after a successful send)
           */
-        $just_sent_notification = (get_post_meta($post_id, 'onesignal_notification_already_sent', true) == true);
+        $just_sent_notification = (get_post_meta($post_id, 'onesignal_notification_already_sent') === true);
 
         if ($just_sent_notification) {
             // Reset our flag
@@ -290,12 +290,12 @@ class OneSignal_Admin
         $settings_send_notification_on_wp_editor_post = $onesignal_wp_settings['notification_on_post'];
 
         /* This is a scheduled post and the user checked "Send a notification on post publish/update". */
-        $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification', true) == true);
+        $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification') === true);
 
         // We check the checkbox if: setting is enabled on Config page, post type is ONLY "post", and the post has not been published (new posts are status "auto-draft")
-    $meta_box_checkbox_send_notification = ($settings_send_notification_on_wp_editor_post &&  // If setting is enabled
-                                            $post->post_type == 'post' &&  // Post type must be type post for checkbox to be auto-checked
-                                            in_array($post->post_status, array('future', 'draft', 'auto-draft', 'pending'))) || // Post is scheduled, incomplete, being edited, or is awaiting publication
+        $meta_box_checkbox_send_notification = ($settings_send_notification_on_wp_editor_post &&  // If setting is enabled
+                                            $post->post_type === 'post' &&  // Post type must be type post for checkbox to be auto-checked
+                                            in_array($post->post_status, array('future', 'draft', 'auto-draft', 'pending'), true)) || // Post is scheduled, incomplete, being edited, or is awaiting publication
                                             ($post_metadata_was_send_notification_checked);
 
         if (has_filter('onesignal_meta_box_send_notification_checkbox_state')) {
@@ -306,8 +306,8 @@ class OneSignal_Admin
         onesignal_debug('    [$meta_box_checkbox_send_notification]', 'onesignal_meta_box_send_notification_checkbox_state filter result:', apply_filters('onesignal_meta_box_send_notification_checkbox_state', $post, $onesignal_wp_settings));
         onesignal_debug('    [$meta_box_checkbox_send_notification]', '$settings_send_notification_on_wp_editor_post:', $settings_send_notification_on_wp_editor_post);
         onesignal_debug('    [$meta_box_checkbox_send_notification]', '$settings_send_notification_on_wp_editor_post:', $settings_send_notification_on_wp_editor_post);
-        onesignal_debug('    [$meta_box_checkbox_send_notification]', '$post->post_type == "post":', $post->post_type == 'post', '('.$post->post_type.')');
-        onesignal_debug('    [$meta_box_checkbox_send_notification]', 'in_array($post->post_status, array("future", "draft", "auto-draft", "pending"):', in_array($post->post_status, array('future', 'draft', 'auto-draft', 'pending')), '('.$post->post_status.')'); ?>
+        onesignal_debug('    [$meta_box_checkbox_send_notification]', '$post->post_type === "post":', $post->post_type === 'post', '('.$post->post_type.')');
+        onesignal_debug('    [$meta_box_checkbox_send_notification]', 'in_array($post->post_status, array("future", "draft", "auto-draft", "pending"):', in_array($post->post_status, array('future', 'draft', 'auto-draft', 'pending'), true), '('.$post->post_status.')'); ?>
     
 	    <input type="hidden" name="onesignal_meta_box_present" value="true"></input>
       <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($meta_box_checkbox_send_notification) {
@@ -334,7 +334,6 @@ class OneSignal_Admin
             return;
         }
 
-        $sdk_dir = plugin_dir_path(__FILE__).'sdk_files/';
         $onesignal_wp_settings = OneSignal::get_onesignal_settings();
         $new_app_id = $config['app_id'];
 
@@ -461,7 +460,7 @@ class OneSignal_Admin
         foreach ($settings as $setting) {
             if (array_key_exists($setting, $config)) {
                 $value = $config[$setting];
-                $value = OneSignalUtils::normalize($value);
+                $value = sanitize_text_field($value);
                 $onesignal_wp_settings[$setting] = $value;
             }
         }
@@ -487,7 +486,7 @@ class OneSignal_Admin
         if (array_key_exists('app_id', $_POST)) {
             // check_admin_referer dies if not valid; no if statement necessary
             check_admin_referer(OneSignal_Admin::$SAVE_CONFIG_NONCE_ACTION, OneSignal_Admin::$SAVE_CONFIG_NONCE_KEY);
-            $onesignal_wp_settings = OneSignal_Admin::save_config_page($_POST);
+            OneSignal_Admin::save_config_page($_POST);
         }
     }
 
@@ -502,8 +501,8 @@ class OneSignal_Admin
 
         $onesignal_wp_settings = OneSignal::get_onesignal_settings();
         if (
-          $onesignal_wp_settings['app_id'] == '' ||
-          $onesignal_wp_settings['app_rest_api_key'] == ''
+          $onesignal_wp_settings['app_id'] === '' ||
+          $onesignal_wp_settings['app_rest_api_key'] === ''
       ) {
             function admin_notice_setup_not_complete()
             {
@@ -594,7 +593,7 @@ class OneSignal_Admin
         if ($prev_minutes !== false && ($now_minutes - $prev_minutes) > 0) {
             update_option('TimeLastUpdated', $now_minutes);
             $timestamp = $now_minutes;
-        } elseif ($prev_minutes == false) {
+        } elseif ($prev_minutes === false) {
             add_option('TimeLastUpdated', $now_minutes);
             $timestamp = $now_minutes;
         } else {
@@ -640,14 +639,14 @@ class OneSignal_Admin
             $was_posted = !empty($_POST);
 
             /* When this post was created or updated, the OneSignal meta box in the WordPress post editor screen was visible */
-            $onesignal_meta_box_present = $was_posted && array_key_exists('onesignal_meta_box_present', $_POST) && $_POST['onesignal_meta_box_present'] == 'true';
+            $onesignal_meta_box_present = $was_posted && array_key_exists('onesignal_meta_box_present', $_POST) && $_POST['onesignal_meta_box_present'] === 'true';
             /* The checkbox "Send notification on post publish/update" on the OneSignal meta box is checked */
-            $onesignal_meta_box_send_notification_checked = $was_posted && array_key_exists('send_onesignal_notification', $_POST) && $_POST['send_onesignal_notification'] == 'true';
+            $onesignal_meta_box_send_notification_checked = $was_posted && array_key_exists('send_onesignal_notification', $_POST) && $_POST['send_onesignal_notification'] === 'true';
 
             /* This is a scheduled post and the OneSignal meta box was present. */
-            $post_metadata_was_onesignal_meta_box_present = (get_post_meta($post->ID, 'onesignal_meta_box_present', true) == true);
+            $post_metadata_was_onesignal_meta_box_present = (get_post_meta($post->ID, 'onesignal_meta_box_present') === true);
             /* This is a scheduled post and the user checked "Send a notification on post publish/update". */
-            $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification', true) == true);
+            $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification') === true);
 
             /* Either we were just posted from the WordPress post editor form, or this is a scheduled notification and it was previously submitted from the post editor form */
             $posted_from_wordpress_editor = $onesignal_meta_box_present || $post_metadata_was_onesignal_meta_box_present;
@@ -665,7 +664,7 @@ class OneSignal_Admin
             $additional_custom_post_types_array = array_filter(explode(',', $additional_custom_post_types_string));
             onesignal_debug('Additional allowed custom post types:', $additional_custom_post_types_string);
             $non_editor_post_publish_do_send_notification = $settings_send_notification_on_non_editor_post_publish &&
-                                                        ($post->post_type == 'post' || in_array($post->post_type, $additional_custom_post_types_array)) &&
+                                                        ($post->post_type === 'post' || in_array($post->post_type, $additional_custom_post_types_array, true)) &&
                                                         $old_status !== 'publish';
             /* ********************************************************************************************************* */
 
@@ -702,7 +701,7 @@ class OneSignal_Admin
             onesignal_debug('    [Editor Post Send]', 'Meta Box Send Notification Previously Checked:', $post_metadata_was_send_notification_checked);
             onesignal_debug('Non-Editor Post Send:', $non_editor_post_publish_do_send_notification);
             onesignal_debug('    [Non-Editor Post Send]', 'Auto Send Config Setting:', $settings_send_notification_on_non_editor_post_publish);
-            onesignal_debug('    [Non-Editor Post Send]', 'Post Type:', ($post->post_type == 'post' || in_array($post->post_type, $additional_custom_post_types_array)), '('.$post->post_type.')');
+            onesignal_debug('    [Non-Editor Post Send]', 'Post Type:', ($post->post_type === 'post' || in_array($post->post_type, $additional_custom_post_types_array, true)), '('.$post->post_type.')');
             onesignal_debug('    [Non-Editor Post Send]', 'Old Post Status:', ($old_status !== 'publish'), '('.$old_status.')');
             onesignal_debug('Actually Sending Notification:', $do_send_notification);
 
@@ -733,7 +732,7 @@ class OneSignal_Admin
                 $notif_content = OneSignalUtils::decode_entities(get_the_title($post->ID));
 
                 $site_title = '';
-                if ($onesignal_wp_settings['notification_title'] != '') {
+                if ($onesignal_wp_settings['notification_title'] !== '') {
                     $site_title = OneSignalUtils::decode_entities($onesignal_wp_settings['notification_title']);
                 } else {
                     $site_title = OneSignalUtils::decode_entities(get_bloginfo('name'));
@@ -760,7 +759,7 @@ class OneSignal_Admin
         );
 
                 $send_to_mobile_platforms = $onesignal_wp_settings['send_to_mobile_platforms'];
-                if ($send_to_mobile_platforms == true) {
+                if ($send_to_mobile_platforms === true) {
                     $fields['isIos'] = true;
                     $fields['isAndroid'] = true;
                 }
@@ -779,9 +778,9 @@ class OneSignal_Admin
                     // Much higher resolution for the notification large image
                     $large_sized_images_array = wp_get_attachment_image_src($post_thumbnail_id, 'large', true);
 
-                    $config_use_featured_image_as_icon = $onesignal_wp_settings['showNotificationIconFromPostThumbnail'] == '1';
+                    $config_use_featured_image_as_icon = $onesignal_wp_settings['showNotificationIconFromPostThumbnail'] === '1';
                     onesignal_debug('Post should use featured image for notification icon (small):', $config_use_featured_image_as_icon);
-                    $config_use_featured_image_as_image = $onesignal_wp_settings['showNotificationImageFromPostThumbnail'] == '1';
+                    $config_use_featured_image_as_image = $onesignal_wp_settings['showNotificationImageFromPostThumbnail'] === '1';
                     onesignal_debug('Post should use featured image for notification image (large):', $config_use_featured_image_as_image);
 
                     // get the icon image from wordpress if it exists
@@ -807,7 +806,7 @@ class OneSignal_Admin
                     onesignal_debug('onesignal_send_notification filter $fields result:', $fields);
 
                     // If the filter adds "do_send_notification: false", do not send a notification
-                    if (array_key_exists('do_send_notification', $fields) && $fields['do_send_notification'] == false) {
+                    if (array_key_exists('do_send_notification', $fields) && $fields['do_send_notification'] === false) {
                         return;
                     }
                 }
@@ -831,7 +830,7 @@ class OneSignal_Admin
                   'content-type' => 'application/json;charset=utf-8',
                   'Authorization' => 'Basic '.$onesignal_auth_key,
         ),
-    'body' => json_encode($fields),
+    'body' => wp_json_encode($fields),
     'timeout' => 60,
     );
 
@@ -853,13 +852,13 @@ class OneSignal_Admin
                     $status = $response['response']['code'];
                 }
 
-                update_post_meta($post->ID, 'response_body', json_encode($response_body));
+                update_post_meta($post->ID, 'response_body', wp_json_encode($response_body));
                 update_post_meta($post->ID, 'status', $status);
 
-                if ($status != 200) {
+                if ($status !== 200) {
                     error_log('There was a '.$status.' error sending your notification.');
                     error_log('Response from OneSignal:', json_encode($response));
-                    if ($status != 0) {
+                    if ($status !== 0) {
                         set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
                     <p><strong>OneSignal Push:</strong><em> There was a '.$status.' error sending your notification.</em></p>
                 </div>', 86400);
@@ -889,11 +888,11 @@ class OneSignal_Admin
                         update_post_meta($post->ID, 'recipients', $recipient_count);
 
                         $sent_or_scheduled = array_key_exists('send_after', $fields) ? 'scheduled' : 'sent';
-                        $config_show_notification_send_status_message = $onesignal_wp_settings['show_notification_send_status_message'] == '1';
+                        $config_show_notification_send_status_message = $onesignal_wp_settings['show_notification_send_status_message'] === '1';
 
                         if ($config_show_notification_send_status_message) {
-                            if ($recipient_count != 0) {
-                                $delivery_link_text = $sent_or_scheduled == 'sent' ? ' Go to your app\'s "Delivery" tab to check sent messages: <a target="_blank" href="https://app.onesignal.com/apps/">https://app.onesignal.com/apps/</a>' : '';
+                            if ($recipient_count !== 0) {
+                                $delivery_link_text = $sent_or_scheduled === 'sent' ? ' Go to your app\'s "Delivery" tab to check sent messages: <a target="_blank" href="https://app.onesignal.com/apps/">https://app.onesignal.com/apps/</a>' : '';
                                 set_transient('onesignal_transient_success', '<div class="components-notice is-success is-dismissible">
                   <div class="components-notice__content">
                   <p><strong>OneSignal Push:</strong><em> Successfully '.$sent_or_scheduled.' a notification to '.$recipient_count.' recipients.'.$delivery_link_text.'</em></p>
@@ -929,7 +928,7 @@ class OneSignal_Admin
 
     public static function on_transition_post_status($new_status, $old_status, $post)
     {
-        if ($post->post_type == 'wdslp-wds-log' ||
+        if ($post->post_type === 'wdslp-wds-log' ||
         self::was_post_restored_from_trash($old_status, $new_status)) {
             // It's important not to call onesignal_debug() on posts of type wdslp-wds-log, otherwise each post will recursively generate 4 more posts
             return;
@@ -955,7 +954,7 @@ class OneSignal_Admin
         }
         if (!(empty($post) ||
         $new_status !== 'publish' ||
-        $post->post_type == 'page')) {
+        $post->post_type === 'page')) {
             self::send_notification_on_wp_post($new_status, $old_status, $post);
         }
     }

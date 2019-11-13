@@ -14,13 +14,6 @@ class OneSignalUtils {
 		return html_entity_decode(str_replace("&apos;", "'", $string), $HTML_ENTITY_DECODE_FLAGS, 'UTF-8');
 	}
 
-	public static function normalize($string) {
-		$string = OneSignalUtils::decode_entities($string);
-		$string = stripslashes($string);
-		$string = trim($string);
-		return $string;
-	}
-
 	public static function url_contains_parameter($text) {
 	  if (array_key_exists('REQUEST_URI', $_SERVER)) {
       return strpos($_SERVER['REQUEST_URI'], $text);

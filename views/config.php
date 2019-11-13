@@ -347,7 +347,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
                 value="platform-default"
                   <?php
                     if ((array_key_exists('persist_notifications', $onesignal_wp_settings) &&
-                        $onesignal_wp_settings['persist_notifications'] == "platform-default")) {
+                        $onesignal_wp_settings['persist_notifications'] === "platform-default")) {
                           echo "selected";
                     }
                   ?>>Yes
@@ -356,7 +356,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
                 value="yes-except-notification-manager-platforms"
                   <?php
                     if ((array_key_exists('persist_notifications', $onesignal_wp_settings) &&
-                        $onesignal_wp_settings['persist_notifications'] == "yes-except-notification-manager-platforms")) {
+                        $onesignal_wp_settings['persist_notifications'] === "yes-except-notification-manager-platforms")) {
                           echo "selected";
                     }
                   ?>>Yes on Mac OS X. No on other platforms.
@@ -365,7 +365,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
                 value="yes-all"
                   <?php
                     if ((array_key_exists('persist_notifications', $onesignal_wp_settings) &&
-                        $onesignal_wp_settings['persist_notifications'] == "yes-all")) {
+                        $onesignal_wp_settings['persist_notifications'] === "yes-all")) {
                           echo "selected";
                     }
                   ?>>No
@@ -479,23 +479,23 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="inline-setting short field nb-feature">
             <label class="inline-setting">Size:</label>
             <select class="ui dropdown" name="notifyButton_size">
-              <option value="small" <?php if (array_key_exists('notifyButton_size', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_size'] == "small") { echo "selected"; } ?>>Small</option>
-              <option value="medium" <?php if ((array_key_exists('notifyButton_size', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_size'] == "medium") || !array_key_exists('notifyButton_theme', $onesignal_wp_settings)) { echo "selected"; } ?>>Medium</option>
-              <option value="large" <?php if (array_key_exists('notifyButton_size', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_size'] == "large") { echo "selected"; } ?>>Large</option>
+              <option value="small" <?php if (array_key_exists('notifyButton_size', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_size'] === "small") { echo "selected"; } ?>>Small</option>
+              <option value="medium" <?php if ((array_key_exists('notifyButton_size', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_size'] === "medium") || !array_key_exists('notifyButton_theme', $onesignal_wp_settings)) { echo "selected"; } ?>>Medium</option>
+              <option value="large" <?php if (array_key_exists('notifyButton_size', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_size'] === "large") { echo "selected"; } ?>>Large</option>
             </select>
           </div>
           <div class="inline-setting short field nb-feature">
             <label class="inline-setting">Position:</label>
             <select class="ui dropdown" name="notifyButton_position">
-              <option value="bottom-left" <?php if (array_key_exists('notifyButton_position', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_position'] == "bottom-left") { echo "selected"; } ?>>Bottom Left</option>
-              <option value="bottom-right" <?php if ((array_key_exists('notifyButton_position', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_position'] == "bottom-right") || !array_key_exists('notifyButton_position', $onesignal_wp_settings)) { echo "selected"; } ?>>Bottom Right</option>
+              <option value="bottom-left" <?php if (array_key_exists('notifyButton_position', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_position'] === "bottom-left") { echo "selected"; } ?>>Bottom Left</option>
+              <option value="bottom-right" <?php if ((array_key_exists('notifyButton_position', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_position'] === "bottom-right") || !array_key_exists('notifyButton_position', $onesignal_wp_settings)) { echo "selected"; } ?>>Bottom Right</option>
             </select>
           </div>
           <div class="inline-setting short field nb-feature">
             <label class="inline-setting">Theme:</label>
             <select class="ui dropdown" name="notifyButton_theme">
-              <option value="default" <?php if ((array_key_exists('notifyButton_theme', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_theme'] == "default") || !array_key_exists('notifyButton_theme', $onesignal_wp_settings)) { echo "selected"; } ?>>Red</option>
-              <option value="inverse" <?php if (array_key_exists('notifyButton_theme', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_theme'] == "inverse") { echo "selected"; } ?>>White</option>
+              <option value="default" <?php if ((array_key_exists('notifyButton_theme', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_theme'] === "default") || !array_key_exists('notifyButton_theme', $onesignal_wp_settings)) { echo "selected"; } ?>>Red</option>
+              <option value="inverse" <?php if (array_key_exists('notifyButton_theme', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_theme'] === "inverse") { echo "selected"; } ?>>White</option>
             </select>
           </div>
           <div class="ui segment nb-feature nb-position-feature">

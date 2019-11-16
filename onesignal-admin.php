@@ -639,7 +639,7 @@ class OneSignal_Admin
             $was_posted = !empty($_POST);
 
             /* When this post was created or updated, the OneSignal meta box in the WordPress post editor screen was visible */
-            $onesignal_meta_box_present = $was_posted && array_key_exists('onesignal_meta_box_present', $_POST) && $_POST['onesignal_meta_box_present'] === 'true';
+            $onesignal_meta_box_present = $was_posted && $_POST['onesignal_meta_box_present'] === 'true';
             /* The checkbox "Send notification on post publish/update" on the OneSignal meta box is checked */
             $onesignal_meta_box_send_notification_checked = $was_posted && array_key_exists('send_onesignal_notification', $_POST) && $_POST['send_onesignal_notification'] === 'true';
 

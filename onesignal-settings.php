@@ -108,12 +108,10 @@ class OneSignal {
     $is_new_user = false;
 
     // If not set or empty, load a fresh empty array
-    if (!isset($onesignal_wp_settings)) {
-      $onesignal_wp_settings = get_option("OneSignalWPSetting");
-      if (empty( $onesignal_wp_settings )) {
-         $is_new_user = true;
-         $onesignal_wp_settings = array();
-      }
+    $onesignal_wp_settings = get_option("OneSignalWPSetting");
+    if (empty( $onesignal_wp_settings )) {
+        $is_new_user = true;
+        $onesignal_wp_settings = array();
     }
 
     // Assign defaults if the key doesn't exist in $onesignal_wp_settings
@@ -250,7 +248,7 @@ class OneSignal {
       } else {
         // This was the old key name for persist_notifications
         if (array_key_exists('chrome_auto_dismiss_notifications', $onesignal_wp_settings)) {
-          if ($onesignal_wp_settings['chrome_auto_dismiss_notifications'] == "1") {
+          if ($onesignal_wp_settings['chrome_auto_dismiss_notifications'] === "1") {
             // The user wants notifications to be dismissed
             $onesignal_wp_settings['persist_notifications'] = 'platform-default';
           } else {
@@ -271,4 +269,3 @@ class OneSignal {
     update_option("OneSignalWPSetting", $onesignal_wp_settings);
   }
 }
-?>

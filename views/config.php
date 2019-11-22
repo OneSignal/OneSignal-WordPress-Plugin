@@ -88,10 +88,10 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <h4>HTTP Sites:</h4>
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
             <div class="center aligned column">
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.png" ?>" width="100%">
+              <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.png") ?>" width="100%">
             </div>
             <div class="center aligned column">
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell.jpg" ?>" width="60%">
+              <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/bell.jpg") ?>" width="60%">
             </div>
           </div>
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-top: 0 !important; padding-top: 0 !important;">
@@ -105,10 +105,10 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <h4>HTTPS Sites:</h4>
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-bottom: 0 !important; padding-bottom: 0 !important;">
             <div class="center aligned column">
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/https-prompt.png" ?>" width="100%">
+              <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/https-prompt.png") ?>" width="100%">
             </div>
             <div class="center aligned column">
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell.jpg" ?>" width="60%">
+              <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/bell.jpg") ?>" width="60%">
             </div>
           </div>
           <div class="relative ui two column middle aligned very relaxed stackable grid" style="margin-top: 0 !important; padding-top: 0 !important;">
@@ -153,7 +153,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <dd>
               <p>Log in to your OneSignal account, and navigate to the <em>App Settings</em> page of the app you configured in this guide.</p>
               <p>You should be on this page:</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/safari-1.jpg" ?>">
+              <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/safari-1.jpg") ?>">
               <p>Click <strong>Configure</strong> on the platform <em>Apple Safari</em>.</p>
             </dd>
           </div>
@@ -161,10 +161,10 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <dt>2</dt>
             <dd>
               <p>In this step, we'll focus on filling out the <em>Site Name</em> and <em>Site URL</em> fields.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/safari-2.jpg" ?>">
+              <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/safari-2.jpg") ?>">
               <p>For the <strong>Site Name</strong>, enter a name you'd like your users to see.</p>
               <p>In the following sample image, <em>OneSignal</em> is the site name:</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/safari-prompt.jpg" ?>" width="450">
+              <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/safari-prompt.jpg") ?>" width="450">
               <p>For the <strong>Site URL</strong>, enter the URL to your site's domain. The purpose of this field is to prevent other sites from hijacking your keys to impersonate you and send push notifications on your behalf. Please note:</p>
               <ul>
                 <li>
@@ -189,7 +189,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <dt>3</dt>
             <dd>
               <p>In this step, we'll focus on uploading your Safari notification icons.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/safari-3.jpg" ?>">
+              <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/safari-3.jpg") ?>">
               <p>Please have your icon in the following sizes:</p>
               <ul>
                 <li>16 &times; 16</li>
@@ -212,7 +212,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <dt>5</dt>
             <dd>
               <p><strong>Refresh</strong> the page, and then copy the <strong>Safari Web ID</strong> you see to the <em>Configuration</em> tab.</p>
-              <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/safari-4.jpg" ?>">
+              <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/safari-4.jpg") ?>">
               <p>That's it for setting up Safari push!</p>
             </dd>
           </div>
@@ -225,21 +225,21 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
       </div>
       <div class="ui tab borderless shadowless segment" style="z-index: 1;" data-tab="setup/3">
         <p>This section shows push notifications working for <em>Chrome</em>, <em>Safari</em>, and <em>Firefox</em> in <em>HTTP</em> and <em>HTTPS</em> mode.</p>
-        <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/web-push.jpg" ?>">
+        <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/web-push.jpg") ?>">
         <p></p>
         <dl>
           <div class="ui horizontal divider">Subscription Bell</div>
-          <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/notify-button.jpg" ?>">
+          <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/notify-button.jpg") ?>">
           <div class="ui horizontal divider">Chrome (HTTP)</div>
-          <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-http.jpg" ?>">
+          <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-http.jpg") ?>">
           <div class="ui horizontal divider">Chrome (HTTPS)</div>
-          <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg" ?>">
+          <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg") ?>">
           <div class="ui horizontal divider">Safari (HTTP & HTTPS)</div>
-          <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/safari-https.jpg" ?>">
+          <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/safari-https.jpg") ?>">
           <div class="ui horizontal divider">Firefox (HTTP)</div>
-          <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/firefox-http.jpg" ?>">
+          <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/firefox-http.jpg") ?>">
           <div class="ui horizontal divider">Firefox (HTTPS)</div>
-          <img class="img-responsive" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/firefox-https.jpg" ?>">
+          <img class="img-responsive" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/firefox-https.jpg") ?>">
         </dl>
       </div>
     </div>
@@ -261,7 +261,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="is_site_https" <?php if ($onesignal_wp_settings['is_site_https_firsttime'] === 'unset') { echo "data-unset=\"true\""; }  if ($onesignal_wp_settings['is_site_https']) { echo "checked"; }  ?>>
-              <label>My site uses an HTTPS connection (SSL)<i class="tiny circular help icon link" role="popup" data-html="<p>Check this if your site uses HTTPS:</p><img src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/https-url.png" ?>' width=619>" data-variation="flowing"></i></label>
+              <label>My site uses an HTTPS connection (SSL)<i class="tiny circular help icon link" role="popup" data-html="<p>Check this if your site uses HTTPS:</p><img src='<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/https-url.png") ?>' width=619>" data-variation="flowing"></i></label>
             </div>
           </div>
           <div class="ui inline subdomain-http nag">
@@ -374,7 +374,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
           <div class="field">
               <label>Notification Title<i class="tiny circular help icon link" role="popup" data-html="The notification title to use for all outgoing notifications. Defaults to your site's title." data-variation="wide"></i></label>
-              <input type="text" name="notification_title" placeholder="<?php echo OneSignalUtils::decode_entities(get_bloginfo('name')); ?>" value="<?php echo esc_attr($onesignal_wp_settings['notification_title']); ?>">
+              <input type="text" name="notification_title" placeholder="<?php echo esc_attr(OneSignalUtils::decode_entities(get_bloginfo('name'))); ?>" value="<?php echo esc_attr($onesignal_wp_settings['notification_title']); ?>">
           </div>
           <div class="field">
             <div class="ui toggle checkbox">
@@ -390,7 +390,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
         </div>
         <div class="ui borderless shadowless segment">
-          <img class="img-responsive no-center" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/nb-unsubscribe.png" ?>" width="234">
+          <img class="img-responsive no-center" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/nb-unsubscribe.png") ?>" width="234">
           <div class="explanation">
             <p>Control the way visitors are prompted to subscribe. The Subscription Bell is an interactive widget your site visitors can use to manage their push notification subscription status. The Subscription Bell can be used to initially subscribe to push notifications, and to unsubscribe.</p>
           </div>
@@ -413,12 +413,12 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
                        <p>If enabled, your site will automatically present the following without any code required:</p>
                        <p>HTTPS Sites:
                          <img
-                            src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg" ?>'
+                            src='<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg") ?>'
                             width=400>
                        </p>
                        <p>HTTP Sites:
                          <img
-                            src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.png" ?>'
+                            src='<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.png") ?>'
                             width=400>
                        </p>"
                      width=450
@@ -449,7 +449,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="field nb-feature">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="notifyButton_prenotify" value="true" <?php if (array_key_exists('notifyButton_prenotify', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_prenotify']) { echo "checked"; } ?>>
-              <label>Show first-time site visitors an unread message icon<i class="tiny circular help icon link" role="popup" data-html="<p>If checked, a circle indicating 1 unread message will be shown:</p><img src='<?php echo ONESIGNAL_PLUGIN_URL."views/images/bell-prenotify.jpg" ?>' width=56><p>A message will be displayed when they hover over the Subscription Bell. This message can be customized below.</p>" data-variation="wide"></i></label>
+              <label>Show first-time site visitors an unread message icon<i class="tiny circular help icon link" role="popup" data-html="<p>If checked, a circle indicating 1 unread message will be shown:</p><img src='<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/bell-prenotify.jpg") ?>' width=56><p>A message will be displayed when they hover over the Subscription Bell. This message can be customized below.</p>" data-variation="wide"></i></label>
             </div>
           </div>
           <div class="field nb-feature">
@@ -576,51 +576,51 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             </div>
           <div class="field nb-feature nb-text-feature">
             <label>First-time visitor message (on Subscription Bell hover)</label>
-            <input type="text" name="notifyButton_message_prenotify" placeholder="Click to subscribe to notifications" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['notifyButton_message_prenotify']); ?>">
+            <input type="text" name="notifyButton_message_prenotify" placeholder="Click to subscribe to notifications" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_message_prenotify']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Tip when unsubscribed</label>
-            <input type="text" name="notifyButton_tip_state_unsubscribed" placeholder="Subscribe to notifications" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['notifyButton_tip_state_unsubscribed']); ?>">
+            <input type="text" name="notifyButton_tip_state_unsubscribed" placeholder="Subscribe to notifications" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_tip_state_unsubscribed']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Tip when subscribed</label>
-            <input type="text" name="notifyButton_tip_state_subscribed" placeholder="You're subscribed to notifications" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['notifyButton_tip_state_subscribed']); ?>">
+            <input type="text" name="notifyButton_tip_state_subscribed" placeholder="You're subscribed to notifications" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_tip_state_subscribed']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Tip when blocked</label>
-            <input type="text" name="notifyButton_tip_state_blocked" placeholder="You've blocked notifications" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['notifyButton_tip_state_blocked']); ?>">
+            <input type="text" name="notifyButton_tip_state_blocked" placeholder="You've blocked notifications" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_tip_state_blocked']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Message on subscribed</label>
-            <input type="text" name="notifyButton_message_action_subscribed" placeholder="Thanks for subscribing!" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['notifyButton_message_action_subscribed']); ?>">
+            <input type="text" name="notifyButton_message_action_subscribed" placeholder="Thanks for subscribing!" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_message_action_subscribed']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Message on re-subscribed (after first unsubscribing)</label>
-            <input type="text" name="notifyButton_message_action_resubscribed" placeholder="You're subscribed to notifications" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['notifyButton_message_action_resubscribed']); ?>">
+            <input type="text" name="notifyButton_message_action_resubscribed" placeholder="You're subscribed to notifications" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_message_action_resubscribed']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Message on unsubscribed</label>
-            <input type="text" name="notifyButton_message_action_unsubscribed" placeholder="You won't receive notifications again" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['notifyButton_message_action_unsubscribed']); ?>">
+            <input type="text" name="notifyButton_message_action_unsubscribed" placeholder="You won't receive notifications again" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_message_action_unsubscribed']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Main dialog title</label>
-            <input type="text" name="notifyButton_dialog_main_title" placeholder="Manage Site Notifications" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['notifyButton_dialog_main_title']); ?>">
+            <input type="text" name="notifyButton_dialog_main_title" placeholder="Manage Site Notifications" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_dialog_main_title']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Main dialog subscribe button</label>
-            <input type="text" name="notifyButton_dialog_main_button_subscribe" placeholder="SUBSCRIBE" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['notifyButton_dialog_main_button_subscribe']); ?>">
+            <input type="text" name="notifyButton_dialog_main_button_subscribe" placeholder="SUBSCRIBE" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_dialog_main_button_subscribe']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Main dialog unsubscribe button</label>
-            <input type="text" name="notifyButton_dialog_main_button_unsubscribe" placeholder="UNSUBSCRIBE" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['notifyButton_dialog_main_button_unsubscribe']); ?>">
+            <input type="text" name="notifyButton_dialog_main_button_unsubscribe" placeholder="UNSUBSCRIBE" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_dialog_main_button_unsubscribe']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Blocked dialog title</label>
-            <input type="text" name="notifyButton_dialog_blocked_title" placeholder="Unblock Notifications" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['notifyButton_dialog_blocked_title']); ?>">
+            <input type="text" name="notifyButton_dialog_blocked_title" placeholder="Unblock Notifications" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_dialog_blocked_title']); ?>">
           </div>
           <div class="field nb-feature nb-text-feature">
             <label>Blocked dialog message</label>
-            <input type="text" name="notifyButton_dialog_blocked_message" placeholder="Follow these instructions to allow notifications:" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['notifyButton_dialog_blocked_message']); ?>">
+            <input type="text" name="notifyButton_dialog_blocked_message" placeholder="Follow these instructions to allow notifications:" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_dialog_blocked_message']); ?>">
           </div>
           </div>
         </div>
@@ -631,7 +631,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
               HTTP Pop-Up Settings
             </div>
           </div>
-          <img class="img-responsive no-center" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.jpg" ?>" width="360">
+          <img class="img-responsive no-center" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.jpg") ?>" width="360">
           <div class="ui borderless shadowless segment" style="position: relative;">
               <p class="lato">These settings modify the HTTP Pop-Up Prompt and button text for all users. Use this to localize the HTTP Pop-Up Prompt to your language. All fields here are limited in the length of text they can display.</p>
               <div class="field">
@@ -642,43 +642,43 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
               </div>
               <div class="field prompt-customize-feature">
                   <label>Action Message</label>
-                  <input type="text" name="prompt_action_message" placeholder="wants to show notifications:" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['prompt_action_message']); ?>">
+                  <input type="text" name="prompt_action_message" placeholder="wants to show notifications:" value="<?php echo esc_attr($onesignal_wp_settings['prompt_action_message']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                 <label>Auto Accept Title (Click Allow)</label>
-                <input type="text" name="prompt_auto_accept_title" placeholder="Click Allow" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['prompt_auto_accept_title']); ?>">
+                <input type="text" name="prompt_auto_accept_title" placeholder="Click Allow" value="<?php echo esc_attr($onesignal_wp_settings['prompt_auto_accept_title']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                 <label>Site Name</label>
-                <input type="text" name="prompt_site_name" placeholder="http://yoursite.com" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['prompt_site_name']); ?>">
+                <input type="text" name="prompt_site_name" placeholder="http://yoursite.com" value="<?php echo esc_attr($onesignal_wp_settings['prompt_site_name']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Example Notification Title (Desktop)</label>
-                  <input type="text" name="prompt_example_notification_title_desktop" placeholder="This is an example notification" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['prompt_example_notification_title_desktop']); ?>">
+                  <input type="text" name="prompt_example_notification_title_desktop" placeholder="This is an example notification" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_title_desktop']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Example Notification Message (Desktop)</label>
-                  <input type="text" name="prompt_example_notification_message_desktop" placeholder="Notifications will appear on your desktop" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['prompt_example_notification_message_desktop']); ?>">
+                  <input type="text" name="prompt_example_notification_message_desktop" placeholder="Notifications will appear on your desktop" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_message_desktop']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Example Notification Title (Mobile)</label>
-                  <input type="text" name="prompt_example_notification_title_mobile" placeholder="Example notification" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['prompt_example_notification_title_mobile']); ?>">
+                  <input type="text" name="prompt_example_notification_title_mobile" placeholder="Example notification" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_title_mobile']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Example Notification Message (Mobile)</label>
-                  <input type="text" name="prompt_example_notification_message_mobile" placeholder="Notifications will appear on your device" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['prompt_example_notification_message_mobile']); ?>">
+                  <input type="text" name="prompt_example_notification_message_mobile" placeholder="Notifications will appear on your device" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_message_mobile']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Example Notification Caption</label>
-                  <input type="text" name="prompt_example_notification_caption" placeholder="(you can unsubscribe anytime)" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['prompt_example_notification_caption']); ?>">
+                  <input type="text" name="prompt_example_notification_caption" placeholder="(you can unsubscribe anytime)" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_caption']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Accept Button Text</label>
-                  <input type="text" name="prompt_accept_button_text" placeholder="CONTINUE" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['prompt_accept_button_text']); ?>">
+                  <input type="text" name="prompt_accept_button_text" placeholder="CONTINUE" value="<?php echo esc_attr($onesignal_wp_settings['prompt_accept_button_text']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Cancel Button Text</label>
-                  <input type="text" name="prompt_cancel_button_text" placeholder="NO THANKS" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['prompt_cancel_button_text']); ?>">
+                  <input type="text" name="prompt_cancel_button_text" placeholder="NO THANKS" value="<?php echo esc_attr($onesignal_wp_settings['prompt_cancel_button_text']); ?>">
               </div>
           </div>
         </div>
@@ -689,7 +689,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
         </div>
         <div class="ui borderless shadowless segment" style="position: relative;">
-            <img class="img-responsive no-center" src="<?php echo ONESIGNAL_PLUGIN_URL."views/images/settings/welcome-notification.jpg" ?>" width="360">
+            <img class="img-responsive no-center" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/welcome-notification.jpg") ?>" width="360">
             <div class="explanation">
               <p>A welcome notification is sent to new visitors after subscribing. A new visitor is someone who hasn't previously registered. If a user's browser cache is cleared, the user is considered new again.</p>
             </div>
@@ -701,15 +701,15 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             </div>
             <div class="field welcome-notification-feature">
                 <label>Title<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification Title" data-content="The welcome notification's title. You can localize this to your own language. If not set, the site's title will be used. Set to one space ' ' to clear the title, although this is not recommended." data-variation="wide"></i></label>
-                <input type="text" placeholder="(defaults to your website's title if blank)" name="welcome_notification_title" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['welcome_notification_title']); ?>">
+                <input type="text" placeholder="(defaults to your website's title if blank)" name="welcome_notification_title" value="<?php echo esc_attr($onesignal_wp_settings['welcome_notification_title']); ?>">
             </div>
             <div class="field welcome-notification-feature">
                 <label>Message<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification Message" data-content="The welcome notification's message. You can localize this to your own language. A message is required. If left blank, the default of 'Thanks for subscribing!' will be used." data-variation="wide"></i></label>
-                <input type="text" placeholder="Thanks for subscribing!" name="welcome_notification_message" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['welcome_notification_message']); ?>">
+                <input type="text" placeholder="Thanks for subscribing!" name="welcome_notification_message" value="<?php echo esc_attr($onesignal_wp_settings['welcome_notification_message']); ?>">
             </div>
           <div class="field welcome-notification-feature">
             <label>URL<i class="tiny circular help icon link" role="popup" data-title="Welcome Notification URL" data-content="The webpage to open when clicking the notification. If left blank, your main site URL will be used as a default." data-variation="wide"></i></label>
-            <input type="text" placeholder="(defaults to your website's URL if blank)" name="welcome_notification_url" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['welcome_notification_url']); ?>">
+            <input type="text" placeholder="(defaults to your website's URL if blank)" name="welcome_notification_url" value="<?php echo esc_attr($onesignal_wp_settings['welcome_notification_url']); ?>">
           </div>
         </div>
         <div class="ui dividing header">
@@ -741,7 +741,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
         <div class="ui borderless shadowless segment">
           <div class="field">
             <label>Additional Notification URL Parameters<i class="tiny circular help icon link" role="popup" data-html="Adds the specified string as extra URL parameters to your notification URL so that they can be tracked as an event by your analytics system. <em>Please escape your parameter values</em>; your input will be added as-is to the end of your notification URL. Example:</p>If you want:<em><li><code>utm_medium</code> to be <code>ppc</code></li><li><code>utm_source</code> to be <code>adwords</code></li><li><code>utm_campaign</code> to be <code>snow boots</code></li><li><code>utm_content</code> to be <code>durable snow boots</code></li></em><p><p>Then use the following string:</p><p><code style='word-break: break-all;'>utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots</code></p>" data-variation="wide"></i></label>
-            <input type="text" placeholder="utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots" name="utm_additional_url_params" value="<?php echo OneSignalUtils::html_safe($onesignal_wp_settings['utm_additional_url_params']); ?>">
+            <input type="text" placeholder="utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots" name="utm_additional_url_params" value="<?php echo esc_attr($onesignal_wp_settings['utm_additional_url_params']); ?>">
           </div>
         </div>
         <div class="ui dividing header">

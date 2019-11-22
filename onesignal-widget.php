@@ -14,10 +14,10 @@ class OneSignalWidget extends WP_Widget {
     $text = ! empty( $instance['text'] ) ? $instance['text'] : 'Subscribe to notifications';
 		?>
 		<p>
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
-		<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
-    		<label for="<?php echo $this->get_field_id( 'text' ); ?>"><?php _e( 'Body:' ); ?></label> 
-		<input class="widefat" id="<?php echo $this->get_field_id( 'text' ); ?>" name="<?php echo $this->get_field_name( 'text' ); ?>" type="text" value="<?php echo esc_attr( $text ); ?>">
+		<label for="<?php echo esc_attr($this->get_field_id( 'title' )); ?>"><?php esc_attr_e( 'Title:' ); ?></label> 
+		<input class="widefat" id="<?php echo esc_attr($this->get_field_id( 'title' )); ?>" name="<?php echo esc_attr($this->get_field_name( 'title' )); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
+    		<label for="<?php echo esc_attr($this->get_field_id( 'text' )); ?>"><?php esc_attr_e( 'Body:' ); ?></label> 
+		<input class="widefat" id="<?php echo esc_attr($this->get_field_id( 'text' )); ?>" name="<?php echo esc_attr($this->get_field_name( 'text' )); ?>" type="text" value="<?php echo esc_attr( $text ); ?>">
 		</p>
 		<?php 
 	}
@@ -32,14 +32,14 @@ class OneSignalWidget extends WP_Widget {
 
 	// Public display
 	function widget($args, $instance) {
-		echo $args['before_widget'];
+		echo esc_attr($args['before_widget']);
 		if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
+			echo esc_attr($args['before_title']) . esc_attr(apply_filters( 'widget_title', $instance['title'])). esc_attr($args['after_title']);
 		}
     if ( ! empty( $instance['text'] ) ) {
-			echo '<a href="#" class="OneSignal-prompt">' . $instance['text'] . '</a>';
+			echo '<a href="#" class="OneSignal-prompt">' . esc_attr($instance['text']) . '</a>';
 		}
-		echo $args['after_widget'];
+		echo esc_attr($args['after_widget']);
 	}
 }
 

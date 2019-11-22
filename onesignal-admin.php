@@ -288,10 +288,10 @@ class OneSignal_Admin
         ?>
     
 	    <input type="hidden" name="onesignal_meta_box_present" value="true"></input>
-      <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($meta_box_checkbox_send_notification) {
-            echo 'checked';
-        } ?>></input>
-      <label>
+        <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($meta_box_checkbox_send_notification) {
+                echo 'checked';
+            } ?>></input>
+        <label>
         <?php if ($post->post_status === 'publish') {
             echo esc_attr('Send notification on '.$post_type.' update');
         } else {
@@ -584,6 +584,13 @@ class OneSignal_Admin
     public static function send_notification_on_wp_post($new_status, $old_status, $post)
     {
         try {
+            $nonce = (isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? filter_var(isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]), FILTER_SANITIZE_STRING) : '');
+
+            // Verify that the nonce is valid.
+            if (!wp_verify_nonce($nonce, OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
+                return;
+            }
+            
             if (!function_exists('curl_init')) {
 
                 return;
@@ -604,7 +611,6 @@ class OneSignal_Admin
 
             /* Settings related to creating a post involving the WordPress editor displaying the OneSignal meta box
              **********************************************************************************************************/
-
             /* Returns true if there is POST data */
             $was_posted = !empty(isset($_POST));
 
@@ -836,7 +842,6 @@ class OneSignal_Admin
 
                 if (defined('ONESIGNAL_DEBUG') || class_exists('WDS_Log_Post')) {
                     fclose($out);
-                    $debug_output = ob_get_clean();
                 }
 
                 self::update_last_sent_timestamp();

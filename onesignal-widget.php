@@ -8,7 +8,7 @@ class OneSignalWidget extends WP_Widget {
     parent::__construct('OneSignalWidget', 'OneSignal', array( 'description' => 'Subscribe to notifications'));
 	}
   
-  // Admin editor
+    // Admin editor
 	function form($instance) {
     $title = ! empty( $instance['title'] ) ? $instance['title'] : 'Follow';
     $text = ! empty( $instance['text'] ) ? $instance['text'] : 'Subscribe to notifications';
@@ -24,8 +24,8 @@ class OneSignalWidget extends WP_Widget {
   
 	function update($new_instance, $old_instance) {
 		$instance = array();
-		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
-    $instance['text'] = ( ! empty( $new_instance['text'] ) ) ? strip_tags( $new_instance['text'] ) : '';
+		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? wp_strip_all_tags( $new_instance['title'] ) : '';
+    	$instance['text'] = ( ! empty( $new_instance['text'] ) ) ? wp_strip_all_tags( $new_instance['text'] ) : '';
     
 		return $instance;
 	}
@@ -36,7 +36,7 @@ class OneSignalWidget extends WP_Widget {
 		if ( ! empty( $instance['title'] ) ) {
 			echo esc_attr($args['before_title']) . esc_attr(apply_filters( 'widget_title', $instance['title'])). esc_attr($args['after_title']);
 		}
-    if ( ! empty( $instance['text'] ) ) {
+    	if ( ! empty( $instance['text'] ) ) {
 			echo '<a href="#" class="OneSignal-prompt">' . esc_attr($instance['text']) . '</a>';
 		}
 		echo esc_attr($args['after_widget']);

@@ -25,7 +25,7 @@ class OneSignal_Public
     {
         $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
-        if (array_key_exists('subdomain', $onesignal_wp_settings && $onesignal_wp_settings['subdomain'] === '')) {
+        if (array_key_exists('subdomain', $onesignal_wp_settings) && $onesignal_wp_settings['subdomain'] === '') {
             if (strpos(ONESIGNAL_PLUGIN_URL, 'http://localhost') === false && strpos(ONESIGNAL_PLUGIN_URL, 'http://127.0.0.1') === false) {
                 $current_plugin_url = preg_replace("/(http:\/\/)/i", 'https://', ONESIGNAL_PLUGIN_URL);
             } else {

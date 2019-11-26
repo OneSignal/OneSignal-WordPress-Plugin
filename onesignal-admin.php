@@ -25,7 +25,7 @@ add_action('wp_ajax_has_metadata', 'has_metadata');
 function has_metadata()
 {
     $post_id = (isset($_GET['post_id']) ? filter_var($_GET['post_id'], FILTER_SANITIZE_NUMBER_INT) : '');
-
+    
     if (is_null($post_id)) {
         $data = array('error' => 'could not get post id');
     } else {

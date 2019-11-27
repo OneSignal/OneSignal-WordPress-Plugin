@@ -116,7 +116,7 @@ class OneSignal_Admin
                       case E_CORE_WARNING:
                       case E_COMPILE_WARNING:
                       case E_PARSE:
-                        // exception
+                        return false;
                     }
                 } catch (Exception $ex) {
                     return true;
@@ -695,7 +695,7 @@ class OneSignal_Admin
                         $site_title = qtrans_use($qtransLang, $site_title, false);
                         $notif_content = qtrans_use($qtransLang, $notif_content, false);
                     } catch (Exception $e) {
-                        // exception 
+                        return new WP_Error('err', __( "OneSignal: There was a problem sending a notification"));
                     }
                 }
 
@@ -846,9 +846,8 @@ class OneSignal_Admin
                 return $response;
             }
         } catch (Exception $e) {
-            // exception
-        }
-    }
+            return new WP_Error('err', __( "OneSignal: There was a problem sending a notification"));
+        } }
 
     public static function was_post_restored_from_trash($old_status, $new_status)
     {

@@ -583,10 +583,14 @@ class OneSignal_Admin
     public static function send_notification_on_wp_post($new_status, $old_status, $post)
     {
         try {
-            $nonce = (isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? filter_var(isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]), FILTER_SANITIZE_STRING) : '');
-	    
+	    // quirk of Gutenberg editor leads to two passes if meta box is added
+	    // conditional removes first pass
+	    if( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+	    	return;
+	    }
+
 	    // Verify that the nonce is valid.
-            if (!$nonce || !check_admin_referer(OneSignal_Admin::$SAVE_POST_NONCE_ACTION, OneSignal_Admin::$SAVE_POST_NONCE_KEY)) {
+            if (!check_admin_referer(OneSignal_Admin::$SAVE_POST_NONCE_ACTION, OneSignal_Admin::$SAVE_POST_NONCE_KEY)) {
 		    return;
 	    }
             
@@ -770,8 +774,8 @@ class OneSignal_Admin
                     'body' => wp_json_encode($fields),
                     'timeout' => 3,
                 );
-
-                $response = wp_remote_post($onesignal_post_url, $request);
+		
+		$response = wp_remote_post($onesignal_post_url, $request);
 
                 if (is_wp_error($response) || !is_array($response) || !isset($response['body'])) {
                     $status = $response->get_error_code(); 				// custom code for WP_ERROR

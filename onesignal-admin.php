@@ -25,7 +25,6 @@ add_action('wp_ajax_has_metadata', 'has_metadata');
 function has_metadata()
 {
     $post_id = (isset($_GET['post_id']) ? filter_var($_GET['post_id'], FILTER_SANITIZE_NUMBER_INT) : '');
-    
     if (is_null($post_id)) {
         $data = array('error' => 'could not get post id');
     } else {
@@ -585,17 +584,12 @@ class OneSignal_Admin
     {
         try {
             $nonce = (isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? filter_var(isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]), FILTER_SANITIZE_STRING) : '');
-
-            // Verify that the nonce is valid.
-            if (!wp_verify_nonce($nonce, OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
-                return;
-            }
+	    
+	    // Verify that the nonce is valid.
+            if (!$nonce || !check_admin_referer(OneSignal_Admin::$SAVE_POST_NONCE_ACTION, OneSignal_Admin::$SAVE_POST_NONCE_KEY)) {
+		    return;
+	    }
             
-            if (!function_exists('curl_init')) {
-
-                return;
-            }
-
             $time_to_wait = self::get_sending_rate_limit_wait_time();
             if ($time_to_wait > 0) {
                 set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
@@ -845,7 +839,6 @@ class OneSignal_Admin
                 }
 
                 self::update_last_sent_timestamp();
-
                 return $response;
             }
         } catch (Exception $e) {

@@ -362,6 +362,7 @@ class OneSignal_Public
 
       function documentInitOneSignal() {
         var oneSignal_elements = document.getElementsByClassName("OneSignal-prompt");
+        var oneSignal_no_js_elements = document.getElementsByClassName("OneSignal-prompt-no-js");
 
         <?php
         if ($onesignal_wp_settings['use_modal_prompt'] == '1') {
@@ -369,10 +370,14 @@ class OneSignal_Public
         } else {
             echo "var oneSignalLinkClickHandler = function(event) { OneSignal.push(['registerForPushNotifications']); event.preventDefault(); };";
         } ?>
-        for(var i = 0; i < oneSignal_elements.length; i++)
+        for(var i = 0; i < oneSignal_elements.length; i++) {
+          oneSignal_elements[i].style.display = 'inherit';
           oneSignal_elements[i].addEventListener('click', oneSignalLinkClickHandler, false);
+        }
+        for(var i = 0; i < oneSignal_no_js_elements.length; i++) {
+          oneSignal_no_js_elements[i].style.display = 'none';
+        }
       }
-
       if (document.readyState === 'complete') {
            documentInitOneSignal();
       }

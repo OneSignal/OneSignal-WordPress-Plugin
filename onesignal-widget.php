@@ -40,7 +40,7 @@ class OneSignalWidget extends WP_Widget {
 		if ( ! empty( $instance['text'] ) ) {
 			printf(
 				'<div class="OneSignal-prompt-no-js">%s</div>',
-				__( 'Apologies, Javascript is required for this feature.' )
+				__( 'Loading notification status...' )
 			);
 			echo '<a href="#" class="OneSignal-prompt" style="display: none;">' . $instance['text'] . '</a>';
 		}

@@ -38,7 +38,7 @@ class OneSignalWidget extends WP_Widget {
 		}
 		echo '<div class="textwidget">';
 		if ( ! empty( $instance['text'] ) ) {
-			echo '<a href="#" class="OneSignal-prompt">' . $instance['text'] . '</a>';
+			echo '<a href="#" class="OneSignal-prompt" style="display: none;">' . $instance['text'] . '</a>';
 		}
 		echo '</div>';
 		echo $args['after_widget'];

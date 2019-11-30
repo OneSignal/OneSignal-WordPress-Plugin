@@ -36,9 +36,11 @@ class OneSignalWidget extends WP_Widget {
 		if ( ! empty( $instance['title'] ) ) {
 			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
 		}
-    if ( ! empty( $instance['text'] ) ) {
+		echo '<div class="textwidget">';
+		if ( ! empty( $instance['text'] ) ) {
 			echo '<a href="#" class="OneSignal-prompt">' . $instance['text'] . '</a>';
 		}
+		echo '</div>';
 		echo $args['after_widget'];
 	}
 }

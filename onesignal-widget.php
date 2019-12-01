@@ -23,7 +23,7 @@ class OneSignalWidget extends WP_Widget {
 	// Admin editor
 	function form($instance) {
 		$title      = ! empty( $instance['title'] ) ? $instance['title'] : $this->default_strings['title'];
-		$text       = ! empty( $instance['text'] ) ? $instance['text'] : $this->default_strings['subscribe'];
+		$text       = ! empty( $instance['text'] ) ? $instance['text'] : $this->default_strings['text'];
 		$unsub_text = ! empty( $instance['unsub-text'] ) ? $instance['unsub-text'] : $this->default_strings['unsubscribe'];
 		?>
 		<p>

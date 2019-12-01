@@ -382,7 +382,12 @@ class OneSignal_Public
             if (state.isOptedOut) {
               OneSignal.setSubscription(true);
             } else {
-              OneSignal.registerForPushNotifications();
+                <?php
+                if ($onesignal_wp_settings['use_modal_prompt'] == '1') {
+                    echo "OneSignal.registerForPushNotifications({ modalPrompt: true });";
+                } else {
+                    echo "OneSignal.registerForPushNotifications();";
+                } ?>
             }
           }
         });

@@ -360,17 +360,78 @@ class OneSignal_Public
         } ?>
       });
 
-      function documentInitOneSignal() {
-        var oneSignal_elements = document.getElementsByClassName("OneSignal-prompt");
-        var oneSignal_no_js_elements = document.getElementsByClassName("OneSignal-prompt-no-js");
-
-        for(var i = 0; i < oneSignal_elements.length; i++) {
-          oneSignal_elements[i].style.display = 'inherit';
-        }
-        for(var i = 0; i < oneSignal_no_js_elements.length; i++) {
-          oneSignal_no_js_elements[i].style.display = 'none';
-        }
+      function getSubscriptionState() {
+        return Promise.all([
+          OneSignal.isPushNotificationsEnabled(),
+          OneSignal.isOptedOut()
+        ]).then(function(result) {
+          var isPushEnabled = result[0];
+          var isOptedOut = result[1];
+          return {
+            isPushEnabled: isPushEnabled,
+            isOptedOut: isOptedOut
+          };
+        });
       }
+
+      function onManageWebPushSubscriptionButtonClicked(event) {
+        getSubscriptionState().then(function(state) {
+          if (state.isPushEnabled) {
+            OneSignal.setSubscription(false);
+          } else {
+            if (state.isOptedOut) {
+              OneSignal.setSubscription(true);
+            } else {
+              OneSignal.registerForPushNotifications();
+            }
+          }
+        });
+        event.preventDefault();
+      }
+
+      function updateMangeWebPushSubscriptionButton(buttonSelector) {
+        getSubscriptionState().then(function(state) {
+          var elements = document.querySelectorAll(buttonSelector);
+          if (elements === null) {
+            return;
+          }
+          for(var i = 0; i < elements.length; i++) {
+            var buttonText = !state.isPushEnabled || state.isOptedOut ?
+              elements[i].dataset.onesignalSubscribe :
+              elements[i].dataset.onesignalUnsubscribe;
+            elements[i].removeEventListener('click', onManageWebPushSubscriptionButtonClicked);
+            elements[i].addEventListener('click', onManageWebPushSubscriptionButtonClicked);
+            elements[i].textContent = buttonText;
+          }
+        });
+      }
+
+      function documentInitOneSignal() {
+        OneSignal.push(function() {
+          var buttonSelector = '.OneSignal-prompt';
+          var noJsSelector = '.OneSignal-prompt-no-js';
+
+          if (!OneSignal.isPushNotificationsSupported()) {
+            return;
+          }
+
+          updateMangeWebPushSubscriptionButton(buttonSelector);
+
+          var oneSignal_elements = document.querySelectorAll(buttonSelector);
+          var oneSignal_no_js_elements = document.querySelectorAll(noJsSelector);
+          for(var i = 0; i < oneSignal_elements.length; i++) {
+            oneSignal_elements[i].style.display = 'inherit';
+          }
+          for(var i = 0; i < oneSignal_no_js_elements.length; i++) {
+            oneSignal_no_js_elements[i].style.display = 'none';
+          }
+
+          OneSignal.on("subscriptionChange", function(isSubscribed) {
+            updateMangeWebPushSubscriptionButton(buttonSelector);
+          });
+        });
+      }
+
       if (document.readyState === 'complete') {
            documentInitOneSignal();
       }

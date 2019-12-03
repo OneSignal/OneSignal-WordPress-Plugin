@@ -21,6 +21,33 @@ class OneSignal_Public
     <?php
     }
 
+    function add_async_forescript($url)
+    {
+        if (strpos($url, '#asyncload')===false)
+            return $url;
+        else if (is_admin())
+            return str_replace('#asyncload', '', $url);
+        else
+            return str_replace('#asyncload', '', $url)."' async='async"; 
+    }
+    
+    public static function onesignal_settings_check($key, $settings, $equality, $value)
+    {
+        $key_exists = array_key_exists($key, $settings);
+
+        if(isset($equality)){
+            if($equality){
+                $is_valid = $settings[$key] === $value;
+            } else {
+                $is_valid = $settings[$key] !== $value;
+            }
+        } else {
+            return $key_exists;
+        }
+
+        return $key_exists && $is_valid;
+    }
+
     public static function onesignal_header()
     {
         $onesignal_wp_settings = OneSignal::get_onesignal_settings();
@@ -34,11 +61,13 @@ class OneSignal_Public
             OneSignal_Public::insert_onesignal_stamp();
         } ?>
     <?php
+    add_filter('clean_url', 'add_async_forescript', 11, 1);
+
     if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
-        wp_register_script('local_sdk', plugins_url('https://localhost:3001/sdks/OneSignalSDK.js', __FILE__), array('jquery'), false, true);
+        wp_register_script('local_sdk', plugins_url('https://localhost:3001/sdks/OneSignalSDK.js#asyncload', __FILE__), array('jquery'), false, true);
         wp_enqueue_script('local_sdk');
     } else {
-        wp_register_script('remote_sdk', plugins_url('https://cdn.onesignal.com/sdks/OneSignalSDK.js', __FILE__), array('jquery'), false, true);
+        wp_register_script('remote_sdk', plugins_url('https://cdn.onesignal.com/sdks/OneSignalSDK.js#asyncload', __FILE__), array('jquery'), false, true);
         wp_enqueue_script('remote_sdk');
     } ?>
     <script>
@@ -51,8 +80,7 @@ class OneSignal_Public
         OneSignal.SERVICE_WORKER_PARAM = { scope: '/' };
 
         <?php
-
-        if (array_key_exists('default_url', $onesignal_wp_settings) &&  $onesignal_wp_settings['default_url'] !== '') {
+        if (onesignal_settings_check('default_url', $onesignal_wp_settings, false, '')) {
             echo 'OneSignal.setDefaultNotificationUrl("'.esc_url($onesignal_wp_settings['default_url']).'");';
         } else {
             echo 'OneSignal.setDefaultNotificationUrl("'.esc_url(get_site_url())."\");\n";
@@ -64,24 +92,24 @@ class OneSignal_Public
         echo "oneSignal_options['wordpress'] = true;\n";
         echo "oneSignal_options['appId'] = '".esc_html($onesignal_wp_settings['app_id'])."';\n";
 
-        if (array_key_exists('prompt_auto_register', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_auto_register'] === '1') {
+        if (onesignal_settings_check('prompt_auto_register', $onesignal_wp_settings, true, '1')) {
             echo "oneSignal_options['autoRegister'] = true;\n";
         } else {
             echo "oneSignal_options['autoRegister'] = false;\n";
         }
 
-        if (array_key_exists('use_http_permission_request', $onesignal_wp_settings) && $onesignal_wp_settings['use_http_permission_request'] === '1') {
+        if (onesignal_settings_check('use_http_permission_request', $onesignal_wp_settings, true, '1')) {
             echo "oneSignal_options['httpPermissionRequest'] = { };\n";
             echo "oneSignal_options['httpPermissionRequest']['enable'] = true;\n";
 
-            if (array_key_exists('customize_http_permission_request', $onesignal_wp_settings) && $onesignal_wp_settings['customize_http_permission_request'] === '1') {
+            if (onesignal_settings_check('customize_http_permission_request', $onesignal_wp_settings, true, '1')) {
                 echo "oneSignal_options['httpPermissionRequest']['modalTitle'] = \"".esc_html($onesignal_wp_settings['http_permission_request_modal_title'])."\";\n";
                 echo "oneSignal_options['httpPermissionRequest']['modalMessage'] = \"".esc_html($onesignal_wp_settings['http_permission_request_modal_message'])."\";\n";
                 echo "oneSignal_options['httpPermissionRequest']['modalButtonText'] = \"".esc_html($onesignal_wp_settings['http_permission_request_modal_button_text'])."\";\n";
             }
         }
 
-        if (array_key_exists('send_welcome_notification', $onesignal_wp_settings) && $onesignal_wp_settings['send_welcome_notification'] === '1') {
+        if (onesignal_settings_check('send_welcome_notification', $onesignal_wp_settings, true, '1')) {
             echo "oneSignal_options['welcomeNotification'] = { };\n";
             echo "oneSignal_options['welcomeNotification']['title'] = \"".esc_html($onesignal_wp_settings['welcome_notification_title'])."\";\n";
             echo "oneSignal_options['welcomeNotification']['message'] = \"".esc_html($onesignal_wp_settings['welcome_notification_message'])."\";\n";
@@ -93,77 +121,77 @@ class OneSignal_Public
             echo "oneSignal_options['welcomeNotification']['disable'] = true;\n";
         }
 
-        if (array_key_exists('subdomain', $onesignal_wp_settings) && $onesignal_wp_settings['subdomain'] !== '') {
+        if (onesignal_settings_check('subdomain', $onesignal_wp_settings, false, '')) {
             echo "oneSignal_options['subdomainName'] = \"".esc_html($onesignal_wp_settings['subdomain'])."\";\n";
         } else {
             echo "oneSignal_options['path'] = \"".esc_html($current_plugin_url)."sdk_files/\";\n";
         }
 
-        if (array_key_exists('safari_web_id', $onesignal_wp_settings) && $onesignal_wp_settings['safari_web_id']) {
+        if (onesignal_settings_check('safari_web_id', $onesignal_wp_settings)) {
             echo "oneSignal_options['safari_web_id'] = \"".esc_html($onesignal_wp_settings['safari_web_id'])."\";\n";
         }
 
-        if (array_key_exists('persist_notifications', $onesignal_wp_settings) && $onesignal_wp_settings['persist_notifications'] === 'platform-default') {
+        if (onesignal_settings_check('persist_notifications', $onesignal_wp_settings, true, 'platform-default')) {
             echo "oneSignal_options['persistNotification'] = false;\n";
-        } elseif (array_key_exists('persist_notifications', $onesignal_wp_settings) && $onesignal_wp_settings['persist_notifications'] === 'yes-all') {
+        } elseif (onesignal_settings_check('persist_notifications', $onesignal_wp_settings, true, 'yes-all')) {
             echo "oneSignal_options['persistNotification'] = true;\n";
         }
 
         echo "oneSignal_options['promptOptions'] = { };\n";
-        if (array_key_exists('prompt_customize_enable', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_customize_enable'] === '1') {
-            if (array_key_exists('prompt_action_message', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_action_message'] !== '') {
+        if (onesignal_settings_check('prompt_customize_enable', $onesignal_wp_settings, true, '1')) {
+            if (onesignal_settings_check('prompt_action_message', $onesignal_wp_settings, false, '')) {
                 echo "oneSignal_options['promptOptions']['actionMessage'] = '".esc_html($onesignal_wp_settings['prompt_action_message'])."';\n";
             }
-            if (array_key_exists('prompt_example_notification_title_desktop', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_example_notification_title_desktop'] !== '') {
+            if (onesignal_settings_check('prompt_example_notification_title_desktop', $onesignal_wp_settings, false, '')) {
                 echo "oneSignal_options['promptOptions']['exampleNotificationTitleDesktop'] = '".esc_html($onesignal_wp_settings['prompt_example_notification_title_desktop'])."';\n";
             }
-            if (array_key_exists('prompt_example_notification_message_desktop', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_example_notification_message_desktop'] !== '') {
+            if (onesignal_settings_check('prompt_example_notification_message_desktop', $onesignal_wp_settings, false, '')) {
                 echo "oneSignal_options['promptOptions']['exampleNotificationMessageDesktop'] = '".esc_html($onesignal_wp_settings['prompt_example_notification_message_desktop'])."';\n";
             }
-            if (array_key_exists('prompt_example_notification_title_mobile', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_example_notification_title_mobile'] !== '') {
+            if (onesignal_settings_check('prompt_example_notification_title_mobile', $onesignal_wp_settings, false, '')) {
                 echo "oneSignal_options['promptOptions']['exampleNotificationTitleMobile'] = '".esc_html($onesignal_wp_settings['prompt_example_notification_title_mobile'])."';\n";
             }
-            if (array_key_exists('prompt_example_notification_message_mobile', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_example_notification_message_mobile'] !== '') {
+            if (onesignal_settings_check('prompt_example_notification_message_mobile', $onesignal_wp_settings, false, '')) {
                 echo "oneSignal_options['promptOptions']['exampleNotificationMessageMobile'] = '".esc_html($onesignal_wp_settings['prompt_example_notification_message_mobile'])."';\n";
             }
-            if (array_key_exists('prompt_example_notification_caption', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_example_notification_caption'] !== '') {
+            if (onesignal_settings_check('prompt_example_notification_caption', $onesignal_wp_settings, false, '')) {
                 echo "oneSignal_options['promptOptions']['exampleNotificationCaption'] = '".esc_html($onesignal_wp_settings['prompt_example_notification_caption'])."';\n";
             }
-            if (array_key_exists('prompt_accept_button_text', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_accept_button_text'] !== '') {
+            if (onesignal_settings_check('prompt_accept_button_text', $onesignal_wp_settings, false, '')) {
                 echo "oneSignal_options['promptOptions']['acceptButtonText'] = '".esc_html($onesignal_wp_settings['prompt_accept_button_text'])."';\n";
             }
-            if (array_key_exists('prompt_cancel_button_text', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_cancel_button_text'] !== '') {
+            if (onesignal_settings_check('prompt_cancel_button_text', $onesignal_wp_settings, false, '')) {
                 echo "oneSignal_options['promptOptions']['cancelButtonText'] = '".esc_html($onesignal_wp_settings['prompt_cancel_button_text'])."';\n";
             }
-            if (array_key_exists('prompt_site_name', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_site_name'] !== '') {
+            if (onesignal_settings_check('prompt_site_name', $onesignal_wp_settings, false, '')) {
                 echo "oneSignal_options['promptOptions']['siteName'] = '".esc_html($onesignal_wp_settings['prompt_site_name'])."';\n";
             }
-            if (array_key_exists('prompt_auto_accept_title', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_auto_accept_title'] !== '') {
+            if (onesignal_settings_check('prompt_auto_accept_title', $onesignal_wp_settings, false, '')) {
                 echo "oneSignal_options['promptOptions']['autoAcceptTitle'] = '".esc_html($onesignal_wp_settings['prompt_auto_accept_title'])."';\n";
             }
         }
 
-        if (array_key_exists('notifyButton_enable', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_enable'] === '1') {
+        if (onesignal_settings_check('notifyButton_enable', $onesignal_wp_settings, true, '1')) {
             echo "oneSignal_options['notifyButton'] = { };\n";
             echo "oneSignal_options['notifyButton']['enable'] = true;\n";
 
-            if (array_key_exists('notifyButton_position', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_position'] !== '') {
+            if (onesignal_settings_check('notifyButton_position', $onesignal_wp_settings, false, '')) {
                 echo "oneSignal_options['notifyButton']['position'] = '".esc_html($onesignal_wp_settings['notifyButton_position'])."';\n";
             }
-            if (array_key_exists('notifyButton_theme', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_theme'] !== '') {
+            if (onesignal_settings_check('notifyButton_theme', $onesignal_wp_settings, false, '')) {
                 echo "oneSignal_options['notifyButton']['theme'] = '".esc_html($onesignal_wp_settings['notifyButton_theme'])."';\n";
             }
-            if (array_key_exists('notifyButton_size', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_size'] !== '') {
+            if (onesignal_settings_check('notifyButton_size', $onesignal_wp_settings,false, '')) {
                 echo "oneSignal_options['notifyButton']['size'] = '".esc_html($onesignal_wp_settings['notifyButton_size'])."';\n";
             }
 
-            if (array_key_exists('notifyButton_prenotify', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_prenotify'] === '1') {
+            if (onesignal_settings_check('notifyButton_prenotify', $onesignal_wp_settings, true, '1')) {
                 echo "oneSignal_options['notifyButton']['prenotify'] = true;\n";
             } else {
                 echo "oneSignal_options['notifyButton']['prenotify'] = false;\n";
             }
 
-            if (array_key_exists('notifyButton_showAfterSubscribed', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_showAfterSubscribed'] !== true) {
+            if (onesignal_settings_check('notifyButton_showAfterSubscribed', $onesignal_wp_settings, false, true)) {
                 echo "oneSignal_options['notifyButton']['displayPredicate'] = function() {
               return OneSignal.isPushNotificationsEnabled()
                       .then(function(isPushEnabled) {
@@ -172,99 +200,99 @@ class OneSignal_Public
             };\n";
             }
 
-            if (array_key_exists('use_modal_prompt', $onesignal_wp_settings) && $onesignal_wp_settings['use_modal_prompt'] === '1') {
+            if (onesignal_settings_check('use_modal_prompt', $onesignal_wp_settings, true, '1')) {
                 echo "oneSignal_options['notifyButton']['modalPrompt'] = true;\n";
             }
 
-            if (array_key_exists('notifyButton_showcredit', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_showcredit'] === '1') {
+            if (onesignal_settings_check('notifyButton_showcredit', $onesignal_wp_settings, true, '1')) {
                 echo "oneSignal_options['notifyButton']['showCredit'] = true;\n";
             } else {
                 echo "oneSignal_options['notifyButton']['showCredit'] = false;\n";
             }
 
-            if (array_key_exists('notifyButton_customize_enable', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_customize_enable'] === '1') {
+            if (onesignal_settings_check('notifyButton_customize_enable', $onesignal_wp_settings, true, '1')) {
                 echo "oneSignal_options['notifyButton']['text'] = {};\n";
-                if (array_key_exists('notifyButton_message_prenotify', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_message_prenotify'] !== '') {
+                if (onesignal_settings_check('notifyButton_message_prenotify', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['text']['message.prenotify'] = '".esc_html($onesignal_wp_settings['notifyButton_message_prenotify'])."';\n";
                 }
-                if (array_key_exists('notifyButton_tip_state_unsubscribed', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_tip_state_unsubscribed'] !== '') {
+                if (onesignal_settings_check('notifyButton_tip_state_unsubscribed', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['text']['tip.state.unsubscribed'] = '".esc_html($onesignal_wp_settings['notifyButton_tip_state_unsubscribed'])."';\n";
                 }
-                if (array_key_exists('notifyButton_tip_state_subscribed', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_tip_state_subscribed'] !== '') {
+                if (onesignal_settings_check('notifyButton_tip_state_subscribed', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['text']['tip.state.subscribed'] = '".esc_html($onesignal_wp_settings['notifyButton_tip_state_subscribed'])."';\n";
                 }
-                if (array_key_exists('notifyButton_tip_state_blocked', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_tip_state_blocked'] !== '') {
+                if (onesignal_settings_check('notifyButton_tip_state_blocked', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['text']['tip.state.blocked'] = '".esc_html($onesignal_wp_settings['notifyButton_tip_state_blocked'])."';\n";
                 }
-                if (array_key_exists('notifyButton_message_action_subscribed', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_message_action_subscribed'] !=='') {
+                if (onesignal_settings_check('notifyButton_message_action_subscribed', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['text']['message.action.subscribed'] = '".esc_html($onesignal_wp_settings['notifyButton_message_action_subscribed'])."';\n";
                 }
-                if (array_key_exists('notifyButton_message_action_resubscribed', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_message_action_resubscribed'] !== '') {
+                if (onesignal_settings_check('notifyButton_message_action_resubscribed', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['text']['message.action.resubscribed'] = '".esc_html($onesignal_wp_settings['notifyButton_message_action_resubscribed'])."';\n";
                 }
-                if (array_key_exists('notifyButton_message_action_unsubscribed', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_message_action_unsubscribed'] !== '') {
+                if (onesignal_settings_check('notifyButton_message_action_unsubscribed', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['text']['message.action.unsubscribed'] = '".esc_html($onesignal_wp_settings['notifyButton_message_action_unsubscribed'])."';\n";
                 }
-                if (array_key_exists('notifyButton_dialog_main_title', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_dialog_main_title'] !== '') {
+                if (onesignal_settings_check('notifyButton_dialog_main_title', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['text']['dialog.main.title'] = '".esc_html($onesignal_wp_settings['notifyButton_dialog_main_title'])."';\n";
                 }
-                if (array_key_exists('notifyButton_dialog_main_button_subscribe', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_dialog_main_button_subscribe'] !== '') {
+                if (onesignal_settings_check('notifyButton_dialog_main_button_subscribe', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['text']['dialog.main.button.subscribe'] = '".esc_html($onesignal_wp_settings['notifyButton_dialog_main_button_subscribe'])."';\n";
                 }
-                if (array_key_exists('notifyButton_dialog_main_button_unsubscribe', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_dialog_main_button_unsubscribe'] !== '') {
+                if (onesignal_settings_check('notifyButton_dialog_main_button_unsubscribe', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['text']['dialog.main.button.unsubscribe'] = '".esc_html($onesignal_wp_settings['notifyButton_dialog_main_button_unsubscribe'])."';\n";
                 }
-                if (array_key_exists('notifyButton_dialog_blocked_title', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_dialog_blocked_title'] !== '') {
+                if (onesignal_settings_check('notifyButton_dialog_blocked_title', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['text']['dialog.blocked.title'] = '".esc_html($onesignal_wp_settings['notifyButton_dialog_blocked_title'])."';\n";
                 }
-                if (array_key_exists('notifyButton_dialog_blocked_message', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_dialog_blocked_message'] !== '') {
+                if (onesignal_settings_check('notifyButton_dialog_blocked_message', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['text']['dialog.blocked.message'] = '".esc_html($onesignal_wp_settings['notifyButton_dialog_blocked_message'])."';\n";
                 }
             }
 
-            if (array_key_exists('notifyButton_customize_colors_enable', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_customize_colors_enable'] === '1') {
+            if (onesignal_settings_check('notifyButton_customize_colors_enable', $onesignal_wp_settings, true, '1')) {
                 echo "oneSignal_options['notifyButton']['colors'] = {};\n";
-                if (array_key_exists('notifyButton_color_background', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_color_background'] !== '') {
+                if (onesignal_settings_check('notifyButton_color_background', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['colors']['circle.background'] = '".esc_html($onesignal_wp_settings['notifyButton_color_background'])."';\n";
                 }
-                if (array_key_exists('notifyButton_color_foreground', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_color_foreground'] !== '') {
+                if (onesignal_settings_check('notifyButton_color_foreground', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['colors']['circle.foreground'] = '".esc_html($onesignal_wp_settings['notifyButton_color_foreground'])."';\n";
                 }
-                if (array_key_exists('notifyButton_color_badge_background', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_color_badge_background'] !== '') {
+                if (onesignal_settings_check('notifyButton_color_badge_background', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['colors']['badge.background'] = '".esc_html($onesignal_wp_settings['notifyButton_color_badge_background'])."';\n";
                 }
-                if (array_key_exists('notifyButton_color_badge_foreground', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_color_badge_foreground'] !== '') {
+                if (onesignal_settings_check('notifyButton_color_badge_foreground', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['colors']['badge.foreground'] = '".esc_html($onesignal_wp_settings['notifyButton_color_badge_foreground'])."';\n";
                 }
-                if (array_key_exists('notifyButton_color_badge_border', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_color_badge_border'] !== '') {
+                if (onesignal_settings_check('notifyButton_color_badge_border', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['colors']['badge.bordercolor'] = '".esc_html($onesignal_wp_settings['notifyButton_color_badge_border'])."';\n";
                 }
-                if (array_key_exists('notifyButton_color_pulse', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_color_pulse'] !== '') {
+                if (onesignal_settings_check('notifyButton_color_pulse', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['colors']['pulse.color'] = '".esc_html($onesignal_wp_settings['notifyButton_color_pulse'])."';\n";
                 }
-                if (array_key_exists('notifyButton_color_popup_button_background', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_color_popup_button_background'] !== '') {
+                if (onesignal_settings_check('notifyButton_color_popup_button_background', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['colors']['dialog.button.background'] = '".esc_html($onesignal_wp_settings['notifyButton_color_popup_button_background'])."';\n";
                 }
-                if (array_key_exists('notifyButton_color_popup_button_background_hover', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_color_popup_button_background_hover'] !== '') {
+                if (onesignal_settings_check('notifyButton_color_popup_button_background_hover', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['colors']['dialog.button.background.hovering'] = '".esc_html($onesignal_wp_settings['notifyButton_color_popup_button_background_hover'])."';\n";
                 }
-                if (array_key_exists('notifyButton_color_popup_button_background_active', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_color_popup_button_background_active'] !== '') {
+                if (onesignal_settings_check('notifyButton_color_popup_button_background_active', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['colors']['dialog.button.background.active'] = '".esc_html($onesignal_wp_settings['notifyButton_color_popup_button_background_active'])."';\n";
                 }
-                if (array_key_exists('notifyButton_color_popup_button_color', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_color_popup_button_color'] !== '') {
+                if (onesignal_settings_check('notifyButton_color_popup_button_color', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['colors']['dialog.button.foreground'] = '".esc_html($onesignal_wp_settings['notifyButton_color_popup_button_color'])."';\n";
                 }
             }
 
-            if (array_key_exists('notifyButton_customize_offset_enable', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_customize_offset_enable'] === '1') {
+            if (onesignal_settings_check('notifyButton_customize_offset_enable', $onesignal_wp_settings, true, '1')) {
                 echo "oneSignal_options['notifyButton']['offset'] = {};\n";
-                if (array_key_exists('notifyButton_offset_bottom', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_offset_bottom'] !== '') {
+                if (onesignal_settings_check('notifyButton_offset_bottom', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['offset']['bottom'] = '".esc_html($onesignal_wp_settings['notifyButton_offset_bottom'])."';\n";
                 }
-                if (array_key_exists('notifyButton_offset_left', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_offset_left'] !== '') {
+                if (onesignal_settings_check('notifyButton_offset_left', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['offset']['left'] = '".esc_html($onesignal_wp_settings['notifyButton_offset_left'])."';\n";
                 }
-                if (array_key_exists('notifyButton_offset_right', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_offset_right'] !== '') {
+                if (onesignal_settings_check('notifyButton_offset_right', $onesignal_wp_settings, false, '')) {
                     echo "oneSignal_options['notifyButton']['offset']['right'] = '".esc_html($onesignal_wp_settings['notifyButton_offset_right'])."';\n";
                 }
             }
@@ -285,7 +313,7 @@ class OneSignal_Public
               <?php
                 }
             } else {
-                if (array_key_exists('use_slidedown_permission_message_for_https', $onesignal_wp_settings) && $onesignal_wp_settings['use_slidedown_permission_message_for_https'] === '1') {
+                if (onesignal_settings_check('use_slidedown_permission_message_for_https', $onesignal_wp_settings, true, '1')) {
                     ?>
               oneSignal_options['autoRegister'] = false;
               OneSignal.showHttpPrompt();
@@ -308,7 +336,7 @@ class OneSignal_Public
         var oneSignal_elements = document.getElementsByClassName("OneSignal-prompt");
 
         <?php
-        if (array_key_exists('use_modal_prompt', $onesignal_wp_settings) && $onesignal_wp_settings['use_modal_prompt'] === '1') {
+        if (onesignal_settings_check('use_modal_prompt', $onesignal_wp_settings, true, '1')) {
             echo "var oneSignalLinkClickHandler = function(event) { OneSignal.push(['registerForPushNotifications', {modalPrompt: true}]); event.preventDefault(); };";
         } else {
             echo "var oneSignalLinkClickHandler = function(event) { OneSignal.push(['registerForPushNotifications']); event.preventDefault(); };";

@@ -24,7 +24,10 @@ function load_javascript()
 add_action('wp_ajax_has_metadata', 'has_metadata');
 function has_metadata()
 {
-    $post_id = (isset($_GET['post_id']) ? filter_var($_GET['post_id'], FILTER_SANITIZE_NUMBER_INT) : '');
+    $post_id = isset($_GET['post_id']) ? 
+            (filter_var($_GET['post_id'], FILTER_SANITIZE_NUMBER_INT))
+            : '';
+    
     if (is_null($post_id)) {
         $data = array('error' => 'could not get post id');
     } else {
@@ -417,7 +420,7 @@ class OneSignal_Admin
 
         OneSignal::save_onesignal_settings($onesignal_wp_settings);
 
-        return $onesignal_wp_settings;
+        return;
     }
 
     public static function saveBooleanSettings(&$onesignal_wp_settings, &$config, $settings)
@@ -610,7 +613,7 @@ class OneSignal_Admin
             /* Settings related to creating a post involving the WordPress editor displaying the OneSignal meta box
              **********************************************************************************************************/
             /* Returns true if there is POST data */
-            $was_posted = !empty(isset($_POST));
+            $was_posted = !empty($_POST);
 
             /* When this post was created or updated, the OneSignal meta box in the WordPress post editor screen was visible */
             $onesignal_meta_box_present = $was_posted && isset($_POST['onesignal_meta_box_present'], $_POST['onesignal_meta_box_present']) && $_POST['onesignal_meta_box_present'] === 'true';

@@ -32,14 +32,14 @@ class OneSignalWidget extends WP_Widget {
 
 	// Public display
 	function widget($args, $instance) {
-		echo esc_attr($args['before_widget']);
+		echo wp_kses_post($args['before_widget']);
 		if ( ! empty( $instance['title'] ) ) {
-			echo esc_attr($args['before_title']) . esc_attr(apply_filters( 'widget_title', $instance['title'])). esc_attr($args['after_title']);
+			echo wp_kses_post($args['before_title']) . wp_kses_post(apply_filters( 'widget_title', $instance['title'])). wp_kses_post($args['after_title']);
 		}
     	if ( ! empty( $instance['text'] ) ) {
-			echo '<a href="#" class="OneSignal-prompt">' . esc_attr($instance['text']) . '</a>';
+			echo '<a href="#" class="OneSignal-prompt">' . wp_kses_post($instance['text']) . '</a>';
 		}
-		echo esc_attr($args['after_widget']);
+		echo wp_kses_post($args['after_widget']);
 	}
 }
 

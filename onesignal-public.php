@@ -277,13 +277,13 @@ class OneSignal_Public
 
             if (array_key_exists('notifyButton_customize_offset_enable', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_customize_offset_enable'] === '1') {
                 echo "oneSignal_options['notifyButton']['offset'] = {};\n";
-                if (valid_for_key('notifyButton_offset_bottom', $onesignal_wp_settings, false, '')) {
+                if (valid_for_key('notifyButton_offset_bottom', $onesignal_wp_settings)) {
                     echo "oneSignal_options['notifyButton']['offset']['bottom'] = '".esc_html($onesignal_wp_settings['notifyButton_offset_bottom'])."';\n";
                 }
-                if (valid_for_key('notifyButton_offset_left', $onesignal_wp_settings, false, '')) {
+                if (valid_for_key('notifyButton_offset_left', $onesignal_wp_settings)) {
                     echo "oneSignal_options['notifyButton']['offset']['left'] = '".esc_html($onesignal_wp_settings['notifyButton_offset_left'])."';\n";
                 }
-                if (valid_for_key('notifyButton_offset_right', $onesignal_wp_settings, false, '')) {
+                if (valid_for_key('notifyButton_offset_right', $onesignal_wp_settings)) {
                     echo "oneSignal_options['notifyButton']['offset']['right'] = '".esc_html($onesignal_wp_settings['notifyButton_offset_right'])."';\n";
                 }
             }

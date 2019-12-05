@@ -580,6 +580,22 @@ class OneSignal_Admin
         return substr($sha1, 0, 8).'-'.substr($sha1, 8, 4).'-'.substr($sha1, 12, 4).'-'.substr($sha1, 16, 4).'-'.substr($sha1, 20, 12);
     }
 
+    public static function exec_post_request($onesignal_post_url, $request, $retry_count) { 
+	if ($retry_count == 1) { 
+		return NULL;
+	}
+
+	$response = wp_remote_post($onesignal_post_url, $request);
+
+	error_log('JSON'.json_encode($response));
+	if (is_wp_error($response) || !is_array($response) || !isset($response['body'])) {
+		error_log("RETRYING".$retry_count);
+		return self::exec_post_request($onesignal_post_url, $request, $retry_count-1); 
+	}
+
+	return $response;
+    }
+
     /**
      * The main function that actually sends a notification to OneSignal.
      */
@@ -777,15 +793,14 @@ class OneSignal_Admin
                     'body' => wp_json_encode($fields),
                     'timeout' => 3,
                 );
+
+		$response = self::exec_post_request($onesignal_post_url, $request, 20);  // retry 20 times
 		
-		$response = wp_remote_post($onesignal_post_url, $request);
-
-                if (is_wp_error($response) || !is_array($response) || !isset($response['body'])) {
-                    $status = $response->get_error_code(); 				// custom code for WP_ERROR
-                    return;
+		if (is_null($response)) {
+		    return;
                 }
-
-                if (isset($response['body'])) {
+		
+		if (isset($response['body'])) {
                     $response_body = json_decode($response['body'], true);
                 }
 

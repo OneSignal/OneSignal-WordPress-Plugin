@@ -587,9 +587,7 @@ class OneSignal_Admin
 
 	$response = wp_remote_post($onesignal_post_url, $request);
 
-	error_log('JSON'.json_encode($response));
 	if (is_wp_error($response) || !is_array($response) || !isset($response['body'])) {
-		error_log("RETRYING".$retry_count);
 		return self::exec_post_request($onesignal_post_url, $request, $retry_count-1); 
 	}
 

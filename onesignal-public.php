@@ -21,7 +21,7 @@ class OneSignal_Public
     <?php
     }
 
-    function add_async_forescript($url)
+    function add_async_for_script($url)
     {
         if (strpos($url, '#asyncload')===false)
             return $url;
@@ -52,7 +52,7 @@ class OneSignal_Public
             OneSignal_Public::insert_onesignal_stamp();
         } ?>
     <?php
-    add_filter('clean_url', 'add_async_forescript', 11, 1);
+    add_filter('clean_url', 'add_async_for_script', 11, 1);
 
     if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
         wp_register_script('local_sdk', plugins_url('https://localhost:3001/sdks/OneSignalSDK.js#asyncload', __FILE__), array('jquery'), false, true);

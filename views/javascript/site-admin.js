@@ -31,8 +31,8 @@ jQuery(function() {
   setupModalPopupSwitcharoo();
 
   function onFormSubmit(e) {
-    var safariWebId = $('[name=safari_web_id]').val();
-    var subdomain = $('[name=subdomain]').val();
+    var safariWebId = jQuery('[name=safari_web_id]').val();
+    var subdomain = jQuery('[name=subdomain]').val();
     var isSiteHttps = isChecked('[name=is_site_https]');
 
     var missingRequiredSubdomain = (!isSiteHttps &&
@@ -51,7 +51,7 @@ jQuery(function() {
     }
   }
 
-  $('.ui.form').submit(onFormSubmit);
+  jQuery('.ui.form').submit(onFormSubmit);
 
   hookHiddenDangerLabels();
 });

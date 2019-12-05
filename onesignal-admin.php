@@ -804,8 +804,11 @@ class OneSignal_Admin
 		$response = self::exec_post_request($onesignal_post_url, $request, 20);  // retry 20 times
 		
 		if (is_null($response)) {
-		    return;
-                }
+            set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
+                <p><strong>OneSignal Push:</strong><em> There was a problem sending your notification.</em></p>
+                </div>', 86400);
+            return;
+        }
 		
 		if (isset($response['body'])) {
                     $response_body = json_decode($response['body'], true);

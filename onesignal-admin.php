@@ -590,17 +590,17 @@ class OneSignal_Admin
     }
 
     public static function exec_post_request($onesignal_post_url, $request, $retry_count) { 
-	if ($retry_count === 1) { 
-		return NULL;
-	}
+        if ($retry_count === 0) { 
+            return NULL;
+        }
 
-	$response = wp_remote_post($onesignal_post_url, $request);
+        $response = wp_remote_post($onesignal_post_url, $request);
 
-	if (is_wp_error($response) || !is_array($response) || !isset($response['body'])) {
-		return self::exec_post_request($onesignal_post_url, $request, $retry_count-1); 
-	}
+        if (is_wp_error($response) || !is_array($response) || !isset($response['body'])) {
+            return self::exec_post_request($onesignal_post_url, $request, $retry_count-1); 
+        }
 
-	return $response;
+        return $response;
     }
 
     /**
@@ -801,7 +801,7 @@ class OneSignal_Admin
                     'timeout' => 3,
                 );
 
-		$response = self::exec_post_request($onesignal_post_url, $request, 20);  // retry 20 times
+		$response = self::exec_post_request($onesignal_post_url, $request, 20);  // try 20 times
 		
 		if (is_null($response)) {
             set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
@@ -910,6 +910,6 @@ class OneSignal_Admin
             self::send_notification_on_wp_post($new_status, $old_status, $post);
         }
     }
-}
+
 
 ?>

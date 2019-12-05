@@ -216,17 +216,26 @@ class OneSignal_Admin
     {
         // If there is an error or success message we should display, display it now
         function admin_notice_error()
-        {
+	{
+	    $allowed_html = [
+		'div' => [
+		   'class' => []
+		],
+		'strong' => [],
+		'a' => [],
+		'p' => [],
+		'em' => []
+	    ];
             $onesignal_transient_error = get_transient('onesignal_transient_error');
             if (!empty($onesignal_transient_error)) {
                 delete_transient('onesignal_transient_error');
-                echo esc_attr($onesignal_transient_error);
+                echo wp_kses($onesignal_transient_error, $allowed_html);
             }
 
             $onesignal_transient_success = get_transient('onesignal_transient_success');
             if (!empty($onesignal_transient_success)) {
                 delete_transient('onesignal_transient_success');
-                echo esc_attr($onesignal_transient_success);
+                echo wp_kses($onesignal_transient_success, $allowed_html);
             }
         }
         add_action('admin_notices', 'admin_notice_error');
@@ -581,7 +590,7 @@ class OneSignal_Admin
     }
 
     public static function exec_post_request($onesignal_post_url, $request, $retry_count) { 
-	if ($retry_count == 1) { 
+	if ($retry_count === 1) { 
 		return NULL;
 	}
 
@@ -840,7 +849,7 @@ class OneSignal_Admin
                         if ($config_show_notification_send_status_message) {
                             if ($recipient_count !== 0) {
                                 $delivery_link_text = $sent_or_scheduled === 'sent' ? ' Go to your app\'s "Delivery" tab to check sent messages: <a target="_blank" href="https://app.onesignal.com/apps/">https://app.onesignal.com/apps/</a>' : '';
-                                set_transient('onesignal_transient_success', '<div class="components-notice is-success is-dismissible">
+                                set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
                   <div class="components-notice__content">
                   <p><strong>OneSignal Push:</strong><em> Successfully '.$sent_or_scheduled.' a notification to '.$recipient_count.' recipients.'.$delivery_link_text.'</em></p>
                   </div>

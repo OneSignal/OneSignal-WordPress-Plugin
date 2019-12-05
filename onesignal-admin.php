@@ -910,6 +910,5 @@ class OneSignal_Admin
             self::send_notification_on_wp_post($new_status, $old_status, $post);
         }
     }
-
-
+}
 ?>

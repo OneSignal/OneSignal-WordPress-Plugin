@@ -448,12 +448,6 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
           <div class="field nb-feature">
             <div class="ui toggle checkbox">
-              <input type="checkbox" name="notifyButton_prenotify" value="true" <?php if (array_key_exists('notifyButton_prenotify', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_prenotify']) { echo "checked"; } ?>>
-              <label>Show first-time site visitors an unread message icon<i class="tiny circular help icon link" role="popup" data-html="<p>If checked, a circle indicating 1 unread message will be shown:</p><img src='<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/bell-prenotify.jpg") ?>' width=56><p>A message will be displayed when they hover over the Subscription Bell. This message can be customized below.</p>" data-variation="wide"></i></label>
-            </div>
-          </div>
-          <div class="field nb-feature">
-            <div class="ui toggle checkbox">
               <input type="checkbox" name="notifyButton_showcredit" value="true" <?php if (array_key_exists('notifyButton_showcredit', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_showcredit']) { echo "checked"; } ?>>
               <label>Show the OneSignal logo on the Subscription Bell dialog</label>
             </div>
@@ -574,10 +568,6 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
                 Subscription Bell Text Customization
               </h4>
             </div>
-          <div class="field nb-feature nb-text-feature">
-            <label>First-time visitor message (on Subscription Bell hover)</label>
-            <input type="text" name="notifyButton_message_prenotify" placeholder="Click to subscribe to notifications" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_message_prenotify']); ?>">
-          </div>
           <div class="field nb-feature nb-text-feature">
             <label>Tip when unsubscribed</label>
             <input type="text" name="notifyButton_tip_state_unsubscribed" placeholder="Subscribe to notifications" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_tip_state_unsubscribed']); ?>">

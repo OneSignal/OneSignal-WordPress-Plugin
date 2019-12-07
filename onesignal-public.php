@@ -170,12 +170,6 @@ class OneSignal_Public
                 echo "oneSignal_options['notifyButton']['size'] = '".esc_html($onesignal_wp_settings['notifyButton_size'])."';\n";
             }
 
-            if (array_key_exists('notifyButton_prenotify', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_prenotify'] === true) {
-                echo "oneSignal_options['notifyButton']['prenotify'] = true;\n";
-            } else {
-                echo "oneSignal_options['notifyButton']['prenotify'] = false;\n";
-            }
-
             if (array_key_exists('notifyButton_showAfterSubscribed', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_showAfterSubscribed'] !== true) {
                 echo "oneSignal_options['notifyButton']['displayPredicate'] = function() {
               return OneSignal.isPushNotificationsEnabled()
@@ -197,9 +191,6 @@ class OneSignal_Public
 
             if (array_key_exists('notifyButton_customize_enable', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_customize_enable'] === true) {
                 echo "oneSignal_options['notifyButton']['text'] = {};\n";
-                if (self::valid_for_key('notifyButton_message_prenotify', $onesignal_wp_settings)) {
-                    echo "oneSignal_options['notifyButton']['text']['message.prenotify'] = '".esc_html($onesignal_wp_settings['notifyButton_message_prenotify'])."';\n";
-                }
                 if (self::valid_for_key('notifyButton_tip_state_unsubscribed', $onesignal_wp_settings)) {
                     echo "oneSignal_options['notifyButton']['text']['tip.state.unsubscribed'] = '".esc_html($onesignal_wp_settings['notifyButton_tip_state_unsubscribed'])."';\n";
                 }

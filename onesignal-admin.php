@@ -356,7 +356,6 @@ class OneSignal_Admin
       'prompt_customize_enable',
       'notifyButton_showAfterSubscribed',
       'notifyButton_enable',
-      'notifyButton_prenotify',
       'notifyButton_showcredit',
       'notifyButton_customize_enable',
       'notifyButton_customize_colors_enable',
@@ -404,7 +403,6 @@ class OneSignal_Admin
       'notifyButton_offset_bottom',
       'notifyButton_offset_left',
       'notifyButton_offset_right',
-      'notifyButton_message_prenotify',
       'notifyButton_tip_state_unsubscribed',
       'notifyButton_tip_state_subscribed',
       'notifyButton_tip_state_blocked',
@@ -753,8 +751,8 @@ class OneSignal_Admin
                     // Much higher resolution for the notification large image
                     $large_sized_images_array = wp_get_attachment_image_src($post_thumbnail_id, 'large', true);
 
-                    $config_use_featured_image_as_icon = $onesignal_wp_settings['showNotificationIconFromPostThumbnail'] === '1';
-                    $config_use_featured_image_as_image = $onesignal_wp_settings['showNotificationImageFromPostThumbnail'] === '1';
+                    $config_use_featured_image_as_icon = $onesignal_wp_settings['showNotificationIconFromPostThumbnail'] === true;
+                    $config_use_featured_image_as_image = $onesignal_wp_settings['showNotificationImageFromPostThumbnail'] === true;
 
                     // get the icon image from wordpress if it exists
                     if ($config_use_featured_image_as_icon) {
@@ -847,7 +845,7 @@ class OneSignal_Admin
                         update_post_meta($post->ID, 'recipients', $recipient_count);
 
                         $sent_or_scheduled = array_key_exists('send_after', $fields) ? 'scheduled' : 'sent';
-                        $config_show_notification_send_status_message = $onesignal_wp_settings['show_notification_send_status_message'] === '1';
+                        $config_show_notification_send_status_message = $onesignal_wp_settings['show_notification_send_status_message'] === true;
 
                         if ($config_show_notification_send_status_message) {
                             if ($recipient_count !== 0) {

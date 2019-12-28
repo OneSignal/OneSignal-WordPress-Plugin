@@ -16,15 +16,15 @@ class OneSignalWidget extends WP_Widget {
 		$this->default_strings = array(
 			'title'       => __( 'Follow' ),
 			'text'        => __( 'Subscribe to notifications' ),
-			'unsubscribe' => __( 'Unsubscribe from notifications' ),
+			'unsub-text' => __( 'Unsubscribe from notifications' ),
 		);
 	}
 
 	// Admin editor
 	function form($instance) {
-		$title      = ! empty( $instance['title'] ) ? $instance['title'] : $this->default_strings['title'];
-		$text       = ! empty( $instance['text'] ) ? $instance['text'] : $this->default_strings['text'];
-		$unsub_text = ! empty( $instance['unsub-text'] ) ? $instance['unsub-text'] : $this->default_strings['unsubscribe'];
+		$title        = ! empty( $instance['title'] ) ? $instance['title'] : $this->default_strings['title'];
+		$text         = ! empty( $instance['text'] ) ? $instance['text'] : $this->default_strings['text'];
+		$unsub_text   = ! empty( $instance['unsub-text'] ) ? $instance['unsub-text'] : $this->default_strings['unsub-text'];
 		?>
 		<p>
 		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
@@ -51,6 +51,8 @@ class OneSignalWidget extends WP_Widget {
 			$instance,
 			$this->default_strings
 		);
+		$loading_service = __( 'Loading notification service...' );
+		$loading_status  = __( 'Loading notification status...' );
 		echo $args['before_widget'];
 		if ( ! empty( $instance['title'] ) ) {
 			echo $args['before_title'] . apply_filters( 'widget_title', $strings['title'] ). $args['after_title'];
@@ -58,13 +60,14 @@ class OneSignalWidget extends WP_Widget {
 		echo '<div class="textwidget">';
 		printf(
 			'<div class="OneSignal-prompt-no-js">%s</div>',
-			__( 'Loading notification status...' )
+			esc_html( $loading_service )
 		);
-		$pattern = '<a href="#" class="OneSignal-prompt" style="display: none;" data-onesignal-subscribe="%1$s" data-onesignal-unsubscribe="%2$s">%1$s</a>';
+		$pattern = '<a href="#" class="OneSignal-prompt" style="display: none;" data-onesignal-subscribe="%1$s" data-onesignal-unsubscribe="%2$s">%3$s</a>';
 		printf(
 			$pattern,
 			esc_attr( $strings['text'] ),
-			esc_attr( $strings['unsubscribe'] )
+			esc_attr( $strings['unsub-text'] ),
+			esc_html( $loading_status )
 		);
 		echo '</div>';
 		echo $args['after_widget'];

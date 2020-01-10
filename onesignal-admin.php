@@ -565,25 +565,21 @@ class OneSignal_Admin
      */
     public static function uuid($title)
     {
-        $now = explode(':', date('z:H:i'));
+        $now = explode(':', gmdate('z:H:i'));
         $now_minutes = $now[0] * 60 * 24 + $now[1] * 60 + $now[2];
         $prev_minutes = get_option('TimeLastUpdated');
         $prehash = (string) $title;
+        $updatedAMinuteOrMoreAgo = $prev_minutes !== false && ($now_minutes - $prev_minutes) > 0;
 
-        if ($prev_minutes !== false && ($now_minutes - $prev_minutes) > 0) {
+        if ($updatedAMinuteOrMoreAgo || $prev_minutes === false) {
             update_option('TimeLastUpdated', $now_minutes);
-            $timestamp = $now_minutes;
-        } elseif ($prev_minutes === false) {
-            add_option('TimeLastUpdated', $now_minutes);
             $timestamp = $now_minutes;
         } else {
             $timestamp = $prev_minutes;
         }
 
         $prehash = $prehash.$timestamp;
-
         $sha1 = substr(sha1($prehash), 0, 32);
-
         return substr($sha1, 0, 8).'-'.substr($sha1, 8, 4).'-'.substr($sha1, 12, 4).'-'.substr($sha1, 16, 4).'-'.substr($sha1, 20, 12);
     }
 

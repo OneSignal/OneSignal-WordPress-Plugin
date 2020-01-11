@@ -9,9 +9,10 @@ jQuery(function() {
   jQuery('.ui.dropdown').dropdown();
 
   ensureNoCheckboxConflicts({
-    use_modal_prompt: ['prompt_auto_register', 'notifyButton_enable'],
-    prompt_auto_register: ['use_modal_prompt'],
-    notifyButton_enable: ['use_modal_prompt']
+    use_modal_prompt: ['prompt_auto_register', 'notifyButton_enable', 'use_native_prompt'],
+    prompt_auto_register: ['use_modal_prompt', 'use_native_prompt'],
+    notifyButton_enable: ['use_modal_prompt'],
+    use_native_prompt: ['prompt_auto_register', 'use_modal_prompt']
   });
 
   ensureFeaturesVisible({

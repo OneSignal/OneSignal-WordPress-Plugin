@@ -408,15 +408,10 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
                 <label>
                   Automatically prompt new site visitors to subscribe to push notifications
                   <i class="tiny circular help icon link"
-                     role="popup"
+		             role="popup"
                      data-html="
-                       <p>If enabled, your site will automatically present the following without any code required:</p>
-                       <p>HTTPS Sites:
-                         <img
-                            src='<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/chrome-https.jpg") ?>'
-                            width=400>
-                       </p>
-                       <p>HTTP Sites:
+                       <h4>Slide Prompt</h4><p>If enabled, the Slide Prompt will be shown before the browser's permission request.</p><p>Please note that this Slide Prompt cannot replace the browser's native permission request.</p><p>The browser's native permission request must always be finally shown before the user can be subscribed.</p>
+                       <p>
                          <img
                             src='<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.png") ?>'
                             width=400>
@@ -426,12 +421,6 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
                   </i>
                 </label>
               </div>
-            </div>
-          </div>
-          <div class="field slidedown-permission-message-https-feature">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" name="use_slidedown_permission_message_for_https" value="true" <?php if (array_key_exists('use_slidedown_permission_message_for_https', $onesignal_wp_settings) && $onesignal_wp_settings['use_slidedown_permission_message_for_https']) { echo "checked"; } ?>>
-              <label>Show the Slide Prompt before prompting users to subscribe<i class="tiny circular help icon link" role="popup" data-title="Slide Prompt for HTTPS Sites" data-content="If checked, the Slide Prompt will be shown before the browser's permission request. Please note that this Slide Prompt cannot replace the browser's native permission request. The browser's native permission request must always be finally shown before the user can be subscribed." data-variation="wide"></i></label>
             </div>
           </div>
           <div class="field">
@@ -612,6 +601,12 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <label>Blocked dialog message</label>
             <input type="text" name="notifyButton_dialog_blocked_message" placeholder="Follow these instructions to allow notifications:" value="<?php echo esc_attr($onesignal_wp_settings['notifyButton_dialog_blocked_message']); ?>">
           </div>
+          </div>
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="use_native_prompt" value="true" <?php if (array_key_exists('use_native_prompt', $onesignal_wp_settings) && $onesignal_wp_settings['use_native_prompt']) { echo "checked"; } ?>>
+              <label>Attempt to show a native browser permission prompt immediately upon user visit (not recommended)<i class="tiny circular help icon link" role="popup" data-title="Native Prompt" data-content="If checked, we will attempt to automatically present the browser's native prompt. We don't recommend this as browsers may penalize you for immediately displaying this prompt. Instead we recommend using one of our two-step prompting options: Slide Prompt or Subscription Bell." data-variation="wide"></i></label>
+            </div>
           </div>
         </div>
         <div class="popup-modal-settings">

@@ -344,6 +344,7 @@ class OneSignal_Admin
         $onesignal_wp_settings['is_site_https_firsttime'] = 'set';
 
         $booleanSettings = array(
+      'use_native_prompt',
       'is_site_https',
       'prompt_auto_register',
       'use_modal_prompt',

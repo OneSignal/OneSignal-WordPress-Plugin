@@ -75,19 +75,23 @@ class OneSignal_Public
             echo 'OneSignal.setDefaultNotificationUrl("'.esc_url($onesignal_wp_settings['default_url']).'");';
         } else {
             echo 'OneSignal.setDefaultNotificationUrl("'.esc_url(get_site_url())."\");\n";
-        } ?>
+        } 
+        
+        if ($onesignal_wp_settings['prompt_auto_register'] == '1') {
+                echo "OneSignal.showSlidedownPrompt();";
+        }
+
+        if ($onesignal_wp_settings['use_native_prompt'] == '1') {
+            echo "OneSignal.showNativePrompt();";
+        }
+
+	?>
         var oneSignal_options = {};
         window._oneSignalInitOptions = oneSignal_options;
 
         <?php
         echo "oneSignal_options['wordpress'] = true;\n";
         echo "oneSignal_options['appId'] = '".esc_html($onesignal_wp_settings['app_id'])."';\n";
-
-        if (array_key_exists('prompt_auto_register', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_auto_register'] === true) {
-            echo "oneSignal_options['autoRegister'] = true;\n";
-        } else {
-            echo "oneSignal_options['autoRegister'] = false;\n";
-        }
 
         if (array_key_exists('use_http_permission_request', $onesignal_wp_settings) && $onesignal_wp_settings['use_http_permission_request'] === true) {
             echo "oneSignal_options['httpPermissionRequest'] = { };\n";

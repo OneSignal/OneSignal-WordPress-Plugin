@@ -77,11 +77,11 @@ class OneSignal_Public
             echo 'OneSignal.setDefaultNotificationUrl("'.esc_url(get_site_url())."\");\n";
         } 
         
-        if ($onesignal_wp_settings['prompt_auto_register'] == '1') {
+        if ($onesignal_wp_settings['prompt_auto_register'] === true) {
                 echo "OneSignal.showSlidedownPrompt();";
         }
 
-        if ($onesignal_wp_settings['use_native_prompt'] == '1') {
+        if ($onesignal_wp_settings['use_native_prompt'] === true) {
             echo "OneSignal.showNativePrompt();";
         }
 

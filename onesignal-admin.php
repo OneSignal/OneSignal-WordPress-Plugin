@@ -565,8 +565,7 @@ class OneSignal_Admin
      */
     public static function uuid($title)
     {
-        $now = explode(':', gmdate('z:H:i'));
-        $now_minutes = $now[0] * 60 * 24 + $now[1] * 60 + $now[2];
+        $now_minutes = floor(time()/60);
         $prev_minutes = get_option('TimeLastUpdated');
         $prehash = (string) $title;
         $updatedAMinuteOrMoreAgo = $prev_minutes !== false && ($now_minutes - $prev_minutes) > 0;

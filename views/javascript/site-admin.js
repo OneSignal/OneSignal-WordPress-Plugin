@@ -24,7 +24,8 @@ jQuery(function() {
     'prompt_customize_enable': ['.prompt-customize-feature'],
     'send_welcome_notification': ['.welcome-notification-feature'],
     'is_site_https': ['.modal-prompt-feature', '.slidedown-permission-message-https-feature'],
-    'use_custom_manifest': ['.custom-manifest-feature']
+    'use_custom_manifest': ['.custom-manifest-feature'],
+    'use_native_prompt': ['.native-prompt-warning']
   });
 
   httpSiteCheck();

@@ -394,19 +394,12 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="explanation">
             <p>Control the way visitors are prompted to subscribe. The Subscription Bell is an interactive widget your site visitors can use to manage their push notification subscription status. The Subscription Bell can be used to initially subscribe to push notifications, and to unsubscribe.</p>
           </div>
-
-          <div class="field modal-prompt-feature">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" name="use_modal_prompt" value="true" <?php if ($onesignal_wp_settings['use_modal_prompt']) { echo "checked"; } ?>>
-              <label>Use an alternate full-screen prompt when requesting subscription permission (incompatible with Subscription Bell and auto-prompting)</label>
-            </div>
-          </div>
           <div class="field auto-register-feature">
             <div class="field">
               <div class="ui toggle checkbox">
                 <input type="checkbox" name="prompt_auto_register" value="true" <?php if ($onesignal_wp_settings['prompt_auto_register']) { echo "checked"; } ?>>
                 <label>
-                  Automatically prompt new site visitors to subscribe to push notifications
+                  Automatically prompt new site visitors with OneSignal Slide Prompt before Native Browser Prompt (recommended)
                   <i class="tiny circular help icon link"
 		             role="popup"
                      data-html="
@@ -605,11 +598,11 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="use_native_prompt" value="true" <?php if (array_key_exists('use_native_prompt', $onesignal_wp_settings) && $onesignal_wp_settings['use_native_prompt']) { echo "checked"; } ?>>
-              <label>Attempt to show a native browser permission prompt immediately upon user visit (not recommended)<i class="tiny circular help icon link" role="popup" data-title="Native Prompt" data-content="If checked, we will attempt to automatically present the browser's native prompt. We don't recommend this as browsers may penalize you for immediately displaying this prompt. Instead we recommend using one of our two-step prompting options: Slide Prompt or Subscription Bell." data-variation="wide"></i></label>
+              <label>Attempt to automatically prompt new site visitors with Native Browser Prompt (not recommended)<i class="tiny circular help icon link" role="popup" data-title="Native Prompt" data-content="If checked, we will attempt to automatically present the browser's native prompt. We don't recommend this as browsers may penalize you for immediately displaying this prompt. Instead we recommend using one of our two-step prompting options: Slide Prompt or Subscription Bell." data-variation="wide"></i></label>
             </div>
-	      </div>
-          <div class="callout danger native-prompt-warning" style="display: none;">
-	        <p>We strongly recommend not immediately prompting users with the native prompt as most browsers will hide this prompt if users frequently click deny. <a href="https://documentation.onesignal.com/docs/native-browser-prompt" target="_blank"> More information</a></p>
+	  </div>
+          <div class="error notice onesignal-error-notice native-prompt-warning" style="display: none;">
+	    <p>We strongly recommend not immediately prompting users with the native prompt as most browsers will hide this prompt if users frequently click deny. <a href="https://documentation.onesignal.com/docs/native-browser-prompt" target="_blank"> More information</a></p>
           </div>
         </div>
         <div class="popup-modal-settings">

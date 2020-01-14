@@ -601,7 +601,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
               <label>Attempt to automatically prompt new site visitors with Native Browser Prompt (not recommended)<i class="tiny circular help icon link" role="popup" data-title="Native Prompt" data-content="If checked, we will attempt to automatically present the browser's native prompt. We don't recommend this as browsers may penalize you for immediately displaying this prompt. Instead we recommend using one of our two-step prompting options: Slide Prompt or Subscription Bell." data-variation="wide"></i></label>
             </div>
 	  </div>
-          <div class="error notice onesignal-error-notice native-prompt-warning" style="display: none;">
+          <div class="callout danger native-prompt-warning" style="display: none;">
 	    <p>We strongly recommend not immediately prompting users with the native prompt as most browsers will hide this prompt if users frequently click deny. <a href="https://documentation.onesignal.com/docs/native-browser-prompt" target="_blank"> More information</a></p>
           </div>
         </div>

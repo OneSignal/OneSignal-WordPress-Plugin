@@ -602,17 +602,22 @@ class OneSignal_Admin
     public static function send_notification_on_wp_post($new_status, $old_status, $post)
     {
         try {
-	    // quirk of Gutenberg editor leads to two passes if meta box is added
-	    // conditional removes first pass
-	    if( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
-	    	return;
-	    }
+            // quirk of Gutenberg editor leads to two passes if meta box is added
+            // conditional removes first pass
+            if( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+                return;
+            }
 
-	    // Verify that the nonce is valid.
-            if (!check_admin_referer(OneSignal_Admin::$SAVE_POST_NONCE_ACTION, OneSignal_Admin::$SAVE_POST_NONCE_KEY)) {
-		    return;
-	    }
+            /* The checkbox "Send notification on post publish/update" on the OneSignal meta box is checked */
+            $onesignal_meta_box_send_notification_checked = $was_posted && array_key_exists('send_onesignal_notification', $_POST) && $_POST['send_onesignal_notification'] === 'true';
+
+            $nonce = (isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? filter_var(isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]), FILTER_SANITIZE_STRING) : '');
             
+            // Verify that the nonce is valid.
+            if ($onesignal_meta_box_send_notification_checked && !wp_verify_nonce($nonce, OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
+                return;
+            }
+
             $time_to_wait = self::get_sending_rate_limit_wait_time();
             if ($time_to_wait > 0) {
                 set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
@@ -633,8 +638,6 @@ class OneSignal_Admin
 
             /* When this post was created or updated, the OneSignal meta box in the WordPress post editor screen was visible */
             $onesignal_meta_box_present = $was_posted && isset($_POST['onesignal_meta_box_present'], $_POST['onesignal_meta_box_present']) && $_POST['onesignal_meta_box_present'] === 'true';
-            /* The checkbox "Send notification on post publish/update" on the OneSignal meta box is checked */
-            $onesignal_meta_box_send_notification_checked = $was_posted && array_key_exists('send_onesignal_notification', $_POST) && $_POST['send_onesignal_notification'] === 'true';
 
             /* This is a scheduled post and the OneSignal meta box was present. */
             $post_metadata_was_onesignal_meta_box_present = (get_post_meta($post->ID, 'onesignal_meta_box_present') === true);

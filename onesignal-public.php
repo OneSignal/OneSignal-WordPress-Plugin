@@ -75,9 +75,7 @@ class OneSignal_Public
             echo 'OneSignal.setDefaultNotificationUrl("'.esc_url($onesignal_wp_settings['default_url']).'");';
         } else {
             echo 'OneSignal.setDefaultNotificationUrl("'.esc_url(get_site_url())."\");\n";
-        } 
-
-	?>
+        } ?>
         var oneSignal_options = {};
         window._oneSignalInitOptions = oneSignal_options;
 

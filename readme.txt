@@ -67,7 +67,7 @@ HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 
 = 2.0.1 =
 
-- Bug fix: link expired issue due to failing nonce check
+- Bug fix: link expired issue due to failing nonce check when creating posts from other WordPress plugins
 
 = 2.0.0 =
 

@@ -76,14 +76,6 @@ class OneSignal_Public
         } else {
             echo 'OneSignal.setDefaultNotificationUrl("'.esc_url(get_site_url())."\");\n";
         } 
-        
-        if ($onesignal_wp_settings['prompt_auto_register'] === true) {
-                echo "OneSignal.showSlidedownPrompt();";
-        }
-
-        if ($onesignal_wp_settings['use_native_prompt'] === true) {
-            echo "OneSignal.showNativePrompt();";
-        }
 
 	?>
         var oneSignal_options = {};
@@ -306,6 +298,15 @@ class OneSignal_Public
               <?php
                 }
             }
+        
+            if ($onesignal_wp_settings['prompt_auto_register'] === true) {
+                    echo "OneSignal.showSlidedownPrompt();";
+            }
+
+            if ($onesignal_wp_settings['use_native_prompt'] === true) {
+                echo "OneSignal.showNativePrompt();";
+            }
+        
         } else {
             ?>
           /* OneSignal: Using custom SDK initialization. */

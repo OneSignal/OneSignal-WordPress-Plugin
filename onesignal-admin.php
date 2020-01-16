@@ -614,9 +614,9 @@ class OneSignal_Admin
             $nonce = (isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? filter_var(isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]), FILTER_SANITIZE_STRING) : '');
             
             // Verify that the nonce is valid.
-            if ($onesignal_meta_box_send_notification_checked && !wp_verify_nonce($nonce, OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
+/*            if ($onesignal_meta_box_send_notification_checked && !wp_verify_nonce($nonce, OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
                 return;
-            }
+            }*/
 
             $time_to_wait = self::get_sending_rate_limit_wait_time();
             if ($time_to_wait > 0) {

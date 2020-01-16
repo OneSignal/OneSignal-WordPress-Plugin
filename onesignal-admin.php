@@ -634,14 +634,6 @@ class OneSignal_Admin
             /* This is a scheduled post and the user checked "Send a notification on post publish/update". */
             $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification') === true);
 
-
-            $nonce = (isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? filter_var(isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]), FILTER_SANITIZE_STRING) : '');
-            
-            // Verify that the nonce is valid.
-            if ($onesignal_meta_box_send_notification_checked && !wp_verify_nonce($nonce, OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
-                return;
-            }
-
             /* Either we were just posted from the WordPress post editor form, or this is a scheduled notification and it was previously submitted from the post editor form */
             $posted_from_wordpress_editor = $onesignal_meta_box_present || $post_metadata_was_onesignal_meta_box_present;
             /* ********************************************************************************************************* */

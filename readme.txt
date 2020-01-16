@@ -65,6 +65,10 @@ HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 
 == Changelog ==
 
+= 2.0.2 =
+
+- Bug fix: posts not sending due to failing nonce check in OneSignal Admin
+
 = 2.0.1 =
 
 - Bug fix: link expired issue due to failing nonce check when creating posts from other WordPress plugins

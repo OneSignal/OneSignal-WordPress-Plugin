@@ -608,16 +608,6 @@ class OneSignal_Admin
                 return;
             }
 
-            /* The checkbox "Send notification on post publish/update" on the OneSignal meta box is checked */
-            $onesignal_meta_box_send_notification_checked = $was_posted && array_key_exists('send_onesignal_notification', $_POST) && $_POST['send_onesignal_notification'] === 'true';
-
-            $nonce = (isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? filter_var(isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]), FILTER_SANITIZE_STRING) : '');
-            
-            // Verify that the nonce is valid.
-/*            if ($onesignal_meta_box_send_notification_checked && !wp_verify_nonce($nonce, OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
-                return;
-            }*/
-
             $time_to_wait = self::get_sending_rate_limit_wait_time();
             if ($time_to_wait > 0) {
                 set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
@@ -643,6 +633,14 @@ class OneSignal_Admin
             $post_metadata_was_onesignal_meta_box_present = (get_post_meta($post->ID, 'onesignal_meta_box_present') === true);
             /* This is a scheduled post and the user checked "Send a notification on post publish/update". */
             $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification') === true);
+
+
+            $nonce = (isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? filter_var(isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]), FILTER_SANITIZE_STRING) : '');
+            
+            // Verify that the nonce is valid.
+            if ($onesignal_meta_box_send_notification_checked && !wp_verify_nonce($nonce, OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
+                return;
+            }
 
             /* Either we were just posted from the WordPress post editor form, or this is a scheduled notification and it was previously submitted from the post editor form */
             $posted_from_wordpress_editor = $onesignal_meta_box_present || $post_metadata_was_onesignal_meta_box_present;

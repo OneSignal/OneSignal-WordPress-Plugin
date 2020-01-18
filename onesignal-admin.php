@@ -169,17 +169,18 @@ class OneSignal_Admin
             return $post_id;
         }
 
-        $nonce = (isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? filter_var(isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]), FILTER_SANITIZE_STRING) : '');
-
-        // Verify that the nonce is valid.
-        if (!wp_verify_nonce($nonce, OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
+	    // Verify that the nonce is valid.
+        if (!wp_verify_nonce((isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? 
+                sanitize_text_field($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) :
+                 ''
+            ), OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
             return $post_id;
         }
 
         /*
-             * If this is an autosave, our form has not been submitted,
-             * so we don't want to do anything.
-             */
+        * If this is an autosave, our form has not been submitted,
+        * so we don't want to do anything.
+        */
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return $post_id;
         }
@@ -631,6 +632,19 @@ class OneSignal_Admin
             /* The checkbox "Send notification on post publish/update" on the OneSignal meta box is checked */
             $onesignal_meta_box_send_notification_checked = $was_posted && array_key_exists('send_onesignal_notification', $_POST) && $_POST['send_onesignal_notification'] === 'true';
 
+            if (!$onesignal_meta_box_send_notification_checked) {
+                return;
+            }
+	    
+	        // Verify that the nonce is valid.            
+            if (!wp_verify_nonce((
+                isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? 
+                sanitize_text_field($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) : 
+                ''
+            ), OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
+		        return;
+            }
+
             /* This is a scheduled post and the OneSignal meta box was present. */
             $post_metadata_was_onesignal_meta_box_present = (get_post_meta($post->ID, 'onesignal_meta_box_present') === true);
             /* This is a scheduled post and the user checked "Send a notification on post publish/update". */
@@ -695,7 +709,6 @@ class OneSignal_Admin
                 }
 
                 $notif_content = OneSignalUtils::decode_entities(get_the_title($post->ID));
-
                 $site_title = '';
                 if ($onesignal_wp_settings['notification_title'] !== '') {
                     $site_title = OneSignalUtils::decode_entities($onesignal_wp_settings['notification_title']);

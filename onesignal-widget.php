@@ -16,7 +16,7 @@ class OneSignalWidget extends WP_Widget {
 		$this->default_strings = array(
 			'title'       => __( 'Follow' ),
 			'text'        => __( 'Subscribe to notifications' ),
-			'unsub-text' => __( 'Unsubscribe from notifications' ),
+			'unsub-text'  => __( 'Unsubscribe from notifications' ),
 		);
 	}
 

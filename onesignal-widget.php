@@ -27,21 +27,23 @@ class OneSignalWidget extends WP_Widget {
 		$unsub_text   = ! empty( $instance['unsub-text'] ) ? $instance['unsub-text'] : $this->default_strings['unsub-text'];
 		?>
 		<p>
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
-		<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
-		<label for="<?php echo $this->get_field_id( 'text' ); ?>"><?php _e( 'Body (Subscribe):' ); ?></label> 
-		<input class="widefat" id="<?php echo $this->get_field_id( 'text' ); ?>" name="<?php echo $this->get_field_name( 'text' ); ?>" type="text" value="<?php echo esc_attr( $text ); ?>">
-		<label for="<?php echo $this->get_field_id( 'unsub-text' ); ?>"><?php _e( 'Body (Change/Unsubscribe):' ); ?></label> 
-		<input class="widefat" id="<?php echo $this->get_field_id( 'unsub-text' ); ?>" name="<?php echo $this->get_field_name( 'unsub-text' ); ?>" type="text" value="<?php echo esc_attr( $unsub_text ); ?>">
+			<label for="<?php echo esc_attr($this->get_field_id( 'title' )); ?>"><?php esc_attr_e( 'Title:' ); ?></label> 
+			<input class="widefat" id="<?php echo esc_attr($this->get_field_id( 'title' )); ?>" name="<?php echo esc_attr($this->get_field_name( 'title' )); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
+			<label for="<?php echo esc_attr($this->get_field_id( 'text' )); ?>"><?php esc_attr_e( 'Body (Subscribe):' ); ?></label> 
+			<input class="widefat" id="<?php echo esc_attr($this->get_field_id( 'text' )); ?>" name="<?php echo esc_attr($this->get_field_name( 'text' )); ?>" type="text" value="<?php echo esc_attr( $text ); ?>">
+			<label for="<?php echo esc_attr($this->get_field_id( 'unsub-text' )); ?>"><?php esc_attr_e( 'Body (Change/Unsubscribe):' ); ?></label> 
+			<input class="widefat" id="<?php echo esc_attr($this->get_field_id( 'unsub-text' )); ?>" name="<?php echo esc_attr($this->get_field_name( 'unsub-text' )); ?>" type="text" value="<?php echo esc_attr( $unsub_text ); ?>">
 		</p>
 		<?php 
 	}
 
 	function update($new_instance, $old_instance) {
 		$instance = array();
-		$instance['title']      = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
-		$instance['text']       = ( ! empty( $new_instance['text'] ) ) ? strip_tags( $new_instance['text'] ) : '';
-		$instance['unsub-text'] = ( ! empty( $new_instance['unsub-text'] ) ) ? strip_tags( $new_instance['unsub-text'] ) : '';
+
+		$instance['title']      = ( ! empty( $new_instance['title'] ) ) ? wp_strip_all_tags( $new_instance['title'] ) : '';
+		$instance['text']       = ( ! empty( $new_instance['text'] ) ) ? wp_strip_all_tags( $new_instance['text'] ) : '';
+		$instance['unsub-text'] = ( ! empty( $new_instance['unsub-text'] ) ) ? wp_strip_all_tags( $new_instance['unsub-text'] ) : '';
+
 		return $instance;
 	}
 
@@ -53,9 +55,9 @@ class OneSignalWidget extends WP_Widget {
 		);
 		$loading_service = __( 'Loading notification service...' );
 		$loading_status  = __( 'Loading notification status...' );
-		echo $args['before_widget'];
+		echo wp_kses_post( $args['before_widget'] );
 		if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . apply_filters( 'widget_title', $strings['title'] ). $args['after_title'];
+			echo wp_kses_post( $args['before_title'] . apply_filters( 'widget_title', $strings['title'] ). $args['after_title'] );
 		}
 		echo '<div class="textwidget">';
 		printf(
@@ -70,7 +72,7 @@ class OneSignalWidget extends WP_Widget {
 			esc_html( $loading_status )
 		);
 		echo '</div>';
-		echo $args['after_widget'];
+		echo wp_kses_post( $args['after_widget'] );
 	}
 }
 

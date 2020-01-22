@@ -282,19 +282,6 @@ class OneSignal_Public
               /* OneSignal: onesignal_initialize_sdk filter preventing SDK initialization. */
               <?php
                 }
-            } else {
-                if (array_key_exists('use_slidedown_permission_message_for_https', $onesignal_wp_settings) && 
-                                    $onesignal_wp_settings['use_slidedown_permission_message_for_https'] === true) {
-                    ?>
-              oneSignal_options['autoRegister'] = false;
-              OneSignal.showHttpPrompt();
-              OneSignal.init(window._oneSignalInitOptions);
-              <?php
-                } else {
-                    ?>
-              OneSignal.init(window._oneSignalInitOptions);
-              <?php
-                }
             }
         
             if ($onesignal_wp_settings['prompt_auto_register'] === true) {

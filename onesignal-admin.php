@@ -368,7 +368,6 @@ class OneSignal_Admin
       'show_notification_send_status_message',
       'use_http_permission_request',
       'customize_http_permission_request',
-      'use_slidedown_permission_message_for_https',
     );
         OneSignal_Admin::saveBooleanSettings($onesignal_wp_settings, $config, $booleanSettings);
 

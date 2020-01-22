@@ -271,7 +271,6 @@ class OneSignal_Public
         $use_custom_sdk_init = $onesignal_wp_settings['use_custom_sdk_init'];
         if (!$use_custom_sdk_init) {
             if (has_filter('onesignal_initialize_sdk')) {
-                onesignal_debug('Applying onesignal_initialize_sdk filter.');
                 if (apply_filters('onesignal_initialize_sdk', $onesignal_wp_settings)) {
                     // If the filter returns "$do_initialize_sdk: true", initialize the web SDK
               ?>

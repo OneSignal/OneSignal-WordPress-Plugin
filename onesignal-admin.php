@@ -609,8 +609,11 @@ class OneSignal_Admin
                 return;
             }
 
+            /* Returns true if there is POST data */
+            $was_posted = !empty($_POST);
+
 	        // Verify that the nonce is valid.            
-            if (!wp_verify_nonce((
+            if ($was_posted && !wp_verify_nonce((
                 isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? 
                 sanitize_text_field($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) : 
                 ''
@@ -633,8 +636,6 @@ class OneSignal_Admin
 
             /* Settings related to creating a post involving the WordPress editor displaying the OneSignal meta box
              **********************************************************************************************************/
-            /* Returns true if there is POST data */
-            $was_posted = !empty($_POST);
 
             /* When this post was created or updated, the OneSignal meta box in the WordPress post editor screen was visible */
             $onesignal_meta_box_present = $was_posted && isset($_POST['onesignal_meta_box_present'], $_POST['onesignal_meta_box_present']) && $_POST['onesignal_meta_box_present'] === 'true';

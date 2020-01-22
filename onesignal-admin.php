@@ -190,7 +190,7 @@ class OneSignal_Admin
         /* Some WordPress environments seem to be inconsistent about whether on_save_post is called before transition_post_status
            * Check flag in case we just sent a notification for this post (this on_save_post is called after a successful send)
           */
-        $just_sent_notification = (get_post_meta($post_id, 'onesignal_notification_already_sent') === true);
+        $just_sent_notification = (get_post_meta($post_id, 'onesignal_notification_already_sent', true) === true);
 
         if ($just_sent_notification) {
             // Reset our flag

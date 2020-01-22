@@ -160,11 +160,11 @@ class OneSignal_Admin
             return;
         }
         /*
-             * We need to verify this came from the our screen and with proper authorization,
-             * because save_post can be triggered at other times.
-             */
+         * We need to verify this came from the our screen and with proper authorization,
+         * because save_post can be triggered at other times.
+         */
         // Check if our nonce is set.
-        if (isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY])) {
+        if (!isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY])) {
             // This is called on every new post ... not necessary to log it.
             return $post_id;
         }

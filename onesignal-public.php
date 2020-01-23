@@ -281,6 +281,10 @@ class OneSignal_Public
               /* OneSignal: onesignal_initialize_sdk filter preventing SDK initialization. */
               <?php
                 }
+            } else {
+                ?>
+                OneSignal.init(window._oneSignalInitOptions);
+                <?php
             }
         
             if ($onesignal_wp_settings['prompt_auto_register'] === true) {

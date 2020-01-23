@@ -160,42 +160,29 @@ class OneSignal_Admin
             return;
         }
         /*
-             * We need to verify this came from the our screen and with proper authorization,
-             * because save_post can be triggered at other times.
-             */
+         * We need to verify this came from the our screen and with proper authorization,
+         * because save_post can be triggered at other times.
+         */
         // Check if our nonce is set.
-        if (isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY])) {
+        if (!isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY])) {
             // This is called on every new post ... not necessary to log it.
             return $post_id;
         }
 
-        $nonce = (isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? filter_var(isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]), FILTER_SANITIZE_STRING) : '');
-
-        // Verify that the nonce is valid.
-        if (!wp_verify_nonce($nonce, OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
+	    // Verify that the nonce is valid.
+        if (!wp_verify_nonce((isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? 
+                sanitize_text_field($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) :
+                 ''
+            ), OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
             return $post_id;
         }
 
         /*
-             * If this is an autosave, our form has not been submitted,
-             * so we don't want to do anything.
-             */
+        * If this is an autosave, our form has not been submitted,
+        * so we don't want to do anything.
+        */
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return $post_id;
-        }
-
-        /* OK, it's safe for us to save the data now. */
-
-        /* Some WordPress environments seem to be inconsistent about whether on_save_post is called before transition_post_status
-           * Check flag in case we just sent a notification for this post (this on_save_post is called after a successful send)
-          */
-        $just_sent_notification = (get_post_meta($post_id, 'onesignal_notification_already_sent') === true);
-
-        if ($just_sent_notification) {
-            // Reset our flag
-            update_post_meta($post_id, 'onesignal_notification_already_sent', false);
-
-            return;
         }
 
         if (array_key_exists('onesignal_meta_box_present', $_POST)) {
@@ -608,14 +595,16 @@ class OneSignal_Admin
                 return;
             }
 
-            /* The checkbox "Send notification on post publish/update" on the OneSignal meta box is checked */
-            $onesignal_meta_box_send_notification_checked = $was_posted && array_key_exists('send_onesignal_notification', $_POST) && $_POST['send_onesignal_notification'] === 'true';
+            /* Returns true if there is POST data */
+            $was_posted = !empty($_POST);
 
-            $nonce = (isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? filter_var(isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]), FILTER_SANITIZE_STRING) : '');
-            
-            // Verify that the nonce is valid.
-            if ($onesignal_meta_box_send_notification_checked && !wp_verify_nonce($nonce, OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
-                return;
+	        // Verify that the nonce is valid.            
+            if ($was_posted && !wp_verify_nonce((
+                isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? 
+                sanitize_text_field($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) : 
+                ''
+            ), OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
+		        return;
             }
 
             $time_to_wait = self::get_sending_rate_limit_wait_time();
@@ -633,16 +622,15 @@ class OneSignal_Admin
 
             /* Settings related to creating a post involving the WordPress editor displaying the OneSignal meta box
              **********************************************************************************************************/
-            /* Returns true if there is POST data */
-            $was_posted = !empty($_POST);
 
             /* When this post was created or updated, the OneSignal meta box in the WordPress post editor screen was visible */
             $onesignal_meta_box_present = $was_posted && isset($_POST['onesignal_meta_box_present'], $_POST['onesignal_meta_box_present']) && $_POST['onesignal_meta_box_present'] === 'true';
-
+            /* The checkbox "Send notification on post publish/update" on the OneSignal meta box is checked */
+            $onesignal_meta_box_send_notification_checked = $was_posted && array_key_exists('send_onesignal_notification', $_POST) && $_POST['send_onesignal_notification'] === 'true';
             /* This is a scheduled post and the OneSignal meta box was present. */
-            $post_metadata_was_onesignal_meta_box_present = (get_post_meta($post->ID, 'onesignal_meta_box_present') === true);
+            $post_metadata_was_onesignal_meta_box_present = (get_post_meta($post->ID, 'onesignal_meta_box_present', true) === '1');
             /* This is a scheduled post and the user checked "Send a notification on post publish/update". */
-            $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification') === true);
+            $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification', true) === '1');
 
             /* Either we were just posted from the WordPress post editor form, or this is a scheduled notification and it was previously submitted from the post editor form */
             $posted_from_wordpress_editor = $onesignal_meta_box_present || $post_metadata_was_onesignal_meta_box_present;
@@ -703,7 +691,6 @@ class OneSignal_Admin
                 }
 
                 $notif_content = OneSignalUtils::decode_entities(get_the_title($post->ID));
-
                 $site_title = '';
                 if ($onesignal_wp_settings['notification_title'] !== '') {
                     $site_title = OneSignalUtils::decode_entities($onesignal_wp_settings['notification_title']);

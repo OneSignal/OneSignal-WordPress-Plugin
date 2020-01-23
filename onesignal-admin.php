@@ -185,20 +185,6 @@ class OneSignal_Admin
             return $post_id;
         }
 
-        /* OK, it's safe for us to save the data now. */
-
-        /* Some WordPress environments seem to be inconsistent about whether on_save_post is called before transition_post_status
-           * Check flag in case we just sent a notification for this post (this on_save_post is called after a successful send)
-          */
-        $just_sent_notification = (get_post_meta($post_id, 'onesignal_notification_already_sent', true) === true);
-
-        if ($just_sent_notification) {
-            // Reset our flag
-            update_post_meta($post_id, 'onesignal_notification_already_sent', false);
-
-            return;
-        }
-
         if (array_key_exists('onesignal_meta_box_present', $_POST)) {
             update_post_meta($post_id, 'onesignal_meta_box_present', true);
         } else {

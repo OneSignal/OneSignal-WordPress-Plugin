@@ -83,12 +83,6 @@ class OneSignal_Public
         echo "oneSignal_options['wordpress'] = true;\n";
         echo "oneSignal_options['appId'] = '".esc_html($onesignal_wp_settings['app_id'])."';\n";
 
-        if (array_key_exists('prompt_auto_register', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_auto_register'] === true) {
-            echo "oneSignal_options['autoRegister'] = true;\n";
-        } else {
-            echo "oneSignal_options['autoRegister'] = false;\n";
-        }
-
         if (array_key_exists('use_http_permission_request', $onesignal_wp_settings) && $onesignal_wp_settings['use_http_permission_request'] === true) {
             echo "oneSignal_options['httpPermissionRequest'] = { };\n";
             echo "oneSignal_options['httpPermissionRequest']['enable'] = true;\n";
@@ -277,7 +271,6 @@ class OneSignal_Public
         $use_custom_sdk_init = $onesignal_wp_settings['use_custom_sdk_init'];
         if (!$use_custom_sdk_init) {
             if (has_filter('onesignal_initialize_sdk')) {
-                onesignal_debug('Applying onesignal_initialize_sdk filter.');
                 if (apply_filters('onesignal_initialize_sdk', $onesignal_wp_settings)) {
                     // If the filter returns "$do_initialize_sdk: true", initialize the web SDK
               ?>
@@ -288,20 +281,16 @@ class OneSignal_Public
               /* OneSignal: onesignal_initialize_sdk filter preventing SDK initialization. */
               <?php
                 }
-            } else {
-                if (array_key_exists('use_slidedown_permission_message_for_https', $onesignal_wp_settings) && 
-                                    $onesignal_wp_settings['use_slidedown_permission_message_for_https'] === true) {
-                    ?>
-              oneSignal_options['autoRegister'] = false;
-              OneSignal.showHttpPrompt();
-              OneSignal.init(window._oneSignalInitOptions);
-              <?php
-                } else {
-                    ?>
-              OneSignal.init(window._oneSignalInitOptions);
-              <?php
-                }
             }
+        
+            if ($onesignal_wp_settings['prompt_auto_register'] === true) {
+                    echo "OneSignal.showSlidedownPrompt();";
+            }
+
+            if ($onesignal_wp_settings['use_native_prompt'] === true) {
+                echo "OneSignal.showNativePrompt();";
+            }
+        
         } else {
             ?>
           /* OneSignal: Using custom SDK initialization. */

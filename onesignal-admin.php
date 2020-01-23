@@ -331,6 +331,7 @@ class OneSignal_Admin
         $onesignal_wp_settings['is_site_https_firsttime'] = 'set';
 
         $booleanSettings = array(
+      'use_native_prompt',
       'is_site_https',
       'prompt_auto_register',
       'use_modal_prompt',
@@ -354,7 +355,6 @@ class OneSignal_Admin
       'show_notification_send_status_message',
       'use_http_permission_request',
       'customize_http_permission_request',
-      'use_slidedown_permission_message_for_https',
     );
         OneSignal_Admin::saveBooleanSettings($onesignal_wp_settings, $config, $booleanSettings);
 

@@ -90,7 +90,6 @@ class OneSignal {
                   'http_permission_request_modal_title' => '',
                   'http_permission_request_modal_message' => '',
                   'http_permission_request_modal_button_text' => '',
-                  'use_slidedown_permission_message_for_https' => false,
                   'persist_notifications' => 'CALCULATE_SPECIAL_VALUE'
                   );
 

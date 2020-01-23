@@ -609,57 +609,60 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="ui dividing header">
             <i class="external icon"></i>
             <div class="content">
-              HTTP Pop-Up Settings
+              Prompt Customization
             </div>
           </div>
-          <img class="img-responsive no-center" src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.jpg") ?>" width="360">
+          <div style="display:flex; flex-wrap: wrap; align-items: center;">
+            <img src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.jpg") ?>" width="500">
+            <img src="<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/http-prompt.png") ?>" width="500">
+          </div>
           <div class="ui borderless shadowless segment" style="position: relative;">
-              <p class="lato">These settings modify the HTTP Pop-Up Prompt and button text for all users. Use this to localize the HTTP Pop-Up Prompt to your language. All fields here are limited in the length of text they can display.</p>
+              <p class="lato">These settings modify the HTTP Pop-up Prompt and HTTPS Slide Prompt for all users. Use this to localize the Prompt to your language. All fields here are limited in the length of text they can display.</p>
               <div class="field">
                 <div class="ui toggle checkbox">
                   <input type="checkbox" name="prompt_customize_enable" value="true" <?php if (array_key_exists('prompt_customize_enable', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_customize_enable']) { echo "checked"; } ?>>
-                  <label>Customize the HTTP Pop-Up Prompt text</label>
+                  <label>Customize the Prompt text</label>
                 </div>
               </div>
               <div class="field prompt-customize-feature">
                   <label>Action Message</label>
-                  <input type="text" name="prompt_action_message" placeholder="wants to show notifications:" value="<?php echo esc_attr($onesignal_wp_settings['prompt_action_message']); ?>">
-              </div>
-              <div class="field prompt-customize-feature">
-                <label>Auto Accept Title (Click Allow)</label>
-                <input type="text" name="prompt_auto_accept_title" placeholder="Click Allow" value="<?php echo esc_attr($onesignal_wp_settings['prompt_auto_accept_title']); ?>">
-              </div>
-              <div class="field prompt-customize-feature">
-                <label>Site Name</label>
-                <input type="text" name="prompt_site_name" placeholder="http://yoursite.com" value="<?php echo esc_attr($onesignal_wp_settings['prompt_site_name']); ?>">
-              </div>
-              <div class="field prompt-customize-feature">
-                  <label>Example Notification Title (Desktop)</label>
-                  <input type="text" name="prompt_example_notification_title_desktop" placeholder="This is an example notification" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_title_desktop']); ?>">
-              </div>
-              <div class="field prompt-customize-feature">
-                  <label>Example Notification Message (Desktop)</label>
-                  <input type="text" name="prompt_example_notification_message_desktop" placeholder="Notifications will appear on your desktop" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_message_desktop']); ?>">
-              </div>
-              <div class="field prompt-customize-feature">
-                  <label>Example Notification Title (Mobile)</label>
-                  <input type="text" name="prompt_example_notification_title_mobile" placeholder="Example notification" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_title_mobile']); ?>">
-              </div>
-              <div class="field prompt-customize-feature">
-                  <label>Example Notification Message (Mobile)</label>
-                  <input type="text" name="prompt_example_notification_message_mobile" placeholder="Notifications will appear on your device" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_message_mobile']); ?>">
-              </div>
-              <div class="field prompt-customize-feature">
-                  <label>Example Notification Caption</label>
-                  <input type="text" name="prompt_example_notification_caption" placeholder="(you can unsubscribe anytime)" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_caption']); ?>">
+                  <input type="text" name="prompt_action_message" placeholder="We'd like to send you push notifications. You can unsubscribe at any time." value="<?php echo esc_attr($onesignal_wp_settings['prompt_action_message']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Accept Button Text</label>
-                  <input type="text" name="prompt_accept_button_text" placeholder="CONTINUE" value="<?php echo esc_attr($onesignal_wp_settings['prompt_accept_button_text']); ?>">
+                  <input type="text" name="prompt_accept_button_text" placeholder="ALLOW" value="<?php echo esc_attr($onesignal_wp_settings['prompt_accept_button_text']); ?>">
               </div>
               <div class="field prompt-customize-feature">
                   <label>Cancel Button Text</label>
                   <input type="text" name="prompt_cancel_button_text" placeholder="NO THANKS" value="<?php echo esc_attr($onesignal_wp_settings['prompt_cancel_button_text']); ?>">
+              </div>
+              <div class="field prompt-customize-feature">
+                <label>Auto Accept Title (Click Allow) - HTTP Only</label>
+                <input type="text" name="prompt_auto_accept_title" placeholder="Click Allow" value="<?php echo esc_attr($onesignal_wp_settings['prompt_auto_accept_title']); ?>">
+              </div>
+              <div class="field prompt-customize-feature">
+                <label>Site Name - HTTP Only</label>
+                <input type="text" name="prompt_site_name" placeholder="http://yoursite.com" value="<?php echo esc_attr($onesignal_wp_settings['prompt_site_name']); ?>">
+              </div>
+              <div class="field prompt-customize-feature">
+                  <label>Example Notification Title (Desktop) - HTTP Only</label>
+                  <input type="text" name="prompt_example_notification_title_desktop" placeholder="This is an example notification" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_title_desktop']); ?>">
+              </div>
+              <div class="field prompt-customize-feature">
+                  <label>Example Notification Message (Desktop) - HTTP Only</label>
+                  <input type="text" name="prompt_example_notification_message_desktop" placeholder="Notifications will appear on your desktop" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_message_desktop']); ?>">
+              </div>
+              <div class="field prompt-customize-feature">
+                  <label>Example Notification Title (Mobile) - HTTP Only</label>
+                  <input type="text" name="prompt_example_notification_title_mobile" placeholder="Example notification" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_title_mobile']); ?>">
+              </div>
+              <div class="field prompt-customize-feature">
+                  <label>Example Notification Message (Mobile) - HTTP Only</label>
+                  <input type="text" name="prompt_example_notification_message_mobile" placeholder="Notifications will appear on your device" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_message_mobile']); ?>">
+              </div>
+              <div class="field prompt-customize-feature">
+                  <label>Example Notification Caption - HTTP Only</label>
+                  <input type="text" name="prompt_example_notification_caption" placeholder="(you can unsubscribe anytime)" value="<?php echo esc_attr($onesignal_wp_settings['prompt_example_notification_caption']); ?>">
               </div>
           </div>
         </div>

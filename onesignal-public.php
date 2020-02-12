@@ -287,11 +287,11 @@ class OneSignal_Public
                 <?php
             }
         
-            if ($onesignal_wp_settings['prompt_auto_register'] === true) {
+            if (array_key_exists('prompt_auto_register', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_auto_register'] === true) {
                     echo "OneSignal.showSlidedownPrompt();";
             }
 
-            if ($onesignal_wp_settings['use_native_prompt'] === true) {
+            if (array_key_exists('use_native_prompt', $onesignal_wp_settings) && $onesignal_wp_settings['use_native_prompt'] === true) {
                 echo "OneSignal.showNativePrompt();";
             }
         

@@ -272,13 +272,14 @@ class OneSignal_Admin
         $settings_send_notification_on_wp_editor_post = $onesignal_wp_settings['notification_on_post'];
 
         /* This is a scheduled post and the user checked "Send a notification on post publish/update". */
-        $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification') === true);
-
-        // We check the checkbox if: setting is enabled on Config page, post type is ONLY "post", and the post has not been published (new posts are status "auto-draft")
-        $meta_box_checkbox_send_notification = ($settings_send_notification_on_wp_editor_post &&  // If setting is enabled
-                                            $post->post_type === 'post' &&  // Post type must be type post for checkbox to be auto-checked
-                                            in_array($post->post_status, array('future', 'draft', 'auto-draft', 'pending'), true)) || // Post is scheduled, incomplete, being edited, or is awaiting publication
-                                            ($post_metadata_was_send_notification_checked);
+        if ((get_post_meta($post->ID, 'onesignal_send_notification', true) === '1')) {
+            $meta_box_checkbox_send_notification = true;
+        } else {
+            // We check the checkbox if: setting is enabled on Config page, post type is ONLY "post", and the post has not been published (new posts are status "auto-draft")
+            $meta_box_checkbox_send_notification = ($settings_send_notification_on_wp_editor_post &&  // If setting is enabled
+                                                $post->post_type === 'post' &&  // Post type must be type post for checkbox to be auto-checked
+                                                !in_array($post->post_status, array('publish', 'private', 'trash', 'inherit'), true)); // Post is scheduled, incomplete, being edited, or is awaiting publication
+        }
 
         if (has_filter('onesignal_meta_box_send_notification_checkbox_state')) {
             $meta_box_checkbox_send_notification = apply_filters('onesignal_meta_box_send_notification_checkbox_state', $post, $onesignal_wp_settings);

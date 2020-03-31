@@ -261,4 +261,8 @@ class OneSignal {
     $onesignal_wp_settings = $settings;
     update_option("OneSignalWPSetting", $onesignal_wp_settings);
   }
+
+  public static function maskedRestApiKey($rest_api_key) {
+    return str_repeat('*', 44) . substr($rest_api_key, -4);
+  }
 }

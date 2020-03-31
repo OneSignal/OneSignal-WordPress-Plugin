@@ -431,10 +431,12 @@ class OneSignal_Admin
         foreach ($settings as $setting) {
             $value = sanitize_text_field($config[$setting]);
 
-            // app_rest_api_key will be empty if the user did not try to change the value
-            // This prevents it from being cleared
-            if ($setting === 'app_rest_api_key' && empty($value))
-                continue;
+            if ($setting === 'app_rest_api_key') {
+                // Only save key if the value has been changed.
+                // This prevents its masked value from becoming the value saved to the DB
+                if (OneSignal::maskedRestApiKey($onesignal_wp_settings[$setting]) === $value)
+                    continue;
+            }
 
             $onesignal_wp_settings[$setting] = $value;
         }

@@ -60,3 +60,7 @@ crashlytics-build.properties
 .DS_Store
 
 onesignal-extra.php
+
+docker-instance-files/*
+# Expection to the rule as we need this files to modify plugin upload limits
+!uploads.ini

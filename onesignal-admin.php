@@ -432,9 +432,14 @@ class OneSignal_Admin
     public static function saveStringSettings(&$onesignal_wp_settings, &$config, $settings)
     {
         foreach ($settings as $setting) {
+            $value = sanitize_text_field($config[$setting]);
+
+            // app_rest_api_key will be empty if the user did not try to change the value
+            // This prevents it from being cleared
+            if ($setting === 'app_rest_api_key' && empty($value))
+                continue;
+
             if (array_key_exists($setting, $config)) {
-                $value = $config[$setting];
-                $value = sanitize_text_field($value);
                 $onesignal_wp_settings[$setting] = $value;
             }
         }

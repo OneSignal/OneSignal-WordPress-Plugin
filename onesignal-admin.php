@@ -406,9 +406,6 @@ class OneSignal_Admin
       'allowed_custom_post_types',
       'notification_title',
       'custom_manifest_url',
-      'http_permission_request_modal_title',
-      'http_permission_request_modal_message',
-      'http_permission_request_modal_button_text',
       'persist_notifications',
     );
         OneSignal_Admin::saveStringSettings($onesignal_wp_settings, $config, $stringSettings);
@@ -439,9 +436,7 @@ class OneSignal_Admin
             if ($setting === 'app_rest_api_key' && empty($value))
                 continue;
 
-            if (array_key_exists($setting, $config)) {
-                $onesignal_wp_settings[$setting] = $value;
-            }
+            $onesignal_wp_settings[$setting] = $value;
         }
     }
 

@@ -406,9 +406,6 @@ class OneSignal_Admin
       'allowed_custom_post_types',
       'notification_title',
       'custom_manifest_url',
-      'http_permission_request_modal_title',
-      'http_permission_request_modal_message',
-      'http_permission_request_modal_button_text',
       'persist_notifications',
     );
         OneSignal_Admin::saveStringSettings($onesignal_wp_settings, $config, $stringSettings);
@@ -432,11 +429,16 @@ class OneSignal_Admin
     public static function saveStringSettings(&$onesignal_wp_settings, &$config, $settings)
     {
         foreach ($settings as $setting) {
-            if (array_key_exists($setting, $config)) {
-                $value = $config[$setting];
-                $value = sanitize_text_field($value);
-                $onesignal_wp_settings[$setting] = $value;
+            $value = sanitize_text_field($config[$setting]);
+
+            if ($setting === 'app_rest_api_key') {
+                // Only save key if the value has been changed.
+                // This prevents its masked value from becoming the value saved to the DB
+                if (OneSignal::maskedRestApiKey($onesignal_wp_settings[$setting]) === $value)
+                    continue;
             }
+
+            $onesignal_wp_settings[$setting] = $value;
         }
     }
 

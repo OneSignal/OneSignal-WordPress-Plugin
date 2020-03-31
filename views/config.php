@@ -9,6 +9,7 @@ if (!OneSignalUtils::can_modify_plugin_settings()) {
 
 // The user is just viewing the config page; this page cannot be accessed directly
 $onesignal_wp_settings = OneSignal::get_onesignal_settings();
+
 ?>
 
 <header class="onesignal">
@@ -289,7 +290,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
           <div class="field">
             <label>REST API Key<i class="tiny circular help icon link" role="popup" data-title="Rest API Key" data-content="Your 48 character alphanumeric REST API Key. You can find this in App Settings > Keys & IDs." data-variation="wide"></i></label>
-            <input type="text" name="app_rest_api_key" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value="<?php echo esc_attr($onesignal_wp_settings['app_rest_api_key']); ?>">
+            <input type="text" name="app_rest_api_key" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value="<?php echo esc_attr(OneSignal::maskedRestApiKey($onesignal_wp_settings['app_rest_api_key'])); ?>">
           </div>
           <div class="field subdomain-feature">
             <label>OneSignal Label<i class="tiny circular help icon link" role="popup" data-title="Subdomain" data-content="The label you chose for your site. You can find this in Step 2. Wordpress Site Setup" data-variation="wide"></i></label>

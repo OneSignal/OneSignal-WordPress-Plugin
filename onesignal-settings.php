@@ -87,9 +87,6 @@ class OneSignal {
                   'use_custom_sdk_init' => false,
                   'show_notification_send_status_message' => true,
                   'use_http_permission_request' => 'CALCULATE_SPECIAL_VALUE',
-                  'http_permission_request_modal_title' => '',
-                  'http_permission_request_modal_message' => '',
-                  'http_permission_request_modal_button_text' => '',
                   'persist_notifications' => 'CALCULATE_SPECIAL_VALUE'
                   );
 
@@ -263,5 +260,9 @@ class OneSignal {
   public static function save_onesignal_settings($settings) {
     $onesignal_wp_settings = $settings;
     update_option("OneSignalWPSetting", $onesignal_wp_settings);
+  }
+
+  public static function maskedRestApiKey($rest_api_key) {
+    return str_repeat('*', 44) . substr($rest_api_key, -4);
   }
 }

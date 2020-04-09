@@ -3,25 +3,27 @@ Contributors: OneSignal
 Donate link: https://onesignal.com
 Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
 Requires at least: 3.8
-Tested up to: 5.3.2
-Stable tag: 2.1.1
+Tested up to: 5.4
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Increase engagement and drive more repeat traffic to your WordPress site with desktop push notifications. Now supporting Chrome, Firefox, and Safari.
+Increase engagement and drive more repeat traffic to your WordPress site with push notifications. Now a Wordpress VIP Gold Partner.
 
 == Description ==
 
 [OneSignal](https://onesignal.com) is an easy way to increase user engagement. Use OneSignal to send visitors targeted push notifications so they keep coming back. It takes just a few minutes to install.
 
-After setup, your visitors opt-in to receive push notifications when you publish a new post. Visitors receive these notifications even after they’ve left your website, thus driving re-engagement. 
+As a Wordpress VIP Gold Partner, OneSignal has been rigorously tested to handle even the highest volume use cases with reliability and ease of use.
+
+After setup, your visitors opt-in to receive push notifications when you publish a new post. Visitors receive these notifications even after they’ve left your website, thus driving re-engagement.
 
 You can configure notification delivery at preset intervals, create user segments, and customize the opt-in process for visitors.
 
 OneSignal’s free plan allows targeting up to 30,000 subscribers with push notifications. Contact support@onesignal.com if you have any questions. We’d love to hear from you!
 
 = Company =
-OneSignal is trusted by over 860,000 developers and marketing strategists. We power push notifications for everyone from early stage startups to Fortune 500 Companies, sending 4 billion notifications per day. It is the most popular push notification plugin on Wordpress with 90,000+ installations.
+OneSignal is trusted by over 920,000 developers and marketing strategists. We power push notifications for everyone from early stage startups to Fortune 500 Companies, sending over 6 billion notifications per day. It is the most popular push notification plugin on Wordpress with 100,000+ installations.
 
 = Features =
 * **Supports Chrome** (Desktop & Android), **Safari** (Mac OS X), **Microsoft Edge** (Desktop & Android), **Opera** (Desktop & Android) and **Firefox** (Desktop & Android) on both HTTP and HTTPS sites.
@@ -41,12 +43,12 @@ OneSignal is trusted by over 860,000 developers and marketing strategists. We po
 == Installation ==
 
 1. Install OneSignal from the WordPress.org plugin directory or by uploading the OneSignal plugin folder to your wp-content/plugins directory.
-2. Active the OneSignal plugin from your WordPress settings dashboard.
+2. Activate the OneSignal plugin from your WordPress settings dashboard.
 3. Follow the instructions on the Setup page.
 
 == Screenshots ==
 
-1. Notifications on Chrome, Safari, and Firefox.
+1. Notifications on Chrome, Safari, Firefox, Opera, and more.
 2. Our detailed setup instructions to get you started.
 3. Our configuration main configuration setup page.
 4. Our OneSignal dashboard users page, where you can see your subscribed users.
@@ -65,11 +67,15 @@ HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 
 == Changelog ==
 
+= 2.1.2 =
+
+- Obfuscation of REST API key in OneSignal configuration page to only show last 4 characters
+
 = 2.1.1 =
 
 - Minor bug fixes: check native_prompt setting key exists, reworked checkbox logic to support custom post statuses
 
-= 2.1.0 = 
+= 2.1.0 =
 
 - OneSignal config page interface changes to prompting options to discourage native prompt use, bug fixes
 

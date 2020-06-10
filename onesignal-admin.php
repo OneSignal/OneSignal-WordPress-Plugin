@@ -714,6 +714,7 @@ class OneSignal_Admin
                 $fields = array(
                     'external_id' => self::uuid($notif_content),
                     'app_id' => $onesignal_wp_settings['app_id'],
+                    'data' => array("post_id" => $post->ID),
                     'headings' => array('en' => $site_title),
                     'included_segments' => array('All'),
                     'isAnyWeb' => true,

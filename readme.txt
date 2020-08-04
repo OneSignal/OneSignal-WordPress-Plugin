@@ -1,9 +1,9 @@
 === OneSignal - Web Push Notifications ===
 Contributors: OneSignal
 Donate link: https://onesignal.com
-Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
+Tags: push notification, push notifications, desktop notifications, mobile notifications, chrome push, android, android notification, android notifications, android push, desktop notification, firefox, firefox push, gcm, goroost, mavericks, mobile, mobile notification, notification, notifications, notify, onesignal, push, push messages, roost, safari, safari push, web push, chrome
 Requires at least: 3.8
-Tested up to: 5.4
+Tested up to: 5.5
 Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html

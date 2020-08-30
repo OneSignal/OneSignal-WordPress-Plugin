@@ -666,6 +666,11 @@ class OneSignal_Admin
                 $do_send_notification = $non_editor_post_publish_do_send_notification;
             }
 
+            // Prevent notifying updates for non-public post types.
+            if ( ! is_post_type_viewable( $post->post_type ) ) {
+	            $do_send_notification = false;
+            }
+
             if (has_filter('onesignal_include_post')) {
                 if (apply_filters('onesignal_include_post', $new_status, $old_status, $post)) {
                     $do_send_notification = true;

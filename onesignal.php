@@ -6,7 +6,7 @@ defined('ABSPATH') or die('This page may not be accessed directly.');
  * Plugin Name: OneSignal Push Notifications
  * Plugin URI: https://onesignal.com/
  * Description: Free web push notifications.
- * Version: 2.1.3
+ * Version: 2.1.4
  * Author: OneSignal
  * Author URI: https://onesignal.com
  * License: MIT
@@ -30,5 +30,5 @@ if (file_exists(plugin_dir_path(__FILE__).'onesignal-extra.php')) {
     require_once plugin_dir_path(__FILE__).'onesignal-extra.php';
 }
 
-add_action('init', array('OneSignal_Admin', 'init'));
-add_action('init', array('OneSignal_Public', 'init'));
+add_action('init', ['OneSignal_Admin', 'init']);
+add_action('init', ['OneSignal_Public', 'init']);

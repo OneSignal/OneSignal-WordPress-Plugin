@@ -284,19 +284,79 @@ class OneSignal_Admin
         if (has_filter('onesignal_meta_box_send_notification_checkbox_state')) {
             $meta_box_checkbox_send_notification = apply_filters('onesignal_meta_box_send_notification_checkbox_state', $post, $onesignal_wp_settings);
         }
+
+        if ($onesignal_wp_settings['notification_title'] !== '') {
+            $site_title = OneSignalUtils::decode_entities($onesignal_wp_settings['notification_title']);
+        } else {
+            $site_title = OneSignalUtils::decode_entities(get_bloginfo('name'));
+        }
+
+
         ?>
     
 	    <input type="hidden" name="onesignal_meta_box_present" value="true"></input>
-        <input type="checkbox" name="send_onesignal_notification" value="true" <?php if ($meta_box_checkbox_send_notification) {
-                echo 'checked';
-            } ?>></input>
+      <div id="onesignal_send_preference">
         <label>
-        <?php if ($post->post_status === 'publish') {
-            echo esc_attr('Send notification on '.$post_type.' update');
-        } else {
-            echo esc_attr('Send notification on '.$post_type.' publish');
-        } ?>
-      </label>
+          <input type="checkbox" id="send_onesignal_notification" name="send_onesignal_notification" value="true" <?php if ($meta_box_checkbox_send_notification) {
+                  echo 'checked';
+              } ?>></input>
+          
+          <?php if ($post->post_status === 'publish') {
+              echo esc_attr('Send notification on '.$post_type.' update');            
+          } else {
+              echo esc_attr('Send notification on '.$post_type.' publish');
+
+         } ?>
+        </label>
+      </div>
+      <label>
+      <div id="onesignal_custom_contents_preferences">
+        <input type="checkbox" id="onesignal_modify_title_and_content" name="onesignal_modify_title_and_content"></input> Customize notification content</label>
+          
+        <div id="onesignal_custom_contents" style="display:none;padding-top:10px">
+          <div>
+            <label>Notification Title<br/>
+            <input type="text" size="16" style="width:250px;" name="onesignal_notification_custom_heading" id="onesignal_notification_custom_heading"></input>
+            </label>
+          </div>
+          <div>
+            <label>Notification Text<br/>
+            <input type="text" size="16" style="width:250px;" name="onesignal_notification_custom_content" id="onesignal_notification_custom_content"></input>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        var title = "<?php echo esc_attr($site_title); ?>";
+        jQuery('#onesignal_modify_title_and_content').change( function() {
+            if(jQuery(this).is(":checked")) {              
+              jQuery('#onesignal_custom_contents').show();
+              if(!jQuery('#onesignal_notification_custom_heading').val()) {
+                jQuery('#onesignal_notification_custom_heading').val(title);
+              }
+              if(!jQuery('#onesignal_notification_custom_content').val()) {
+                jQuery('#onesignal_notification_custom_content').val(jQuery("#title").val())
+              }
+
+            } else {
+              jQuery('#onesignal_custom_contents').hide();
+            }          
+        });
+        if(!jQuery("#send_onesignal_notification").is(":checked")) {
+          jQuery('#onesignal_modify_title_and_content').prop("disabled",true);        
+          jQuery('#onesignal_modify_title_and_content').prop("checked",false).change();
+        }
+        jQuery("#send_onesignal_notification").change( function() {
+          if(jQuery(this).is(":checked")) {
+            jQuery('#onesignal_modify_title_and_content').prop("disabled",false);
+          } else {
+            jQuery('#onesignal_modify_title_and_content').prop("disabled",true);
+            jQuery('#onesignal_modify_title_and_content').prop("checked",false).change();  
+          }
+      
+        })
+      </script>
     <?php
     }
 
@@ -630,6 +690,16 @@ class OneSignal_Admin
             $onesignal_meta_box_present = $was_posted && isset($_POST['onesignal_meta_box_present'], $_POST['onesignal_meta_box_present']) && $_POST['onesignal_meta_box_present'] === 'true';
             /* The checkbox "Send notification on post publish/update" on the OneSignal meta box is checked */
             $onesignal_meta_box_send_notification_checked = $was_posted && array_key_exists('send_onesignal_notification', $_POST) && $_POST['send_onesignal_notification'] === 'true';
+
+            /* Check if the checkbox "Customize notification content" is selected */
+            $onesignal_customize_content_checked = $was_posted && array_key_exists('onesignal_modify_title_and_content', $_POST) && $_POST['onesignal_modify_title_and_content'] === 'true';
+
+            if($onesignal_customize_content_checked) {
+              // Load the custom content if the user has selected to use it
+              $onesignal_custom_notification_heading = $_POST['onesignal_notification_custom_heading'];
+              $onesignal_custom_notification_content = $_POST['onesignal_notification_custom_content'];
+            }
+
             /* This is a scheduled post and the OneSignal meta box was present. */
             $post_metadata_was_onesignal_meta_box_present = (get_post_meta($post->ID, 'onesignal_meta_box_present', true) === '1');
             /* This is a scheduled post and the user checked "Send a notification on post publish/update". */
@@ -696,15 +766,24 @@ class OneSignal_Admin
                     if (array_key_exists('send_onesignal_notification', $_POST)) {
                         unset($_POST['send_onesignal_notification']);
                     }
+                    if (array_key_exists('onesignal_modify_title_and_content', $_POST)) {
+                        unset($_POST['onesignal_modify_title_and_content']);
+                    }
+                    if (array_key_exists('onesignal_notification_custom_heading', $_POST)) {
+                        unset($_POST['onesignal_notification_custom_heading']);
+                    }
+                    if (array_key_exists('onesignal_notification_custom_content', $_POST)) {
+                        unset($_POST['onesignal_notification_custom_content']);
+                    }
                 }
 
-                $notif_content = OneSignalUtils::decode_entities(get_the_title($post->ID));
+
                 $site_title = '';
                 if ($onesignal_wp_settings['notification_title'] !== '') {
                     $site_title = OneSignalUtils::decode_entities($onesignal_wp_settings['notification_title']);
                 } else {
                     $site_title = OneSignalUtils::decode_entities(get_bloginfo('name'));
-                }
+                }                
 
                 if (function_exists('qtrans_getLanguage')) {
                     try {
@@ -714,6 +793,18 @@ class OneSignal_Admin
                     } catch (Exception $e) {
                         return new WP_Error('err', __( "OneSignal: There was a problem sending a notification"));
                     }
+                }
+
+                $notif_content = OneSignalUtils::decode_entities(get_the_title($post->ID));
+
+                //Override content and/or title if the user has chosen to do so
+                if($onesignal_customize_content_checked) {
+                  if($onesignal_custom_notification_heading) {
+                    $site_title = $onesignal_custom_notification_heading;
+                  }
+                  if($onesignal_custom_notification_content) {
+                    $notif_content = $onesignal_custom_notification_content;
+                  }
                 }
 
                 $fields = array(

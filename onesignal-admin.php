@@ -311,7 +311,7 @@ class OneSignal_Admin
       </div>
       <label>
       <div id="onesignal_custom_contents_preferences">
-        <input type="checkbox" id="onesignal_modify_title_and_content" name="onesignal_modify_title_and_content"></input> Customize notification content</label>
+        <input type="checkbox" id="onesignal_modify_title_and_content" value="true" name="onesignal_modify_title_and_content"></input> Customize notification content</label>
           
         <div id="onesignal_custom_contents" style="display:none;padding-top:10px">
           <div>

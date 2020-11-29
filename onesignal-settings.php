@@ -138,41 +138,32 @@ class OneSignal {
       }
     }
 
-    /*
-      For first-time setup users, the array key will not exist since keys aren't
-      created until inside these blocks. The array_key_exists() will return
-      false for first-time users.
-     */
-
-    // Special case for web push images
-    if (!array_key_exists('showNotificationImageFromPostThumbnail', $onesignal_wp_settings)) {
-      if ( $is_new_user ) {
-        // Enable the notify button by default for new sites
-        $onesignal_wp_settings['showNotificationImageFromPostThumbnail'] = true;
-      } else {
-        // Do NOT enable the notify button for existing WordPress sites, since they may not like the way their notification changes
-        $onesignal_wp_settings['showNotificationImageFromPostThumbnail'] = false;
-      }
+    // These boolean settings are on by default for new installs only, and off by default on plugin upgrades,
+    // so as to minimize impact of change to existing behavior during automated upgrades.
+    $onByDefaultForNewInstalls = array(
+        // Do NOT enable the notify button for existing WordPress sites,
+        // since they may not like the way their notification changes
+        'showNotificationImageFromPostThumbnail',
+        // Do NOT enable the notify button for existing WordPress sites,
+        // since they might have a lot of users
+        'prompt_enable',
+        // Do NOT enable for existing WordPress sites,
+        // since it breaks existing prompt behavior
+        'use_http_permission_request'
+    );
+    foreach ($onByDefaultForNewInstalls as $key) {
+        if (!array_key_exists($key, $onesignal_wp_settings)) {
+          if ( $is_new_user ) {
+            $onesignal_wp_settings[$key] = true;
+          } else {
+            $onesignal_wp_settings[$key] = false;
+          }
     }
 
-    // Special case for notify button
-    if (!array_key_exists('notifyButton_enable', $onesignal_wp_settings)) {
-        if ( $is_new_user ) {
-            // Enable the notify button by default for new sites
-            $onesignal_wp_settings['notifyButton_enable'] = true;
-        } else {
-            // Do NOT enable the notify button for existing WordPress sites, since they might have a lot of users
-            $onesignal_wp_settings['notifyButton_enable'] = false;
-        }
-    }
-
-    // Special case for notify button customization
-    if (!array_key_exists('notifyButton_customize_enable', $onesignal_wp_settings)) {
-      if ( $is_new_user ) {
-        // Initially turn off notifyButton_customize_enable by default for new sites
-        $onesignal_wp_settings['notifyButton_customize_enable'] = true;
-      } else {
-        $text_customize_settings = array(
+    // These settings are groups of customized values
+    // and a boolean flag to indicate customization
+    $uncustomizedByDefault = array(
+        'notifyButton_customize_enable' => array(
           'notifyButton_tip_state_unsubscribed',
           'notifyButton_tip_state_subscribed',
           'notifyButton_tip_state_blocked',
@@ -184,24 +175,8 @@ class OneSignal {
           'notifyButton_dialog_main_button_unsubscribe',
           'notifyButton_dialog_blocked_title',
           'notifyButton_dialog_blocked_message'
-        );
-        $was_customized = false;
-        foreach ($text_customize_settings as $text_customize_setting) {
-          if ($onesignal_wp_settings[$text_customize_setting] !== "") {
-            $was_customized = true;
-          }
-        }
-        $onesignal_wp_settings['notifyButton_customize_enable'] = $was_customized;
-      }
-    }
-
-    // Special case for prompt customization
-    if (!array_key_exists('prompt_customize_enable', $onesignal_wp_settings)) {
-      if ( $is_new_user ) {
-        // Initially turn off prompt_customize_enable by default for new sites
-        $onesignal_wp_settings['prompt_customize_enable'] = true;
-      } else {
-        $text_customize_settings = array(
+        ),
+        'prompt_customize_enable' => array(
           'prompt_action_message',
           'prompt_example_notification_title_desktop',
           'prompt_example_notification_message_desktop',
@@ -210,26 +185,22 @@ class OneSignal {
           'prompt_example_notification_caption',
           'prompt_accept_button_text',
           'prompt_cancel_button_text'
-        );
-        $was_customized = false;
-        foreach ($text_customize_settings as $text_customize_setting) {
-          if ($onesignal_wp_settings[$text_customize_setting] !== "") {
-            $was_customized = true;
+        )
+    );
+    foreach ($uncustomizedByDefault as $key => $value) {
+        if (!array_key_exists($key, $onesignal_wp_settings)) {
+          if ( $is_new_user ) {
+            $onesignal_wp_settings[$key] = true;
+          } else {
+            $was_customized = false;
+            foreach ($value as $text_customize_setting) {
+              if ($onesignal_wp_settings[$text_customize_setting] !== "") {
+                $was_customized = true;
+              }
+            }
+            $onesignal_wp_settings[$key] = $was_customized;
           }
         }
-        $onesignal_wp_settings['prompt_customize_enable'] = $was_customized;
-      }
-    }
-
-    // Special case for HTTP permission request
-    if (!array_key_exists('use_http_permission_request', $onesignal_wp_settings)) {
-      if ($is_new_user) {
-        // Enable by default for new sites
-        $onesignal_wp_settings['use_http_permission_request'] = true;
-      } else {
-        // Do NOT enable for existing WordPress sites, since it breaks existing prompt behavior
-        $onesignal_wp_settings['use_http_permission_request'] = false;
-      }
     }
 
     // Special case for persistent notifications

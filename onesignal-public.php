@@ -55,10 +55,10 @@ class OneSignal_Public
     add_filter('clean_url', 'add_async_for_script', 11, 1);
 
     if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
-        wp_register_script('local_sdk', 'https://localhost:3001/sdks/OneSignalSDK.js#asyncload', array('jquery'), false, true);
+        wp_register_script('local_sdk', 'https://localhost:3001/sdks/OneSignalSDK.js#asyncload', array(), false, true);
         wp_enqueue_script('local_sdk');
     } else {
-        wp_register_script('remote_sdk', 'https://cdn.onesignal.com/sdks/OneSignalSDK.js#asyncload', array('jquery'), false, true);
+        wp_register_script('remote_sdk', 'https://cdn.onesignal.com/sdks/OneSignalSDK.js#asyncload', array(), false, true);
         wp_enqueue_script('remote_sdk');
     } ?>
     <script>

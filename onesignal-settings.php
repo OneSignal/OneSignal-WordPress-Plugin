@@ -253,8 +253,8 @@ class OneSignal {
         }
       }
     }
-
-    return apply_filters( 'onesignal_get_settings', $onesignal_wp_settings );
+    $onesignal_settings_values_without_slashes = stripslashes_deep($onesignal_wp_settings);
+    return apply_filters( 'onesignal_get_settings', $onesignal_settings_values_without_slashes );
   }
 
   public static function save_onesignal_settings($settings) {

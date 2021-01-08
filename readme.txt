@@ -69,7 +69,7 @@ HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 
 = 2.1.5 =
 
-- Update of "Tested up to" value (WP 5.6)
+- Update of "Tested up to" value (WP 5.6), robots files, new feature: custom title/body support, remove unnecessary jQuery
 
 = 2.1.4 =
 

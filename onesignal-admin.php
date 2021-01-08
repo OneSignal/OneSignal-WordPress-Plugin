@@ -313,32 +313,27 @@ class OneSignal_Admin
       <div id="onesignal_custom_contents_preferences">
         <input type="checkbox" id="onesignal_modify_title_and_content" value="true" name="onesignal_modify_title_and_content"></input> Customize notification content</label>
           
-        <div id="onesignal_custom_contents" style="display:none;padding-top:10px">
+        <div id="onesignal_custom_contents" style="display:none;padding-top:10px;">
           <div>
             <label>Notification Title<br/>
-            <input type="text" size="16" style="width:250px;" name="onesignal_notification_custom_heading" id="onesignal_notification_custom_heading"></input>
+            <input type="text" size="16" style="width:220px;" name="onesignal_notification_custom_heading" id="onesignal_notification_custom_heading" placeholder="<?php echo esc_attr(OneSignalUtils::decode_entities($onesignal_wp_settings['notification_title'])); ?>"></input>
             </label>
           </div>
-          <div>
+          <div style="padding-top:10px">
             <label>Notification Text<br/>
-            <input type="text" size="16" style="width:250px;" name="onesignal_notification_custom_content" id="onesignal_notification_custom_content"></input>
+            <input type="text" size="16" style="width:220px;" name="onesignal_notification_custom_content" id="onesignal_notification_custom_content" placeholder="The Post's Current Title"></input>
             </label>
           </div>
         </div>
       </div>
 
       <script>
-        var title = "<?php echo esc_attr($site_title); ?>";
         jQuery('#onesignal_modify_title_and_content').change( function() {
             if(jQuery(this).is(":checked")) {              
               jQuery('#onesignal_custom_contents').show();
-              if(!jQuery('#onesignal_notification_custom_heading').val()) {
-                jQuery('#onesignal_notification_custom_heading').val(title);
-              }
               if(!jQuery('#onesignal_notification_custom_content').val()) {
-                jQuery('#onesignal_notification_custom_content').val(jQuery("#title").val())
+                jQuery('#onesignal_notification_custom_content').val(jQuery("#title").val());
               }
-
             } else {
               jQuery('#onesignal_custom_contents').hide();
             }          
@@ -810,11 +805,11 @@ class OneSignal_Admin
                 $fields = array(
                     'external_id' => self::uuid($notif_content),
                     'app_id' => $onesignal_wp_settings['app_id'],
-                    'headings' => array('en' => $site_title),
+                    'headings' => array('en' => stripslashes_deep($site_title)),
                     'included_segments' => array('All'),
                     'isAnyWeb' => true,
                     'url' => get_permalink($post->ID),
-                    'contents' => array('en' => $notif_content),
+                    'contents' => array('en' => stripslashes_deep($notif_content)),
                 );
 
                 $send_to_mobile_platforms = $onesignal_wp_settings['send_to_mobile_platforms'];

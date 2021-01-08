@@ -4,12 +4,13 @@ defined('ABSPATH') or die('This page may not be accessed directly.');
 
 function add_async_for_script($url)
 {
-	if (strpos($url, '#asyncload') === false)
-	    return $url;
-	else if (is_admin())
-	    return str_replace('#asyncload', '', $url);
-	else
-	    return str_replace('#asyncload', '', $url)."' async='async"; 
+    if (strpos($url, '#asyncload') === false) {
+        return $url;
+    } elseif (is_admin()) {
+        return str_replace('#asyncload', '', $url);
+    } else {
+        return str_replace('#asyncload', '', $url)."' async='async";
+    }
 }
 
 class OneSignal_Public
@@ -20,7 +21,7 @@ class OneSignal_Public
 
     public static function init()
     {
-        add_action('wp_head', array(__CLASS__, 'onesignal_header'), 10);
+        add_action('wp_head', [__CLASS__, 'onesignal_header'], 10);
     }
 
     // For easier debugging of sites by identifying them as WordPress
@@ -31,8 +32,9 @@ class OneSignal_Public
     <?php
     }
 
-    private static function valid_for_key($key, $array) {
-        if(array_key_exists($key, $array) && $array[$key] !== ''){
+    private static function valid_for_key($key, $array)
+    {
+        if (array_key_exists($key, $array) && $array[$key] !== '') {
             return true;
         }
 
@@ -54,13 +56,13 @@ class OneSignal_Public
     <?php
     add_filter('clean_url', 'add_async_for_script', 11, 1);
 
-    if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
-        wp_register_script('local_sdk', 'https://localhost:3001/sdks/OneSignalSDK.js#asyncload', array(), false, true);
-        wp_enqueue_script('local_sdk');
-    } else {
-        wp_register_script('remote_sdk', 'https://cdn.onesignal.com/sdks/OneSignalSDK.js#asyncload', array(), false, true);
-        wp_enqueue_script('remote_sdk');
-    } ?>
+        if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
+            wp_register_script('local_sdk', 'https://localhost:3001/sdks/OneSignalSDK.js#asyncload', [], false, true);
+            wp_enqueue_script('local_sdk');
+        } else {
+            wp_register_script('remote_sdk', 'https://cdn.onesignal.com/sdks/OneSignalSDK.js#asyncload', [], false, true);
+            wp_enqueue_script('remote_sdk');
+        } ?>
     <script>
 
       window.OneSignal = window.OneSignal || [];
@@ -120,7 +122,7 @@ class OneSignal_Public
         echo "oneSignal_options['promptOptions'] = { };\n";
         if (array_key_exists('prompt_customize_enable', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_customize_enable'] === true) {
             if (self::valid_for_key('prompt_action_message', $onesignal_wp_settings)) {
-                echo "oneSignal_options['promptOptions']['actionMessage'] = \"".OneSignalUtils::decode_entities(esc_html($onesignal_wp_settings["prompt_action_message"]))."\";\n"; 
+                echo "oneSignal_options['promptOptions']['actionMessage'] = \"".OneSignalUtils::decode_entities(esc_html($onesignal_wp_settings['prompt_action_message']))."\";\n";
             }
             if (self::valid_for_key('prompt_example_notification_title_desktop', $onesignal_wp_settings)) {
                 echo "oneSignal_options['promptOptions']['exampleNotificationTitleDesktop'] = \"".OneSignalUtils::decode_entities(esc_html($onesignal_wp_settings['prompt_example_notification_title_desktop']))."\";\n";
@@ -287,15 +289,14 @@ class OneSignal_Public
                 OneSignal.init(window._oneSignalInitOptions);
                 <?php
             }
-        
+
             if (array_key_exists('prompt_auto_register', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_auto_register'] === true) {
-                    echo "OneSignal.showSlidedownPrompt();";
+                echo 'OneSignal.showSlidedownPrompt();';
             }
 
             if (array_key_exists('use_native_prompt', $onesignal_wp_settings) && $onesignal_wp_settings['use_native_prompt'] === true) {
-                echo "OneSignal.showNativePrompt();";
+                echo 'OneSignal.showNativePrompt();';
             }
-        
         } else {
             ?>
           /* OneSignal: Using custom SDK initialization. */

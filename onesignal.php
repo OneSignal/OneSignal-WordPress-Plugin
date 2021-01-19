@@ -13,7 +13,6 @@ defined('ABSPATH') or die('This page may not be accessed directly.');
  */
 
 define('ONESIGNAL_PLUGIN_URL', plugin_dir_url(__FILE__));
-
 /*
  * The number of seconds required to wait between requests.
  */

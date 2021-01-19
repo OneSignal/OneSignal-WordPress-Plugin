@@ -2,6 +2,7 @@
 
 defined('ABSPATH') or die('This page may not be accessed directly.');
 
+
 function onesignal_change_footer_admin()
 {
     return '';
@@ -155,6 +156,7 @@ class OneSignal_Admin
      */
     public static function on_save_post($post_id, $post, $updated)
     {
+
         if ($post->post_type === 'wdslp-wds-log') {
             // Prevent recursive post logging
             return;
@@ -197,6 +199,17 @@ class OneSignal_Admin
         } else {
             update_post_meta($post_id, 'onesignal_send_notification', false);
         }
+
+        if (array_key_exists('onesignal_modify_title_and_content', $_POST)) {
+            update_post_meta($post_id, 'onesignal_modify_title_and_content', true);
+            update_post_meta($post_id, 'onesignal_notification_custom_heading', $_POST['onesignal_notification_custom_heading']);
+            update_post_meta($post_id, 'onesignal_notification_custom_content', $_POST['onesignal_notification_custom_content']);
+        } else {
+            update_post_meta($post_id, 'onesignal_modify_title_and_content', false);
+            update_post_meta($post_id, 'onesignal_notification_custom_heading', null);
+            update_post_meta($post_id, 'onesignal_notification_custom_content', null);
+        }
+
     }
 
     public static function add_onesignal_post_options()
@@ -291,7 +304,10 @@ class OneSignal_Admin
             $site_title = OneSignalUtils::decode_entities(get_bloginfo('name'));
         }
 
-
+        $onesignal_customize_content_checked = (get_post_meta($post->ID, 'onesignal_modify_title_and_content', true) === '1');                
+        $onesignal_notification_custom_content = get_post_meta($post->ID, 'onesignal_notification_custom_content', true);
+        $onesignal_notification_custom_heading = get_post_meta($post->ID, 'onesignal_notification_custom_heading', true);
+        
         ?>
     
 	    <input type="hidden" name="onesignal_meta_box_present" value="true"></input>
@@ -311,17 +327,23 @@ class OneSignal_Admin
       </div>
       <label>
       <div id="onesignal_custom_contents_preferences">
-        <input type="checkbox" id="onesignal_modify_title_and_content" value="true" name="onesignal_modify_title_and_content"></input> Customize notification content</label>
+        <input type="checkbox" id="onesignal_modify_title_and_content" value="true" name="onesignal_modify_title_and_content" <?php if ($onesignal_customize_content_checked) {
+                  echo 'checked';
+              } ?>></input> Customize notification content</label>
           
         <div id="onesignal_custom_contents" style="display:none;padding-top:10px;">
           <div>
             <label>Notification Title<br/>
-            <input type="text" size="16" style="width:220px;" name="onesignal_notification_custom_heading" id="onesignal_notification_custom_heading" placeholder="<?php echo esc_attr(OneSignalUtils::decode_entities($onesignal_wp_settings['notification_title'])); ?>"></input>
+            <input type="text" size="16" style="width:220px;" name="onesignal_notification_custom_heading" value="<?php 
+              echo esc_attr(OneSignalUtils::decode_entities($onesignal_notification_custom_heading)); 
+             ?>" id="onesignal_notification_custom_heading" placeholder="<?php echo esc_attr(OneSignalUtils::decode_entities($onesignal_wp_settings['notification_title'])); ?>"></input>
             </label>
           </div>
           <div style="padding-top:10px">
             <label>Notification Text<br/>
-            <input type="text" size="16" style="width:220px;" name="onesignal_notification_custom_content" id="onesignal_notification_custom_content" placeholder="The Post's Current Title"></input>
+            <input type="text" size="16" style="width:220px;" name="onesignal_notification_custom_content" value="<?php  
+              echo esc_attr(OneSignalUtils::decode_entities($onesignal_notification_custom_content)); 
+              ?>" id="onesignal_notification_custom_content" placeholder="The Post's Current Title"></input>
             </label>
           </div>
         </div>
@@ -342,6 +364,7 @@ class OneSignal_Admin
           jQuery('#onesignal_modify_title_and_content').prop("disabled",true);        
           jQuery('#onesignal_modify_title_and_content').prop("checked",false).change();
         }
+
         jQuery("#send_onesignal_notification").change( function() {
           if(jQuery(this).is(":checked")) {
             jQuery('#onesignal_modify_title_and_content').prop("disabled",false);
@@ -349,8 +372,9 @@ class OneSignal_Admin
             jQuery('#onesignal_modify_title_and_content').prop("disabled",true);
             jQuery('#onesignal_modify_title_and_content').prop("checked",false).change();  
           }
-      
+        
         })
+        jQuery('#onesignal_modify_title_and_content').change();
       </script>
     <?php
     }
@@ -646,6 +670,7 @@ class OneSignal_Admin
      */
     public static function send_notification_on_wp_post($new_status, $old_status, $post)
     {
+
         try {
             // quirk of Gutenberg editor leads to two passes if meta box is added
             // conditional removes first pass
@@ -674,6 +699,7 @@ class OneSignal_Admin
                 return;
             }
 
+
             $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
             /* Looks like on_save_post is called after transition_post_status so we'll have to check POST data in addition to post meta data */
@@ -689,16 +715,22 @@ class OneSignal_Admin
             /* Check if the checkbox "Customize notification content" is selected */
             $onesignal_customize_content_checked = $was_posted && array_key_exists('onesignal_modify_title_and_content', $_POST) && $_POST['onesignal_modify_title_and_content'] === 'true';
 
-            if($onesignal_customize_content_checked) {
-              // Load the custom content if the user has selected to use it
-              $onesignal_custom_notification_heading = $_POST['onesignal_notification_custom_heading'];
-              $onesignal_custom_notification_content = $_POST['onesignal_notification_custom_content'];
+            // If this post is newly being created and if the user has chosen to customize the content
+            $onesignal_customized_content = $onesignal_customize_content_checked || (get_post_meta($post->ID, 'onesignal_modify_title_and_content', true) === '1');
+          
+            if($was_posted && $onesignal_customized_content) {                
+                $onesignal_custom_notification_heading = $_POST['onesignal_notification_custom_heading'];
+                $onesignal_custom_notification_content = $_POST['onesignal_notification_custom_content'];
+            } else { // If this post was created previously (eg: scheduled), and the user had chosen to customize the content                
+                $onesignal_custom_notification_heading = get_post_meta($post->ID, 'onesignal_notification_custom_heading', true);
+                $onesignal_custom_notification_content = get_post_meta($post->ID, 'onesignal_notification_custom_content', true);
             }
-
+            
             /* This is a scheduled post and the OneSignal meta box was present. */
             $post_metadata_was_onesignal_meta_box_present = (get_post_meta($post->ID, 'onesignal_meta_box_present', true) === '1');
             /* This is a scheduled post and the user checked "Send a notification on post publish/update". */
             $post_metadata_was_send_notification_checked = (get_post_meta($post->ID, 'onesignal_send_notification', true) === '1');
+
 
             /* Either we were just posted from the WordPress post editor form, or this is a scheduled notification and it was previously submitted from the post editor form */
             $posted_from_wordpress_editor = $onesignal_meta_box_present || $post_metadata_was_onesignal_meta_box_present;
@@ -749,6 +781,9 @@ class OneSignal_Admin
                       */
                 update_post_meta($post->ID, 'onesignal_meta_box_present', false);
                 update_post_meta($post->ID, 'onesignal_send_notification', false);
+                update_post_meta($post->ID, 'onesignal_modify_title_and_content', false);
+                update_post_meta($post->ID, 'onesignal_notification_custom_heading', null);
+                update_post_meta($post->ID, 'onesignal_notification_custom_content', null);
 
                 /* Some WordPress environments seem to be inconsistent about whether on_save_post is called before transition_post_status
                  * This sets the metadata back to true, and will cause a post to be sent even if the checkbox is not checked the next time
@@ -793,7 +828,7 @@ class OneSignal_Admin
                 $notif_content = OneSignalUtils::decode_entities(get_the_title($post->ID));
 
                 //Override content and/or title if the user has chosen to do so
-                if($onesignal_customize_content_checked) {
+                if($onesignal_customized_content) {
                   if($onesignal_custom_notification_heading) {
                     $site_title = $onesignal_custom_notification_heading;
                   }

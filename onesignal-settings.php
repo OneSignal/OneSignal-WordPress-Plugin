@@ -87,7 +87,7 @@ class OneSignal {
                   'use_custom_sdk_init' => false,
                   'show_notification_send_status_message' => true,
                   'use_http_permission_request' => 'CALCULATE_SPECIAL_VALUE',
-                  'persist_notifications' => 'CALCULATE_SPECIAL_VALUE'
+                  'persist_notifications' => 'CALCULATE_SPECIAL_VALUE',
                   'onesignal_sw_js' => true
                   );
 

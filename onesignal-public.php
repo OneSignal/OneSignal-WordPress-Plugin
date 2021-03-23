@@ -72,15 +72,15 @@ class OneSignal_Public
              * Ex. It will give you a string like this:
              * /wp-content/plugins/onesignal-free-web-push-notifications/
              */
-            $path = strstr(plugin_dir_url(__FILE__), '/wp-content');
-            if(array_key_exists('onesignal_sw_js', $onesignal_wp_settings)) {
-               echo  "OneSignal.SERVICE_WORKER_UPDATER_PATH = 'OneSignalSDKUpdaterWorker.js';
+            if(array_key_exists('onesignal_sw_js', $onesignal_wp_settings)) {         
+                $path = strstr(plugin_dir_url(__FILE__), '/wp-content');
+                echo  "OneSignal.SERVICE_WORKER_UPDATER_PATH = 'OneSignalSDKUpdaterWorker.js';
                       OneSignal.SERVICE_WORKER_PATH = 'OneSignalSDKWorker.js';
                       OneSignal.SERVICE_WORKER_PARAM = { scope: '$path'+'sdk_files/push/onesignal/' };";
             } else {
                 echo 'OneSignal.SERVICE_WORKER_UPDATER_PATH = "OneSignalSDKUpdaterWorker.js.php";
                       OneSignal.SERVICE_WORKER_PATH = "OneSignalSDKWorker.js.php";
-                      OneSignal.SERVICE_WORKER_PARAM = { scope: "push/onesignal" };';
+                      OneSignal.SERVICE_WORKER_PARAM = { scope: "/" };';
             }
         ?>
 

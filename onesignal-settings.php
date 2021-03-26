@@ -109,7 +109,6 @@ class OneSignal {
     $onesignal_wp_settings = get_option("OneSignalWPSetting");
     if (empty( $onesignal_wp_settings )) {
         $is_new_user = true;
-        $defaults['onesignal_sw_js'] = true;
         $onesignal_wp_settings = array();
     }
 

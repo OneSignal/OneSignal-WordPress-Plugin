@@ -39,6 +39,16 @@ class OneSignal_Public
         return false;
     }
 
+    // Returns the OneSignal plugin URL path
+    // Examples:
+    //   /wp-content/plugins/onesignal-free-web-push-notifications
+    //   /app/plugins/onesignal-free-web-push-notifications
+    private static function getOneSignalPluginPath()
+    {
+        $path = parse_url(ONESIGNAL_PLUGIN_URL)['path'];
+        return rtrim($path, '/');
+    }
+
     public static function onesignal_header()
     {
         $onesignal_wp_settings = OneSignal::get_onesignal_settings();
@@ -68,15 +78,10 @@ class OneSignal_Public
       OneSignal.push( function() {
         <?php
             if(array_key_exists('onesignal_sw_js', $onesignal_wp_settings)) {
-                 /**
-                 * strstr method will remove the unecessary path before /wp-content
-                 * Ex. It will give you a string like this:
-                 * /wp-content/plugins/onesignal-free-web-push-notifications/
-                 */         
-                $path = strstr(plugin_dir_url(__FILE__), '/wp-content');
+                $swScope = self::getOneSignalPluginPath() . '/sdk_files/push/onesignal/';
                 echo  "OneSignal.SERVICE_WORKER_UPDATER_PATH = 'OneSignalSDKUpdaterWorker.js';
                       OneSignal.SERVICE_WORKER_PATH = 'OneSignalSDKWorker.js';
-                      OneSignal.SERVICE_WORKER_PARAM = { scope: '$path'+'sdk_files/push/onesignal/' };";
+                      OneSignal.SERVICE_WORKER_PARAM = { scope: '$swScope' };";
             } else {
                 echo 'OneSignal.SERVICE_WORKER_UPDATER_PATH = "OneSignalSDKUpdaterWorker.js.php";
                       OneSignal.SERVICE_WORKER_PATH = "OneSignalSDKWorker.js.php";

@@ -21,6 +21,7 @@ class OneSignal_Public
     public static function init()
     {
         add_action('wp_head', array(__CLASS__, 'onesignal_header'), 10);
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'onesigal_amp_style' ) );
     }
 
     // For easier debugging of sites by identifying them as WordPress
@@ -51,6 +52,20 @@ class OneSignal_Public
 
     public static function onesignal_header()
     {
+		
+		if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
+
+			if ( function_exists( 'amp_is_legacy' ) && amp_is_legacy() ) {
+				add_action( 'amp_post_template_body_open', array( __CLASS__, 'insert_amp_web_push' ) );
+				add_action( 'amp_post_template_footer', array( __CLASS__, 'insert_amp_one_signal_widget' ) );
+			} else {
+				add_action( 'wp_body_open', array( __CLASS__, 'insert_amp_web_push' ) );
+				add_action( 'wp_footer', array( __CLASS__, 'insert_amp_one_signal_widget' ) );
+			}
+
+			return;
+		}
+
         $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
         if (array_key_exists('subdomain', $onesignal_wp_settings) && $onesignal_wp_settings['subdomain'] === '') {
@@ -346,5 +361,103 @@ class OneSignal_Public
     </script>
 <?php
     }
+
+	/**
+	 * Enqueues style for onesignal push notification button.
+	 *
+	 * @return void
+	 */
+	public static function onesigal_amp_style() {
+		if ( ! self::onesignal_is_amp() ) {
+			return;
+		}
+
+		wp_enqueue_style( 'onesignal-amp', plugin_dir_url( __FILE__ ) . 'css/onsignal-amp-style.css', '', '0.1' );
+	}
+
+	/**
+	 * OneSignal AMP endpoint.
+	 *
+	 * @return boolean
+	 */
+	public static function onesignal_is_amp() {
+
+		$is_amp = false;
+
+		if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
+			$is_amp = true;
+		}
+
+		/**
+		 * Filter to modify AMP check.
+		 */
+		return apply_filters( 'onesignal_is_amp', $is_amp );
+	}
+
+	/**
+	 * Returns One Signal App ID
+	 *
+	 * @return int | false return one singal app ID false otherwise.
+	 */
+	public static function get_onesignal_app_id() {
+		$onesignal_wp_settings = OneSignal::get_onesignal_settings();
+		$onesignal_app_id      = $onesignal_wp_settings['app_id'];
+		return $onesignal_app_id;
+	}
+
+	/**
+	 * Add amp-web-push component.
+	 *
+	 * @return html
+	 */
+	public static function insert_amp_web_push() {
+
+		$onesignal_app_id = self::get_onesignal_app_id();
+
+		if ( empty( $onesignal_app_id ) ) {
+			return;
+		}
+
+		$one_signal_sdk_files_url = plugin_dir_url( __FILE__ ) . 'sdk_files/';
+
+		$helper_iframe_url     = $one_signal_sdk_files_url . 'amp-helper-frame.html?appId=' . $onesignal_app_id;
+		$permission_dialog_url = $one_signal_sdk_files_url . 'amp-permission-dialog.html?appId=' . $onesignal_app_id;
+		$service_worker_url    = $one_signal_sdk_files_url . 'OneSignalSDKWorker.js.php?appId=' . $onesignal_app_id;
+
+		echo sprintf(
+			'<amp-web-push id="amp-web-push" layout="nodisplay" helper-iframe-url="%1$s" permission-dialog-url="%2$s" service-worker-url="%3$s"></amp-web-push>',
+			esc_url( $helper_iframe_url ),
+			esc_url( $permission_dialog_url ),
+			esc_url( $service_worker_url )
+		);
+	}
+
+	/**
+	 * Add AMP webpush widget.
+	 */
+	public static function insert_amp_one_signal_widget() {
+		$onesignal_app_id = self::get_onesignal_app_id();
+
+		if ( empty( $onesignal_app_id ) ) {
+			return;
+		}
+		?>
+		<!-- A subscription widget -->
+		<amp-web-push-widget visibility="unsubscribed" layout="fixed" width="245" height="45">
+			<button class="subscribe has-background has-text-color" on="tap:amp-web-push.subscribe">
+				<svg class="onesignal-bell-svg" xmlns="http://www.w3.org/2000/svg" width="99.7" height="99.7" viewBox="0 0 99.7 99.7" style="filter: drop-shadow(0 2px 4px rgba(34,36,38,0.35));; -webkit-filter: drop-shadow(0 2px 4px rgba(34,36,38,0.35));;"><circle class="background" cx="49.9" cy="49.9" r="49.9" style=""></circle><path class="foreground" d="M50.1 66.2H27.7s-2-.2-2-2.1c0-1.9 1.7-2 1.7-2s6.7-3.2 6.7-5.5S33 52.7 33 43.3s6-16.6 13.2-16.6c0 0 1-2.4 3.9-2.4 2.8 0 3.8 2.4 3.8 2.4 7.2 0 13.2 7.2 13.2 16.6s-1 11-1 13.3c0 2.3 6.7 5.5 6.7 5.5s1.7.1 1.7 2c0 1.8-2.1 2.1-2.1 2.1H50.1zm-7.2 2.3h14.5s-1 6.3-7.2 6.3-7.3-6.3-7.3-6.3z" style=""></path><ellipse class="stroke" cx="49.9" cy="49.9" rx="37.4" ry="36.9" style=""></ellipse></svg>
+				<span class="tooltiptext"><?php esc_html_e( 'Subscribe to notifications' ); ?></span>
+			</button>
+		</amp-web-push-widget>
+
+		<!-- An unsubscription widget -->
+		<amp-web-push-widget visibility="subscribed" layout="fixed" width="230" height="45">
+			<button class="unsubscribe has-background has-text-color" on="tap:amp-web-push.unsubscribe">
+				<svg class="onesignal-bell-svg" xmlns="http://www.w3.org/2000/svg" width="99.7" height="99.7" viewBox="0 0 99.7 99.7" style="filter: drop-shadow(0 2px 4px rgba(34,36,38,0.35));; -webkit-filter: drop-shadow(0 2px 4px rgba(34,36,38,0.35));;"><circle class="background" cx="49.9" cy="49.9" r="49.9" style=""></circle><path class="foreground" d="M50.1 66.2H27.7s-2-.2-2-2.1c0-1.9 1.7-2 1.7-2s6.7-3.2 6.7-5.5S33 52.7 33 43.3s6-16.6 13.2-16.6c0 0 1-2.4 3.9-2.4 2.8 0 3.8 2.4 3.8 2.4 7.2 0 13.2 7.2 13.2 16.6s-1 11-1 13.3c0 2.3 6.7 5.5 6.7 5.5s1.7.1 1.7 2c0 1.8-2.1 2.1-2.1 2.1H50.1zm-7.2 2.3h14.5s-1 6.3-7.2 6.3-7.3-6.3-7.3-6.3z" style=""></path><ellipse class="stroke" cx="49.9" cy="49.9" rx="37.4" ry="36.9" style=""></ellipse></svg>
+				<span class="tooltiptext"><?php esc_html_e( 'Your\'e subscribed to notifications' ); ?></span>
+			</button>
+		</amp-web-push-widget>
+		<?php
+	}
+
 }
-?>

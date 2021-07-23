@@ -43,6 +43,7 @@ class OneSignalWidget extends WP_Widget {
 	}
 }
 
-add_action('widgets_init', function(){register_widget("OneSignalWidget");});
-
-?>
+function onesignal_register_widgets() {
+	register_widget("OneSignalWidget");
+}
+add_action('widgets_init', 'onesignal_register_widgets' );

@@ -847,6 +847,14 @@ class OneSignal_Admin
                     'contents' => array('en' => stripslashes_deep($notif_content)),
                 );
 
+                // Support for: https://yoast.com/wordpress/plugins/duplicate-post/
+                // Rewrite post url to the original url if current post is a duplicate post revision
+                $dp_is_revision = (int)get_post_meta($post->ID, '_dp_is_rewrite_republish_copy', true) === 1;
+                $dp_original_post_id = (int)get_post_meta($post->ID, '_dp_original', true);
+                if($dp_is_revision === true && $dp_original_post_id > 0) {
+                    $fields['url'] = get_permalink($dp_original_post_id);
+                }
+
                 $send_to_mobile_platforms = $onesignal_wp_settings['send_to_mobile_platforms'];
                 if ($send_to_mobile_platforms === true) {
                     $fields['isIos'] = true;

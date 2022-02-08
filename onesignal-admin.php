@@ -256,6 +256,7 @@ class OneSignal_Admin
         $output = 'names';
         $operator = 'and';
         $post_types = get_post_types($args, $output, $operator);
+        $post_types = apply_filters( 'onesignal_post_types_display_meta_box', $post_types );
         foreach ($post_types  as $post_type) {
             add_meta_box(
         'onesignal_notif_on_post',

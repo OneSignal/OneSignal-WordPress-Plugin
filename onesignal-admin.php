@@ -202,8 +202,8 @@ class OneSignal_Admin
 
         if (array_key_exists('onesignal_modify_title_and_content', $_POST)) {
             update_post_meta($post_id, 'onesignal_modify_title_and_content', true);
-            update_post_meta($post_id, 'onesignal_notification_custom_heading', $_POST['onesignal_notification_custom_heading']);
-            update_post_meta($post_id, 'onesignal_notification_custom_content', $_POST['onesignal_notification_custom_content']);
+            update_post_meta($post_id, 'onesignal_notification_custom_heading', sanitize_text_field($_POST['onesignal_notification_custom_heading']));
+            update_post_meta($post_id, 'onesignal_notification_custom_content', sanitize_text_field($_POST['onesignal_notification_custom_content']));
         } else {
             update_post_meta($post_id, 'onesignal_modify_title_and_content', false);
             update_post_meta($post_id, 'onesignal_notification_custom_heading', null);
@@ -717,15 +717,15 @@ class OneSignal_Admin
 
             // If this post is newly being created and if the user has chosen to customize the content
             $onesignal_customized_content = $onesignal_customize_content_checked || (get_post_meta($post->ID, 'onesignal_modify_title_and_content', true) === '1');
-          
-            if($was_posted && $onesignal_customized_content) {                
-                $onesignal_custom_notification_heading = $_POST['onesignal_notification_custom_heading'];
-                $onesignal_custom_notification_content = $_POST['onesignal_notification_custom_content'];
-            } else { // If this post was created previously (eg: scheduled), and the user had chosen to customize the content                
+
+            if($was_posted && $onesignal_customized_content) {
+                $onesignal_custom_notification_heading = sanitize_text_field($_POST['onesignal_notification_custom_heading']);
+                $onesignal_custom_notification_content = sanitize_text_field($_POST['onesignal_notification_custom_content']);
+            } else { // If this post was created previously (eg: scheduled), and the user had chosen to customize the content
                 $onesignal_custom_notification_heading = get_post_meta($post->ID, 'onesignal_notification_custom_heading', true);
                 $onesignal_custom_notification_content = get_post_meta($post->ID, 'onesignal_notification_custom_content', true);
             }
-            
+
             /* This is a scheduled post and the OneSignal meta box was present. */
             $post_metadata_was_onesignal_meta_box_present = (get_post_meta($post->ID, 'onesignal_meta_box_present', true) === '1');
             /* This is a scheduled post and the user checked "Send a notification on post publish/update". */
@@ -840,11 +840,11 @@ class OneSignal_Admin
                 $fields = array(
                     'external_id' => self::uuid($notif_content),
                     'app_id' => $onesignal_wp_settings['app_id'],
-                    'headings' => array('en' => stripslashes_deep($site_title)),
+                    'headings' => array('en' => stripslashes_deep(wp_specialchars_decode($site_title))),
                     'included_segments' => array('All'),
                     'isAnyWeb' => true,
                     'url' => get_permalink($post->ID),
-                    'contents' => array('en' => stripslashes_deep($notif_content)),
+                    'contents' => array('en' => stripslashes_deep(wp_specialchars_decode($notif_content))),
                 );
 
                 $send_to_mobile_platforms = $onesignal_wp_settings['send_to_mobile_platforms'];

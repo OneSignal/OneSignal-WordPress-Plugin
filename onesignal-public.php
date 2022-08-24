@@ -53,7 +53,7 @@ class OneSignal_Public
     public static function onesignal_header()
     {
 
-        if ( function_exists( 'amp_is_request' ) && amp_is_request() ) {
+        if ( self::onesignal_is_amp() ) {
 
             if ( function_exists( 'amp_is_legacy' ) && amp_is_legacy() ) {
                 add_action( 'amp_post_template_body_open', array( __CLASS__, 'insert_amp_web_push' ) );

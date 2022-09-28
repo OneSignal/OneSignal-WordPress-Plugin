@@ -24,7 +24,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 	⭐ Appreciate OneSignal?
 	<a style="margin-left:15px;" href="https://wordpress.org/support/plugin/onesignal-free-web-push-notifications/reviews/#new-post" target="_blank">Leave us a review →	</a>
       </span>
-    </div>    
+    </div>
     <div class="ui pointing stackable menu">
       <a class="item" data-tab="setup">Setup</a>
       <a class="active item" data-tab="configuration">Configuration</a>
@@ -764,6 +764,12 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <div class="ui toggle checkbox">
               <input type="checkbox" name="show_notification_send_status_message" value="true" <?php if ($onesignal_wp_settings['show_notification_send_status_message']) { echo "checked"; } ?>>
               <label>Show status message after sending notifications<i class="tiny circular help icon link" role="popup" data-title="Show Notification Send Status Message" data-content="If enabled, a notice at the top of your admin interface will show 'Successfully sent a notification to # recipients.' after our plugin sends a notification."></i></label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="sanitize_post_titles" value="true" <?php if ($onesignal_wp_settings['sanitize_post_titles']) { echo "checked"; } ?>>
+              <label>Sanitize Post Titles<i class="tiny circular help icon link" role="popup" data-title="Sanitize Post Titles" data-content="If enabled, we'll strip HTML content from your post titles before sending notifications."></i></label>
             </div>
           </div>
         </div>

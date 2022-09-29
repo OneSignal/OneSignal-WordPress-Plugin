@@ -766,12 +766,6 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
               <label>Show status message after sending notifications<i class="tiny circular help icon link" role="popup" data-title="Show Notification Send Status Message" data-content="If enabled, a notice at the top of your admin interface will show 'Successfully sent a notification to # recipients.' after our plugin sends a notification."></i></label>
             </div>
           </div>
-          <div class="field">
-            <div class="ui toggle checkbox">
-              <input type="checkbox" name="sanitize_post_titles" value="true" <?php if ($onesignal_wp_settings['sanitize_post_titles']) { echo "checked"; } ?>>
-              <label>Sanitize Post Titles<i class="tiny circular help icon link" role="popup" data-title="Sanitize Post Titles" data-content="If enabled, we'll strip HTML content from your post titles before sending notifications."></i></label>
-            </div>
-          </div>
         </div>
         </div>
         <button class="ui large teal button" type="submit">Save</button>

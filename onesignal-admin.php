@@ -434,7 +434,6 @@ class OneSignal_Admin
       'use_custom_manifest',
       'use_custom_sdk_init',
       'show_notification_send_status_message',
-      'sanitize_post_titles',
       'use_http_permission_request',
       'customize_http_permission_request',
 
@@ -828,14 +827,7 @@ class OneSignal_Admin
                     }
                 }
 
-                // Notification title, remove HTML from title if option is selected
-                $notif_content = '';
-                $notif_title = OneSignalUtils::decode_entities(get_the_title($post->ID));
-                if ($onesignal_wp_settings['sanitize_post_titles']) {
-                    $notif_content = wp_strip_all_tags($notif_title);
-                } else {
-                    $notif_content = $notif_title;
-                }
+                $notif_content = wp_strip_all_tags(OneSignalUtils::decode_entities(get_the_title($post->ID)));
 
                 //Override content and/or title if the user has chosen to do so
                 if($onesignal_customized_content) {

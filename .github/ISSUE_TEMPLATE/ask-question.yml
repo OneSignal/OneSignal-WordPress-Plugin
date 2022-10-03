@@ -1,0 +1,19 @@
+name: 🙋 Ask a question
+description: Tell us what's on your mind
+title: "[question]: "
+labels: ["triage"]
+assignees:
+  - OneSignal/eng-developer-sdk
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Having issues integrating the plugin?
+  - type: textarea
+    id: question
+    attributes:
+      label: How can we help?
+      description: Specific question regarding integrating this plugin.
+      placeholder: How do I...?
+    validations:
+      required: true

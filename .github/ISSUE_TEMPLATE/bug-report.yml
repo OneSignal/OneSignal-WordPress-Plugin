@@ -17,6 +17,22 @@ body:
       placeholder: The latest version of the plugin causes a runtime error.
     validations:
       required: true
+  - type: input
+    id: wp-version
+    attributes:
+      label: Wordpress version
+      description: What version of Wordpress are you running?
+      placeholder: 6.0.2
+    validations:
+      required: true
+  - type: input
+    id: plugin-version
+    attributes:
+      label: OneSignal Plugin version
+      description: What version of the plugin are you running?
+      placeholder: 2.2.7
+    validations:
+      required: true
   - type: textarea
     id: reproduction-steps
     attributes:

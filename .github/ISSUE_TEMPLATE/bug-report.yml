@@ -1,0 +1,70 @@
+name: 🪳 Bug report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees:
+  - OneSignal/eng-developer-sdk
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Provide a thorough description of whats going on.
+      placeholder: The latest version of the plugin causes a runtime error.
+    validations:
+      required: true
+  - type: input
+    id: wp-version
+    attributes:
+      label: Wordpress version
+      description: What version of Wordpress are you running?
+      placeholder: 6.0.2
+    validations:
+      required: true
+  - type: input
+    id: plugin-version
+    attributes:
+      label: OneSignal Plugin version
+      description: What version of the plugin are you running?
+      placeholder: 2.2.7
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to reproduce?
+      description: Provide as much detail as posible to reproduce the issue.
+      placeholder: |
+        1. Install and set up the plugin (version X.Y.Z), etc...
+        2. Visit website
+        3. Click on the notification prompt
+        4. Note that this causes a runtime error and a failed subscription.
+      render: Markdown
+    validations:
+      required: true
+  - type: textarea
+    id: what-are-expectations
+    attributes:
+      label: What did you expect to happen?
+      description: Also tell us, what did you expect to happen?
+      placeholder: I expected the notification prompt to cause a native permission change in the browser.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: Shell
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/OneSignal/OneSignal-WordPress-Plugin/blob/main/CONTRIBUTING.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

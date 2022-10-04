@@ -1,10 +1,10 @@
 === OneSignal - Web Push Notifications ===
 Contributors: OneSignal
 Donate link: https://onesignal.com
-Tags: chrome, firefox, safari, push, push notifications, push notification, chrome push, safari push, firefox push, notification, notifications, web push, notify, mavericks, android, android push, android notifications, android notification, mobile notification, mobile notifications, mobile, desktop notification, roost, goroost, desktop notifications, gcm, push messages, onesignal
+Tags: push notification, push notifications, desktop notifications, mobile notifications, chrome push, android, android notification, android notifications, android push, desktop notification, firefox, firefox push, mobile, mobile notification, notification, notifications, notify, onesignal, push, push messages, safari, safari push, web push, chrome
 Requires at least: 3.8
-Tested up to: 5.4
-Stable tag: 2.1.2
+Tested up to: 6.0
+Stable tag: 2.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,10 +20,10 @@ After setup, your visitors opt-in to receive push notifications when you publish
 
 You can configure notification delivery at preset intervals, create user segments, and customize the opt-in process for visitors.
 
-OneSignal’s free plan allows targeting up to 30,000 subscribers with push notifications. Contact support@onesignal.com if you have any questions. We’d love to hear from you!
+OneSignal’s free plan allows targeting up to 10,000 subscribers with push notifications. Contact support@onesignal.com if you have any questions. We’d love to hear from you!
 
 = Company =
-OneSignal is trusted by over 920,000 developers and marketing strategists. We power push notifications for everyone from early stage startups to Fortune 500 Companies, sending over 6 billion notifications per day. It is the most popular push notification plugin on Wordpress with 100,000+ installations.
+OneSignal is trusted by over 1,500,000 developers and marketing strategists. We power push notifications for everyone from early stage startups to Fortune 500 Companies, sending over 6 billion notifications per day. It is the most popular push notification plugin on Wordpress with 100,000+ installations.
 
 = Features =
 * **Supports Chrome** (Desktop & Android), **Safari** (Mac OS X), **Microsoft Edge** (Desktop & Android), **Opera** (Desktop & Android) and **Firefox** (Desktop & Android) on both HTTP and HTTPS sites.
@@ -66,6 +66,58 @@ OneSignal is trusted by over 920,000 developers and marketing strategists. We po
 HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 
 == Changelog ==
+
+= 2.2.7 =
+
+- Update tested up to tag (6.0)
+
+= 2.2.6 =
+
+- Add missing style sheets that should have been in previous version.
+
+= 2.2.5 =
+
+- Adds AMP Support. Now works with the official AMP Wordpress Plugin.
+
+= 2.2.4 =
+
+- Update tested up to tag (5.9)
+
+= 2.2.3 =
+
+- Includes minor (non-critical) security improvements to notification customization functionality
+
+= 2.2.2 =
+
+- Update tested up to version to WP 5.8
+
+= 2.2.1 =
+
+- Fixes error for missing OneSignalSDKWorker.js file
+
+= 2.2.0 =
+
+- Service Worker scope change to non-root for new user installs
+
+= 2.1.7 =
+
+- Update Tested Up To Version to 5.7
+
+= 2.1.6 =
+
+- Adds support for customizing title and body of notifications with scheduled notifications.
+
+= 2.1.5 =
+
+- Update of "Tested up to" value (WP 5.6). Removed unnecessary jQuery. Includes support for customizing the title and body of notifications. Fixed formatting issues related to apostrophe use.
+
+= 2.1.4 =
+
+- Bug fix: adds check to prevent notifications for non-public post types
+
+= 2.1.3 =
+
+- Update of "Tested up to" value (WP 5.5)
 
 = 2.1.2 =
 

@@ -87,7 +87,11 @@ class OneSignal {
                   'use_custom_sdk_init' => false,
                   'show_notification_send_status_message' => true,
                   'use_http_permission_request' => 'CALCULATE_SPECIAL_VALUE',
-                  'persist_notifications' => 'CALCULATE_SPECIAL_VALUE'
+                  'persist_notifications' => 'CALCULATE_SPECIAL_VALUE',
+                  /*
+                   * 'onesignal_sw_js' => true -> this is false people who
+                   *  upgraded from version 2.1.7
+                   */
                   );
 
     $legacies = array(
@@ -111,6 +115,14 @@ class OneSignal {
     // Assign defaults if the key doesn't exist in $onesignal_wp_settings
     // Except for those with value CALCULATE_LEGACY_VALUE -- we need special logic for legacy values that used to exist in previous plugin versions
     reset($defaults);
+
+    /*
+    * 'onesignal_sw_js' => true -> for new users
+    */
+    if ($is_new_user) {
+      $defaults['onesignal_sw_js'] = true;
+    }
+
     foreach ($defaults as $key => $value) {
       if ($value === "CALCULATE_LEGACY_VALUE") {
           if (!array_key_exists($key, $onesignal_wp_settings)) {
@@ -253,8 +265,8 @@ class OneSignal {
         }
       }
     }
-
-    return apply_filters( 'onesignal_get_settings', $onesignal_wp_settings );
+    $onesignal_settings_values_without_slashes = stripslashes_deep($onesignal_wp_settings);
+    return apply_filters( 'onesignal_get_settings', $onesignal_settings_values_without_slashes );
   }
 
   public static function save_onesignal_settings($settings) {

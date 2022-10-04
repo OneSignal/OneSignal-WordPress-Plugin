@@ -11,7 +11,7 @@ class OneSignalUtils {
 		if (defined('ENT_HTML401')) {
 			$HTML_ENTITY_DECODE_FLAGS = ENT_HTML401 | $HTML_ENTITY_DECODE_FLAGS;
 		}
-		return html_entity_decode(str_replace("&apos;", "'", $string), $HTML_ENTITY_DECODE_FLAGS, 'UTF-8');
+		return html_entity_decode(str_replace(['&apos;', '&#x27;', '&#39;', '&quot;'], '\'', $string), $HTML_ENTITY_DECODE_FLAGS, 'UTF-8');
 	}
 
 	public static function url_contains_parameter($text) {

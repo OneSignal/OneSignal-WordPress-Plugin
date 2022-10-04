@@ -25,10 +25,10 @@ function load_javascript()
 add_action('wp_ajax_has_metadata', 'has_metadata');
 function has_metadata()
 {
-    $post_id = isset($_GET['post_id']) ? 
+    $post_id = isset($_GET['post_id']) ?
             (filter_var($_GET['post_id'], FILTER_SANITIZE_NUMBER_INT))
             : '';
-    
+
     if (is_null($post_id)) {
         $data = array('error' => 'could not get post id');
     } else {
@@ -53,6 +53,7 @@ function has_metadata()
         delete_post_meta($post_id, 'response_body');
 
         $data = array('recipients' => $recipients, 'status_code' => $status, 'response_body' => $response_body);
+
     }
 
     echo wp_json_encode($data);
@@ -172,7 +173,7 @@ class OneSignal_Admin
         }
 
 	    // Verify that the nonce is valid.
-        if (!wp_verify_nonce((isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? 
+        if (!wp_verify_nonce((isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ?
                 sanitize_text_field($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) :
                  ''
             ), OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
@@ -304,21 +305,21 @@ class OneSignal_Admin
             $site_title = OneSignalUtils::decode_entities(get_bloginfo('name'));
         }
 
-        $onesignal_customize_content_checked = (get_post_meta($post->ID, 'onesignal_modify_title_and_content', true) === '1');                
+        $onesignal_customize_content_checked = (get_post_meta($post->ID, 'onesignal_modify_title_and_content', true) === '1');
         $onesignal_notification_custom_content = get_post_meta($post->ID, 'onesignal_notification_custom_content', true);
         $onesignal_notification_custom_heading = get_post_meta($post->ID, 'onesignal_notification_custom_heading', true);
-        
+
         ?>
-    
+
 	    <input type="hidden" name="onesignal_meta_box_present" value="true"></input>
       <div id="onesignal_send_preference">
         <label>
           <input type="checkbox" id="send_onesignal_notification" name="send_onesignal_notification" value="true" <?php if ($meta_box_checkbox_send_notification) {
                   echo 'checked';
               } ?>></input>
-          
+
           <?php if ($post->post_status === 'publish') {
-              echo esc_attr('Send notification on '.$post_type.' update');            
+              echo esc_attr('Send notification on '.$post_type.' update');
           } else {
               echo esc_attr('Send notification on '.$post_type.' publish');
 
@@ -330,19 +331,19 @@ class OneSignal_Admin
         <input type="checkbox" id="onesignal_modify_title_and_content" value="true" name="onesignal_modify_title_and_content" <?php if ($onesignal_customize_content_checked) {
                   echo 'checked';
               } ?>></input> Customize notification content</label>
-          
+
         <div id="onesignal_custom_contents" style="display:none;padding-top:10px;">
           <div>
             <label>Notification Title<br/>
-            <input type="text" size="16" style="width:220px;" name="onesignal_notification_custom_heading" value="<?php 
-              echo esc_attr(OneSignalUtils::decode_entities($onesignal_notification_custom_heading)); 
+            <input type="text" size="16" style="width:220px;" name="onesignal_notification_custom_heading" value="<?php
+              echo esc_attr(OneSignalUtils::decode_entities($onesignal_notification_custom_heading));
              ?>" id="onesignal_notification_custom_heading" placeholder="<?php echo esc_attr(OneSignalUtils::decode_entities($onesignal_wp_settings['notification_title'])); ?>"></input>
             </label>
           </div>
           <div style="padding-top:10px">
             <label>Notification Text<br/>
-            <input type="text" size="16" style="width:220px;" name="onesignal_notification_custom_content" value="<?php  
-              echo esc_attr(OneSignalUtils::decode_entities($onesignal_notification_custom_content)); 
+            <input type="text" size="16" style="width:220px;" name="onesignal_notification_custom_content" value="<?php
+              echo esc_attr(OneSignalUtils::decode_entities($onesignal_notification_custom_content));
               ?>" id="onesignal_notification_custom_content" placeholder="The Post's Current Title"></input>
             </label>
           </div>
@@ -351,17 +352,17 @@ class OneSignal_Admin
 
       <script>
         jQuery('#onesignal_modify_title_and_content').change( function() {
-            if(jQuery(this).is(":checked")) {              
+            if(jQuery(this).is(":checked")) {
               jQuery('#onesignal_custom_contents').show();
               if(!jQuery('#onesignal_notification_custom_content').val()) {
                 jQuery('#onesignal_notification_custom_content').val(jQuery("#title").val());
               }
             } else {
               jQuery('#onesignal_custom_contents').hide();
-            }          
+            }
         });
         if(!jQuery("#send_onesignal_notification").is(":checked")) {
-          jQuery('#onesignal_modify_title_and_content').prop("disabled",true);        
+          jQuery('#onesignal_modify_title_and_content').prop("disabled",true);
           jQuery('#onesignal_modify_title_and_content').prop("checked",false).change();
         }
 
@@ -370,9 +371,9 @@ class OneSignal_Admin
             jQuery('#onesignal_modify_title_and_content').prop("disabled",false);
           } else {
             jQuery('#onesignal_modify_title_and_content').prop("disabled",true);
-            jQuery('#onesignal_modify_title_and_content').prop("checked",false).change();  
+            jQuery('#onesignal_modify_title_and_content').prop("checked",false).change();
           }
-        
+
         })
         jQuery('#onesignal_modify_title_and_content').change();
       </script>
@@ -435,6 +436,7 @@ class OneSignal_Admin
       'show_notification_send_status_message',
       'use_http_permission_request',
       'customize_http_permission_request',
+
     );
         OneSignal_Admin::saveBooleanSettings($onesignal_wp_settings, $config, $booleanSettings);
 
@@ -651,15 +653,15 @@ class OneSignal_Admin
         return substr($sha1, 0, 8).'-'.substr($sha1, 8, 4).'-'.substr($sha1, 12, 4).'-'.substr($sha1, 16, 4).'-'.substr($sha1, 20, 12);
     }
 
-    public static function exec_post_request($onesignal_post_url, $request, $retry_count) { 
-        if ($retry_count === 0) { 
+    public static function exec_post_request($onesignal_post_url, $request, $retry_count) {
+        if ($retry_count === 0) {
             return NULL;
         }
 
         $response = wp_remote_post($onesignal_post_url, $request);
 
         if (is_wp_error($response) || !is_array($response) || !isset($response['body'])) {
-            return self::exec_post_request($onesignal_post_url, $request, $retry_count-1); 
+            return self::exec_post_request($onesignal_post_url, $request, $retry_count-1);
         }
 
         return $response;
@@ -681,10 +683,10 @@ class OneSignal_Admin
             /* Returns true if there is POST data */
             $was_posted = !empty($_POST);
 
-	        // Verify that the nonce is valid.            
+	        // Verify that the nonce is valid.
             if ($was_posted && !wp_verify_nonce((
-                isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ? 
-                sanitize_text_field($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) : 
+                isset($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) ?
+                sanitize_text_field($_POST[OneSignal_Admin::$SAVE_POST_NONCE_KEY]) :
                 ''
             ), OneSignal_Admin::$SAVE_POST_NONCE_ACTION)) {
 		        return;
@@ -813,7 +815,7 @@ class OneSignal_Admin
                     $site_title = OneSignalUtils::decode_entities($onesignal_wp_settings['notification_title']);
                 } else {
                     $site_title = OneSignalUtils::decode_entities(get_bloginfo('name'));
-                }                
+                }
 
                 if (function_exists('qtrans_getLanguage')) {
                     try {
@@ -825,7 +827,7 @@ class OneSignal_Admin
                     }
                 }
 
-                $notif_content = OneSignalUtils::decode_entities(get_the_title($post->ID));
+                $notif_content = wp_strip_all_tags(OneSignalUtils::decode_entities(get_the_title($post->ID)));
 
                 //Override content and/or title if the user has chosen to do so
                 if($onesignal_customized_content) {
@@ -914,14 +916,14 @@ class OneSignal_Admin
                 );
 
 		$response = self::exec_post_request($onesignal_post_url, $request, 20);  // try 20 times
-		
+
 		if (is_null($response)) {
             set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
                 <p><strong>OneSignal Push:</strong><em> There was a problem sending your notification.</em></p>
                 </div>', 86400);
             return;
         }
-		
+
 		if (isset($response['body'])) {
                     $response_body = json_decode($response['body'], true);
                 }

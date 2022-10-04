@@ -24,7 +24,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 	⭐ Appreciate OneSignal?
 	<a style="margin-left:15px;" href="https://wordpress.org/support/plugin/onesignal-free-web-push-notifications/reviews/#new-post" target="_blank">Leave us a review →	</a>
       </span>
-    </div>    
+    </div>
     <div class="ui pointing stackable menu">
       <a class="item" data-tab="setup">Setup</a>
       <a class="active item" data-tab="configuration">Configuration</a>

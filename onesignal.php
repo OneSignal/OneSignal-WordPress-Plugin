@@ -6,7 +6,7 @@ defined('ABSPATH') or die('This page may not be accessed directly.');
  * Plugin Name: OneSignal Push Notifications
  * Plugin URI: https://onesignal.com/
  * Description: Free web push notifications.
- * Version: 2.2.7
+ * Version: 2.3.0
  * Author: OneSignal
  * Author URI: https://onesignal.com
  * License: MIT

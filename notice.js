@@ -44,7 +44,12 @@ function notice() {
     state.status = status;
 
     // is checked
-    const send_os_notif = jQuery("#send_onesignal_notification")[0].checked;
+    let send_os_notif;
+    const htmlElement = jQuery("#send_onesignal_notification")[0];
+    
+    if (!!htmlElement) {
+       send_os_notif = htmlElement.checked;
+    }
 
     // if last modified differs from first modified times, post_modified = true
     const post_modified = modified !== state.first_modified;

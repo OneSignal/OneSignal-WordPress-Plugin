@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: push notification, push notifications, desktop notifications, mobile notifications, chrome push, android, android notification, android notifications, android push, desktop notification, firefox, firefox push, mobile, mobile notification, notification, notifications, notify, onesignal, push, push messages, safari, safari push, web push, chrome
 Requires at least: 3.8
 Tested up to: 6.0
-Stable tag: 2.3.1
+Stable tag: 2.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +66,9 @@ OneSignal is trusted by over 1,800,000 developers and marketing strategists. We 
 HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 
 == Changelog ==
+
+= 2.3.2 =
+- Add nofollow robots HTML tag to prevent search engine crawling service worker scope
 
 = 2.3.1 =
 - jQuery bug fix

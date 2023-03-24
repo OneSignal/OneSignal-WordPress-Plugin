@@ -948,18 +948,44 @@ class OneSignal_Admin
                 </div>', 86400);
                     }
                 } else {
+                  // 200 OK
                     if (!empty($response)) {
-
                         // API can send a 200 OK even if the notification failed to send
                         if (isset($response['body'])) {
                             $response_body = json_decode($response['body'], true);
-                            if (isset($response_body['recipients'])) {
-                                $recipient_count = $response_body['recipients'];
+                            if (isset($response_body['id'])) {
+                                $notification_id = $response_body['id'];
+                            }
+                        }
+
+                        sleep(10); // wait 10 seconds for the notification to be sent
+
+                        // Make the second API call
+                        $second_request_url = 'https://onesignal.com/api/v1/notifications/' . $notification_id . '?app_id=' . $onesignal_wp_settings['app_id'];
+                        $second_request = array(
+                            'headers' => array(
+                                'content-type' => 'application/json;charset=utf-8',
+                                'Authorization' => 'Basic ' . $onesignal_auth_key,
+                            ),
+                            'timeout' => 3,
+                        );
+                        $second_response = wp_remote_get($second_request_url, $second_request);
+
+                        if (!is_wp_error($second_response) && isset($second_response['body'])) {
+                            $second_response_body = json_decode($second_response['body'], true);
+                            if (isset($second_response_body['successful'])) {
+                                $recipient_count = $second_response_body['successful'];
                             }
                         }
 
                         // updates meta so that recipient count is available for GET request from client
                         update_post_meta($post->ID, 'recipients', $recipient_count);
+                        if (isset($second_response['response'])) {
+                            $status = $second_response['response']['code'];
+                        }
+
+                        update_post_meta($post->ID, 'response_body', wp_json_encode($second_response_body));
+                        update_post_meta($post->ID, 'status', $status);
 
                         $sent_or_scheduled = array_key_exists('send_after', $fields) ? 'scheduled' : 'sent';
                         $config_show_notification_send_status_message = $onesignal_wp_settings['show_notification_send_status_message'] === true;

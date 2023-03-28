@@ -949,34 +949,16 @@ class OneSignal_Admin
                     }
                 } else {
                     if (!empty($response)) {
-
-                        // API can send a 200 OK even if the notification failed to send
-                        if (isset($response['body'])) {
-                            $response_body = json_decode($response['body'], true);
-                            if (isset($response_body['recipients'])) {
-                                $recipient_count = $response_body['recipients'];
-                            }
-                        }
-
-                        // updates meta so that recipient count is available for GET request from client
-                        update_post_meta($post->ID, 'recipients', $recipient_count);
-
-                        $sent_or_scheduled = array_key_exists('send_after', $fields) ? 'scheduled' : 'sent';
                         $config_show_notification_send_status_message = $onesignal_wp_settings['show_notification_send_status_message'] === true;
 
                         if ($config_show_notification_send_status_message) {
-                            if ($recipient_count !== 0) {
-                                $delivery_link_text = $sent_or_scheduled === 'sent' ? ' Go to your app\'s "Delivery" tab to check sent messages: <a target="_blank" href="https://app.onesignal.com/apps/">https://app.onesignal.com/apps/</a>' : '';
-                                set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
-                  <div class="components-notice__content">
-                  <p><strong>OneSignal Push:</strong><em> Successfully '.$sent_or_scheduled.' a notification to '.$recipient_count.' recipients.'.$delivery_link_text.'</em></p>
-                  </div>
-                    </div>', 86400);
-                            } else {
-                                set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
-                        <p><strong>OneSignal Push:</strong><em>There were no recipients. You likely have no subscribers.</em></p>
-                    </div>', 86400);
-                            }
+                              $app_id = $onesignal_wp_settings['app_id'];
+                              $delivery_link_text = ' Go to your app\'s Delivery tab to check sent messages: </em><a target="_blank" href="https://dashboard.onesignal.com/apps/' . $app_id . '/notifications">https://dashboard.onesignal.com/apps/' . $app_id . '/notifications</a><em>';
+                              set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
+                <div class="components-notice__content">
+                <p><strong>OneSignal Push:</strong><em> Successfully scheduled a notification.' . $delivery_link_text . '</em></p>
+                </div>
+                  </div>', 86400);
                         }
                     }
                 }

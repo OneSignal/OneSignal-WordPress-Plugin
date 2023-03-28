@@ -9,7 +9,7 @@ function add_async_for_script($url)
 	else if (is_admin())
 	    return str_replace('#asyncload', '', $url);
 	else
-	    return str_replace('#asyncload', '', $url)."' async='async"; 
+	    return str_replace('#asyncload', '', $url)."' async='async";
 }
 
 class OneSignal_Public
@@ -321,7 +321,7 @@ class OneSignal_Public
                 OneSignal.init(window._oneSignalInitOptions);
                 <?php
             }
-        
+
             if (array_key_exists('prompt_auto_register', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_auto_register'] === true) {
                     echo "OneSignal.showSlidedownPrompt();";
             }
@@ -329,7 +329,7 @@ class OneSignal_Public
             if (array_key_exists('use_native_prompt', $onesignal_wp_settings) && $onesignal_wp_settings['use_native_prompt'] === true) {
                 echo "OneSignal.showNativePrompt();";
             }
-        
+
         } else {
             ?>
           /* OneSignal: Using custom SDK initialization. */

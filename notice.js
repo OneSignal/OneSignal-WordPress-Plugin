@@ -72,7 +72,7 @@ function notice() {
 
     jQuery.get(ajax_object.ajax_url, data, function(response) {
       response = JSON.parse(response);
-      const { status_code, response_body } = response;
+      let { status_code, response_body } = response;
 
       if(window.DEBUG_MODE){
         console.log(response);

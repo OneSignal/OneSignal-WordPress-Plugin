@@ -141,9 +141,9 @@ function httpSiteCheck() {
   // Only run this function once to prevent duplicate event handlers
   // (e.g. If use_modal_prompt has just been toggled, ensure prompt_auto_register is not toggled)
   map: {
-    'use_modal_prompt': ['prompt_auto_register'],
-    'prompt_auto_register': ['use_modal_prompt', 'notifyButton_enable'],
-    'notifyButton_enable': ['prompt_auto_register']
+	'use_modal_prompt': ['prompt_auto_register'],
+	'prompt_auto_register': ['use_modal_prompt', 'notifyButton_enable'],
+	'notifyButton_enable': ['prompt_auto_register']
   }
  */
 
@@ -381,13 +381,13 @@ function showHttpPopup() {
 		domainPrefix + '?' + message_localization_opts_str,
 		'_blank',
 		'scrollbars=yes, width=' +
-			550 +
-			', height=' +
-			480 +
-			', top=' +
-			0 +
-			', left=' +
-			0
+		550 +
+		', height=' +
+		480 +
+		', top=' +
+		0 +
+		', left=' +
+		0
 	);
 
 	if (popupPreviewWindow) popupPreviewWindow.focus();

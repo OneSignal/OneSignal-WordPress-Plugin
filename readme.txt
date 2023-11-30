@@ -59,9 +59,6 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 
 == Frequently Asked Questions ==
 
-= HTTP Site Setup Video =
-[youtube https://www.youtube.com/watch?v=j8qO9gDr9Wg]
-
 = HTTPS Site Setup Video =
 HTTPS Setup Video: [youtube https://www.youtube.com/watch?v=BeTZ2KgytC0]
 

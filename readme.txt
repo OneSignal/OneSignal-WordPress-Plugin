@@ -182,7 +182,7 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 
 - Updated notice message to reflect changes to time limiter, removed extra newline from description
 
-= 1.17.4 = 
+= 1.17.4 =
 
 - Changed time limiter to 2 minutes from 1 hour to ease restrictions on sending update notifications
 
@@ -204,7 +204,7 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 
 - Bug fixes, edge-case handling, refactoring
 
-= 1.16.16 = 
+= 1.16.16 =
 
 - Code to catch error where core/editor is not defined for old versions of the editor
 

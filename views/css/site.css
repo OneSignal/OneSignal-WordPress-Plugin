@@ -84,7 +84,11 @@
   word-wrap: break-word;
   white-space: normal;
   background-position: bottom;
-  background-image: linear-gradient(to right, #777777 25%, rgba(255, 255, 255, 0) 50%);
+  background-image: linear-gradient(
+    to right,
+    #777777 25%,
+    rgba(255, 255, 255, 0) 50%
+  );
   background-size: 4px 1px;
   background-repeat: repeat-x;
 }
@@ -92,18 +96,22 @@
   color: #515151;
   background-color: none;
 }
-.callout.default a:active, .callout.default a.active {
+.callout.default a:active,
+.callout.default a.active {
   color: #777777;
 }
 .callout.default a[disabled] {
   pointer-events: none;
 }
-.callout.default a.disabled, .callout.default a[disabled], fieldset[disabled] .callout.default a {
+.callout.default a.disabled,
+.callout.default a[disabled],
+fieldset[disabled] .callout.default a {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
-.callout.default a a.disabled, fieldset[disabled] .callout.default a a {
+.callout.default a a.disabled,
+fieldset[disabled] .callout.default a a {
   pointer-events: none;
 }
 .callout.primary {
@@ -131,7 +139,11 @@
   word-wrap: break-word;
   white-space: normal;
   background-position: bottom;
-  background-image: linear-gradient(to right, #428bca 25%, rgba(255, 255, 255, 0) 50%);
+  background-image: linear-gradient(
+    to right,
+    #428bca 25%,
+    rgba(255, 255, 255, 0) 50%
+  );
   background-size: 4px 1px;
   background-repeat: repeat-x;
 }
@@ -139,18 +151,22 @@
   color: #2a6496;
   background-color: none;
 }
-.callout.primary a:active, .callout.primary a.active {
+.callout.primary a:active,
+.callout.primary a.active {
   color: #428bca;
 }
 .callout.primary a[disabled] {
   pointer-events: none;
 }
-.callout.primary a.disabled, .callout.primary a[disabled], fieldset[disabled] .callout.primary a {
+.callout.primary a.disabled,
+.callout.primary a[disabled],
+fieldset[disabled] .callout.primary a {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
-.callout.primary a a.disabled, fieldset[disabled] .callout.primary a a {
+.callout.primary a a.disabled,
+fieldset[disabled] .callout.primary a a {
   pointer-events: none;
 }
 .callout.success {
@@ -178,7 +194,11 @@
   word-wrap: break-word;
   white-space: normal;
   background-position: bottom;
-  background-image: linear-gradient(to right, #5cb85c 25%, rgba(255, 255, 255, 0) 50%);
+  background-image: linear-gradient(
+    to right,
+    #5cb85c 25%,
+    rgba(255, 255, 255, 0) 50%
+  );
   background-size: 4px 1px;
   background-repeat: repeat-x;
 }
@@ -186,18 +206,22 @@
   color: #3d8b3d;
   background-color: none;
 }
-.callout.success a:active, .callout.success a.active {
+.callout.success a:active,
+.callout.success a.active {
   color: #5cb85c;
 }
 .callout.success a[disabled] {
   pointer-events: none;
 }
-.callout.success a.disabled, .callout.success a[disabled], fieldset[disabled] .callout.success a {
+.callout.success a.disabled,
+.callout.success a[disabled],
+fieldset[disabled] .callout.success a {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
-.callout.success a a.disabled, fieldset[disabled] .callout.success a a {
+.callout.success a a.disabled,
+fieldset[disabled] .callout.success a a {
   pointer-events: none;
 }
 .callout.danger {
@@ -225,7 +249,11 @@
   word-wrap: break-word;
   white-space: normal;
   background-position: bottom;
-  background-image: linear-gradient(to right, #d9534f 25%, rgba(255, 255, 255, 0) 50%);
+  background-image: linear-gradient(
+    to right,
+    #d9534f 25%,
+    rgba(255, 255, 255, 0) 50%
+  );
   background-size: 4px 1px;
   background-repeat: repeat-x;
 }
@@ -233,18 +261,22 @@
   color: #b52b27;
   background-color: none;
 }
-.callout.danger a:active, .callout.danger a.active {
+.callout.danger a:active,
+.callout.danger a.active {
   color: #d9534f;
 }
 .callout.danger a[disabled] {
   pointer-events: none;
 }
-.callout.danger a.disabled, .callout.danger a[disabled], fieldset[disabled] .callout.danger a {
+.callout.danger a.disabled,
+.callout.danger a[disabled],
+fieldset[disabled] .callout.danger a {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
-.callout.danger a a.disabled, fieldset[disabled] .callout.danger a a {
+.callout.danger a a.disabled,
+fieldset[disabled] .callout.danger a a {
   pointer-events: none;
 }
 .callout.warning {
@@ -272,7 +304,11 @@
   word-wrap: break-word;
   white-space: normal;
   background-position: bottom;
-  background-image: linear-gradient(to right, #f0ad4e 25%, rgba(255, 255, 255, 0) 50%);
+  background-image: linear-gradient(
+    to right,
+    #f0ad4e 25%,
+    rgba(255, 255, 255, 0) 50%
+  );
   background-size: 4px 1px;
   background-repeat: repeat-x;
 }
@@ -280,18 +316,22 @@
   color: #df8a13;
   background-color: none;
 }
-.callout.warning a:active, .callout.warning a.active {
+.callout.warning a:active,
+.callout.warning a.active {
   color: #f0ad4e;
 }
 .callout.warning a[disabled] {
   pointer-events: none;
 }
-.callout.warning a.disabled, .callout.warning a[disabled], fieldset[disabled] .callout.warning a {
+.callout.warning a.disabled,
+.callout.warning a[disabled],
+fieldset[disabled] .callout.warning a {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
-.callout.warning a a.disabled, fieldset[disabled] .callout.warning a a {
+.callout.warning a a.disabled,
+fieldset[disabled] .callout.warning a a {
   pointer-events: none;
 }
 .callout.info {
@@ -319,7 +359,11 @@
   word-wrap: break-word;
   white-space: normal;
   background-position: bottom;
-  background-image: linear-gradient(to right, #71bec0 25%, rgba(255, 255, 255, 0) 50%);
+  background-image: linear-gradient(
+    to right,
+    #71bec0 25%,
+    rgba(255, 255, 255, 0) 50%
+  );
   background-size: 4px 1px;
   background-repeat: repeat-x;
 }
@@ -327,18 +371,22 @@
   color: #469c9e;
   background-color: none;
 }
-.callout.info a:active, .callout.info a.active {
+.callout.info a:active,
+.callout.info a.active {
   color: #71bec0;
 }
 .callout.info a[disabled] {
   pointer-events: none;
 }
-.callout.info a.disabled, .callout.info a[disabled], fieldset[disabled] .callout.info a {
+.callout.info a.disabled,
+.callout.info a[disabled],
+fieldset[disabled] .callout.info a {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
-.callout.info a a.disabled, fieldset[disabled] .callout.info a a {
+.callout.info a a.disabled,
+fieldset[disabled] .callout.info a a {
   pointer-events: none;
 }
 .callout ul li strong {
@@ -412,7 +460,7 @@ h3,
 h4,
 h5 {
   line-height: 1.2857em;
-  margin: calc(2rem - 0.14285em ) 0em 1rem;
+  margin: calc(2rem - 0.14285em) 0em 1rem;
   font-weight: 600;
   padding: 0;
   font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
@@ -533,6 +581,13 @@ input::selection {
 .onesignal-error-notice + .onesignal-error-notice {
   margin-top: 5px !important;
 }
+.notice-info {
+  margin: 0 !important;
+  padding: 16px 10px 8px;
+  p {
+    font-size: 1rem;
+  }
+}
 
 /*******************************
          Site Overrides
@@ -541,13 +596,13 @@ input::selection {
   padding-left: 0 !important;
 }
 
-header[class=onesignal] {
-  background: #E54B4D;
+header[class="onesignal"] {
+  background: #e54b4d;
   padding-top: 35px;
   padding-bottom: 40px;
   box-shadow: inset 0 -7px 9px -7px rgba(0, 0, 0, 0.4);
 }
-header[class=onesignal] #logo-onesignal {
+header[class="onesignal"] #logo-onesignal {
   background: url("https://media.onesignal.com/cms/Website%20Layout/logo-white.svg");
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -637,7 +692,8 @@ header[class=onesignal] #logo-onesignal {
   padding: 0.25em;
   border-radius: 4px;
 }
-.ui.site.onesignal.container code strong, .ui.site.onesignal.container code em {
+.ui.site.onesignal.container code strong,
+.ui.site.onesignal.container code em {
   font-family: monospace;
 }
 .ui.site.onesignal.container code.massive {
@@ -675,14 +731,17 @@ header[class=onesignal] #logo-onesignal {
   font-style: normal;
   font-weight: 100;
 }
-.ui.site.onesignal.container p, .ui.site.onesignal.container h4 {
+.ui.site.onesignal.container p,
+.ui.site.onesignal.container h4 {
   font-size: 1.3rem;
   color: #333333;
 }
-.ui.site.onesignal.container p + dl, .ui.site.onesignal.container h4 + dl {
+.ui.site.onesignal.container p + dl,
+.ui.site.onesignal.container h4 + dl {
   padding-top: 1em;
 }
-.ui.site.onesignal.container p.lato, .ui.site.onesignal.container h4.lato {
+.ui.site.onesignal.container p.lato,
+.ui.site.onesignal.container h4.lato {
   font-family: "Lato";
   font-size: 1.2rem;
 }
@@ -690,13 +749,15 @@ header[class=onesignal] #logo-onesignal {
   font-weight: 500;
   margin-top: 0.5em;
 }
-.ui.site.onesignal.container ol, .ui.site.onesignal.container ul {
+.ui.site.onesignal.container ol,
+.ui.site.onesignal.container ul {
   font-size: 1.3rem;
   line-height: 1.4285em;
   color: #333333;
   list-style: initial !important;
 }
-.ui.site.onesignal.container ol li, .ui.site.onesignal.container ul li {
+.ui.site.onesignal.container ol li,
+.ui.site.onesignal.container ul li {
   font-size: inherit;
   line-height: inherit;
   margin: 0.5em 0;
@@ -783,10 +844,12 @@ header[class=onesignal] #logo-onesignal {
 .ui.site.onesignal.container .lato {
   font-family: "Lato", sans-serif;
 }
-.ui.site.onesignal.container i[role=popup] {
+.ui.site.onesignal.container i[role="popup"] {
   margin-left: 1em;
 }
-.ui.site.onesignal.container .wp-core-ui .button, .ui.site.onesignal.container .wp-core-ui .button-primary, .ui.site.onesignal.container .wp-core-ui .button-secondary {
+.ui.site.onesignal.container .wp-core-ui .button,
+.ui.site.onesignal.container .wp-core-ui .button-primary,
+.ui.site.onesignal.container .wp-core-ui .button-secondary {
   height: unset;
 }
 .ui.site.onesignal.container .ui.button {
@@ -806,7 +869,9 @@ header[class=onesignal] #logo-onesignal {
 .ui.site.onesignal.container .ui.form .short.field > label.inline-setting {
   width: 5em;
 }
-.ui.site.onesignal.container .notice, .ui.site.onesignal.container div.error, .ui.site.onesignal.container div.updated {
+.ui.site.onesignal.container .notice,
+.ui.site.onesignal.container div.error,
+.ui.site.onesignal.container div.updated {
   box-shadow: none;
 }
 .ui.site.onesignal.container .ui.error.message {

@@ -3,8 +3,8 @@ Contributors: OneSignal
 Donate link: https://onesignal.com
 Tags: push notification, push notifications, desktop notifications, mobile notifications, chrome push, android, android notification, android notifications, android push, desktop notification, firefox, firefox push, mobile, mobile notification, notification, notifications, notify, onesignal, push, push messages, safari, safari push, web push, chrome
 Requires at least: 3.8
-Tested up to: 6.2
-Stable tag: 2.4.2
+Tested up to: 6.4
+Stable tag: 2.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,7 +26,7 @@ OneSignal’s free plan allows targeting up to 10,000 subscribers with push noti
 OneSignal is trusted by over 1.8M+ developers and marketing strategists. We power push notifications for everyone from early stage startups to Fortune 500 Companies, sending over 6 billion notifications per day. It is the most popular push notification plugin on Wordpress with 100,000+ installations.
 
 = Features =
-* **Supports Chrome** (Desktop & Android), **Safari** (Mac OS X), **Microsoft Edge** (Desktop & Android), **Opera** (Desktop & Android) and **Firefox** (Desktop & Android) on both HTTP and HTTPS sites.
+* **Supports Chrome** (Desktop & Android), **Safari** (Mac OS X), **Microsoft Edge** (Desktop & Android), **Opera** (Desktop & Android) and **Firefox** (Desktop & Android) on HTTPS sites.
 
 * **Automatic Notifications** - Send notifications to followers every time you publish a new post. Or set up a reminder that gets automatically sent to them if they haven’t visited for a few days.
 
@@ -63,6 +63,10 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 [youtube https://www.youtube.com/watch?v=q1mH2kCK7LQ]
 
 == Changelog ==
+
+2.4.3 =
+- Fixed "async" script src issue issue
+- Added Admin Notice announcing work on v3.0.0.
 
 = 2.4.2 =
 - Update OneSignal icons

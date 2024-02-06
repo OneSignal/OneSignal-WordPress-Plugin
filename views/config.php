@@ -26,7 +26,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
       </span>
     </div>
     <div class="ui pointing stackable menu">
-      <!-- <a class="item" data-tab="setup">Setup</a> -->
+      <!-- HIDE THIS AS OUTDATED <a class="item" data-tab="setup">Setup</a> -->
       <a class="active item" data-tab="configuration">Configuration</a>
     </div>
     <div class="ui tab borderless shadowless segment" data-tab="setup" style="padding-top: 0; padding-bottom: 0;">

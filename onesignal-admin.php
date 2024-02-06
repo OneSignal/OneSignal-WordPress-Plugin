@@ -373,7 +373,6 @@ class OneSignal_Admin
                     jQuery('#onesignal_modify_title_and_content').prop("disabled", true);
                     jQuery('#onesignal_modify_title_and_content').prop("checked", false).change();
                 }
-
             })
             jQuery('#onesignal_modify_title_and_content').change();
         </script>
@@ -558,13 +557,31 @@ class OneSignal_Admin
         add_action('admin_enqueue_scripts', array(__CLASS__, 'admin_custom_scripts'));
 
         $onesignal_wp_settings = OneSignal::get_onesignal_settings();
+
+        function admin_notice_new_release()
+        {
+        ?>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    activateSetupTab('setup/0');
+                });
+            </script>
+            <div class="notice notice-info is-dismissible">
+                <p><strong>OneSignal:</strong> We're working on v3.0.0. This version will use our latest Web SDK, so could have some breaking changes. More information can be seen here: <a href="https://documentation.onesignal.com/docs/wordpress-plugin-30" target="_blank">OneSignal WordPress Plugin – v3.0.0</a>.</p>
+            </div>
+            <?php
+        }
+
+        add_action('admin_notices', 'admin_notice_new_release');
+
+
         if (
             $onesignal_wp_settings['app_id'] === '' ||
             $onesignal_wp_settings['app_rest_api_key'] === ''
         ) {
             function admin_notice_setup_not_complete()
             {
-        ?>
+            ?>
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         activateSetupTab('setup/0');

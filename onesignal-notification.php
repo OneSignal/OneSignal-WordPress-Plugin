@@ -27,12 +27,12 @@ function onesignal_send_notification($post_id)
 
     $args = array(
         'headers' => array(
-            'Authorization' => 'Basic ' . get_option('onesignal_rest_api_key'),
+            'Authorization' => 'Basic ' . get_option('OneSignalWPSetting')['app_rest_api_key'],
             'accept' => 'application/json',
             'content-type' => 'application/json',
         ),
         'body' => json_encode(array(
-            'app_id' => get_option('onesignal_app_id'),
+            'app_id' => get_option('OneSignalWPSetting')['app_id'],
             'headings' => array('en' => $title),
             'contents' => array('en' => wp_strip_all_tags($content)),
             'included_segments' => array($segment),
@@ -45,7 +45,7 @@ function onesignal_send_notification($post_id)
     $body = json_decode($args['body'], true);
 
     // Conditionally include mobile parameters
-    if (get_option('onesignal_send_to_mobile') && get_option('onesignal_send_to_mobile') == 'on') {
+    if (get_option('OneSignalWPSetting')['send_to_mobile_platforms'] && get_option('OneSignalWPSetting')['send_to_mobile_platforms'] == 1) {
         $body['isIos'] = true;
         $body['isAndroid'] = true;
         $body['isHuawei'] = true;

@@ -20,14 +20,14 @@ function onesignal_metabox($post)
   // View segments API to populate Segments list.
   $args = array(
     'headers' => array(
-      'Authorization' => 'Bearer ' . get_option('onesignal_rest_api_key'),
+      'Authorization' => 'Bearer ' . get_option('OneSignalWPSetting')['app_rest_api_key'],
       'accept' => 'application/json',
       'content-type' => 'application/json',
     )
   );
 
   // Make the API request, log errors, get segment names.
-  $response = wp_remote_get('https://onesignal.com/api/v1/apps/' . get_option('onesignal_app_id') . '/segments', $args);
+  $response = wp_remote_get('https://onesignal.com/api/v1/apps/' . get_option('OneSignalWPSetting')['app_id'] . '/segments', $args);
   if (is_wp_error($response)) {
     error_log('API request failed: ' . $response->get_error_message());
   }

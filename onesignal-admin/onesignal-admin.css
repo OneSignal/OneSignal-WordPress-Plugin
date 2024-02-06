@@ -3,21 +3,19 @@
 }
 
 .toplevel_page_onesignal-admin-page header {
-  min-height: 150px;
+  min-height: 125px;
   min-width: 100%;
-  background-image: url(images/header-bg.jpg);
-  background-size: cover;
-  background-position: right;
+  background-color: #14143c;
   display: flex;
   justify-content: center;
 }
 
 .toplevel_page_onesignal-admin-page header img {
-  max-width: 300px;
+  max-width: 225px;
 }
 
 .os-content {
-  padding: 60px;
+  padding: 40px 60px 25px;
   font-size: 16px !important;
   line-height: 1.5rem;
   font-weight: 400;
@@ -35,7 +33,7 @@
 .os-content label[for="apikey"]:after {
   content: "*";
   font-size: 125%;
-  color: rgb(229, 75, 77);
+  color: #e54b4d;
   margin-left: 3px;
 }
 

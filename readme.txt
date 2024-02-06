@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: push notification, push notifications, desktop notifications, mobile notifications, chrome push, android, android notification, android notifications, android push, desktop notification, firefox, firefox push, mobile, mobile notification, notification, notifications, notify, onesignal, push, push messages, safari, safari push, web push, chrome
 Requires at least: 3.8
 Tested up to: 6.4
-Stable tag: 2.4.3
+Stable tag: 3.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,7 +64,15 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 
 == Changelog ==
 
-2.4.3 =
+= 3.0.0 =
+- Initialises the latest OneSignal Web SDK (v16).
+- Automatically sends Push Notifications when a WordPress post is published.
+- Setup prompts within the OneSignal dashboard. No custom code required.
+- Choose which Segment should recieve notifications for each post.
+- Web Topics included by default.
+- Send to mobile app subscribers, with an option to direct them to a different URL (Deep Link).
+
+= 2.4.3 =
 - Fixed "async" script src issue issue
 - Added Admin Notice announcing work on v3.0.0.
 

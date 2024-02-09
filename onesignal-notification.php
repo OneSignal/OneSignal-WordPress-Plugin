@@ -42,36 +42,44 @@ function onesignal_send_notification($post_id)
     );
 
 
-    $body = json_decode($args['body'], true);
+    $fields = json_decode($args['body'], true);
 
     // Conditionally include mobile parameters
     if (get_option('OneSignalWPSetting')['send_to_mobile_platforms'] && get_option('OneSignalWPSetting')['send_to_mobile_platforms'] == 1) {
-        $body['isIos'] = true;
-        $body['isAndroid'] = true;
-        $body['isHuawei'] = true;
-        $body['isWP_WNS'] = true;
+        $fields['isIos'] = true;
+        $fields['isAndroid'] = true;
+        $fields['isHuawei'] = true;
+        $fields['isWP_WNS'] = true;
         if (!empty($_POST['os_mobile_url'])) {
-            $body['app_url'] = $_POST['os_mobile_url'];
-            $body['web_url'] = get_permalink($post_id);
+            $fields['app_url'] = $_POST['os_mobile_url'];
+            $fields['web_url'] = get_permalink($post_id);
         } else {
-            $body['url'] = get_permalink($post_id);
+            $fields['url'] = get_permalink($post_id);
         }
     } else {
-        $body['url'] = get_permalink($post_id);
+        $fields['url'] = get_permalink($post_id);
     }
-    // Set notification images
+    // Set notification images based on the post's featured image
     if (has_post_thumbnail($post_id)) {
+        // Get the post thumbnail ID
         $post_thumbnail_id = get_post_thumbnail_id($post_id);
-        // Higher resolution (2x retina, + a little more) for the notification small icon
-        $thumbnail_sized_images_array = wp_get_attachment_image_src($post_thumbnail_id, array(192, 192), true);
-        // Much higher resolution for the notification large image
-        $large_sized_images_array = wp_get_attachment_image_src($post_thumbnail_id, 'large', true);
-        $body['firefox_icon'] =  $thumbnail_sized_images_array[0];
-        $body['chrome_web_icon'] =  $thumbnail_sized_images_array[0];
-        $body['chrome_web_image'] = $large_sized_images_array[0];
+
+        // Retrieve image URLs for different sizes
+        $thumbnail_size_url = wp_get_attachment_image_src($post_thumbnail_id, array(192, 192), true)[0];
+        $large_size_url = wp_get_attachment_image_src($post_thumbnail_id, 'large', true)[0];
+
+        // Assign image URLs to notification fields
+        $fields['firefox_icon'] =  $thumbnail_size_url;
+        $fields['chrome_web_icon'] =  $thumbnail_size_url;
+        $fields['chrome_web_image'] = $large_size_url;
     }
 
-    $args['body'] = json_encode($body);
+    // Include any fields from onesignal_send_notification filter
+    if (has_filter('onesignal_send_notification')) {
+        $fields = apply_filters('onesignal_send_notification', $fields, $post_id);
+    }
+
+    $args['body'] = json_encode($fields);
 
     // Make the API request and log errors
     if (defined('REST_REQUEST') && REST_REQUEST) return;

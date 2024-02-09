@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: push notification, push notifications, desktop notifications, mobile notifications, chrome push, android, android notification, android notifications, android push, desktop notification, firefox, firefox push, mobile, mobile notification, notification, notifications, notify, onesignal, push, push messages, safari, safari push, web push, chrome
 Requires at least: 3.8
 Tested up to: 6.4
-Stable tag: 2.4.3
+Stable tag: 2.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,9 +64,12 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 
 == Changelog ==
 
-2.4.3 =
-- Fixed "async" script src issue issue
+= 2.4.4 =
+- "Hidden" Setup outdated settings.
 - Added Admin Notice announcing work on v3.0.0.
+
+= 2.4.3 =
+- Fix SDK not loading (async attribute issue)
 
 = 2.4.2 =
 - Update OneSignal icons

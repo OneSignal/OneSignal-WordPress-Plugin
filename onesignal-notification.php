@@ -45,7 +45,7 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
         $postDate = new DateTime('now', new DateTimeZone('UTC'));
         $sendDate = new DateTime($post->post_date_gmt, new DateTimeZone('UTC'));
 
-        if ($sendDate >= $postDate) {
+        if ($sendDate > $postDate) {
             // Schedule the notification to be sent in the future
             $fields['send_after'] = $sendDate->format('Y-m-d H:i:s e');
         }

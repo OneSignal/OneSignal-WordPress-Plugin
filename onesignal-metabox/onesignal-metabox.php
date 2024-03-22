@@ -57,10 +57,10 @@ function onesignal_metabox($post)
       <label for="os_content">Notification content</label>
       <input type="text" name="os_content" id="os_content" value="<?php echo esc_attr(isset($post->os_meta['os_content']) ? $post->os_meta['os_content'] : ''); ?>" disabled>
     </div>
-    <?php if (get_option('onesignal_send_to_mobile') == 'on') : ?>
+    <?php if (get_option('OneSignalWPSetting')['send_to_mobile_platforms'] == 1) : ?>
       <hr>
       <label for="os_mobile_url">Mobile URL</label>
-      <input type="text" name="os_mobile_url" id="os_mobile_url" value="<?php echo esc_attr(isset($post->os_meta['os_mobile_url']) ? $post->os_meta['os_mobile_url'] : ''); ?>" disabled>
+      <input type="text" name="os_mobile_url" id="os_mobile_url" value="<?php echo esc_attr(isset($post->os_meta['os_mobile_url']) ? $post->os_meta['os_mobile_url'] : ''); ?>">
     <?php endif; ?>
   </div>
 

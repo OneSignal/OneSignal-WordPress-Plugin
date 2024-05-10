@@ -21,6 +21,7 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
         // set api params
         $title = !empty($_POST['os_title']) ? $_POST['os_title'] : $post->post_title;
         $content = !empty($_POST['os_content']) ? $_POST['os_content'] : $post->post_content;
+        $excerpt = $excerpt = substr($content, 0, 120);
         $segment = $_POST['os_segment'] ?? 'All';
 
         $args = array(
@@ -32,7 +33,7 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
             'body' => json_encode(array(
                 'app_id' => get_option('OneSignalWPSetting')['app_id'],
                 'headings' => array('en' => $title),
-                'contents' => array('en' => wp_strip_all_tags($content)),
+                'contents' => array('en' => wp_strip_all_tags($excerpt)),
                 'included_segments' => array($segment),
                 'web_push_topic' => str_replace(' ', '-', strtolower($segment)),
                 'isAnyWeb' => true,

@@ -11,8 +11,8 @@ function onesignal_init()
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script>
     window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(function(OneSignal) {
-      OneSignal.init({
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
         appId: "<?php echo get_option('OneSignalWPSetting')['app_id']; ?>",
       });
     });

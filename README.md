@@ -1,6 +1,6 @@
 OneSignal WordPress Plugin - v3.0.0
 ====================================
-[OneSignal WordPress Plugin 3.0 – Documentation](setuphttps://documentation.onesignal.com/docs/wordpress-plugin-30)
+[OneSignal WordPress Plugin 3.0 – Documentation](https://documentation.onesignal.com/docs/wordpress-plugin-30)
 
 ## Overview
 

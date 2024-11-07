@@ -21,6 +21,13 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
   <div class="ui site onesignal container" id="content-container">
     <div class="ui menu">
       <span style="padding-bottom:15px; padding-left:20px; color:#E54B4D; font-weight:700;">
+        ⚠️ OneSignal Push Important Update:<br><br>
+        Before updating to Version 3 of the OneSignal WordPress plugin you must migrate your configuration to dashboard.onesignal.com.
+        <a href="https://documentation.onesignal.com/docs/wordpress-plugin-30" target="_blank">Learn more.</a>
+      </span>
+    </div>
+    <div class="ui menu">
+      <span style="padding-bottom:15px; padding-left:20px; color:#E54B4D; font-weight:700;">
 	⭐ Appreciate OneSignal?
 	<a style="margin-left:15px;" href="https://wordpress.org/support/plugin/onesignal-free-web-push-notifications/reviews/#new-post" target="_blank">Leave us a review →	</a>
       </span>

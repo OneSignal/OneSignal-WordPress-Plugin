@@ -64,6 +64,10 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 
 == Changelog ==
 
+= 2.4.5 =
+- Add v2 plugin deprecation warning
+- Update "Tested up to" Wordpress version to 6.6
+
 = 2.4.4 =
 - Update "Tested up to" Wordpress version to 6.5
 - Update OneSignal plugin menu icon

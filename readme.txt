@@ -3,8 +3,8 @@ Contributors: OneSignal
 Donate link: https://onesignal.com
 Tags: push notification, push notifications, desktop notifications, mobile notifications, chrome push, android, android notification, android notifications, android push, desktop notification, firefox, firefox push, mobile, mobile notification, notification, notifications, notify, onesignal, push, push messages, safari, safari push, web push, chrome
 Requires at least: 3.8
-Tested up to: 6.5
-Stable tag: 2.4.4
+Tested up to: 6.7
+Stable tag: 2.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,7 +66,8 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 
 = 2.4.5 =
 - Add v2 plugin deprecation warning
-- Update "Tested up to" Wordpress version to 6.6
+- Add export current configuration
+- Update "Tested up to" Wordpress version to 6.7
 
 = 2.4.4 =
 - Update "Tested up to" Wordpress version to 6.5

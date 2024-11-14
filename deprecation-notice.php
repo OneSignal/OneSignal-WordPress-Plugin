@@ -13,7 +13,7 @@ function notify_plugin_update() {
             <p>
               <strong>
                 OneSignal Push Important Update:</strong>
-                Before updating to Version 3 of the OneSignal WordPress plugin you must migrate your configuration to dashboard.onesignal.com.
+                We are soon releasing Version 3 of the OneSignal WordPress Plugin. Before updating, you must migrate your configuration to dashboard.onesignal.com.
                 <a target="_blank" href="https://documentation.onesignal.com/docs/wordpress-plugin-30">Learn More.</a>
             </p>
         </div>';

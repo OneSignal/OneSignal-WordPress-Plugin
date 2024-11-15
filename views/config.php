@@ -23,6 +23,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
       <span style="padding:0 20px 15px; color:#E54B4D; font-weight:700;">
         ⚠️ OneSignal Push Important Update:<br><br>
         <p style="font-size:1.15rem;">We are soon releasing Version 3 of the OneSignal WordPress Plugin. Before updating, you must migrate your configuration to dashboard.onesignal.com.</p>
+        <p style="font-size:1.15rem;">Note: after migrating, the settings on this page will be overrided by the new dashboard.onesignal.com settings.</p>
         <form method="post" action="">
           <?php wp_nonce_field('onesignal_export_nonce'); ?>
           <input type="hidden" name="plugin_action" value="export_settings">

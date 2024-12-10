@@ -51,7 +51,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
             <button type="submit" class="ui medium button">Export Current Configuration</button>
           </form>
           <form method="post" action="" class="pull-right" id="onesignal-migration-form">
-              <?php wp_nonce_field('onesignal_import_nonce'); ?>
+              <?php wp_nonce_field('onesignal_migration_nonce'); ?>
               <input type="hidden" name="plugin_action" value="complete_migration">
               <button type="button" class="ui medium purple-button" id="confirm-migration-button">I Migrated</button>
           </form>

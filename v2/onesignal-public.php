@@ -81,7 +81,7 @@ class OneSignal_Public
       OneSignal.push( function() {
         <?php
             if(array_key_exists('onesignal_sw_js', $onesignal_wp_settings)) {
-                $swScope = self::getOneSignalPluginPath() . '/sdk_files/push/onesignal/';
+                $swScope = self::getOneSignalPluginPath() . '/v2/sdk_files/push/onesignal/';
                 echo  "OneSignal.SERVICE_WORKER_UPDATER_PATH = 'OneSignalSDKUpdaterWorker.js';
                       OneSignal.SERVICE_WORKER_PATH = 'OneSignalSDKWorker.js';
                       OneSignal.SERVICE_WORKER_PARAM = { scope: '$swScope' };";

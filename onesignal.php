@@ -19,13 +19,13 @@ define('ONESIGNAL_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('ONESIGNAL_API_RATE_LIMIT_SECONDS', 1);
 define('ONESIGNAL_URI_REVEAL_PROJECT_NUMBER', 'reveal_project_number=true');
 
-require_once plugin_dir_path(__FILE__).'onesignal-utils.php';
-require_once plugin_dir_path(__FILE__).'onesignal-admin.php';
-require_once plugin_dir_path(__FILE__).'onesignal-public.php';
-require_once plugin_dir_path(__FILE__).'onesignal-settings.php';
-require_once plugin_dir_path(__FILE__).'onesignal-widget.php';
-include_once plugin_dir_path(__FILE__).'configuration-export.php';
-include_once plugin_dir_path(__FILE__).'complete-migration.php';
+require_once plugin_dir_path(__FILE__).'v2/onesignal-utils.php';
+require_once plugin_dir_path(__FILE__).'v2/onesignal-admin.php';
+require_once plugin_dir_path(__FILE__).'v2/onesignal-public.php';
+require_once plugin_dir_path(__FILE__).'v2/onesignal-settings.php';
+require_once plugin_dir_path(__FILE__).'v2/onesignal-widget.php';
+include_once plugin_dir_path(__FILE__).'v2/configuration-export.php';
+include_once plugin_dir_path(__FILE__).'v2/complete-migration.php';
 
 if (file_exists(plugin_dir_path(__FILE__).'onesignal-extra.php')) {
     require_once plugin_dir_path(__FILE__).'onesignal-extra.php';

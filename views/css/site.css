@@ -542,7 +542,7 @@ input::selection {
 }
 
 header[class=onesignal] {
-  background: #E54B4D;
+  background: #3A3DB2;
   padding-top: 35px;
   padding-bottom: 40px;
   box-shadow: inset 0 -7px 9px -7px rgba(0, 0, 0, 0.4);
@@ -841,6 +841,17 @@ header[class=onesignal] #logo-onesignal {
   font-size: 0.9em;
   font-weight: bold;
   font-family: "Lato";
+}
+.purple-button {
+  background-color: #3A3DB2;
+  color: white;
+  border: none;
+  padding: 0.5em 1em;
+  font-size: 1.1rem;
+  font-family: "Lato";
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 /* This style is overridden on some sites:

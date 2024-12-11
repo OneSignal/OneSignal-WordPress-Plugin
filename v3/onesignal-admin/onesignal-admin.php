@@ -1,4 +1,5 @@
 <?php
+require_once plugin_dir_path(__FILE__) . '../onesignal-helpers.php';
 
 defined('ABSPATH') or die('This page may not be accessed directly.');
 
@@ -47,42 +48,67 @@ function onesignal_admin_page()
   <div class="os-content">
     <h2>Settings</h2>
     <form method="post">
-      <label for="appid">OneSignal App ID</label>
-      <input type="text" id="appid" name="onesignal_app_id" />
-      <p>
+    <label for="appid">OneSignal App ID</label>
+    <div class="input-with-icon">
+      <input type="text" id="appid" name="onesignal_app_id"
+            value="<?php echo esc_attr(get_option('OneSignalWPSetting')['app_id'] ?? ''); ?>" />
+      <span class="validation-icon">
         <?php
-        $appID = esc_attr(get_option('OneSignalWPSetting')['app_id']);
-        if (!empty($appID)) {
-          echo '✅ ' . $appID;
-        } else {
-          echo '❌ Please enter your OneSignal App ID';
-        }
+        $appID = esc_attr(get_option('OneSignalWPSetting')['app_id'] ?? '');
+        echo !empty($appID) ? '✅' : '❌';
         ?>
-      </p>
-      <label for="apikey">OneSignal REST API Key </label>
-      <input type="text" id="apikey" name="onesignal_rest_api_key" />
-      <p>
-        <?php
-        $apiKey = esc_attr(get_option('OneSignalWPSetting')['app_rest_api_key']);
-        if (!empty($apiKey)) {
-          // Get the last four characters
-          $lastFour = substr($apiKey, -4);
-          // Hide the rest of the key with asterisks
-          $hiddenKey = str_repeat('*', strlen($apiKey) - 4) . $lastFour;
+      </span>
+    </div>
 
-          echo '✅ ' . $hiddenKey;
+    <label for="apikey">OneSignal REST API Key
+        <?php
+        $apiKey = get_option('OneSignalWPSetting')['app_rest_api_key'] ?? '';
+        if (!empty($apiKey)) {
+            // Display the API key type
+            echo '<span class="api-key-badge api-key-type-'.strtolower(onesignal_get_api_key_type()).'">' . onesignal_get_api_key_type() . ' API Key</span>';
+        }
+        ?>
+    </label>
+    <div class="input-with-icon">
+      <input type="password" id="apikey" name="onesignal_rest_api_key" placeholder="Enter a REST API Key to update" />
+      <span class="validation-icon">
+        <?php
+        $apiKey = get_option('OneSignalWPSetting')['app_rest_api_key'] ?? '';
+        if (!empty($apiKey)) {
+            echo '✅';
         } else {
-          echo '❌ Please enter your REST API Key';
+            echo '❌';
+        }
+        ?>
+      </span>
+    </div>
+    <p>
+        <?php
+        $apiKey = get_option('OneSignalWPSetting')['app_rest_api_key'] ?? '';
+        if (!empty($apiKey)) {
+            // Get the last four characters
+            $lastFour = substr($apiKey, -4);
+            // Hide the rest of the key with asterisks
+            $hiddenKey = str_repeat('*', strlen($apiKey) - 4) . $lastFour;
+
+            echo 'Current Key: ' . $hiddenKey;
+        } else {
+            echo '❌ Please enter your REST API Key';
         }
         ?>
       </p>
+      <p class="help-text">The REST API Key is hidden for security reasons. Enter a new key to update.</p>
+
+      <!-- Mobile App Checkbox -->
       <div class="checkbox-wrapper">
         <label for="send-to-mobile">
-          <input id="send-to-mobile" type="checkbox" name="onesignal_send_to_mobile" <?php echo get_option('OneSignalWPSetting')['send_to_mobile_platforms'] === 1 ? 'checked' : '' ?>>
+          <input id="send-to-mobile" type="checkbox" name="onesignal_send_to_mobile" 
+                 <?php echo (get_option('OneSignalWPSetting')['send_to_mobile_platforms'] ?? 0) == 1 ? 'checked' : ''; ?>>
           <span class="checkbox"></span>
           Send notification to Mobile app subscribers
         </label>
-        <div class="help" aria-label="More information"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor">
+        <div class="help" aria-label="More information">
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
             <g fill="currentColor">
               <path d="M8 0a8 8 0 108 8 8.009 8.009 0 00-8-8zm0 12.667a1 1 0 110-2 1 1 0 010 2zm1.067-4.054a.667.667 0 00-.4.612.667.667 0 01-1.334 0 2 2 0 011.2-1.834A1.333 1.333 0 106.667 6.17a.667.667 0 01-1.334 0 2.667 2.667 0 113.734 2.444z"></path>
             </g>
@@ -90,11 +116,14 @@ function onesignal_admin_page()
         </div>
         <div class="information" style="display: none;">
           <p>If you also have a mobile app setup in OneSignal, that's separate to your Website, this will include subscribers from your Mobile app in notification sends.</p>
-          <p>You can choose a different URL(<a href="https://documentation.onesignal.com/docs/links#deep-linking">Deep Link</a>) for your Mobile app subscribers in the Post metabox.
+          <p>You can choose a different URL(<a href="https://documentation.onesignal.com/docs/links#deep-linking">Deep Link</a>) for your Mobile app subscribers in the Post metabox.</p>
           <p>If you do not include a different URL, it will direct them to your Website, rather than a specific page of your app.</p>
         </div>
-        <?php submit_button(); ?>
-    </form>
+      </div>
+
+      <?php submit_button('Save Settings', 'primary', 'submit', true, array('id' => 'save-settings-button')); ?>
+      </form>
   </div>
 <?php
 }
+

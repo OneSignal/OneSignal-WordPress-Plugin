@@ -1,5 +1,6 @@
 <?php
 
+require_once plugin_dir_path(__FILE__) . 'onesignal-helpers.php';
 defined('ABSPATH') or die('This page may not be accessed directly.');
 
 // Register the notification function, called when a post status changes
@@ -24,9 +25,14 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
         $excerpt = $excerpt = substr($content, 0, 120);
         $segment = $_POST['os_segment'] ?? 'All';
 
+        $apiKeyType = onesignal_get_api_key_type();
+        $authorizationHeader = $apiKeyType === "Rich"
+            ? 'Key ' . get_option('OneSignalWPSetting')['app_rest_api_key']
+            : 'Basic ' . get_option('OneSignalWPSetting')['app_rest_api_key'];
+
         $args = array(
             'headers' => array(
-                'Authorization' => 'Basic ' . get_option('OneSignalWPSetting')['app_rest_api_key'],
+                'Authorization' => $authorizationHeader,
                 'accept' => 'application/json',
                 'content-type' => 'application/json',
             ),

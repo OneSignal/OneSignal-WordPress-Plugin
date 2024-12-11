@@ -23,6 +23,25 @@
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
 }
 
+.api-key-badge {
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.api-key-type-rich {
+  color: #eee;
+  background-color: #14143c;
+  border-radius: 5px;
+  padding: 4px;
+}
+
+.api-key-type-legacy {
+  color: #fff;
+  background-color: rgb(155, 161, 167);
+  border-radius: 5px;
+  padding: 4px;
+}
+
 .os-content label {
   color: rgb(66, 77, 87);
   margin-bottom: 5px;
@@ -146,4 +165,65 @@
   background-color: rgb(58, 61, 179);
   border-color: rgb(58, 61, 179);
   color: rgb(255, 255, 255) !important;
+}
+
+/* Wrap input and validation icon together */
+.input-with-icon {
+  position: relative;
+  display: block;
+  max-width: 500px; /* Set a max width for the input box */
+  margin-bottom: 20px;
+  width: 100%; /* Make the input box responsive */
+}
+
+.input-with-icon input[type="text"],
+.input-with-icon input[type="password"] {
+  padding-left: 3rem; /* Leave space for the validation icon */
+  display: block;
+  font-size: 16px;
+  height: 2.25rem;
+  outline: none;
+  width: 100%; /* Ensure input box scales within the container */
+  color: rgb(5, 27, 44);
+  border-radius: 0.25rem;
+  border: 1px solid rgb(203, 209, 215);
+  background: #fff;
+  margin: 0 auto; /* Center the input box */
+}
+
+.input-with-icon input[type="text"]:active,
+.input-with-icon input[type="text"]:focus,
+.input-with-icon input[type="password"]:active,
+.input-with-icon input[type="password"]:focus {
+  border: 1px solid rgb(67, 70, 206);
+  background: rgb(236, 236, 252);
+}
+
+/* Validation icon styling */
+.validation-icon {
+  position: absolute;
+  top: 50%;
+  left: 0.75rem; /* Position the icon at the left */
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+  pointer-events: none;
+  color: #e54b4d; /* Default error color */
+}
+
+.input-with-icon input[type="text"]:not(:placeholder-shown):valid + .validation-icon,
+.input-with-icon input[type="password"]:not(:placeholder-shown):valid + .validation-icon {
+  color: #28a745; /* Success color */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .input-with-icon {
+    max-width: 90%; /* Adjust for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .input-with-icon {
+    max-width: 100%; /* Full width for very small screens */
+  }
 }

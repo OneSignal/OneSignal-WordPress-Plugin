@@ -42,18 +42,22 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
       <span style="padding:0 20px 15px; color:#3A3DB2; font-weight:700;">
           Migrate Settings to OneSignal.com<br><br>
           <p style="font-size:1.15rem;font-weight:500">All OneSignal prompt configurations on this page are moving to OneSignal.com.</p>
-          <p style="font-size:1.15rem;">What do I have to do?</p>
-          <p style="font-size:1.15rem;font-weight:500">Simply recreate your prompt configurations in the <a href="https://dashboard.onesignal.com/" target="_blank">OneSignal.com dashboard</a>, then click "I Migrated", below.</p>
-          <form method="post" action="" class="pull-left">
+          <button type="button" class="ui medium teal button" onclick="window.open('https://documentation.onesignal.com/docs/wordpress-plugin-30','_blank');">Learn More</button>
+          <form method="post" action="" style="margin-bottom: 20px; margin-top: 20px;">
+            <p style="font-size:1.15rem;">Save your current settings to a txt file</p>
             <?php wp_nonce_field('onesignal_export_nonce'); ?>
             <input type="hidden" name="plugin_action" value="export_settings">
-            <button type="button" class="ui medium teal button" onclick="window.open('https://documentation.onesignal.com/docs/wordpress-plugin-30','_blank');">Learn More</button>
             <button type="submit" class="ui medium button">Export Current Configuration</button>
           </form>
-          <form method="post" action="" class="pull-right" id="onesignal-migration-form">
+          <p style="font-size:1.15rem;">What do I have to do?</p>
+          <p style="font-size:1.15rem;font-weight:500">1. Open the <a href="https://dashboard.onesignal.com/" target="_blank">OneSignal.com dashboard</a></p>
+          <p style="font-size:1.15rem;font-weight:500">2. Go to your app Settings > Push & In-App > Web > Wordpress Plugin or Website Builder</p>
+          <p style="font-size:1.15rem;font-weight:500">3. Recreate the plugin settings from this screen on the OneSignal dashboard (e.g. configure prompt options, subscription bell, etc...).</p>
+          <p style="font-size:1.15rem;font-weight:500">4. Click "Migration Completed", below.</p>
+          <form method="post" action="" class="pull-right" id="onesignal-migration-form" style="margin: 10px;">
               <?php wp_nonce_field('onesignal_migration_nonce'); ?>
               <input type="hidden" name="plugin_action" value="complete_migration">
-              <button type="button" class="ui medium purple-button" id="confirm-migration-button">I Migrated</button>
+              <button type="button" class="ui medium purple-button" id="confirm-migration-button">Migration Completed</button>
           </form>
           <!-- Modal -->
           <div id="migration-confirmation-modal" class="ui modal">

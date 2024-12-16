@@ -9,18 +9,8 @@ function onesignal_complete_migration()
             wp_die(__('Security check failed', 'onesignal-push'));
         }
 
-        // Get current settings
-        $settings = get_option('OneSignalWPSetting');
-
-        if (!$settings) {
-            wp_die(__('No settings found', 'onesignal-push'));
-        }
-
         // Mark the plugin as migrated
         update_option('onesignal_plugin_migrated', true);
-
-        // clean up other settings
-        delete_option('onesignal.last_send_time');
 
         // Provide feedback to the user
         wp_redirect(admin_url('admin.php?page=onesignal-admin-page.php'));

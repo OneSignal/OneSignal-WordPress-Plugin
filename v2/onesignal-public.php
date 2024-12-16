@@ -71,7 +71,7 @@ class OneSignal_Public
 	wp_register_script('local_sdk', 'https://localhost:3001/sdks/OneSignalSDK.js', array(), '1.0.0', array('strategy' => 'async'));
         wp_enqueue_script('local_sdk');
     } else {
-        wp_register_script('remote_sdk', 'https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js', array(), '1.0.0', array('strategy' => 'async'));
+        wp_register_script('remote_sdk', 'https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js', array(), '1.0.0', array('strategy' => 'defer'));
         wp_enqueue_script('remote_sdk');
     } ?>
     <script>
@@ -84,7 +84,7 @@ class OneSignal_Public
 
         <?php
             if(array_key_exists('onesignal_sw_js', $onesignal_wp_settings)) {
-                $swScope = self::getOneSignalPluginPath() . '/v2/sdk_files/push/onesignal/';
+                $swScope = self::getOneSignalPluginPath() . '/sdk_files/push/onesignal/';
                 echo "oneSignal_options['serviceWorkerParam'] = { scope: '$swScope' };\n";
                 echo "oneSignal_options['serviceWorkerPath'] = 'OneSignalSDKWorker.js';\n";
             } else {
@@ -293,9 +293,7 @@ class OneSignal_Public
                 if (apply_filters('onesignal_initialize_sdk', $onesignal_wp_settings)) {
                     // If the filter returns "$do_initialize_sdk: true", initialize the web SDK
               ?>
-              OneSignalDeferred.push(async function(OneSignal) {
-                OneSignal.init(window._oneSignalInitOptions);
-              });
+              OneSignal.init(window._oneSignalInitOptions);
               <?php
                 } else {
                     ?>
@@ -303,10 +301,8 @@ class OneSignal_Public
               <?php
                 }
             } else {
-                ?>
-              OneSignalDeferred.push(async function(OneSignal) {
-                OneSignal.init(window._oneSignalInitOptions);
-              });
+              ?>
+              OneSignal.init(window._oneSignalInitOptions);
               <?php
             }
 

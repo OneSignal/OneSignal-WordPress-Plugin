@@ -25,7 +25,6 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
 
         // Open the modal when the "I Migrated" button is clicked
         confirmButton.addEventListener("click", function () {
-          console.log('Migration modal clicked');
             jQuery(modal).modal("show");
         });
 

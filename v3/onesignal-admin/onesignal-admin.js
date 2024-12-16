@@ -19,8 +19,8 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function isValidApiKey(apiKey) {
-    const base64Regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
-    const opaqueTokenRegex = /^os_v2_(app|org)_[2-7a-z]{56,}$/; // Base32 encoded, minimum 56 characters
+  const base64Regex = /^(?:[A-Za-z0-9+/]{4}){12,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/; // At least 48 characters in Base64
+  const opaqueTokenRegex = /^os_v[2-9]_app_[2-7a-z]{56,}$/;
     return (base64Regex.test(apiKey) || opaqueTokenRegex.test(apiKey)); // Ensure it's not empty and matches regex
   }
 

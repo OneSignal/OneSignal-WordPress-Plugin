@@ -51,8 +51,11 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <p style="font-size:1.15rem;">What do I have to do?</p>
           <p style="font-size:1.15rem;font-weight:500">1. Open the <a href="https://dashboard.onesignal.com/" target="_blank">OneSignal.com dashboard</a></p>
           <p style="font-size:1.15rem;font-weight:500">2. Go to your app Settings > Push & In-App > Web > Wordpress Plugin or Website Builder</p>
-          <p style="font-size:1.15rem;font-weight:500">3. Recreate the plugin settings from this screen on the OneSignal dashboard (e.g. configure prompt options, subscription bell, etc...).</p>
-          <p style="font-size:1.15rem;font-weight:500">4. Click "Migration Completed", below.</p>
+          <span class="onesignal-error-notice">
+            ⚠️ <strong>IMPORTANT:</strong> Steps 3 and 4 must be done immediately, one after the other, to avoid breaking functionality.
+          </span><br/><br/>
+          <p style="font-size:1.15rem;font-weight:500">3. Recreate the plugin settings from this screen on the OneSignal.com dashboard (e.g. configure prompt options, subscription bell, etc...). Click Save.</p>
+          <p style="font-size:1.15rem;font-weight:500">4. Click "Migration Completed", below as soon as you have saved your configuration in the OneSignal.com dashboard.</p>
           <form method="post" action="" class="pull-right" id="onesignal-migration-form" style="margin: 10px;">
               <?php wp_nonce_field('onesignal_migration_nonce'); ?>
               <input type="hidden" name="plugin_action" value="complete_migration">

@@ -55,6 +55,3 @@ if ($plugin_version === ONESIGNAL_VERSION_V3) {
     add_action('init', ['OneSignal_Admin', 'init']);
     add_action('init', ['OneSignal_Public', 'init']);
 }
-
-// Debugging: Log which version of the plugin was loaded (useful for troubleshooting)
-error_log('OneSignal Plugin Version Loaded: ' . $plugin_version);

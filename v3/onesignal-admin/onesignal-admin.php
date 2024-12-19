@@ -43,46 +43,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Content for WP Admin Page
 function onesignal_admin_page()
 {
+  $settings = get_option('OneSignalWPSetting'); // Fetch existing plugin settings (if any)
+  $is_new_install = !$settings || !isset($settings['app_id']); // Determine if this is a fresh install (no settings yet)
 ?>
   <header><img src="<?php echo plugins_url('/images/onesignal.svg', __FILE__); ?>"></header>
   <div class="os-content">
     <h2>Settings</h2>
+    <?php
+    if ($is_new_install) {
+    ?>
+    <div style="margin-bottom: 20px;">
+      <span style="margin-bottom:35px;color:#E54B4D; font-weight:700;">
+        <a href="https://documentation.onesignal.com/docs/wordpress-plugin-30" target="_blank">Getting Started →	</a>
+      </span>
+    </div>
+    <?php
+    }
+    ?>
     <form method="post">
-    <label for="appid">OneSignal App ID</label>
-    <div class="input-with-icon">
-      <input type="text" id="appid" name="onesignal_app_id"
-            value="<?php echo esc_attr(get_option('OneSignalWPSetting')['app_id'] ?? ''); ?>" />
-      <span class="validation-icon">
-        <?php
-        $appID = esc_attr(get_option('OneSignalWPSetting')['app_id'] ?? '');
-        echo !empty($appID) ? '✅' : '❌';
-        ?>
-      </span>
-    </div>
+      <label for="appid">OneSignal App ID</label>
+      <div class="input-with-icon">
+        <input type="text" id="appid" name="onesignal_app_id"
+              value="<?php echo esc_attr(get_option('OneSignalWPSetting')['app_id'] ?? ''); ?>" />
+        <span class="validation-icon">
+          <?php
+          $appID = esc_attr(get_option('OneSignalWPSetting')['app_id'] ?? '');
+          echo !empty($appID) ? '✅' : '❌';
+          ?>
+        </span>
+      </div>
 
-    <label for="apikey">OneSignal REST API Key
-        <?php
-        $apiKey = get_option('OneSignalWPSetting')['app_rest_api_key'] ?? '';
-        if (!empty($apiKey)) {
-            // Display the API key type
-            echo '<span class="api-key-badge api-key-type-'.strtolower(onesignal_get_api_key_type()).'">' . onesignal_get_api_key_type() . ' API Key</span>';
-        }
-        ?>
-    </label>
-    <div class="input-with-icon">
-      <input type="password" id="apikey" name="onesignal_rest_api_key" placeholder="Enter a REST API Key to update" />
-      <span class="validation-icon">
-        <?php
-        $apiKey = get_option('OneSignalWPSetting')['app_rest_api_key'] ?? '';
-        if (!empty($apiKey)) {
-            echo '✅';
-        } else {
-            echo '❌';
-        }
-        ?>
-      </span>
-    </div>
-    <p>
+      <label for="apikey">OneSignal REST API Key
+          <?php
+          $apiKey = get_option('OneSignalWPSetting')['app_rest_api_key'] ?? '';
+          if (!empty($apiKey)) {
+              // Display the API key type
+              echo '<span class="api-key-badge api-key-type-'.strtolower(onesignal_get_api_key_type()).'">' . onesignal_get_api_key_type() . ' API Key</span>';
+          }
+          ?>
+      </label>
+      <div class="input-with-icon">
+        <input type="password" id="apikey" name="onesignal_rest_api_key" placeholder="Enter a REST API Key to update" />
+        <span class="validation-icon">
+          <?php
+          $apiKey = get_option('OneSignalWPSetting')['app_rest_api_key'] ?? '';
+          if (!empty($apiKey)) {
+              echo '✅';
+          } else {
+              echo '❌';
+          }
+          ?>
+        </span>
+      </div>
+      <p>
         <?php
         $apiKey = get_option('OneSignalWPSetting')['app_rest_api_key'] ?? '';
         if (!empty($apiKey)) {
@@ -122,7 +135,7 @@ function onesignal_admin_page()
       </div>
 
       <?php submit_button('Save Settings', 'primary', 'submit', true, array('id' => 'save-settings-button')); ?>
-      </form>
+    </form>
   </div>
 <?php
 }

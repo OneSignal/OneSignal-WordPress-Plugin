@@ -71,35 +71,34 @@ class OneSignal_Public
 	wp_register_script('local_sdk', 'https://localhost:3001/sdks/OneSignalSDK.js', array(), '1.0.0', array('strategy' => 'async'));
         wp_enqueue_script('local_sdk');
     } else {
-        wp_register_script('remote_sdk', 'https://cdn.onesignal.com/sdks/OneSignalSDK.js', array(), '1.0.0', array('strategy' => 'async'));
+        wp_register_script('remote_sdk', 'https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js', array(), '1.0.0', array('strategy' => 'defer'));
         wp_enqueue_script('remote_sdk');
     } ?>
     <script>
 
-      window.OneSignal = window.OneSignal || [];
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
 
-      OneSignal.push( function() {
+      OneSignalDeferred.push(function(OneSignal) {
+        var oneSignal_options = {};
+        window._oneSignalInitOptions = oneSignal_options;
+
         <?php
             if(array_key_exists('onesignal_sw_js', $onesignal_wp_settings)) {
                 $swScope = self::getOneSignalPluginPath() . '/sdk_files/push/onesignal/';
-                echo  "OneSignal.SERVICE_WORKER_UPDATER_PATH = 'OneSignalSDKUpdaterWorker.js';
-                      OneSignal.SERVICE_WORKER_PATH = 'OneSignalSDKWorker.js';
-                      OneSignal.SERVICE_WORKER_PARAM = { scope: '$swScope' };";
+                echo "oneSignal_options['serviceWorkerParam'] = { scope: '$swScope' };\n";
+                echo "oneSignal_options['serviceWorkerPath'] = 'OneSignalSDKWorker.js';\n";
             } else {
-                echo 'OneSignal.SERVICE_WORKER_UPDATER_PATH = "OneSignalSDKUpdaterWorker.js.php";
-                      OneSignal.SERVICE_WORKER_PATH = "OneSignalSDKWorker.js.php";
-                      OneSignal.SERVICE_WORKER_PARAM = { scope: "/" };';
+                echo "oneSignal_options['serviceWorkerParam'] = { scope: '/' };\n";
+                echo "oneSignal_options['serviceWorkerPath'] = 'OneSignalSDKWorker.js.php';\n";
             }
         ?>
 
         <?php
         if (self::valid_for_key('default_url', $onesignal_wp_settings)) {
-            echo 'OneSignal.setDefaultNotificationUrl("'.esc_url($onesignal_wp_settings['default_url']).'");';
+            echo 'OneSignal.Notifications.setDefaultUrl("'.esc_url($onesignal_wp_settings['default_url']).'");';
         } else {
-            echo 'OneSignal.setDefaultNotificationUrl("'.esc_url(get_site_url())."\");\n";
+            echo 'OneSignal.Notifications.setDefaultUrl("'.esc_url(get_site_url())."\");\n";
         } ?>
-        var oneSignal_options = {};
-        window._oneSignalInitOptions = oneSignal_options;
 
         <?php
         echo "oneSignal_options['wordpress'] = true;\n";
@@ -189,10 +188,7 @@ class OneSignal_Public
 
             if (array_key_exists('notifyButton_showAfterSubscribed', $onesignal_wp_settings) && $onesignal_wp_settings['notifyButton_showAfterSubscribed'] !== true) {
                 echo "oneSignal_options['notifyButton']['displayPredicate'] = function() {
-              return OneSignal.isPushNotificationsEnabled()
-                      .then(function(isPushEnabled) {
-                          return !isPushEnabled;
-                      });
+              return !OneSignal.User.PushSubscription.optedIn;
             };\n";
             }
 
@@ -305,17 +301,17 @@ class OneSignal_Public
               <?php
                 }
             } else {
-                ?>
-                OneSignal.init(window._oneSignalInitOptions);
-                <?php
+              ?>
+              OneSignal.init(window._oneSignalInitOptions);
+              <?php
             }
 
             if (array_key_exists('prompt_auto_register', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_auto_register'] === true) {
-                    echo "OneSignal.showSlidedownPrompt();";
+                    echo "OneSignal.Slidedown.promptPush()";
             }
 
             if (array_key_exists('use_native_prompt', $onesignal_wp_settings) && $onesignal_wp_settings['use_native_prompt'] === true) {
-                echo "OneSignal.showNativePrompt();";
+                echo "OneSignal.Notifications.requestPermission()";
             }
 
         } else {
@@ -330,9 +326,9 @@ class OneSignal_Public
 
         <?php
         if (array_key_exists('use_modal_prompt', $onesignal_wp_settings) && $onesignal_wp_settings['use_modal_prompt'] === true) {
-            echo "var oneSignalLinkClickHandler = function(event) { OneSignal.push(['registerForPushNotifications', {modalPrompt: true}]); event.preventDefault(); };";
+            echo "var oneSignalLinkClickHandler = function(event) { OneSignal.Slidedown.promptPush(); event.preventDefault(); };";
         } else {
-            echo "var oneSignalLinkClickHandler = function(event) { OneSignal.push(['registerForPushNotifications']); event.preventDefault(); };";
+            echo "var oneSignalLinkClickHandler = function(event) { OneSignal.Notifications.requestPermission(); event.preventDefault(); };";
         } ?>
         for(var i = 0; i < oneSignal_elements.length; i++)
           oneSignal_elements[i].addEventListener('click', oneSignalLinkClickHandler, false);

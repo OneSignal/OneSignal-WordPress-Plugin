@@ -1,0 +1,48 @@
+#onesignal_metabox {
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI;", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+}
+
+#onesignal_metabox h2 {
+  font-weight: 500 !important;
+  font-size: 13px;
+  padding: 16px 48px 16px 16px !important;
+}
+
+#onesignal_metabox label {
+  color: rgb(66, 77, 87);
+  margin: 1rem 0 0.5rem;
+  display: inline-block;
+}
+
+#onesignal_metabox input[type="text"] {
+  display: block;
+  height: 2.25rem;
+  padding: 0.5rem 0.75rem;
+  outline: none 0px;
+  width: 100%;
+  color: rgb(5, 27, 44);
+  border-radius: 0.25rem;
+  border: 1px solid rgb(203, 209, 215);
+}
+
+#onesignal_metabox input[type="text"]:active,
+#onesignal_metabox input[type="text"]:focus {
+  border: 1px solid rgb(67, 70, 206);
+  background: rgb(236, 236, 252);
+}
+
+#onesignal_metabox select {
+  display: block;
+  outline: none 0px;
+  width: 85%;
+  color: rgb(5, 27, 44);
+  border-radius: 0.25rem;
+  border: 1px solid rgb(203, 209, 215);
+  margin-bottom: 1rem;
+}
+
+#onesignal_metabox hr {
+  margin-top: 30px;
+}

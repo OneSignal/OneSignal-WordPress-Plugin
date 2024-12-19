@@ -3,8 +3,8 @@ Contributors: OneSignal
 Donate link: https://onesignal.com
 Tags: push notification, push notifications, desktop notifications, mobile notifications, chrome push, android, android notification, android notifications, android push, desktop notification, firefox, firefox push, mobile, mobile notification, notification, notifications, notify, onesignal, push, push messages, safari, safari push, web push, chrome
 Requires at least: 3.8
-Tested up to: 6.7
-Stable tag: 2.4.4
+Tested up to: 6.4
+Stable tag: 3.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,7 +26,7 @@ OneSignal’s free plan allows targeting up to 10,000 subscribers with push noti
 OneSignal is trusted by over 1.8M+ developers and marketing strategists. We power push notifications for everyone from early stage startups to Fortune 500 Companies, sending over 6 billion notifications per day. It is the most popular push notification plugin on Wordpress with 100,000+ installations.
 
 = Features =
-* **Supports Chrome** (Desktop & Android), **Safari** (Mac OS X), **Microsoft Edge** (Desktop & Android), **Opera** (Desktop & Android) and **Firefox** (Desktop & Android) on both HTTP and HTTPS sites.
+* **Supports Chrome** (Desktop & Android), **Safari** (Mac OS X), **Microsoft Edge** (Desktop & Android), **Opera** (Desktop & Android) and **Firefox** (Desktop & Android) on HTTPS sites.
 
 * **Automatic Notifications** - Send notifications to followers every time you publish a new post. Or set up a reminder that gets automatically sent to them if they haven’t visited for a few days.
 
@@ -65,28 +65,16 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 == Changelog ==
 
 = 3.0.0 =
-WARNING: this update contains changes that may break specific setups, as detailed below:
-
-If you have made any code modifications to your Wordpress installation to directly interact with the OneSignal SDK, this version will break your implementation. Please revert your code modifications prior to upgrading and use our improved dashboard functionality to configure your OneSignal integration instead.
-
-Learn more: https://documentation.onesignal.com/docs/wordpress-plugin-30
-
-- Support migration to new configuration flow.
-- Simpler configuration interface.
-- Ability to target specific segments.
-- Automatically send Push Notifications when a WordPress post is published.
-- Update "Tested up to" WP 6.7.
-- Upgrades the OneSignal Web SDK (v15 --> v16).
-- Web Topics are included by default.
+- Initialises the latest OneSignal Web SDK (v16).
+- Automatically sends Push Notifications when a WordPress post is published.
+- Setup prompts within the OneSignal dashboard. No custom code required.
+- Choose which Segment should recieve notifications for each post.
+- Web Topics included by default.
 - Send to mobile app subscribers, with an option to direct them to a different URL (Deep Link).
 
-= 2.4.4 =
-- Update "Tested up to" Wordpress version to 6.5
-- Update OneSignal plugin menu icon
-
 = 2.4.3 =
-- Update async attribute
-- Update setup video link
+- Fixed "async" script src issue issue
+- Added Admin Notice announcing work on v3.0.0.
 
 = 2.4.2 =
 - Update OneSignal icons
@@ -206,7 +194,7 @@ Learn more: https://documentation.onesignal.com/docs/wordpress-plugin-30
 
 - Updated notice message to reflect changes to time limiter, removed extra newline from description
 
-= 1.17.4 = 
+= 1.17.4 =
 
 - Changed time limiter to 2 minutes from 1 hour to ease restrictions on sending update notifications
 
@@ -228,7 +216,7 @@ Learn more: https://documentation.onesignal.com/docs/wordpress-plugin-30
 
 - Bug fixes, edge-case handling, refactoring
 
-= 1.16.16 = 
+= 1.16.16 =
 
 - Code to catch error where core/editor is not defined for old versions of the editor
 

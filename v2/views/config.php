@@ -65,11 +65,15 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div id="migration-confirmation-modal" class="ui modal">
               <div class="header">Confirm Migration</div>
               <div class="content">
-                  <p>Are you sure you want to mark the plugin as migrated? This action is irreversible.</p>
+                <span class="onesignal-error-notice">
+                  This action is irreversible.
+                </span><br/><br/>
+                  <p>By confirming the migration, you confirm that you have configured your prompt settings on the OneSignal.com dashboard.</p>
+                  <p>Are you sure you want to mark the plugin as migrated?</p>
               </div>
               <div class="actions">
                   <button class="ui cancel button">Cancel</button>
-                  <button class="ui approve button" id="confirm-migration-submit">Confirm</button>
+                  <button class="ui approve button" id="confirm-migration-submit" style="background-color:#E54B4D">Confirm</button>
               </div>
           </div>
 

@@ -54,4 +54,15 @@ if ($plugin_version === ONESIGNAL_VERSION_V3) {
     // Initialize V2 admin and public components
     add_action('init', ['OneSignal_Admin', 'init']);
     add_action('init', ['OneSignal_Public', 'init']);
+    add_action('admin_notices', 'migration_notice');
+}
+
+function migration_notice() {
+    // Only show the notice on the Plugins page
+    $screen = get_current_screen();
+    if ($screen && $screen->id === 'plugins') {
+        echo '<div class="notice notice-warning is-dismissible">
+                <p><strong>OneSignal Migration Needed:</strong> All OneSignal prompt configurations are moving to OneSignal.com. See the plugin page for more info.</p>
+              </div>';
+    }
 }

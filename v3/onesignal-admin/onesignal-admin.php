@@ -20,31 +20,31 @@ function admin_files()
   wp_enqueue_style('style', plugins_url('onesignal-admin.css', __FILE__), array(), time());
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
   if (isset($_POST["submit"])) {
-      $onesignal_settings = get_option('OneSignalWPSetting', array());
+    $onesignal_settings = get_option('OneSignalWPSetting', array());
 
-      if (isset($_POST['onesignal_app_id']) && !empty($_POST['onesignal_app_id'])) {
-          $onesignal_settings['app_id'] = sanitize_text_field($_POST['onesignal_app_id']);
-      }
+    if (isset($_POST['onesignal_app_id']) && !empty($_POST['onesignal_app_id'])) {
+        $onesignal_settings['app_id'] = sanitize_text_field($_POST['onesignal_app_id']);
+    }
 
-      if (isset($_POST['onesignal_rest_api_key']) && !empty($_POST['onesignal_rest_api_key'])) {
-          $onesignal_settings['app_rest_api_key'] = sanitize_text_field($_POST['onesignal_rest_api_key']);
-      }
+    if (isset($_POST['onesignal_rest_api_key']) && !empty($_POST['onesignal_rest_api_key'])) {
+        $onesignal_settings['app_rest_api_key'] = sanitize_text_field($_POST['onesignal_rest_api_key']);
+    }
 
-      if (isset($_POST['utm_additional_url_params'])) {
-          $onesignal_settings['utm_additional_url_params'] = sanitize_text_field($_POST['utm_additional_url_params']);
-      }
+    if (isset($_POST['utm_additional_url_params'])) {
+        $onesignal_settings['utm_additional_url_params'] = sanitize_text_field($_POST['utm_additional_url_params']);
+    }
 
-      // Save the auto send notifications setting
-      $auto_send = isset($_POST['onesignal_auto_send']) ? 1 : 0;
-      $onesignal_settings['notification_on_post'] = $auto_send;
+    // Save the auto send notifications setting
+    $auto_send = isset($_POST['onesignal_auto_send']) ? 1 : 0;
+    $onesignal_settings['notification_on_post'] = $auto_send;
 
-      // Save the mobile subscribers setting
-      $send_to_mobile = isset($_POST['onesignal_send_to_mobile']) ? 1 : 0;
-      $onesignal_settings['send_to_mobile_platforms'] = $send_to_mobile;
+    // Save the mobile subscribers setting
+    $send_to_mobile = isset($_POST['onesignal_send_to_mobile']) ? 1 : 0;
+    $onesignal_settings['send_to_mobile_platforms'] = $send_to_mobile;
 
-      update_option('OneSignalWPSetting', $onesignal_settings);
+    update_option('OneSignalWPSetting', $onesignal_settings);
   }
 }
 

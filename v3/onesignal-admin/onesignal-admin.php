@@ -32,6 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $onesignal_settings['app_rest_api_key'] = sanitize_text_field($_POST['onesignal_rest_api_key']);
       }
 
+      if (isset($_POST['utm_additional_url_params'])) {
+          $onesignal_settings['utm_additional_url_params'] = sanitize_text_field($_POST['utm_additional_url_params']);
+      }
+
       // Save the auto send notifications setting
       $auto_send = isset($_POST['onesignal_auto_send']) ? 1 : 0;
       $onesignal_settings['notification_on_post'] = $auto_send;
@@ -116,6 +120,14 @@ function onesignal_admin_page()
       </p>
       <p class="help-text">The REST API Key is hidden for security reasons. Enter a new key to update.</p>
 
+      <h3>Advanced Settings</h3>
+      <div class="ui borderless shadowless segment">
+        <div class="field">
+          <label>Additional Notification URL Parameters<i class="tiny circular help icon link" role="popup" data-html="Adds the specified string as extra URL parameters to your notification URL so that they can be tracked as an event by your analytics system. <em>Please escape your parameter values</em>; your input will be added as-is to the end of your notification URL. Example:</p>If you want:<em><li><code>utm_medium</code> to be <code>ppc</code></li><li><code>utm_source</code> to be <code>adwords</code></li><li><code>utm_campaign</code> to be <code>snow boots</code></li><li><code>utm_content</code> to be <code>durable snow boots</code></li></em><p><p>Then use the following string:</p><p><code style='word-break: break-all;'>utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots</code></p>" data-variation="wide"></i></label>
+          <input id="utm-params" type="text" placeholder="utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots" name="utm_additional_url_params" value="<?php echo esc_attr(get_option('OneSignalWPSetting')['utm_additional_url_params']); ?>">
+        </div>
+      </div>
+
       <!-- Auto Send Checkbox -->
       <div class="checkbox-wrapper">
         <label for="auto-send">
@@ -147,7 +159,6 @@ function onesignal_admin_page()
           <p>If you do not include a different URL, it will direct them to your Website, rather than a specific page of your app.</p>
         </div>
       </div>
-
       <?php submit_button('Save Settings', 'primary', 'submit', true, array('id' => 'save-settings-button')); ?>
     </form>
   </div>

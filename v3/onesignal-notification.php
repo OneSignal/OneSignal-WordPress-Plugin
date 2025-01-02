@@ -9,7 +9,8 @@ add_action('transition_post_status', 'onesignal_schedule_notification', 10, 3);
 // Function to schedule notification
 function onesignal_schedule_notification($new_status, $old_status, $post)
 {
-    if (($new_status === 'publish') || ($new_status === 'future')) {
+  if (($new_status === 'publish') || ($new_status === 'future')) {
+        $onesignal_wp_settings = get_option("OneSignalWPSetting");
 
         // check if update is on.
         $update = !empty($_POST['os_update']) ? $_POST['os_update'] : $post->os_update;
@@ -24,6 +25,13 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
         $content = !empty($_POST['os_content']) ? $_POST['os_content'] : $post->post_content;
         $excerpt = $excerpt = substr($content, 0, 120);
         $segment = $_POST['os_segment'] ?? 'All';
+        $config_utm_additional_url_params = $onesignal_wp_settings['utm_additional_url_params'] ?? '';
+        $url = get_permalink($post->ID);
+
+        // Append UTM parameters to the URL
+        if (!empty($config_utm_additional_url_params)) {
+          $url = $url . (strpos($url, '?') === false ? '?' : '&') . $config_utm_additional_url_params;
+        }
 
         $apiKeyType = onesignal_get_api_key_type();
         $authorizationHeader = $apiKeyType === "Rich"
@@ -67,10 +75,10 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
                 $fields['app_url'] = $_POST['os_mobile_url'];
                 $fields['web_url'] = get_permalink($post->ID);
             } else {
-                $fields['url'] = get_permalink($post->ID);
+                $fields['url'] = $url;
             }
         } else {
-            $fields['url'] = get_permalink($post->ID);
+            $fields['url'] = $url;
         }
         // Set notification images based on the post's featured image
         if (has_post_thumbnail($post->ID)) {

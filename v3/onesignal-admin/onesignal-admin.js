@@ -13,13 +13,15 @@ window.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("DOMContentLoaded", () => {
   const appIdInput = document.querySelector("#appid");
   const apiKeyInput = document.querySelector("#apikey");
+  const utmInput = document.querySelector("#utm-params");
   const autoSendCheckbox = document.querySelector("#auto-send");
   const sendToMobileCheckbox = document.querySelector("#send-to-mobile");
   const saveButton = document.querySelector("#save-settings-button");
 
-  if (appIdInput && apiKeyInput && autoSendCheckbox && sendToMobileCheckbox && saveButton) {
+  if (appIdInput && apiKeyInput && autoSendCheckbox && sendToMobileCheckbox && utmInput && saveButton) {
     const initialAppId = appIdInput.value;
     const initialApiKey = apiKeyInput.value;
+    const initialUtmInput = utmInput.value;
     const initialAutoSend = autoSendCheckbox.checked;
     const initialSendToMobile = sendToMobileCheckbox.checked;
 
@@ -48,10 +50,11 @@ window.addEventListener("DOMContentLoaded", () => {
     function hasFormChanged() {
       const appIdChanged = appIdInput.value !== initialAppId;
       const apiKeyChanged = apiKeyInput.value !== initialApiKey;
+      const utmChanged = utmInput.value !== initialUtmInput;
       const autoSendChanged = autoSendCheckbox.checked !== initialAutoSend;
       const sendToMobileChanged = sendToMobileCheckbox.checked !== initialSendToMobile;
 
-      return appIdChanged || apiKeyChanged || autoSendChanged || sendToMobileChanged;
+      return appIdChanged || apiKeyChanged || autoSendChanged || sendToMobileChanged || utmChanged;
     }
 
     function toggleSaveButton() {
@@ -75,6 +78,8 @@ window.addEventListener("DOMContentLoaded", () => {
       updateValidationIcon(apiKeyInput, isValid);
       toggleSaveButton();
     });
+
+    utmInput.addEventListener("input", toggleSaveButton);
 
     autoSendCheckbox.addEventListener("change", toggleSaveButton);
     sendToMobileCheckbox.addEventListener("change", toggleSaveButton);

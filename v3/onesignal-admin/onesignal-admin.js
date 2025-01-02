@@ -13,9 +13,16 @@ window.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("DOMContentLoaded", () => {
   const appIdInput = document.querySelector("#appid");
   const apiKeyInput = document.querySelector("#apikey");
+  const autoSendCheckbox = document.querySelector("#auto-send");
+  const sendToMobileCheckbox = document.querySelector("#send-to-mobile");
   const saveButton = document.querySelector("#save-settings-button");
 
-  if (appIdInput && apiKeyInput && saveButton) {
+  if (appIdInput && apiKeyInput && autoSendCheckbox && sendToMobileCheckbox && saveButton) {
+    const initialAppId = appIdInput.value;
+    const initialApiKey = apiKeyInput.value;
+    const initialAutoSend = autoSendCheckbox.checked;
+    const initialSendToMobile = sendToMobileCheckbox.checked;
+
     function isValidUUID(uuid) {
       const uuidRegex =
         /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -38,10 +45,23 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    function hasFormChanged() {
+      const appIdChanged = appIdInput.value !== initialAppId;
+      const apiKeyChanged = apiKeyInput.value !== initialApiKey;
+      const autoSendChanged = autoSendCheckbox.checked !== initialAutoSend;
+      const sendToMobileChanged = sendToMobileCheckbox.checked !== initialSendToMobile;
+
+      return appIdChanged || apiKeyChanged || autoSendChanged || sendToMobileChanged;
+    }
+
     function toggleSaveButton() {
       const appIdValid = isValidUUID(appIdInput.value);
-      const apiKeyValid = isValidApiKey(apiKeyInput.value);
-      saveButton.disabled = !(appIdValid && apiKeyValid); // Enable button only if both are valid
+      const apiKeyValid = apiKeyInput.value.length == 0 || isValidApiKey(apiKeyInput.value);
+      const formChanged = hasFormChanged();
+
+      // Enable button if either text inputs are valid or toggles have changed
+      const enabled = formChanged && appIdValid && apiKeyValid;
+      saveButton.disabled = !enabled;
     }
 
     appIdInput.addEventListener("input", () => {
@@ -55,6 +75,9 @@ window.addEventListener("DOMContentLoaded", () => {
       updateValidationIcon(apiKeyInput, isValid);
       toggleSaveButton();
     });
+
+    autoSendCheckbox.addEventListener("change", toggleSaveButton);
+    sendToMobileCheckbox.addEventListener("change", toggleSaveButton);
 
     // Initial state on page load
     toggleSaveButton();

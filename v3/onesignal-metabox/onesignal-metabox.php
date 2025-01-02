@@ -28,10 +28,20 @@ function onesignal_metabox($post)
 
   // Make the API request, log errors, get segment names.
   $response = wp_remote_get('https://onesignal.com/api/v1/apps/' . get_option('OneSignalWPSetting')['app_id'] . '/segments', $args);
+
   if (is_wp_error($response)) {
-    error_log('API request failed: ' . $response->get_error_message());
+      error_log('API request failed: ' . $response->get_error_message());
+      $json = null; // Handle error case
+  } else {
+      $body = wp_remote_retrieve_body($response);
+      $json = json_decode($body);
+
+      // Check if segments exist and are an array
+      if (!isset($json->segments) || !is_array($json->segments)) {
+          error_log('Unexpected API response: Missing or invalid key');
+          $json = null;
+      }
   }
-  $json = json_decode(wp_remote_retrieve_body($response));
 
   // Meta box content -> js file hides sections depending on whats checked.
 ?>
@@ -49,14 +59,20 @@ Send notification when post is published or updated
   <div id="os_options">
     <label for="os_segment">Send to segment</label>
     <select name="os_segment" id="os_segment">
-      <option value="All">All</option>
-      <?php
-      for ($i = 0; $i < count($json->segments); $i++) {
-        $selected = isset($post->os_meta['os_segment']) && $post->os_meta['os_segment'] === $json->segments[$i]->name ? 'selected' : '';
-        echo '<option value="' . $json->segments[$i]->name . '"' . $selected . '>' . $json->segments[$i]->name . '</option>';
-      }
-      ?>
-    </select>
+    <option value="All">All</option>
+    <?php
+    if ($json && is_array($json->segments)) {
+        foreach ($json->segments as $segment) {
+            if (isset($segment->name)) {
+                $selected = isset($post->os_meta['os_segment']) && $post->os_meta['os_segment'] === $segment->name ? 'selected' : '';
+                echo '<option value="' . esc_attr($segment->name) . '"' . $selected . '>' . esc_html($segment->name) . '</option>';
+            }
+        }
+    } else {
+        echo '<option disabled>No segments available</option>';
+    }
+    ?>
+</select>
     <hr>
     <label for="os_customise">
       <input type="checkbox" name="os_customise" id="os_customise" <?php echo isset($post->os_meta['os_customise']) && $post->os_meta['os_customise'] == 'on' ? 'checked' : '' ?>>Customize notification content</label>

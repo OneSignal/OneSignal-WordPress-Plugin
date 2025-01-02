@@ -36,7 +36,16 @@ function onesignal_metabox($post)
   // Meta box content -> js file hides sections depending on whats checked.
 ?>
   <label for="os_update">
-    <input type="checkbox" name="os_update" id="os_update" <?php echo isset($post->os_meta['os_update']) && $post->os_meta['os_update'] == 'on' ? 'checked' : '' ?>>Send notification when post is published or updated</label>
+  <input type="checkbox" name="os_update" id="os_update"
+       <?php
+       $os_update_checked = isset($os_meta['os_update'])
+           ? $os_meta['os_update'] == 'on'
+           : (get_option('OneSignalWPSetting')['notification_on_post'] ?? 0) == 1;
+
+       echo $os_update_checked ? 'checked' : '';
+       ?>>
+Send notification when post is published or updated
+</label>
   <div id="os_options">
     <label for="os_segment">Send to segment</label>
     <select name="os_segment" id="os_segment">

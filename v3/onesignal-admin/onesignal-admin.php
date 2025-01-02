@@ -22,21 +22,25 @@ function admin_files()
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if (isset($_POST["submit"])) {
+      $onesignal_settings = get_option('OneSignalWPSetting', array());
 
-    $onesignal_settings = get_option('OneSignalWPSetting', array());
+      if (isset($_POST['onesignal_app_id']) && !empty($_POST['onesignal_app_id'])) {
+          $onesignal_settings['app_id'] = sanitize_text_field($_POST['onesignal_app_id']);
+      }
 
-    if (isset($_POST['onesignal_app_id']) && !empty($_POST['onesignal_app_id'])) {
-      $onesignal_settings['app_id'] = sanitize_text_field($_POST['onesignal_app_id']);
-    }
+      if (isset($_POST['onesignal_rest_api_key']) && !empty($_POST['onesignal_rest_api_key'])) {
+          $onesignal_settings['app_rest_api_key'] = sanitize_text_field($_POST['onesignal_rest_api_key']);
+      }
 
-    if (isset($_POST['onesignal_rest_api_key']) && !empty($_POST['onesignal_rest_api_key'])) {
-      $onesignal_settings['app_rest_api_key'] = sanitize_text_field($_POST['onesignal_rest_api_key']);
-    }
+      // Save the auto send notifications setting
+      $auto_send = isset($_POST['onesignal_auto_send']) ? 1 : 0;
+      $onesignal_settings['notification_on_post'] = $auto_send;
 
-    $send_to_mobile = isset($_POST['onesignal_send_to_mobile']) ? 1 : 0;
-    $onesignal_settings['send_to_mobile_platforms'] = $send_to_mobile;
+      // Save the mobile subscribers setting
+      $send_to_mobile = isset($_POST['onesignal_send_to_mobile']) ? 1 : 0;
+      $onesignal_settings['send_to_mobile_platforms'] = $send_to_mobile;
 
-    update_option('OneSignalWPSetting', $onesignal_settings);
+      update_option('OneSignalWPSetting', $onesignal_settings);
   }
 }
 
@@ -112,10 +116,20 @@ function onesignal_admin_page()
       </p>
       <p class="help-text">The REST API Key is hidden for security reasons. Enter a new key to update.</p>
 
+      <!-- Auto Send Checkbox -->
+      <div class="checkbox-wrapper">
+        <label for="auto-send">
+          <input id="auto-send" type="checkbox" name="onesignal_auto_send"
+                 <?php echo (get_option('OneSignalWPSetting')['notification_on_post'] ?? 0) == 1 ? 'checked' : ''; ?>>
+          <span class="checkbox"></span>
+          Automatically send notifications when a post is published or updated
+        </label>
+      </div>
+
       <!-- Mobile App Checkbox -->
       <div class="checkbox-wrapper">
         <label for="send-to-mobile">
-          <input id="send-to-mobile" type="checkbox" name="onesignal_send_to_mobile" 
+          <input id="send-to-mobile" type="checkbox" name="onesignal_send_to_mobile"
                  <?php echo (get_option('OneSignalWPSetting')['send_to_mobile_platforms'] ?? 0) == 1 ? 'checked' : ''; ?>>
           <span class="checkbox"></span>
           Send notification to Mobile app subscribers

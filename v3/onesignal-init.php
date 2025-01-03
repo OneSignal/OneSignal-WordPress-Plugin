@@ -8,10 +8,9 @@ add_action('wp_head', 'onesignal_init');
 function onesignal_init()
 {
   $onesignal_wp_settings = get_option('OneSignalWPSetting');
-  $use_root_scope = array_key_exists('onesignal_sw_js', $onesignal_wp_settings) ? false : true;
   $path = rtrim(parse_url(ONESIGNAL_PLUGIN_URL)['path'], '/');
   $scope = $path . '/sdk_files/push/onesignal/';
-  $filename = 'OneSignalSDKWorker.js' . ($use_root_scope ? '.php' : '');
+  $filename = 'OneSignalSDKWorker.js';
 ?>
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script>
@@ -21,11 +20,12 @@ function onesignal_init()
               appId: "<?php echo esc_html($onesignal_wp_settings['app_id']); ?>",
               serviceWorkerOverrideForTypical: true,
               path: "<?php echo ONESIGNAL_PLUGIN_URL; ?>sdk_files/",
-              serviceWorkerParam: { scope: "<?php echo $use_root_scope ? '/' : $scope ?>" },
+              serviceWorkerParam: { scope: "<?php echo $scope ?>" },
               serviceWorkerPath: "<?php echo $filename; ?>",
             });
           });
-          // TO DO: move this to a separate file
+
+          // Unregister the legacy OneSignal service worker to prevent scope conflicts
           navigator.serviceWorker.getRegistrations().then((registrations) => {
             // Iterate through all registered service workers
             registrations.forEach((registration) => {
@@ -34,9 +34,9 @@ function onesignal_init()
                 // Unregister the service worker
                 registration.unregister().then((success) => {
                   if (success) {
-                    console.log('Successfully unregistered:', registration.active.scriptURL);
+                    console.log('OneSignalSW: Successfully unregistered:', registration.active.scriptURL);
                   } else {
-                    console.log('Failed to unregister:', registration.active.scriptURL);
+                    console.log('OneSignalSW: Failed to unregister:', registration.active.scriptURL);
                   }
                 });
               }

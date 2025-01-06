@@ -62,7 +62,7 @@ function onesignal_admin_page()
     ?>
     <div style="margin-bottom: 20px;">
       <span style="margin-bottom:35px;color:#E54B4D; font-weight:700;">
-        <a href="https://documentation.onesignal.com/docs/wordpress-plugin-30" target="_blank">Getting Started →	</a>
+        <a href="https://documentation.onesignal.com/docs/wordpress" target="_blank">Getting Started →	</a>
       </span>
     </div>
     <?php

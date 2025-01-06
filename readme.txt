@@ -79,7 +79,7 @@ WARNING: this update contains changes that may break specific setups, as detaile
 
 If you have made any code modifications to your Wordpress installation to directly interact with the OneSignal SDK, this version will break your implementation. Please revert your code modifications prior to upgrading and use our improved dashboard functionality to configure your OneSignal integration instead.
 
-Learn more: https://documentation.onesignal.com/docs/wordpress-plugin-30
+Learn more: https://documentation.onesignal.com/docs/wordpress
 
 - Support migration to new configuration flow.
 - Simpler configuration interface.

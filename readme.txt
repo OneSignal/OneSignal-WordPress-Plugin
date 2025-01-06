@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: push notification, push notifications, desktop notifications, mobile notifications, chrome push, android, android notification, android notifications, android push, desktop notification, firefox, firefox push, mobile, mobile notification, notification, notifications, notify, onesignal, push, push messages, safari, safari push, web push, chrome
 Requires at least: 3.8
 Tested up to: 6.7
-Stable tag: 3.0.4
+Stable tag: 3.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,11 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 
 == Changelog ==
 
+= 3.0.5 =
+- Change push title and content to match 2.X version
+- Bugfix: handle missing UTM parameters
+- Update documentation links
+
 = 3.0.4 =
 - Added features: auto-send on publish, UTM tags
 - Bug fixes: validation issues on settings form
@@ -79,7 +84,7 @@ WARNING: this update contains changes that may break specific setups, as detaile
 
 If you have made any code modifications to your Wordpress installation to directly interact with the OneSignal SDK, this version will break your implementation. Please revert your code modifications prior to upgrading and use our improved dashboard functionality to configure your OneSignal integration instead.
 
-Learn more: https://documentation.onesignal.com/docs/wordpress-plugin-30
+Learn more: https://documentation.onesignal.com/docs/wordpress
 
 - Support migration to new configuration flow.
 - Simpler configuration interface.

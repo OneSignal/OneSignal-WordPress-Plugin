@@ -21,16 +21,17 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
         }
 
         // set api params
-        $title = !empty($_POST['os_title']) ? $_POST['os_title'] : $post->post_title;
-        $content = !empty($_POST['os_content']) ? $_POST['os_content'] : $post->post_content;
-        $excerpt = $excerpt = substr($content, 0, 120);
+        $title = !empty($_POST['os_title']) ? sanitize_text_field($_POST['os_title']) : decode_entities(get_bloginfo('name'));
+        $content = !empty($_POST['os_content']) ? sanitize_text_field($_POST['os_content']) : $post->post_title;
+        $excerpt = sanitize_content_for_excerpt($content);
         $segment = $_POST['os_segment'] ?? 'All';
         $config_utm_additional_url_params = $onesignal_wp_settings['utm_additional_url_params'] ?? '';
-        $url = get_permalink($post->ID);
 
-        // Append UTM parameters to the URL
+        $url = get_permalink($post->ID);
         if (!empty($config_utm_additional_url_params)) {
-          $url = $url . (strpos($url, '?') === false ? '?' : '&') . $config_utm_additional_url_params;
+          // validate and encode the URL parameters
+          $params = urlencode($config_utm_additional_url_params);
+          $url = $url . (strpos($url, '?') === false ? '?' : '&') . $params;
         }
 
         $apiKeyType = onesignal_get_api_key_type();
@@ -47,7 +48,7 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
             'body' => json_encode(array(
                 'app_id' => get_option('OneSignalWPSetting')['app_id'],
                 'headings' => array('en' => $title),
-                'contents' => array('en' => wp_strip_all_tags($excerpt)),
+                'contents' => array('en' => $excerpt),
                 'included_segments' => array($segment),
                 'web_push_topic' => str_replace(' ', '-', strtolower($segment)),
                 'isAnyWeb' => true,

@@ -62,7 +62,7 @@ function onesignal_admin_page()
     ?>
     <div style="margin-bottom: 20px;">
       <span style="margin-bottom:35px;color:#E54B4D; font-weight:700;">
-        <a href="https://documentation.onesignal.com/docs/wordpress-plugin-30" target="_blank">Getting Started →	</a>
+        <a href="https://documentation.onesignal.com/docs/wordpress" target="_blank">Getting Started →	</a>
       </span>
     </div>
     <?php
@@ -122,14 +122,33 @@ function onesignal_admin_page()
 
       <h3>Advanced Settings</h3>
       <div class="ui borderless shadowless segment">
-        <div class="field">
-          <label>Additional Notification URL Parameters<i class="tiny circular help icon link" role="popup" data-html="Adds the specified string as extra URL parameters to your notification URL so that they can be tracked as an event by your analytics system. <em>Please escape your parameter values</em>; your input will be added as-is to the end of your notification URL. Example:</p>If you want:<em><li><code>utm_medium</code> to be <code>ppc</code></li><li><code>utm_source</code> to be <code>adwords</code></li><li><code>utm_campaign</code> to be <code>snow boots</code></li><li><code>utm_content</code> to be <code>durable snow boots</code></li></em><p><p>Then use the following string:</p><p><code style='word-break: break-all;'>utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots</code></p>" data-variation="wide"></i></label>
-          <input id="utm-params" type="text" placeholder="utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots" name="utm_additional_url_params" value="<?php echo esc_attr(get_option('OneSignalWPSetting')['utm_additional_url_params']); ?>">
+      <?php
+        $oneSignalSettings = get_option('OneSignalWPSetting');
+        $utmParams = ''; // Default empty value
+
+        // Check if the settings are an array and if the key exists
+        if (is_array($oneSignalSettings) && isset($oneSignalSettings['utm_additional_url_params'])) {
+            $utmParams = esc_attr($oneSignalSettings['utm_additional_url_params']);
+        }
+        ?>
+        <div class="field utm-params">
+            <label>Additional Notification URL Parameters</label>
+            <div class="help" aria-label="More information">
+              <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                <g fill="currentColor">
+                  <path d="M8 0a8 8 0 108 8 8.009 8.009 0 00-8-8zm0 12.667a1 1 0 110-2 1 1 0 010 2zm1.067-4.054a.667.667 0 00-.4.612.667.667 0 01-1.334 0 2 2 0 011.2-1.834A1.333 1.333 0 106.667 6.17a.667.667 0 01-1.334 0 2.667 2.667 0 113.734 2.444z"></path>
+                </g>
+              </svg>
+            </div>
+            <div class="information" style="display: none;">
+              <p>Adds the specified string as extra URL parameters to your notification URL so that they can be tracked as an event by your analytics system. <em>Please escape your parameter values</em>; your input will be added as-is to the end of your notification URL. Example:</p>If you want:<em><li><code>utm_medium</code> to be <code>ppc</code></li><li><code>utm_source</code> to be <code>adwords</code></li><li><code>utm_campaign</code> to be <code>snow boots</code></li><li><code>utm_content</code> to be <code>durable snow boots</code></li></em><p><p>Then use the following string:</p><p><code style='word-break: break-all;'>utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots</code></p>
+            </div>
+            <input id="utm-params" type="text" placeholder="utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots" name="utm_additional_url_params" value="<?php echo $utmParams; ?>">
         </div>
       </div>
 
       <!-- Auto Send Checkbox -->
-      <div class="checkbox-wrapper">
+      <div class="checkbox-wrapper auto-send">
         <label for="auto-send">
           <input id="auto-send" type="checkbox" name="onesignal_auto_send"
                  <?php echo (get_option('OneSignalWPSetting')['notification_on_post'] ?? 0) == 1 ? 'checked' : ''; ?>>
@@ -139,7 +158,7 @@ function onesignal_admin_page()
       </div>
 
       <!-- Mobile App Checkbox -->
-      <div class="checkbox-wrapper">
+      <div class="checkbox-wrapper mobile-app">
         <label for="send-to-mobile">
           <input id="send-to-mobile" type="checkbox" name="onesignal_send_to_mobile"
                  <?php echo (get_option('OneSignalWPSetting')['send_to_mobile_platforms'] ?? 0) == 1 ? 'checked' : ''; ?>>

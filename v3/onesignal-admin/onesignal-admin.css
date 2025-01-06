@@ -143,7 +143,9 @@
   border-radius: 0.25rem;
   border: 1px solid rgb(185, 194, 202);
   padding: 1rem 2rem;
-  background-color: #fff;
+  background-color: #eee;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .os-content input[type="submit"] {

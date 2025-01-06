@@ -1,13 +1,20 @@
 window.addEventListener("DOMContentLoaded", () => {
-  const helpIcon = document.querySelector(".help");
-  const infoDiv = document.querySelector(".information");
+  const sendToMobileHelpIcon = document.querySelector(".mobile-app .help");
+  const sendToMobileInfoDiv = document.querySelector(".mobile-app .information");
+  const utmParamsHelpIcon = document.querySelector(".utm-params .help");
+  const utmParamsInfoDiv = document.querySelector(".utm-params .information");
 
-  if (helpIcon && infoDiv) {
-    helpIcon.addEventListener("click", () => {
-      infoDiv.style.display =
-        infoDiv.style.display === "none" ? "inherit" : "none";
-    });
-  }
+  const setupToggleAction = (helpIcon, infoDiv) => {
+    if (helpIcon && infoDiv) {
+      helpIcon.addEventListener("click", () => {
+        infoDiv.style.display =
+          infoDiv.style.display === "none" ? "inherit" : "none";
+      });
+    }
+  };
+
+  setupToggleAction(sendToMobileHelpIcon, sendToMobileInfoDiv);
+  setupToggleAction(utmParamsHelpIcon, utmParamsInfoDiv);
 });
 
 window.addEventListener("DOMContentLoaded", () => {

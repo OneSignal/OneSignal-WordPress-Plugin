@@ -41,7 +41,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
       <span style="padding:0 20px 15px; color:#3A3DB2; font-weight:700;">
           Migrate Settings to OneSignal.com<br><br>
           <p style="font-size:1.15rem;font-weight:500">All OneSignal prompt configurations on this page are moving to OneSignal.com.</p>
-          <button type="button" class="ui medium teal button" onclick="window.open('https://documentation.onesignal.com/docs/wordpress-plugin-30','_blank');">Learn More</button>
+          <button type="button" class="ui medium teal button" onclick="window.open('https://documentation.onesignal.com/docs/wordpress','_blank');">Learn More</button>
           <form method="post" action="" style="margin-bottom: 20px; margin-top: 20px;">
             <p style="font-size:1.15rem;">Save your current settings to a txt file</p>
             <?php wp_nonce_field('onesignal_export_nonce'); ?>

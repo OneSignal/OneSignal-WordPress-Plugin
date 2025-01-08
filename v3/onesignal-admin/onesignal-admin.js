@@ -3,6 +3,8 @@ window.addEventListener("DOMContentLoaded", () => {
   const sendToMobileInfoDiv = document.querySelector(".mobile-app .information");
   const utmParamsHelpIcon = document.querySelector(".utm-params .help");
   const utmParamsInfoDiv = document.querySelector(".utm-params .information");
+  const customPostTypesHelpIcon = document.querySelector(".custom-post-types .help");
+  const customPostTypesInfoDiv = document.querySelector(".custom-post-types .information");
 
   const setupToggleAction = (helpIcon, infoDiv) => {
     if (helpIcon && infoDiv) {
@@ -15,6 +17,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   setupToggleAction(sendToMobileHelpIcon, sendToMobileInfoDiv);
   setupToggleAction(utmParamsHelpIcon, utmParamsInfoDiv);
+  setupToggleAction(customPostTypesHelpIcon, customPostTypesInfoDiv);
 });
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -24,13 +27,15 @@ window.addEventListener("DOMContentLoaded", () => {
   const autoSendCheckbox = document.querySelector("#auto-send");
   const sendToMobileCheckbox = document.querySelector("#send-to-mobile");
   const saveButton = document.querySelector("#save-settings-button");
+  const customPostTypesInput = document.querySelector("#custom-post-types");
 
-  if (appIdInput && apiKeyInput && autoSendCheckbox && sendToMobileCheckbox && utmInput && saveButton) {
+  if (appIdInput && apiKeyInput && autoSendCheckbox && sendToMobileCheckbox && utmInput && saveButton && customPostTypesInput) {
     const initialAppId = appIdInput.value;
     const initialApiKey = apiKeyInput.value;
     const initialUtmInput = utmInput.value;
     const initialAutoSend = autoSendCheckbox.checked;
     const initialSendToMobile = sendToMobileCheckbox.checked;
+    const initialCustomPostTypes = customPostTypesInput.value;
 
     function isValidUUID(uuid) {
       const uuidRegex =
@@ -60,8 +65,9 @@ window.addEventListener("DOMContentLoaded", () => {
       const utmChanged = utmInput.value !== initialUtmInput;
       const autoSendChanged = autoSendCheckbox.checked !== initialAutoSend;
       const sendToMobileChanged = sendToMobileCheckbox.checked !== initialSendToMobile;
+      const customPostTypesChanged = customPostTypesInput.value !== initialCustomPostTypes;
 
-      return appIdChanged || apiKeyChanged || autoSendChanged || sendToMobileChanged || utmChanged;
+      return appIdChanged || apiKeyChanged || autoSendChanged || sendToMobileChanged || utmChanged || customPostTypesChanged;
     }
 
     function toggleSaveButton() {
@@ -90,7 +96,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     autoSendCheckbox.addEventListener("change", toggleSaveButton);
     sendToMobileCheckbox.addEventListener("change", toggleSaveButton);
-
+    customPostTypesInput.addEventListener("input", toggleSaveButton);
     // Initial state on page load
     toggleSaveButton();
   }

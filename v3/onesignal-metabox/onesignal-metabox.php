@@ -48,9 +48,12 @@ function onesignal_metabox($post)
   <label for="os_update">
   <input type="checkbox" name="os_update" id="os_update"
        <?php
+       $post_status = get_post_status($post->ID);
+       $default_enabled = get_option('OneSignalWPSetting')['notification_on_post'] ?? 0;
+
        $os_update_checked = isset($os_meta['os_update'])
            ? $os_meta['os_update'] == 'on'
-           : (get_option('OneSignalWPSetting')['notification_on_post'] ?? 0) == 1;
+           : ($default_enabled == 1 && $post_status !== 'publish');
 
        echo $os_update_checked ? 'checked' : '';
        ?>>

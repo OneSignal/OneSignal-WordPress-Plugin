@@ -33,24 +33,37 @@ window.addEventListener("DOMContentLoaded", () => {
     setDisabled(customiseWrapChild, !customisePost.checked);
   });
 
-  // Watch for the Publish button to be added to the DOM
-  const observer = new MutationObserver((mutations, obs) => {
-    const publishButton = document.querySelector('.editor-post-publish-button__button');
+  // make sure WordPress editor and API are available
+  if (typeof wp === 'undefined' || !wp.data || !wp.data.select) {
+    console.warn('wp.data is not available.');
+    return;
+  }
 
-    if (publishButton) {
-      publishButton.addEventListener('click', function() {
-        setTimeout(() => {
-          if (sendPost && sendPost.checked) {
-            sendPost.click();
-          }
-        }, 1000);
-      });
-      obs.disconnect(); // Stop observing once we've found and handled the button
+  const editorStore = wp.data.select('core/editor');
+
+  // track initial state of checkbox
+  const osUpdateCheckbox = document.querySelector('#os_update');
+  const wasCheckedInitially = osUpdateCheckbox ? osUpdateCheckbox.checked : false;
+
+  // track previous post status to detect changes
+  let previousStatus = editorStore.getCurrentPostAttribute('status');
+
+  // subscribe to state changes
+  wp.data.subscribe(() => {
+    const currentStatus = editorStore.getCurrentPostAttribute('status');
+
+    // check if the post status changed to "publish"
+    if (previousStatus !== currentStatus && currentStatus === 'publish') {
+        previousStatus = currentStatus;
+
+        if (wasCheckedInitially) {
+            // uncheck the os_update checkbox
+            if (osUpdateCheckbox && osUpdateCheckbox.checked) {
+                osUpdateCheckbox.checked = false;
+            }
+        }
+    } else {
+        previousStatus = currentStatus;
     }
-  });
-
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
   });
 });

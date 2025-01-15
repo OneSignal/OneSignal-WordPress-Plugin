@@ -32,4 +32,25 @@ window.addEventListener("DOMContentLoaded", () => {
     setDisplay(customiseWrap, customisePost.checked);
     setDisabled(customiseWrapChild, !customisePost.checked);
   });
+
+  // Watch for the Publish button to be added to the DOM
+  const observer = new MutationObserver((mutations, obs) => {
+    const publishButton = document.querySelector('.editor-post-publish-button__button');
+
+    if (publishButton) {
+      publishButton.addEventListener('click', function() {
+        setTimeout(() => {
+          if (sendPost && sendPost.checked) {
+            sendPost.click();
+          }
+        }, 1000);
+      });
+      obs.disconnect(); // Stop observing once we've found and handled the button
+    }
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
 });

@@ -20,50 +20,43 @@ window.addEventListener("DOMContentLoaded", () => {
     children.forEach((child) => (child.disabled = disabled));
   }
 
-  setDisplay(optionsWrap, sendPost.checked);
-  setDisplay(customiseWrap, customisePost.checked);
-  setDisabled(customiseWrapChild, !customisePost.checked);
-
-  sendPost.addEventListener("change", () => {
+  function updateUI() {
     setDisplay(optionsWrap, sendPost.checked);
-  });
-
-  customisePost.addEventListener("change", () => {
     setDisplay(customiseWrap, customisePost.checked);
     setDisabled(customiseWrapChild, !customisePost.checked);
-  });
+  }
 
-  // make sure WordPress editor and API are available
-  if (typeof wp === 'undefined' || !wp.data || !wp.data.select) {
-    console.warn('wp.data is not available.');
+  // init UI state
+  updateUI();
+
+  sendPost.addEventListener("change", updateUI);
+  customisePost.addEventListener("change", updateUI);
+
+  // Make sure WordPress editor and API are available
+  if (typeof wp === "undefined" || !wp.data || !wp.data.select) {
+    console.warn("wp.data is not available.");
     return;
   }
 
-  const editorStore = wp.data.select('core/editor');
+  const editorStore = wp.data.select("core/editor");
 
-  // track initial state of checkbox
-  const osUpdateCheckbox = document.querySelector('#os_update');
-  const wasCheckedInitially = osUpdateCheckbox ? osUpdateCheckbox.checked : false;
+  // Track previous post status to detect changes
+  let previousStatus = editorStore.getCurrentPostAttribute("status");
 
-  // track previous post status to detect changes
-  let previousStatus = editorStore.getCurrentPostAttribute('status');
-
-  // subscribe to state changes
   wp.data.subscribe(() => {
-    const currentStatus = editorStore.getCurrentPostAttribute('status');
+    const currentStatus = editorStore.getCurrentPostAttribute("status");
 
-    // check if the post status changed to "publish"
-    if (previousStatus !== currentStatus && currentStatus === 'publish') {
-        previousStatus = currentStatus;
+    // Check if the post status changed to "publish"
+    if (previousStatus !== currentStatus && currentStatus === "publish") {
+      previousStatus = currentStatus;
 
-        if (wasCheckedInitially) {
-            // uncheck the os_update checkbox
-            if (osUpdateCheckbox && osUpdateCheckbox.checked) {
-                osUpdateCheckbox.checked = false;
-            }
-        }
+      // Uncheck the checkbox and update the UI
+      if (sendPost.checked) {
+        sendPost.checked = false;
+        updateUI(); // Ensure the UI reflects the checkbox state
+      }
     } else {
-        previousStatus = currentStatus;
+      previousStatus = currentStatus;
     }
   });
 });

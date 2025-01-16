@@ -98,11 +98,21 @@ add_action('admin_print_styles-post-new.php', 'onesignal_meta_files');
 
 function onesignal_meta_files()
 {
-  wp_enqueue_script('onesignal_metabox_js', plugins_url('onesignal-metabox.js', __FILE__));
-  wp_enqueue_style('onesignal_metabox_css', plugins_url('onesignal-metabox.css', __FILE__), array(), time());
+  $cache_buster = ceil(time() / 3600); // updates every hour
+  wp_enqueue_script(
+    'onesignal_metabox_js',
+    plugins_url('onesignal-metabox.js', __FILE__),
+    array(),
+    $cache_buster,
+    true // load in the footer for performance
+  );
+  wp_enqueue_style(
+    'onesignal_metabox_css',
+    plugins_url('onesignal-metabox.css', __FILE__),
+    array(),
+    $cache_buster
+  );
 }
-
-
 
 // Store meta data
 add_action('save_post', 'onesignal_save_meta', 10);

@@ -16,8 +16,14 @@ add_action('admin_enqueue_scripts', 'admin_files');
 
 function admin_files()
 {
-  wp_enqueue_script('onesignal_admin_js', plugins_url('onesignal-admin.js', __FILE__));
-  wp_enqueue_style('style', plugins_url('onesignal-admin.css', __FILE__), array(), time());
+  $cache_buster = ceil(time() / 3600); // updates every hour
+  wp_enqueue_script(
+    'onesignal_admin_js',
+    plugins_url('onesignal-admin.js', __FILE__),
+    array(),
+    $cache_buster
+  );
+  wp_enqueue_style('style', plugins_url('onesignal-admin.css', __FILE__), array(), $cache_buster);
 }
 
 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -42,9 +42,17 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') 
         $onesignal_settings['utm_additional_url_params'] = sanitize_text_field($_POST['utm_additional_url_params']);
     }
 
+    if (isset($_POST['allowed_custom_post_types'])) {
+        $onesignal_settings['allowed_custom_post_types'] = sanitize_text_field($_POST['allowed_custom_post_types']);
+    }
+
     // Save the auto send notifications setting
     $auto_send = isset($_POST['onesignal_auto_send']) ? 1 : 0;
     $onesignal_settings['notification_on_post'] = $auto_send;
+
+    // Save the notification on post from plugin setting
+    $notification_on_post_from_plugin = isset($_POST['notification_on_post_from_plugin']) ? 1 : 0;
+    $onesignal_settings['notification_on_post_from_plugin'] = $notification_on_post_from_plugin;
 
     // Save the mobile subscribers setting
     $send_to_mobile = isset($_POST['onesignal_send_to_mobile']) ? 1 : 0;
@@ -153,6 +161,31 @@ function onesignal_admin_page()
         </div>
       </div>
 
+      <?php
+        $oneSignalSettings = get_option('OneSignalWPSetting');
+        $customPostTypes = ''; // Default empty value
+
+        // Check if the settings are an array and if the key exists
+        if (is_array($oneSignalSettings) && isset($oneSignalSettings['allowed_custom_post_types'])) {
+            $customPostTypes = esc_attr($oneSignalSettings['allowed_custom_post_types']);
+        }
+        ?>
+      <br>
+      <div class="field custom-post-types">
+        <label>Additional Custom Post Types for Automatic Notifications Created From Plugins</label>
+        <div class="help" aria-label="More information">
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <g fill="currentColor">
+              <path d="M8 0a8 8 0 108 8 8.009 8.009 0 00-8-8zm0 12.667a1 1 0 110-2 1 1 0 010 2zm1.067-4.054a.667.667 0 00-.4.612.667.667 0 01-1.334 0 2 2 0 011.2-1.834A1.333 1.333 0 106.667 6.17a.667.667 0 01-1.334 0 2.667 2.667 0 113.734 2.444z"></path>
+            </g>
+          </svg>
+        </div>
+        <div class="information" style="display: none;">
+            <p>Enter a comma-separated list of custom post type names. Anytime a post is published with one of the listed post types, a notification will be sent to all your users. <strong class='least-strong'>The setting</strong> <em>Automatically send a push notification when I publish a post from 3rd party plugins</em> <strong class='least-strong'>must be enabled for this feature to work</strong>."</p>
+        </div>
+        <input id="custom-post-types"type="text" placeholder="forum,reply,topic  (comma separated, no spaces between commas)" name="allowed_custom_post_types" value="<?php echo esc_attr($customPostTypes); ?>">
+      </div>
+
       <!-- Auto Send Checkbox -->
       <div class="checkbox-wrapper auto-send">
         <label for="auto-send">
@@ -161,6 +194,27 @@ function onesignal_admin_page()
           <span class="checkbox"></span>
           Automatically send notifications when a post is published or updated
         </label>
+      </div>
+
+      <!-- 3rd Party Plugins Checkbox -->
+      <div class="checkbox-wrapper notification-on-post-from-plugin">
+        <label for="notification-on-post-from-plugin">
+            <input id="notification-on-post-from-plugin" type="checkbox" name="notification_on_post_from_plugin" value="true"
+            <?php echo (get_option('OneSignalWPSetting')['notification_on_post_from_plugin'] ?? 0) == 1 ? 'checked' : ''; ?>
+            >
+            <span class="checkbox"></span>
+            Automatically send a push notification when I publish a post from 3<sup>rd</sup> party plugins
+        </label>
+        <div class="help" aria-label="More information">
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <g fill="currentColor">
+              <path d="M8 0a8 8 0 108 8 8.009 8.009 0 00-8-8zm0 12.667a1 1 0 110-2 1 1 0 010 2zm1.067-4.054a.667.667 0 00-.4.612.667.667 0 01-1.334 0 2 2 0 011.2-1.834A1.333 1.333 0 106.667 6.17a.667.667 0 01-1.334 0 2.667 2.667 0 113.734 2.444z"></path>
+            </g>
+          </svg>
+        </div>
+        <div class="information" style="display: none;">
+          <p>If checked, when a post is created outside of WordPress's editor, a push notification will automatically be sent. Must be the built-in WordPress post type 'post' and the post must be published.</p>
+        </div>
       </div>
 
       <!-- Mobile App Checkbox -->

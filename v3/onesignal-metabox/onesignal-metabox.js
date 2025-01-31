@@ -42,21 +42,83 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Track previous post status to detect changes
   let previousStatus = editorStore.getCurrentPostAttribute("status");
+  let checkingNotification = false;
 
+  // Subscribe to post status changes
   wp.data.subscribe(() => {
     const currentStatus = editorStore.getCurrentPostAttribute("status");
 
     // Check if the post status changed to "publish"
     if (previousStatus !== currentStatus && currentStatus === "publish") {
-      previousStatus = currentStatus;
+      // Instead of unchecking immediately, let's wait for the save to complete
+      if (sendPost.checked && !checkingNotification) {
+        // Prevent the checkbox from being unchecked until save is complete
+        checkingNotification = true;
 
-      // Uncheck the checkbox and update the UI
-      if (sendPost.checked) {
-        sendPost.checked = false;
-        updateUI(); // Ensure the UI reflects the checkbox state
+        // Wait for the next tick to ensure form data is sent with the save
+        setTimeout(() => {
+          // Start checking for the notification status
+          pollNotificationStatus();
+        }, 0);
       }
-    } else {
-      previousStatus = currentStatus;
     }
+
+    previousStatus = currentStatus;
   });
+
+  /**
+   * Checks if a OneSignal notification has been sent for the current post
+   * Uses WordPress admin-ajax.php endpoint for compatibility across all permalink structures
+   *
+   * @returns {Promise<boolean>} True if notification was sent successfully, false otherwise
+   */
+  async function checkNotificationStatus() {
+    // Get the current post ID from WordPress editor store
+    const postId = editorStore.getCurrentPostId();
+
+    // Create form data for the AJAX request
+    const formData = new FormData();
+    formData.append('action', 'check_onesignal_notification'); // 'action' tells WordPress which AJAX handler to use (wp_ajax_check_onesignal_notification)
+    formData.append('post_id', postId); // Pass the post ID to check notification status for this specific post
+    formData.append('_ajax_nonce', ajax_object.nonce); // Add security nonce to prevent CSRF attacks
+
+    try {
+      // Use the AJAX URL localized in PHP via wp_localize_script
+      const response = await fetch(ajax_object.ajaxurl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: formData
+      });
+
+      const data = await response.json();
+      // Return the success status (true/false)
+      return data.success;
+    } catch (error) {
+      // If anything fails, assume notification wasn't sent
+      return false;
+    }
+  }
+
+  /**
+   * Polls the notification status until it is confirmed to be sent
+   * Uses checkNotificationStatus to verify the status
+   */
+  async function pollNotificationStatus() {
+    let attempts = 0;
+    const maxAttempts = 10;
+
+    while (attempts < maxAttempts) {
+      const sent = await checkNotificationStatus();
+      if (sent) {
+        sendPost.checked = false;
+        updateUI();
+        break;
+      }
+      attempts++;
+
+      // Wait for 1 second before checking again
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+    checkingNotification = false;
+  }
 });

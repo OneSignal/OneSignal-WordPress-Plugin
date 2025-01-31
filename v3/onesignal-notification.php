@@ -3,6 +3,75 @@
 require_once plugin_dir_path(__FILE__) . 'onesignal-helpers.php';
 defined('ABSPATH') or die('This page may not be accessed directly.');
 
+// Store the status in post meta using a custom meta key '_onesignal_notification_sent'
+// This can then be used to check if the notification was sent
+function store_notification_status($post_id, $success) {
+    return update_post_meta($post_id, '_onesignal_notification_sent', $success);
+}
+
+// Get the notification status from the post meta
+function check_notification_status($request) {
+    $post_id = $request['post_id'];
+    $status = get_post_meta($post_id, '_onesignal_notification_sent', true);
+    return rest_ensure_response(['sent' => (bool)$status]);
+}
+
+/**
+ * Enqueues JavaScript files and localizes data for the OneSignal metabox
+ * Only loads on post edit screens to prevent unnecessary script loading
+ */
+function onesignal_enqueue_admin_scripts() {
+    // Only load on post edit screens
+    $screen = get_current_screen();
+    if (!$screen || !in_array($screen->base, ['post', 'post-new'])) {
+        return;
+    }
+
+    // Register and enqueue our JavaScript file
+    wp_enqueue_script(
+        'onesignal-metabox',                                                            // Unique handle for the script
+        plugins_url('/onesignal-metabox/onesignal-metabox.js', __FILE__),               // Path to the script
+        ['wp-data'],                                                                    // Dependencies
+        filemtime(plugin_dir_path(__FILE__) . 'onesignal-metabox/onesignal-metabox.js'),// Dynamic version number
+        true                                                                            // Load in footer
+    );
+
+    // Make PHP data available to our JavaScript
+    wp_localize_script(
+        'onesignal-metabox',                                           // Same handle as above
+        'ajax_object',                                                 // JavaScript object name
+        array(
+            'ajaxurl' => admin_url('admin-ajax.php'),                  // URL for AJAX requests
+            'nonce' => wp_create_nonce('onesignal_notification_nonce') // Security token
+        )
+    );
+}
+
+// Add the action to enqueue the script
+add_action('admin_enqueue_scripts', 'onesignal_enqueue_admin_scripts');
+
+// Register the REST API endpoint
+add_action('rest_api_init', function () {
+    register_rest_route('onesignal/v1', '/notification-status/(?P<post_id>\d+)', array(
+        'methods' => 'GET',
+        'callback' => 'check_notification_status',
+        'permission_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+});
+
+// Add the admin-ajax handler
+add_action('wp_ajax_check_onesignal_notification', function() {
+    if (!current_user_can('edit_posts')) {
+        wp_send_json_error('Unauthorized');
+    }
+
+    $post_id = intval($_POST['post_id']);
+    $status = get_post_meta($post_id, '_onesignal_notification_sent', true);
+    wp_send_json(['success' => (bool)$status]);
+});
+
 // Register the notification function, called when a post status changes
 add_action('transition_post_status', 'onesignal_schedule_notification', 10, 3);
 
@@ -14,6 +83,9 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
 
         // check if update is on.
         $update = !empty($_POST['os_update']) ? $_POST['os_update'] : $post->os_update;
+
+        // Store initial status as false
+        store_notification_status($post->ID, false);
 
         // do not send notification if not enabled
         if (empty($update)) {
@@ -106,8 +178,27 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
         // Make the API request and log errors
         if (defined('REST_REQUEST') && REST_REQUEST) return;
         $response = wp_remote_post('https://onesignal.com/api/v1/notifications', $args);
-        if (is_wp_error($response)) {
-            error_log('API request failed: ' . $response->get_error_message());
+
+        // Store the notification status based on the response
+        $success = false;
+        if (!is_wp_error($response)) {
+            $response_code = wp_remote_retrieve_response_code($response);
+            $body = json_decode(wp_remote_retrieve_body($response), true);
+
+            // Check if the notification was sent successfully
+            $success = $response_code === 200 && !empty($body['id']);
+
+            if ($success) {
+                error_log('OneSignal notification sent successfully: ' . $body['id']);
+            } else {
+                error_log('OneSignal notification failed. Response code: ' . $response_code);
+                error_log('Response body: ' . wp_remote_retrieve_body($response));
+            }
+        } else {
+            error_log('OneSignal notification failed: ' . $response->get_error_message());
         }
+
+        // Store the final status
+        store_notification_status($post->ID, $success);
     }
 }

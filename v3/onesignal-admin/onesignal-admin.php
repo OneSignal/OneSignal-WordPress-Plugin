@@ -42,21 +42,21 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') 
         $onesignal_settings['utm_additional_url_params'] = sanitize_text_field($_POST['utm_additional_url_params']);
     }
 
-      if (isset($_POST['allowed_custom_post_types'])) {
-          $onesignal_settings['allowed_custom_post_types'] = sanitize_text_field($_POST['allowed_custom_post_types']);
-      }
+    if (isset($_POST['allowed_custom_post_types'])) {
+        $onesignal_settings['allowed_custom_post_types'] = sanitize_text_field($_POST['allowed_custom_post_types']);
+    }
 
-      // Save the auto send notifications setting
-      $auto_send = isset($_POST['onesignal_auto_send']) ? 1 : 0;
-      $onesignal_settings['notification_on_post'] = $auto_send;
+    // Save the auto send notifications setting
+    $auto_send = isset($_POST['onesignal_auto_send']) ? 1 : 0;
+    $onesignal_settings['notification_on_post'] = $auto_send;
 
-      // Save the notification on post from plugin setting
-      $notification_on_post_from_plugin = isset($_POST['notification_on_post_from_plugin']) ? 1 : 0;
-      $onesignal_settings['notification_on_post_from_plugin'] = $notification_on_post_from_plugin;
+    // Save the notification on post from plugin setting
+    $notification_on_post_from_plugin = isset($_POST['notification_on_post_from_plugin']) ? 1 : 0;
+    $onesignal_settings['notification_on_post_from_plugin'] = $notification_on_post_from_plugin;
 
-      // Save the mobile subscribers setting
-      $send_to_mobile = isset($_POST['onesignal_send_to_mobile']) ? 1 : 0;
-      $onesignal_settings['send_to_mobile_platforms'] = $send_to_mobile;
+    // Save the mobile subscribers setting
+    $send_to_mobile = isset($_POST['onesignal_send_to_mobile']) ? 1 : 0;
+    $onesignal_settings['send_to_mobile_platforms'] = $send_to_mobile;
 
     update_option('OneSignalWPSetting', $onesignal_settings);
   }

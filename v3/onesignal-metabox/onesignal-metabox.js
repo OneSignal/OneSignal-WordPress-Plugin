@@ -40,35 +40,32 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const editorStore = wp.data.select("core/editor");
 
-  // Track previous post status to detect changes
-  let previousStatus = editorStore.getCurrentPostAttribute("status");
+  // Track previous save state to prevent multiple checks
+  let previousIsSaving = false;
   let checkingNotification = false;
 
   // Subscribe to post status changes
   wp.data.subscribe(() => {
     const currentStatus = editorStore.getCurrentPostAttribute("status");
+    const isAutosaving = editorStore.isAutosavingPost();
+    const isSaving = editorStore.isSavingPost();
 
-    // Check if the post status changed to "publish"
-    if (previousStatus !== currentStatus && currentStatus === "publish") {
-      // Instead of unchecking immediately, let's wait for the save to complete
+    // Only proceed if we're transitioning from "not saving" to "saving"
+    // This prevents multiple triggers during the same save operation
+    if (!isAutosaving && isSaving && !previousIsSaving && currentStatus === "publish") {
+      // Check if notification should be sent
       if (sendPost.checked && !checkingNotification) {
-        // Prevent the checkbox from being unchecked until save is complete
         checkingNotification = true;
-
-        // Wait for the next tick to ensure form data is sent with the save
-        setTimeout(() => {
-          // Start checking for the notification status
-          pollNotificationStatus();
-        }, 0);
+        pollNotificationStatus();
       }
     }
 
-    previousStatus = currentStatus;
+    // Update the previous save state, this is to prevent multiple triggers during the same save operation
+    previousIsSaving = isSaving;
   });
 
   /**
    * Checks if a OneSignal notification has been sent for the current post
-   * Uses WordPress admin-ajax.php endpoint for compatibility across all permalink structures
    *
    * @returns {Promise<boolean>} True if notification was sent successfully, false otherwise
    */
@@ -95,13 +92,41 @@ window.addEventListener("DOMContentLoaded", () => {
       return data.success;
     } catch (error) {
       // If anything fails, assume notification wasn't sent
+      console.log('something went wrong', error)
       return false;
+    }
+  }
+
+  /**
+   * Reset the notification status
+   *
+   * @returns {Promise<void>}
+   */ 
+  async function resetNotificationStatus() {
+    const resetFormData = new FormData();
+    resetFormData.append('action', 'reset_onesignal_status');
+    resetFormData.append('post_id', editorStore.getCurrentPostId());
+    resetFormData.append('_ajax_nonce', ajax_object.nonce);
+
+    try {
+      const resetResponse = await fetch(ajax_object.ajaxurl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: resetFormData
+      });
+      const resetData = await resetResponse.json();
+      console.log('OneSignal status reset:', resetData);
+    } catch (error) {
+      console.error('OneSignal status reset error:', error);
     }
   }
 
   /**
    * Polls the notification status until it is confirmed to be sent
    * Uses checkNotificationStatus to verify the status
+   * Uses resetNotificationStatus to reset the status after the notification is sent
+   *
+   * @returns {Promise<void>}
    */
   async function pollNotificationStatus() {
     let attempts = 0;
@@ -109,16 +134,21 @@ window.addEventListener("DOMContentLoaded", () => {
 
     while (attempts < maxAttempts) {
       const sent = await checkNotificationStatus();
+      console.log('OneSignal poll attempt', attempts + 1, 'result:', sent);
+
       if (sent) {
+        await resetNotificationStatus();
+
         sendPost.checked = false;
         updateUI();
-        break;
+        return;
       }
-      attempts++;
 
-      // Wait for 1 second before checking again
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      attempts++;
+      await new Promise(resolve => setTimeout(resolve, 1500));
     }
+
+    console.log('OneSignal polling timed out');
     checkingNotification = false;
   }
 });

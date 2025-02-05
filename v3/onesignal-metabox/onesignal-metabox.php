@@ -99,16 +99,26 @@ Send notification when post is published or updated
 add_action('admin_print_styles-post.php', 'onesignal_meta_files');
 add_action('admin_print_styles-post-new.php', 'onesignal_meta_files');
 
-function onesignal_meta_files()
-{
+function onesignal_meta_files() {
   $cache_buster = ceil(time() / 3600); // updates every hour
   wp_enqueue_script(
     'onesignal_metabox_js',
     plugins_url('onesignal-metabox.js', __FILE__),
-    array(),
+    ['wp-data'],
     $cache_buster,
     true // load in the footer for performance
   );
+
+  // Make PHP data available to our JavaScript
+  wp_localize_script(
+    'onesignal_metabox_js',
+    'ajax_object',
+    array(
+      'ajaxurl' => admin_url('admin-ajax.php'),
+      'nonce' => wp_create_nonce('onesignal_notification_nonce')
+    )
+  );
+
   wp_enqueue_style(
     'onesignal_metabox_css',
     plugins_url('onesignal-metabox.css', __FILE__),

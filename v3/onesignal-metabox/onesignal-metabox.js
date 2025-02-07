@@ -65,17 +65,14 @@ window.addEventListener("DOMContentLoaded", () => {
    * @returns {Promise<boolean>} True if notification was sent successfully, false otherwise
    */
   async function checkNotificationStatus() {
-    // Get the current post ID from WordPress editor store
     const postId = editorStore.getCurrentPostId();
 
-    // Create form data for the AJAX request
     const formData = new FormData();
     formData.append('action', 'check_onesignal_notification'); // 'action' tells WordPress which AJAX handler to use (wp_ajax_check_onesignal_notification)
     formData.append('post_id', postId); // Pass the post ID to check notification status for this specific post
     formData.append('_ajax_nonce', ajax_object.nonce); // Add security nonce to prevent CSRF attacks
 
     try {
-      // Use the AJAX URL localized in PHP via wp_localize_script
       const response = await fetch(ajax_object.ajaxurl, {
         method: 'POST',
         credentials: 'same-origin',
@@ -86,8 +83,8 @@ window.addEventListener("DOMContentLoaded", () => {
       // Return the success status (true/false)
       return data.success;
     } catch (error) {
-      // If anything fails, assume notification wasn't sent
-      console.log('something went wrong', error)
+      console.error('OneSignal status check error:', error);
+      // If anything fails, assume the notification wasn't sent
       return false;
     }
   }
@@ -99,9 +96,9 @@ window.addEventListener("DOMContentLoaded", () => {
    */ 
   async function resetNotificationStatus() {
     const resetFormData = new FormData();
-    resetFormData.append('action', 'reset_onesignal_status');
-    resetFormData.append('post_id', editorStore.getCurrentPostId());
-    resetFormData.append('_ajax_nonce', ajax_object.nonce);
+    resetFormData.append('action', 'reset_onesignal_status'); // 'action' tells WordPress which AJAX handler to use (wp_ajax_reset_onesignal_status)
+    resetFormData.append('post_id', editorStore.getCurrentPostId()); // Pass the post ID to reset notification status for this specific post
+    resetFormData.append('_ajax_nonce', ajax_object.nonce); // Add security nonce to prevent CSRF attacks
 
     try {
       const resetResponse = await fetch(ajax_object.ajaxurl, {
@@ -110,7 +107,6 @@ window.addEventListener("DOMContentLoaded", () => {
         body: resetFormData
       });
       const resetData = await resetResponse.json();
-      console.log('OneSignal status reset:', resetData);
     } catch (error) {
       console.error('OneSignal status reset error:', error);
     }
@@ -129,7 +125,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
     while (attempts < maxAttempts) {
       const sent = await checkNotificationStatus();
-      console.log('OneSignal poll attempt', attempts + 1, 'result:', sent);
 
       if (sent) {
         await resetNotificationStatus();
@@ -143,7 +138,6 @@ window.addEventListener("DOMContentLoaded", () => {
       await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
-    console.log('OneSignal polling timed out');
     checkingNotification = false;
   }
 });

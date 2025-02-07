@@ -40,8 +40,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const editorStore = wp.data.select("core/editor");
 
-  // Track previous save state to prevent multiple checks
-  let previousIsSaving = false;
   let checkingNotification = false;
 
   // Subscribe to post status changes
@@ -52,16 +50,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Only proceed if we're transitioning from "not saving" to "saving"
     // This prevents multiple triggers during the same save operation
-    if (!isAutosaving && isSaving && !previousIsSaving && currentStatus === "publish") {
-      // Check if notification should be sent
+    if (!isAutosaving && isSaving && currentStatus === "publish") {
+      // Check if we should poll for notification status
       if (sendPost.checked && !checkingNotification) {
         checkingNotification = true;
         pollNotificationStatus();
       }
     }
-
-    // Update the previous save state, this is to prevent multiple triggers during the same save operation
-    previousIsSaving = isSaving;
   });
 
   /**
@@ -141,7 +136,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
         sendPost.checked = false;
         updateUI();
-        return;
+        break;
       }
 
       attempts++;

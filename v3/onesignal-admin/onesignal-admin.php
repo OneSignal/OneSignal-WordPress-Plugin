@@ -29,11 +29,7 @@ function admin_files()
 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
   if (isset($_POST["submit"])) {
     // Get existing settings with default values
-    $onesignal_settings = get_option('OneSignalWPSetting', array(
-      'notification_on_post' => 0,
-      'notification_on_post_from_plugin' => 0,
-      'send_to_mobile_platforms' => 0
-    ));
+    $onesignal_settings = get_option('OneSignalWPSetting', onesignal_get_default_settings());
 
     if (isset($_POST['onesignal_app_id']) && !empty($_POST['onesignal_app_id'])) {
         $onesignal_settings['app_id'] = sanitize_text_field($_POST['onesignal_app_id']);
@@ -71,15 +67,20 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') 
   }
 }
 
+// Add this function near the top of the file
+function onesignal_get_default_settings() {
+    return array(
+        'notification_on_post' => 0,
+        'notification_on_post_from_plugin' => 0,
+        'send_to_mobile_platforms' => 0
+    );
+}
+
 // Content for WP Admin Page
 function onesignal_admin_page()
 {
   // Get settings with defaults
-  $settings = get_option('OneSignalWPSetting', array(
-    'notification_on_post' => 0,
-    'notification_on_post_from_plugin' => 0,
-    'send_to_mobile_platforms' => 0
-  ));
+  $settings = get_option('OneSignalWPSetting', onesignal_get_default_settings());
 
   $is_new_install = !$settings || !isset($settings['app_id']);
 ?>
@@ -264,15 +265,8 @@ register_activation_hook(__FILE__, 'onesignal_activate');
 // Ensures that when the plugin is activated, there are proper default values in place for certain setting
 // Meant to guard against the "undefined index" error
 function onesignal_activate() {
-    // Set default values if they don't exist
     $existing_settings = get_option('OneSignalWPSetting', array());
-    $default_settings = array(
-        'notification_on_post' => 0,
-        'notification_on_post_from_plugin' => 0,
-        'send_to_mobile_platforms' => 0
-    );
-
-    $merged_settings = wp_parse_args($existing_settings, $default_settings);
+    $merged_settings = wp_parse_args($existing_settings, onesignal_get_default_settings());
     update_option('OneSignalWPSetting', $merged_settings, 'no');
 }
 

@@ -20,16 +20,16 @@ window.addEventListener("DOMContentLoaded", () => {
     children.forEach((child) => (child.disabled = disabled));
   }
 
-  setDisplay(optionsWrap, sendPost.checked);
-  setDisplay(customiseWrap, customisePost.checked);
-  setDisabled(customiseWrapChild, !customisePost.checked);
-
-  sendPost.addEventListener("change", () => {
+  function updateUI() {
     setDisplay(optionsWrap, sendPost.checked);
-  });
-
-  customisePost.addEventListener("change", () => {
     setDisplay(customiseWrap, customisePost.checked);
     setDisabled(customiseWrapChild, !customisePost.checked);
+  }
+
+  updateUI();
+
+  sendPost.addEventListener("change", updateUI);
+  customisePost.addEventListener("change", updateUI);
+
   });
 });

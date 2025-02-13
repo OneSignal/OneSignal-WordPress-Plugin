@@ -31,12 +31,6 @@ window.addEventListener("DOMContentLoaded", () => {
   sendPost.addEventListener("change", updateUI);
   customisePost.addEventListener("change", updateUI);
 
-  // Make sure WordPress editor and API are available
-  if (typeof wp === "undefined" || !wp.data || !wp.data.select) {
-    console.warn("wp.data is not available.");
-    return;
-  }
-
   let wasSaving = false;
 
   /*
@@ -44,19 +38,44 @@ window.addEventListener("DOMContentLoaded", () => {
   * This is to prevent users from accidentally sending notifications on subsequent updates
   * Instead, the user needs to opt-in again to send a notification when a post is updated
   */
-  wp.data.subscribe(() => {
-    const isSaving = wp.data.select('core/editor').isSavingPost();
-    const postStatus = wp.data.select('core/editor').getCurrentPost().status;
+  if (wp?.data?.select) {
+    // Gutenberg editor
+    wp.data.subscribe(() => {
+      const isSaving = wp.data.select('core/editor').isSavingPost();
+      const postStatus = wp.data.select('core/editor').getCurrentPost().status;
 
-    // Check if the post has finished saving successfully and is published
-    if (wasSaving && !isSaving && postStatus === 'publish') {
-      if (sendPost && sendPost.checked) {
-        sendPost.checked = false;
-        updateUI();
+      // Check if the post has finished saving successfully and is published
+      if (wasSaving && !isSaving && postStatus === 'publish') {
+        if (sendPost && sendPost.checked) {
+          sendPost.checked = false;
+          updateUI();
+        }
       }
-    }
 
-    // reset state for the next check
-    wasSaving = isSaving;
-  });
+      // reset state for the next check
+      wasSaving = isSaving;
+    });
+  } else {
+    // Classic editor
+    jQuery(document).ready(function($) {
+      /*
+      * The classic editor doesn't have the same hooks as the Gutenberg editor
+      * It also refreshes the page after saving, so we need to persist the "just published" state across page reloads
+      */
+      if (sessionStorage.getItem('onesignal_just_published')) {
+        if (sendPost && sendPost.checked) {
+          sendPost.checked = false;
+          updateUI();
+        }
+        sessionStorage.removeItem('onesignal_just_published');
+      }
+
+      $('#publish').click(function() {
+        if (sendPost && sendPost.checked) {
+          // Set flag before page refresh
+          sessionStorage.setItem('onesignal_just_published', 'true');
+        }
+      });
+    });
+  }
 });

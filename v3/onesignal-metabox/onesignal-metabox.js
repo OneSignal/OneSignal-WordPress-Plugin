@@ -31,5 +31,32 @@ window.addEventListener("DOMContentLoaded", () => {
   sendPost.addEventListener("change", updateUI);
   customisePost.addEventListener("change", updateUI);
 
+  // Make sure WordPress editor and API are available
+  if (typeof wp === "undefined" || !wp.data || !wp.data.select) {
+    console.warn("wp.data is not available.");
+    return;
+  }
+
+  let wasSaving = false;
+
+  /*
+  * Uncheck the "Send notification when post is published or updated" input whenever the post is published
+  * This is to prevent users from accidentally sending notifications on subsequent updates
+  * Instead, the user needs to opt-in again to send a notification when a post is updated
+  */
+  wp.data.subscribe(() => {
+    const isSaving = wp.data.select('core/editor').isSavingPost();
+    const postStatus = wp.data.select('core/editor').getCurrentPost().status;
+
+    // Check if the post has finished saving successfully and is published
+    if (wasSaving && !isSaving && postStatus === 'publish') {
+      if (sendPost && sendPost.checked) {
+        sendPost.checked = false;
+        updateUI();
+      }
+    }
+
+    // reset state for the next check
+    wasSaving = isSaving;
   });
 });

@@ -28,7 +28,8 @@ function admin_files()
 
 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
   if (isset($_POST["submit"])) {
-    $onesignal_settings = get_option('OneSignalWPSetting', array());
+    // Get existing settings with default values
+    $onesignal_settings = get_option('OneSignalWPSetting', onesignal_get_default_settings());
 
     if (isset($_POST['onesignal_app_id']) && !empty($_POST['onesignal_app_id'])) {
         $onesignal_settings['app_id'] = sanitize_text_field($_POST['onesignal_app_id']);
@@ -58,15 +59,30 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') 
     $send_to_mobile = isset($_POST['onesignal_send_to_mobile']) ? 1 : 0;
     $onesignal_settings['send_to_mobile_platforms'] = $send_to_mobile;
 
-    update_option('OneSignalWPSetting', $onesignal_settings);
+    // Update with autoload set to 'no' to prevent caching issues
+    update_option('OneSignalWPSetting', $onesignal_settings, 'no');
+
+    // Force refresh the settings in cache
+    wp_cache_delete('OneSignalWPSetting', 'options');
   }
+}
+
+// Add this function near the top of the file
+function onesignal_get_default_settings() {
+    return array(
+        'notification_on_post' => 0,
+        'notification_on_post_from_plugin' => 0,
+        'send_to_mobile_platforms' => 0
+    );
 }
 
 // Content for WP Admin Page
 function onesignal_admin_page()
 {
-  $settings = get_option('OneSignalWPSetting'); // Fetch existing plugin settings (if any)
-  $is_new_install = !$settings || !isset($settings['app_id']); // Determine if this is a fresh install (no settings yet)
+  // Get settings with defaults
+  $settings = get_option('OneSignalWPSetting', onesignal_get_default_settings());
+
+  $is_new_install = !$settings || !isset($settings['app_id']);
 ?>
   <header><img src="<?php echo plugins_url('/images/onesignal.svg', __FILE__); ?>"></header>
   <div class="os-content">
@@ -190,7 +206,7 @@ function onesignal_admin_page()
       <div class="checkbox-wrapper auto-send">
         <label for="auto-send">
           <input id="auto-send" type="checkbox" name="onesignal_auto_send"
-                 <?php echo (get_option('OneSignalWPSetting')['notification_on_post'] ?? 0) == 1 ? 'checked' : ''; ?>>
+                 <?php echo (!empty($settings['notification_on_post'])) ? 'checked' : ''; ?>>
           <span class="checkbox"></span>
           Automatically send notifications when a post is published or updated
         </label>
@@ -200,7 +216,7 @@ function onesignal_admin_page()
       <div class="checkbox-wrapper notification-on-post-from-plugin">
         <label for="notification-on-post-from-plugin">
             <input id="notification-on-post-from-plugin" type="checkbox" name="notification_on_post_from_plugin" value="true"
-            <?php echo (get_option('OneSignalWPSetting')['notification_on_post_from_plugin'] ?? 0) == 1 ? 'checked' : ''; ?>
+            <?php echo (!empty($settings['notification_on_post_from_plugin'])) ? 'checked' : ''; ?>
             >
             <span class="checkbox"></span>
             Automatically send a push notification when I publish a post from 3<sup>rd</sup> party plugins
@@ -221,7 +237,7 @@ function onesignal_admin_page()
       <div class="checkbox-wrapper mobile-app">
         <label for="send-to-mobile">
           <input id="send-to-mobile" type="checkbox" name="onesignal_send_to_mobile"
-                 <?php echo (get_option('OneSignalWPSetting')['send_to_mobile_platforms'] ?? 0) == 1 ? 'checked' : ''; ?>>
+                 <?php echo (!empty($settings['send_to_mobile_platforms'])) ? 'checked' : ''; ?>>
           <span class="checkbox"></span>
           Send notification to Mobile app subscribers
         </label>
@@ -242,5 +258,15 @@ function onesignal_admin_page()
     </form>
   </div>
 <?php
+}
+
+register_activation_hook(__FILE__, 'onesignal_activate');
+
+// Ensures that when the plugin is activated, there are proper default values in place for certain setting
+// Meant to guard against the "undefined index" error
+function onesignal_activate() {
+    $existing_settings = get_option('OneSignalWPSetting', array());
+    $merged_settings = wp_parse_args($existing_settings, onesignal_get_default_settings());
+    update_option('OneSignalWPSetting', $merged_settings, 'no');
 }
 

@@ -41,8 +41,8 @@ window.addEventListener("DOMContentLoaded", () => {
   if (isGutenbergEditorLoaded()) {
     // Gutenberg editor
     wp.data.subscribe(() => {
-      const isSaving = wp.data.select('core/editor').isSavingPost();
-      const postStatus = wp.data.select('core/editor').getCurrentPost().status;
+      const isSaving = wp?.data?.select('core/editor')?.isSavingPost();
+      const postStatus = wp?.data?.select('core/editor')?.getCurrentPost()?.status;
 
       // Check if the post has finished saving successfully and is published
       if (wasSaving && !isSaving && postStatus === 'publish') {

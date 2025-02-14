@@ -38,7 +38,7 @@ window.addEventListener("DOMContentLoaded", () => {
   * This is to prevent users from accidentally sending notifications on subsequent updates
   * Instead, the user needs to opt-in again to send a notification when a post is updated
   */
-  if (wp?.data?.select) {
+  if (isGutenbergEditorLoaded()) {
     // Gutenberg editor
     wp.data.subscribe(() => {
       const isSaving = wp.data.select('core/editor').isSavingPost();
@@ -79,3 +79,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+function isGutenbergEditorLoaded() {
+  return ( wp?.data !== undefined && wp?.data?.select( 'core/editor' ) !== undefined );
+}

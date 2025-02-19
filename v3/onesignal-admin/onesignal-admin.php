@@ -27,7 +27,7 @@ function admin_files()
 }
 
 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (isset($_POST["submit"])) {
+  if (isset($_POST["submit"]) && $_POST["submit"] === "Save Settings") {
     // Get existing settings with default values
     $onesignal_settings = get_option('OneSignalWPSetting', onesignal_get_default_settings());
 

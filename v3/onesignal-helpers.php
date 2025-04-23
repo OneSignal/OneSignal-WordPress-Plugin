@@ -34,3 +34,17 @@ function sanitize_content_for_excerpt($content) {
   $cleaned_content = wp_strip_all_tags(strip_shortcodes($stripped_slashes));
   return $cleaned_content;
 }
+
+function onesignal_is_post_type_allowed($post_type) {
+    if ($post_type === 'post') {
+        return true;
+    }
+
+    $onesignal_wp_settings = get_option("OneSignalWPSetting");
+    if (empty($onesignal_wp_settings['allowed_custom_post_types'])) {
+        return false;
+    }
+
+    $allowed_post_types = array_map('trim', explode(',', $onesignal_wp_settings['allowed_custom_post_types']));
+    return in_array($post_type, $allowed_post_types);
+}

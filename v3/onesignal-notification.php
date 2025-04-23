@@ -6,16 +6,6 @@ defined('ABSPATH') or die('This page may not be accessed directly.');
 // Register the notification function, called when a post status changes
 add_action('transition_post_status', 'onesignal_schedule_notification', 10, 3);
 
-// Check if notifications are allowed for a post type
-function onesignal_is_notification_allowed($post_id) {
-    $onesignal_wp_settings = get_option("OneSignalWPSetting");
-
-    $current_post_type = get_post_type($post_id);
-    $allowed_post_types = array_map('trim', explode(',', $onesignal_wp_settings['allowed_custom_post_types']));
-
-    return in_array($current_post_type, $allowed_post_types);
-}
-
 // Function to schedule notification
 function onesignal_schedule_notification($new_status, $old_status, $post)
 {
@@ -23,7 +13,7 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
         $onesignal_wp_settings = get_option("OneSignalWPSetting");
 
         $current_post_type = get_post_type($post->ID);
-        if ($current_post_type !== 'post' && !onesignal_is_notification_allowed($post->ID)) {
+        if (!onesignal_is_post_type_allowed($current_post_type)) {
             return;
         }
 

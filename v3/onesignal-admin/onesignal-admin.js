@@ -32,8 +32,19 @@ window.addEventListener("DOMContentLoaded", () => {
   const saveButton = document.querySelector("#save-settings-button");
   const customPostTypesInput = document.querySelector("#custom-post-types");
   const notificationOnPostFromPluginCheckbox = document.querySelector("#notification-on-post-from-plugin");
+  const notificationOnPageCheckbox = document.querySelector("#auto-send-pages");
 
-  if (appIdInput && apiKeyInput && autoSendCheckbox && sendToMobileCheckbox && utmInput && saveButton && customPostTypesInput && notificationOnPostFromPluginCheckbox) {
+  const haveAllAdminInputsLoaded = appIdInput &&
+    apiKeyInput &&
+    autoSendCheckbox &&
+    sendToMobileCheckbox &&
+    utmInput &&
+    saveButton &&
+    customPostTypesInput &&
+    notificationOnPostFromPluginCheckbox &&
+    notificationOnPageCheckbox;
+
+  if (haveAllAdminInputsLoaded) {
     const initialAppId = appIdInput.value;
     const initialApiKey = apiKeyInput.value;
     const initialUtmInput = utmInput.value;
@@ -41,6 +52,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const initialSendToMobile = sendToMobileCheckbox.checked;
     const initialCustomPostTypes = customPostTypesInput.value;
     const initialNotificationOnPostFromPlugin = notificationOnPostFromPluginCheckbox.checked;
+    const initialNotificationOnPage = notificationOnPageCheckbox.checked;
 
     function isValidUUID(uuid) {
       const uuidRegex =
@@ -72,8 +84,16 @@ window.addEventListener("DOMContentLoaded", () => {
       const sendToMobileChanged = sendToMobileCheckbox.checked !== initialSendToMobile;
       const customPostTypesChanged = customPostTypesInput.value !== initialCustomPostTypes;
       const notificationOnPostFromPluginChanged = notificationOnPostFromPluginCheckbox.checked !== initialNotificationOnPostFromPlugin;
+      const notificationOnPageChanged = notificationOnPageCheckbox.checked !== initialNotificationOnPage;
 
-      return appIdChanged || apiKeyChanged || autoSendChanged || sendToMobileChanged || utmChanged || customPostTypesChanged || notificationOnPostFromPluginChanged;
+      return appIdChanged ||
+        apiKeyChanged ||
+        autoSendChanged ||
+        sendToMobileChanged ||
+        utmChanged ||
+        customPostTypesChanged ||
+        notificationOnPostFromPluginChanged ||
+        notificationOnPageChanged;
     }
 
     function toggleSaveButton() {
@@ -103,6 +123,7 @@ window.addEventListener("DOMContentLoaded", () => {
     sendToMobileCheckbox.addEventListener("change", toggleSaveButton);
     customPostTypesInput.addEventListener("input", toggleSaveButton);
     notificationOnPostFromPluginCheckbox.addEventListener("change", toggleSaveButton);
+    notificationOnPageCheckbox.addEventListener("change", toggleSaveButton);
 
     // Initial state on page load
     toggleSaveButton();

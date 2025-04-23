@@ -13,8 +13,6 @@ function onesignal_is_notification_allowed($post_id) {
     $current_post_type = get_post_type($post_id);
     $allowed_post_types = array_map('trim', explode(',', $onesignal_wp_settings['allowed_custom_post_types']));
 
-    // error_log('custom post types: ' . $current_post_type . ' ' . print_r($allowed_post_types, true) . ' ' . in_array($current_post_type, $allowed_post_types));
-
     return in_array($current_post_type, $allowed_post_types);
 }
 
@@ -23,9 +21,9 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
 {
     if (($new_status === 'publish') || ($new_status === 'future')) {
         $onesignal_wp_settings = get_option("OneSignalWPSetting");
-        error_log('onesignal_wp_settings: ' . print_r($onesignal_wp_settings, true));
 
-        if (!onesignal_is_notification_allowed($post->ID)) {
+        $current_post_type = get_post_type($post->ID);
+        if ($current_post_type !== 'post' && !onesignal_is_notification_allowed($post->ID)) {
             return;
         }
 

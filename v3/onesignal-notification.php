@@ -12,6 +12,19 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
   if (($new_status === 'publish') || ($new_status === 'future')) {
         $onesignal_wp_settings = get_option("OneSignalWPSetting");
 
+        // Get the current post type
+        $current_post_type = get_post_type($post->ID);
+
+        // Split the allowed post types string into an array and trim whitespace
+        $allowed_post_types = array_map('trim', explode(',', $onesignal_wp_settings['allowed_custom_post_types']));
+
+        error_log('custom post types: ' . $current_post_type . ' ' . print_r($allowed_post_types, true) . ' ' . in_array($current_post_type, $allowed_post_types));
+
+        // Check if current post type is in the allowed list
+        if (!in_array($current_post_type, $allowed_post_types)) {
+            return;
+        }
+
         // check if update is on.
         $update = !empty($_POST['os_update']) ? $_POST['os_update'] : $post->os_update;
 

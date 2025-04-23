@@ -9,7 +9,7 @@ add_action('transition_post_status', 'onesignal_schedule_notification', 10, 3);
 // Function to schedule notification
 function onesignal_schedule_notification($new_status, $old_status, $post)
 {
-  if (($new_status === 'publish') || ($new_status === 'future')) {
+    if (($new_status === 'publish') || ($new_status === 'future')) {
         $onesignal_wp_settings = get_option("OneSignalWPSetting");
 
         // check if update is on.

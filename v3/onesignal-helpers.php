@@ -41,4 +41,9 @@ function onesignal_is_post_type_allowed($post_type) {
     $settings = get_option("OneSignalWPSetting");
 
     if($post_type === 'page' && !empty($settings['notification_on_page'])) return true;
+
+    if (empty($settings['allowed_custom_post_types'])) return false;
+
+    $allowed_post_types = array_map('trim', explode(',', $settings['allowed_custom_post_types']));
+    return in_array($post_type, $allowed_post_types);
 }

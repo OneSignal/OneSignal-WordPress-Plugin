@@ -7,11 +7,24 @@ add_action('add_meta_boxes', 'onesignal_add_metabox');
 
 function onesignal_add_metabox()
 {
-  add_meta_box(
-    'onesignal_metabox', // metabox ID
-    'OneSignal Push Notifications', // title
-    'onesignal_metabox', // callback function
-  );
+  $current_post_type = get_post_type();
+
+  if (
+    $current_post_type === 'post' ||
+    onesignal_should_show_metabox($current_post_type)
+  ) {
+    add_meta_box(
+      'onesignal_metabox', // metabox ID
+      'OneSignal Push Notifications', // title
+      'onesignal_metabox', // callback function
+    );
+  }
+}
+
+function onesignal_should_show_metabox($post_type) {
+    $onesignal_wp_settings = get_option("OneSignalWPSetting");
+    $allowed_post_types = array_map('trim', explode(',', $onesignal_wp_settings['allowed_custom_post_types']));
+    return in_array($post_type, $allowed_post_types);
 }
 
 // Render the meta box

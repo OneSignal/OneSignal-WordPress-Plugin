@@ -6,22 +6,26 @@ defined('ABSPATH') or die('This page may not be accessed directly.');
 // Register the notification function, called when a post status changes
 add_action('transition_post_status', 'onesignal_schedule_notification', 10, 3);
 
+// Check if notifications are allowed for a post type
+function onesignal_is_notification_allowed($post_id) {
+    $onesignal_wp_settings = get_option("OneSignalWPSetting");
+
+    $current_post_type = get_post_type($post_id);
+    $allowed_post_types = array_map('trim', explode(',', $onesignal_wp_settings['allowed_custom_post_types']));
+
+    // error_log('custom post types: ' . $current_post_type . ' ' . print_r($allowed_post_types, true) . ' ' . in_array($current_post_type, $allowed_post_types));
+
+    return in_array($current_post_type, $allowed_post_types);
+}
+
 // Function to schedule notification
 function onesignal_schedule_notification($new_status, $old_status, $post)
 {
-  if (($new_status === 'publish') || ($new_status === 'future')) {
+    if (($new_status === 'publish') || ($new_status === 'future')) {
         $onesignal_wp_settings = get_option("OneSignalWPSetting");
+        error_log('onesignal_wp_settings: ' . print_r($onesignal_wp_settings, true));
 
-        // Get the current post type
-        $current_post_type = get_post_type($post->ID);
-
-        // Split the allowed post types string into an array and trim whitespace
-        $allowed_post_types = array_map('trim', explode(',', $onesignal_wp_settings['allowed_custom_post_types']));
-
-        error_log('custom post types: ' . $current_post_type . ' ' . print_r($allowed_post_types, true) . ' ' . in_array($current_post_type, $allowed_post_types));
-
-        // Check if current post type is in the allowed list
-        if (!in_array($current_post_type, $allowed_post_types)) {
+        if (!onesignal_is_notification_allowed($post->ID)) {
             return;
         }
 

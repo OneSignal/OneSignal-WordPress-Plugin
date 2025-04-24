@@ -9,6 +9,13 @@ function onesignal_complete_migration()
             wp_die(__('Security check failed', 'onesignal-push'));
         }
 
+        // Set option for notification_on_page updates to true
+        // This is to prevent breaking changes for existing users migrating from v2 to v3
+        $settings = get_option('OneSignalWPSetting', array());
+        $settings['notification_on_page'] = 1;
+
+        update_option('OneSignalWPSetting', $settings, 'no');
+
         // Mark the plugin as migrated
         update_option('onesignal_plugin_migrated', true);
 

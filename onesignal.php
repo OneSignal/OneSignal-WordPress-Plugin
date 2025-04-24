@@ -39,6 +39,12 @@ if ($plugin_version === ONESIGNAL_VERSION_V3) {
 
     // Ensure migration is marked as complete after loading V3
     if (!$is_migrated) {
+        if(!$is_new_install) {
+            // Upgrade within v3 - enable notification_on_page for existing users
+            // This prevents breaking changes for users who were used to v2 behavior
+            $settings['notification_on_page'] = 1;
+            update_option('OneSignalWPSetting', $settings, 'no');
+        }
         update_option('onesignal_plugin_migrated', true);
     }
 } else {

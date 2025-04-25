@@ -8,16 +8,8 @@ add_action('add_meta_boxes', 'onesignal_add_metabox');
 function onesignal_add_metabox()
 {
   $current_post_type = get_post_type();
-  $settings = get_option("OneSignalWPSetting");
 
-  if ($current_post_type === 'post') {
-    add_meta_box(
-      'onesignal_metabox', // metabox ID
-      'OneSignal Push Notifications', // title
-      'onesignal_metabox', // callback function
-    );
-  }
-  else if ($current_post_type === 'page' && !empty($settings['notification_on_page'])) {
+  if (onesignal_is_post_type_allowed($current_post_type)) {
     add_meta_box(
       'onesignal_metabox', // metabox ID
       'OneSignal Push Notifications', // title

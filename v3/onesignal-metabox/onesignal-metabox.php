@@ -17,6 +17,11 @@ function onesignal_add_metabox()
 // Render the meta box
 function onesignal_metabox($post)
 {
+  $os_meta = get_post_meta($post->ID, 'os_meta', true);
+  if (!is_array($os_meta)) {
+    $os_meta = array();
+  }
+
   // View segments API to populate Segments list.
   $args = array(
     'headers' => array(
@@ -49,7 +54,7 @@ function onesignal_metabox($post)
   <input type="checkbox" name="os_update" id="os_update"
        <?php
        $os_update_checked = isset($os_meta['os_update'])
-           ? $os_meta['os_update'] == 'on'
+           ? $os_meta['os_update'] === 'on'
            : (get_option('OneSignalWPSetting')['notification_on_post'] ?? 0) == 1;
 
        echo $os_update_checked ? 'checked' : '';
@@ -64,7 +69,7 @@ Send notification when post is published or updated
     if ($json && is_array($json->segments)) {
         foreach ($json->segments as $segment) {
             if (isset($segment->name)) {
-                $selected = isset($post->os_meta['os_segment']) && $post->os_meta['os_segment'] === $segment->name ? 'selected' : '';
+                $selected = isset($os_meta['os_segment']) && $os_meta['os_segment'] === $segment->name ? 'selected' : '';
                 echo '<option value="' . esc_attr($segment->name) . '"' . $selected . '>' . esc_html($segment->name) . '</option>';
             }
         }
@@ -75,17 +80,17 @@ Send notification when post is published or updated
 </select>
     <hr>
     <label for="os_customise">
-      <input type="checkbox" name="os_customise" id="os_customise" <?php echo isset($post->os_meta['os_customise']) && $post->os_meta['os_customise'] == 'on' ? 'checked' : '' ?>>Customize notification content</label>
-    <div id="os_customisations" style="<?php echo isset($post->os_meta['os_customise']) && $post->os_meta['os_customise'] == 'on' ? 'display:block;' : 'display:none;'; ?>">
+      <input type="checkbox" name="os_customise" id="os_customise" <?php echo isset($os_meta['os_customise']) && $os_meta['os_customise'] === 'on' ? 'checked' : '' ?>>Customize notification content</label>
+    <div id="os_customisations" style="<?php echo isset($os_meta['os_customise']) && $os_meta['os_customise'] === 'on' ? 'display:block;' : 'display:none;'; ?>">
       <label for="os_title">Notification title</label>
-      <input type="text" name="os_title" id="os_title" value="<?php echo esc_attr(isset($post->os_meta['os_title']) ? $post->os_meta['os_title'] : ''); ?>" disabled>
+      <input type="text" name="os_title" id="os_title" value="<?php echo esc_attr(isset($os_meta['os_title']) ? $os_meta['os_title'] : ''); ?>" disabled>
       <label for="os_content">Notification content</label>
-      <input type="text" name="os_content" id="os_content" value="<?php echo esc_attr(isset($post->os_meta['os_content']) ? $post->os_meta['os_content'] : ''); ?>" disabled>
+      <input type="text" name="os_content" id="os_content" value="<?php echo esc_attr(isset($os_meta['os_content']) ? $os_meta['os_content'] : ''); ?>" disabled>
     </div>
     <?php if (get_option('OneSignalWPSetting')['send_to_mobile_platforms'] == 1) : ?>
       <hr>
       <label for="os_mobile_url">Mobile URL</label>
-      <input type="text" name="os_mobile_url" id="os_mobile_url" value="<?php echo esc_attr(isset($post->os_meta['os_mobile_url']) ? $post->os_meta['os_mobile_url'] : ''); ?>">
+      <input type="text" name="os_mobile_url" id="os_mobile_url" value="<?php echo esc_attr(isset($os_meta['os_mobile_url']) ? $os_meta['os_mobile_url'] : ''); ?>">
     <?php endif; ?>
   </div>
 

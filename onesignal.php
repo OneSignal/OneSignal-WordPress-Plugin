@@ -39,7 +39,7 @@ if ($plugin_version === ONESIGNAL_VERSION_V3) {
 
     // Ensure migration is marked as complete after loading V3
     if (!$is_migrated) {
-        if(!$is_new_install) {
+        if(!$is_new_install && !isset($settings['notification_on_page'])) {
             // Upgrade within v3 - enable notification_on_page for existing users
             // This prevents breaking changes for users who were used to v2 behavior
             $settings['notification_on_page'] = 1;

@@ -7,11 +7,15 @@ add_action('add_meta_boxes', 'onesignal_add_metabox');
 
 function onesignal_add_metabox()
 {
-  add_meta_box(
-    'onesignal_metabox', // metabox ID
-    'OneSignal Push Notifications', // title
-    'onesignal_metabox', // callback function
-  );
+  $current_post_type = get_post_type();
+
+  if (onesignal_is_post_type_allowed($current_post_type)) {
+    add_meta_box(
+      'onesignal_metabox', // metabox ID
+      'OneSignal Push Notifications', // title
+      'onesignal_metabox', // callback function
+    );
+  }
 }
 
 // Render the meta box

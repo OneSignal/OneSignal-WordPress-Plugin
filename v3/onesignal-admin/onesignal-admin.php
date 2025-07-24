@@ -104,7 +104,7 @@ function onesignal_admin_page()
     }
     ?>
     <form method="post">
-      <label for="appid">OneSignal App ID HELLLO</label>
+      <label for="appid">OneSignal App ID</label>
       <div class="input-with-icon">
         <input type="text" id="appid" name="onesignal_app_id"
               value="<?php echo esc_attr(get_option('OneSignalWPSetting')['app_id'] ?? ''); ?>" />

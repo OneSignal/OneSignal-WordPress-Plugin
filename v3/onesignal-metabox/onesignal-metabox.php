@@ -59,16 +59,20 @@ function onesignal_metabox($post)
        <?php
        // Determine if this is a new post (never published)
        $is_new_post = ($post->post_status !== 'publish' || empty($post->post_date_gmt));
+       $post_type = $post->post_type;
        if ($is_new_post) {
-           // First time publish: use global setting
-           $os_update_checked = (get_option('OneSignalWPSetting')['notification_on_post'] ?? 0) == 1;
+           if ($post_type === 'page') {
+               $os_update_checked = (get_option('OneSignalWPSetting')['notification_on_page'] ?? 0) == 1;
+           } else {
+               $os_update_checked = (get_option('OneSignalWPSetting')['notification_on_post'] ?? 0) == 1;
+           }
        } else {
            // Already published: always unchecked
            $os_update_checked = false;
        }
        echo $os_update_checked ? 'checked' : '';
        ?>>
-Send notification when post is published or updated
+Send notification when <?php echo $post_type === 'page' ? 'page' : 'post'; ?> is published
 </label>
   <div id="os_options">
     <label for="os_segment">Send to segment</label>

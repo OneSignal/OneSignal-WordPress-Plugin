@@ -213,7 +213,7 @@ function onesignal_admin_page()
           <input id="auto-send" type="checkbox" name="onesignal_auto_send"
                  <?php echo (!empty($settings['notification_on_post'])) ? 'checked' : ''; ?>>
           <span class="checkbox"></span>
-          Automatically send notifications when a post is published or updated
+          Automatically send notifications when a post is published
         </label>
       </div>
 
@@ -223,7 +223,7 @@ function onesignal_admin_page()
           <input id="auto-send-pages" type="checkbox" name="onesignal_auto_send_pages"
                  <?php echo (!empty($settings['notification_on_page'])) ? 'checked' : ''; ?>>
           <span class="checkbox"></span>
-          Automatically send notifications when a page is published or updated
+          Automatically send notifications when a page is published
         </label>
       </div>
 

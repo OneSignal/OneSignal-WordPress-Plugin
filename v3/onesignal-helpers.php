@@ -47,3 +47,40 @@ function onesignal_is_post_type_allowed($post_type) {
     $allowed_post_types = array_map('trim', explode(',', $settings['allowed_custom_post_types']));
     return in_array($post_type, $allowed_post_types);
 }
+
+function onesignal_save_notification_id($post_id, $notification_id) {
+    update_post_meta($post_id, 'os_notification_id', sanitize_text_field($notification_id));
+}
+
+function onesignal_get_notification_id($post_id) {
+    return get_post_meta($post_id, 'os_notification_id', true);
+}
+
+function onesignal_cancel_notification($notification_id) {
+    if (empty($notification_id)) {
+        return false;
+    }
+
+    $apiKeyType = onesignal_get_api_key_type();
+    $authorizationHeader = $apiKeyType === "Rich"
+        ? 'Key ' . get_option('OneSignalWPSetting')['app_rest_api_key']
+        : 'Basic ' . get_option('OneSignalWPSetting')['app_rest_api_key'];
+
+    $args = array(
+        'method' => 'DELETE',
+        'headers' => array(
+            'Authorization' => $authorizationHeader,
+            'accept' => 'application/json',
+        ),
+    );
+
+    $response = wp_remote_request("https://onesignal.com/api/v1/notifications/{$notification_id}?app_id=" . get_option('OneSignalWPSetting')['app_id'], $args);
+    
+    if (is_wp_error($response)) {
+        error_log('Failed to cancel OneSignal notification: ' . $response->get_error_message());
+        return false;
+    }
+
+    $response_code = wp_remote_retrieve_response_code($response);
+    return $response_code === 200;
+}

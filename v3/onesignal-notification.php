@@ -20,6 +20,12 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
             return;
         }
 
+        // Cancel any existing scheduled notification for this post
+        $existing_notification_id = onesignal_get_notification_id($post->ID);
+        if (!empty($existing_notification_id)) {
+            onesignal_cancel_notification($existing_notification_id);
+        }
+
         // set api params
         $title = !empty($_POST['os_title']) ? sanitize_text_field($_POST['os_title']) : decode_entities(get_bloginfo('name'));
         $content = !empty($_POST['os_content']) ? sanitize_text_field($_POST['os_content']) : $post->post_title;
@@ -108,6 +114,16 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
         $response = wp_remote_post('https://onesignal.com/api/v1/notifications', $args);
         if (is_wp_error($response)) {
             error_log('API request failed: ' . $response->get_error_message());
+        } else {
+            // Save the notification ID for potential future cancellation
+            $response_code = wp_remote_retrieve_response_code($response);
+            if ($response_code === 200) {
+                $response_body = wp_remote_retrieve_body($response);
+                $response_data = json_decode($response_body, true);
+                if (!empty($response_data['id'])) {
+                    onesignal_save_notification_id($post->ID, $response_data['id']);
+                }
+            }
         }
     }
 }

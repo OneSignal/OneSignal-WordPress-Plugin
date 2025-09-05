@@ -6,25 +6,35 @@ defined('ABSPATH') or die('This page may not be accessed directly.');
 // Register the notification function, called when a post status changes
 add_action('transition_post_status', 'onesignal_schedule_notification', 10, 3);
 
+// Register the quick-edit handler to handle publish date changes
+add_action('save_post', 'onesignal_handle_quick_edit_date_change', 10, 3);
+
 // Function to schedule notification
 function onesignal_schedule_notification($new_status, $old_status, $post)
 {
     if (($new_status === 'publish') || ($new_status === 'future')) {
+        error_log('!!! calling onesignal_schedule_notification' . $new_status . ' ' . $old_status);
         $onesignal_wp_settings = get_option("OneSignalWPSetting");
 
         // check if update is on.
         $update = !empty($_POST['os_update']) ? $_POST['os_update'] : $post->os_update;
-
+        error_log('!!! update' . $update . ' ' . empty($update));
         // do not send notification if not enabled
         if (empty($update)) {
+            error_log('!!! update is empty');
             return;
         }
 
         // Cancel any existing scheduled notification for this post
+        
         $existing_notification_id = onesignal_get_notification_id($post->ID);
+        error_log('!!! cancel existing notification' . $existing_notification_id);
         if (!empty($existing_notification_id)) {
             onesignal_cancel_notification($existing_notification_id);
         }
+
+        // Store the current publish date for future quick-edit comparisons
+        update_post_meta($post->ID, '_os_previous_publish_date', $post->post_date);
 
         // set api params
         $title = !empty($_POST['os_title']) ? sanitize_text_field($_POST['os_title']) : decode_entities(get_bloginfo('name'));
@@ -125,5 +135,54 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
                 }
             }
         }
+    }
+}
+
+// Function to handle quick-edit publish date changes
+function onesignal_handle_quick_edit_date_change($post_id, $post, $update)
+{
+    // Check if this is an autosave, revision, or not an update
+    if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id) || !$update) {
+        return;
+    }
+
+    // Check if the post type is allowed for notifications
+    if (!onesignal_is_post_type_allowed($post->post_type)) {
+        return;
+    }
+
+    // Only handle posts with 'future' status (scheduled posts)
+    if ($post->post_status !== 'future') {
+        return;
+    }
+
+    // Get the previous publish date stored in post meta
+    $previous_publish_date = get_post_meta($post_id, '_os_previous_publish_date', true);
+    $current_publish_date = $post->post_date;
+
+    // If this is the first time we're tracking the publish date, store it and return
+    if (empty($previous_publish_date)) {
+        update_post_meta($post_id, '_os_previous_publish_date', $current_publish_date);
+        return;
+    }
+
+    // Check if the publish date has actually changed
+    if ($previous_publish_date !== $current_publish_date) {
+        // Cancel any existing scheduled notification for this post
+        $existing_notification_id = onesignal_get_notification_id($post_id);
+        if (!empty($existing_notification_id)) {
+            $cancelled = onesignal_cancel_notification($existing_notification_id);
+            if ($cancelled) {
+                // Clear the stored notification ID since we cancelled it
+                delete_post_meta($post_id, 'os_notification_id');
+            }
+        }
+
+        // Update the stored publish date
+        update_post_meta($post_id, '_os_previous_publish_date', $current_publish_date);
+
+        // Trigger the notification scheduling logic by calling the existing function
+        // We simulate the transition from 'future' to 'future' to trigger rescheduling
+        onesignal_schedule_notification('future', 'future', $post);
     }
 }

@@ -63,6 +63,14 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') 
     $send_to_mobile = isset($_POST['onesignal_send_to_mobile']) ? 1 : 0;
     $onesignal_settings['send_to_mobile_platforms'] = $send_to_mobile;
 
+    // Save the auto send notifications setting for post updates
+    $auto_send_post_update = isset($_POST['onesignal_auto_send_post_update']) ? 1 : 0;
+    $onesignal_settings['notification_on_post_update'] = $auto_send_post_update;
+
+    // Save the auto send notifications setting for page updates
+    $auto_send_page_update = isset($_POST['onesignal_auto_send_page_update']) ? 1 : 0;
+    $onesignal_settings['notification_on_page_update'] = $auto_send_page_update;
+
     // Update with autoload set to 'no' to prevent caching issues
     update_option('OneSignalWPSetting', $onesignal_settings, 'no');
 
@@ -77,7 +85,9 @@ function onesignal_get_default_settings() {
         'notification_on_post' => 0,
         'notification_on_page' => 0,
         'notification_on_post_from_plugin' => 0,
-        'send_to_mobile_platforms' => 0
+        'send_to_mobile_platforms' => 0,
+        'notification_on_post_update' => 0,
+        'notification_on_page_update' => 0
     );
 }
 
@@ -207,13 +217,23 @@ function onesignal_admin_page()
         <input id="custom-post-types"type="text" placeholder="forum,reply,topic  (comma separated, no spaces between commas)" name="allowed_custom_post_types" value="<?php echo esc_attr($customPostTypes); ?>">
       </div>
 
-      <!-- Auto Send Checkbox -->
+      <!-- Auto Send For Posts Checkbox -->
       <div class="checkbox-wrapper auto-send">
         <label for="auto-send">
           <input id="auto-send" type="checkbox" name="onesignal_auto_send"
                  <?php echo (!empty($settings['notification_on_post'])) ? 'checked' : ''; ?>>
           <span class="checkbox"></span>
           Automatically send notifications when a post is published
+        </label>
+      </div>
+
+      <!-- Auto Send for Post Updates Checkbox -->
+      <div class="checkbox-wrapper auto-send-post-update">
+        <label for="auto-send-post-update">
+          <input id="auto-send-post-update" type="checkbox" name="onesignal_auto_send_post_update"
+                 <?php echo (!empty($settings['notification_on_post_update'])) ? 'checked' : ''; ?>>
+          <span class="checkbox"></span>
+          Automatically send notifications when a post is updated
         </label>
       </div>
 
@@ -224,6 +244,16 @@ function onesignal_admin_page()
                  <?php echo (!empty($settings['notification_on_page'])) ? 'checked' : ''; ?>>
           <span class="checkbox"></span>
           Automatically send notifications when a page is published
+        </label>
+      </div>
+
+      <!-- Auto Send for Page Updates Checkbox -->
+      <div class="checkbox-wrapper auto-send-page-update">
+        <label for="auto-send-page-update">
+          <input id="auto-send-page-update" type="checkbox" name="onesignal_auto_send_page_update"
+                 <?php echo (!empty($settings['notification_on_page_update'])) ? 'checked' : ''; ?>>
+          <span class="checkbox"></span>
+          Automatically send notifications when a page is updated
         </label>
       </div>
 

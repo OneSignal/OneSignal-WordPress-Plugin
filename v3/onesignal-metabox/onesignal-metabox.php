@@ -67,12 +67,16 @@ function onesignal_metabox($post)
                $os_update_checked = (get_option('OneSignalWPSetting')['notification_on_post'] ?? 0) == 1;
            }
        } else {
-           // Already published: always unchecked
-           $os_update_checked = false;
+           // Already published: use update settings
+           if ($post_type === 'page') {
+               $os_update_checked = (get_option('OneSignalWPSetting')['notification_on_page_update'] ?? 0) == 1;
+           } else {
+               $os_update_checked = (get_option('OneSignalWPSetting')['notification_on_post_update'] ?? 0) == 1;
+           }
        }
        echo $os_update_checked ? 'checked' : '';
        ?>>
-Send notification when <?php echo $post_type === 'page' ? 'page' : 'post'; ?> is published
+Send notification when <?php echo $post_type === 'page' ? 'page' : 'post'; ?> is <?php echo $is_new_post ? 'published' : 'updated'; ?>
 </label>
   <div id="os_options">
     <label for="os_segment">Send to segment</label>

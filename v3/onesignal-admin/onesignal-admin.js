@@ -33,6 +33,8 @@ window.addEventListener("DOMContentLoaded", () => {
   const customPostTypesInput = document.querySelector("#custom-post-types");
   const notificationOnPostFromPluginCheckbox = document.querySelector("#notification-on-post-from-plugin");
   const notificationOnPageCheckbox = document.querySelector("#auto-send-pages");
+  const autoSendPostUpdateCheckbox = document.querySelector("#auto-send-post-update");
+  const autoSendPageUpdateCheckbox = document.querySelector("#auto-send-page-update");
 
   const haveAllAdminInputsLoaded = appIdInput &&
     apiKeyInput &&
@@ -42,7 +44,9 @@ window.addEventListener("DOMContentLoaded", () => {
     saveButton &&
     customPostTypesInput &&
     notificationOnPostFromPluginCheckbox &&
-    notificationOnPageCheckbox;
+    notificationOnPageCheckbox &&
+    autoSendPostUpdateCheckbox &&
+    autoSendPageUpdateCheckbox;
 
   if (haveAllAdminInputsLoaded) {
     const initialAppId = appIdInput.value;
@@ -53,6 +57,8 @@ window.addEventListener("DOMContentLoaded", () => {
     const initialCustomPostTypes = customPostTypesInput.value;
     const initialNotificationOnPostFromPlugin = notificationOnPostFromPluginCheckbox.checked;
     const initialNotificationOnPage = notificationOnPageCheckbox.checked;
+    const initialAutoSendPostUpdate = autoSendPostUpdateCheckbox.checked;
+    const initialAutoSendPageUpdate = autoSendPageUpdateCheckbox.checked;
 
     function isValidUUID(uuid) {
       const uuidRegex =
@@ -85,6 +91,8 @@ window.addEventListener("DOMContentLoaded", () => {
       const customPostTypesChanged = customPostTypesInput.value !== initialCustomPostTypes;
       const notificationOnPostFromPluginChanged = notificationOnPostFromPluginCheckbox.checked !== initialNotificationOnPostFromPlugin;
       const notificationOnPageChanged = notificationOnPageCheckbox.checked !== initialNotificationOnPage;
+      const autoSendPostUpdateChanged = autoSendPostUpdateCheckbox.checked !== initialAutoSendPostUpdate;
+      const autoSendPageUpdateChanged = autoSendPageUpdateCheckbox.checked !== initialAutoSendPageUpdate;
 
       return appIdChanged ||
         apiKeyChanged ||
@@ -93,7 +101,9 @@ window.addEventListener("DOMContentLoaded", () => {
         utmChanged ||
         customPostTypesChanged ||
         notificationOnPostFromPluginChanged ||
-        notificationOnPageChanged;
+        notificationOnPageChanged ||
+        autoSendPostUpdateChanged ||
+        autoSendPageUpdateChanged;
     }
 
     function toggleSaveButton() {
@@ -124,6 +134,8 @@ window.addEventListener("DOMContentLoaded", () => {
     customPostTypesInput.addEventListener("input", toggleSaveButton);
     notificationOnPostFromPluginCheckbox.addEventListener("change", toggleSaveButton);
     notificationOnPageCheckbox.addEventListener("change", toggleSaveButton);
+    autoSendPostUpdateCheckbox.addEventListener("change", toggleSaveButton);
+    autoSendPageUpdateCheckbox.addEventListener("change", toggleSaveButton);
 
     // Initial state on page load
     toggleSaveButton();

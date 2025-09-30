@@ -9,6 +9,9 @@ add_action('transition_post_status', 'onesignal_schedule_notification', 10, 3);
 // Register the quick-edit handler to handle publish date changes
 add_action('save_post', 'onesignal_handle_quick_edit_date_change', 10, 3);
 
+// Register handler to cancel scheduled notifications when posts are deleted
+add_action('wp_trash_post', 'onesignal_cancel_notification_on_post_delete');
+
 // Core function to create and send/schedule a notification
 function onesignal_create_notification($post, $notification_options = array())
 {
@@ -195,5 +198,24 @@ function onesignal_handle_quick_edit_date_change($post_id, $post, $update)
         // Create a new notification with default options (no custom title/content from metabox)
         // This will use the post title and default settings
         onesignal_create_notification($post);
+    }
+}
+
+// Function to cancel scheduled notifications when a post is deleted
+function onesignal_cancel_notification_on_post_delete($post_id)
+{
+    $post = get_post($post_id);
+
+    if (!$post) {
+        return;
+    }
+
+    $existing_notification_id = onesignal_get_notification_id($post_id);
+    if (!empty($existing_notification_id)) {
+        $cancelled = onesignal_cancel_notification($existing_notification_id);
+        if ($cancelled) {
+            delete_post_meta($post_id, 'os_notification_id');
+            delete_post_meta($post_id, 'os_previous_publish_date');
+        }
     }
 }

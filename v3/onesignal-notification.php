@@ -210,10 +210,6 @@ function onesignal_cancel_notification_on_post_delete($post_id)
         return;
     }
 
-    if (!onesignal_is_post_type_allowed($post->post_type)) {
-        return;
-    }
-
     $existing_notification_id = onesignal_get_notification_id($post_id);
     if (!empty($existing_notification_id)) {
         $cancelled = onesignal_cancel_notification($existing_notification_id);

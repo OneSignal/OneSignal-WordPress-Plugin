@@ -56,6 +56,46 @@ function onesignal_get_notification_id($post_id) {
     return get_post_meta($post_id, 'os_notification_id', true);
 }
 
+function onesignal_parse_utm_parameters($utm_string) {
+    if (empty($utm_string)) {
+        return array();
+    }
+
+    // Sanitize the input string
+    $utm_string = trim($utm_string);
+    $utm_string = ltrim($utm_string, '?&');
+
+    if (empty($utm_string)) {
+        return array();
+    }
+
+    $params = array();
+    $pairs = explode('&', $utm_string);
+
+    foreach ($pairs as $pair) {
+        $pair = trim($pair);
+
+        if (empty($pair)) {
+            continue;
+        }
+
+        $parts = explode('=', $pair, 2);
+
+        // validates that both a key and value are present
+        if (count($parts) === 2) {
+            $key = trim($parts[0]);
+            $value = trim($parts[1]);
+
+            // Only add if both key and value are not empty and key is valid
+            if (!empty($key) && !empty($value) && preg_match('/^[a-zA-Z0-9_-]+$/', $key)) {
+                $params[$key] = $value;
+            }
+        }
+    }
+
+    return $params;
+}
+
 function onesignal_cancel_notification($notification_id) {
     if (empty($notification_id)) {
         return false;

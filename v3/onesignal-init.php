@@ -26,24 +26,26 @@ function onesignal_init()
           });
 
           // Unregister the legacy OneSignal service worker to prevent scope conflicts
-          navigator.serviceWorker.getRegistrations().then((registrations) => {
-            // Iterate through all registered service workers
-            registrations.forEach((registration) => {
-              // Check the script URL to identify the specific service worker
-              if (registration.active && registration.active.scriptURL.includes('OneSignalSDKWorker.js.php')) {
-                // Unregister the service worker
-                registration.unregister().then((success) => {
-                  if (success) {
-                    console.log('OneSignalSW: Successfully unregistered:', registration.active.scriptURL);
-                  } else {
-                    console.log('OneSignalSW: Failed to unregister:', registration.active.scriptURL);
-                  }
-                });
-              }
+          if (navigator.serviceWorker) {
+            navigator.serviceWorker.getRegistrations().then((registrations) => {
+              // Iterate through all registered service workers
+              registrations.forEach((registration) => {
+                // Check the script URL to identify the specific service worker
+                if (registration.active && registration.active.scriptURL.includes('OneSignalSDKWorker.js.php')) {
+                  // Unregister the service worker
+                  registration.unregister().then((success) => {
+                    if (success) {
+                      console.log('OneSignalSW: Successfully unregistered:', registration.active.scriptURL);
+                    } else {
+                      console.log('OneSignalSW: Failed to unregister:', registration.active.scriptURL);
+                    }
+                  });
+                }
+              });
+            }).catch((error) => {
+              console.error('Error fetching service worker registrations:', error);
             });
-          }).catch((error) => {
-            console.error('Error fetching service worker registrations:', error);
-          });
+        }
         </script>
 <?php
 }

@@ -83,8 +83,8 @@ function onesignal_parse_utm_parameters($utm_string) {
 
         // validates that both a key and value are present
         if (count($parts) === 2) {
-            $key = trim($parts[0]);
-            $value = trim($parts[1]);
+            $key = rawurlencode($parts[0]);
+            $value = rawurlencode($parts[1]);
 
             if (!empty($key) && !empty($value) && preg_match('/^[a-zA-Z0-9_-]+$/', $key)) {
                 $validated_pairs[] = $key . '=' . $value;

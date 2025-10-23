@@ -58,7 +58,7 @@ function onesignal_get_notification_id($post_id) {
 
 function onesignal_parse_utm_parameters($utm_string) {
     if (empty($utm_string)) {
-        return array();
+        return '';
     }
 
     // Sanitize the input string
@@ -66,11 +66,11 @@ function onesignal_parse_utm_parameters($utm_string) {
     $utm_string = ltrim($utm_string, '?&');
 
     if (empty($utm_string)) {
-        return array();
+        return '';
     }
 
-    $params = array();
     $pairs = explode('&', $utm_string);
+    $validated_pairs = array();
 
     foreach ($pairs as $pair) {
         $pair = trim($pair);
@@ -86,14 +86,13 @@ function onesignal_parse_utm_parameters($utm_string) {
             $key = trim($parts[0]);
             $value = trim($parts[1]);
 
-            // Only add if both key and value are not empty and key is valid
             if (!empty($key) && !empty($value) && preg_match('/^[a-zA-Z0-9_-]+$/', $key)) {
-                $params[$key] = $value;
+                $validated_pairs[] = $key . '=' . $value;
             }
         }
     }
 
-    return $params;
+    return implode('&', $validated_pairs);
 }
 
 function onesignal_cancel_notification($notification_id) {

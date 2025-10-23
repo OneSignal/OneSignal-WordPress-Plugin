@@ -38,7 +38,8 @@ function onesignal_create_notification($post, $notification_options = array())
     if (!empty($config_utm_additional_url_params)) {
       $utm_params = onesignal_parse_utm_parameters($config_utm_additional_url_params);
       if (!empty($utm_params)) {
-        $url = add_query_arg($utm_params, $url);
+        $separator = (strpos($url, '?') === false) ? '?' : '&';
+        $url = $url . $separator . $utm_params;
       }
     }
 

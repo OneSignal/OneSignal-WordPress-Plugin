@@ -186,9 +186,9 @@ function onesignal_admin_page()
               </svg>
             </div>
             <div class="information" style="display: none;">
-              <p>Adds the specified string as extra URL parameters to your notification URL so that they can be tracked as an event by your analytics system. <em>Please escape your parameter values</em>; your input will be added as-is to the end of your notification URL. Example:</p>If you want:<em><li><code>utm_medium</code> to be <code>ppc</code></li><li><code>utm_source</code> to be <code>adwords</code></li><li><code>utm_campaign</code> to be <code>snow boots</code></li><li><code>utm_content</code> to be <code>durable snow boots</code></li></em><p><p>Then use the following string:</p><p><code style='word-break: break-all;'>utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots</code></p>
+              <p>Adds the specified string as extra URL parameters to your notification URL so that they can be tracked as an event by your analytics system.</p><p>For example, if you want:</p><em><li><code>utm_medium</code> to be <code>ppc</code></li><li><code>utm_source</code> to be <code>adwords</code></li><li><code>utm_campaign</code> to be <code>snow boots</code></li><li><code>utm_content</code> to be <code>durable snow boots</code></li></em><p><p>Then use the following string:</p><p><code style='word-break: break-all;'>utm_medium=ppc&utm_source=adwords&utm_campaign=snow boots&utm_content=durable snow boots</code></p>
             </div>
-            <input id="utm-params" type="text" placeholder="utm_medium=ppc&utm_source=adwords&utm_campaign=snow%20boots&utm_content=durable%20%snow%boots" name="utm_additional_url_params" value="<?php echo $utmParams; ?>">
+            <input id="utm-params" type="text" placeholder="utm_medium=ppc&utm_source=adwords&utm_campaign=snow boots&utm_content=durable snow boots" name="utm_additional_url_params" value="<?php echo $utmParams; ?>">
         </div>
       </div>
 

@@ -36,9 +36,11 @@ function onesignal_create_notification($post, $notification_options = array())
 
     $url = get_permalink($post->ID);
     if (!empty($config_utm_additional_url_params)) {
-      // validate and encode the URL parameters
-      $params = urlencode($config_utm_additional_url_params);
-      $url = $url . (strpos($url, '?') === false ? '?' : '&') . $params;
+      $utm_params = onesignal_parse_utm_parameters($config_utm_additional_url_params);
+      if (!empty($utm_params)) {
+        $separator = (strpos($url, '?') === false) ? '?' : '&';
+        $url = $url . $separator . $utm_params;
+      }
     }
 
     $apiKeyType = onesignal_get_api_key_type();

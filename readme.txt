@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: push notification, push notifications, desktop notifications, mobile notifications, chrome push, android, android notification, android notifications, android push, desktop notification, firefox, firefox push, mobile, mobile notification, notification, notifications, notify, onesignal, push, push messages, safari, safari push, web push, chrome
 Requires at least: 3.8
 Tested up to: 6.8
-Stable tag: 3.5.1
+Stable tag: 3.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,12 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 [youtube https://www.youtube.com/watch?v=q1mH2kCK7LQ]
 
 == Changelog ==
+
+= 3.6.0 =
+- UTM fixes: Preserve reserved query string characters while properly encoding parameters according to RFC 3986
+- Added support for rich media notifications:
+  - Android: Added `big_picture` parameter for large image display
+  - iOS: Added `ios_attachments` parameter for media attachments
 
 = 3.5.1 =
 - add null check for navigator.serviceWorker when attempting to unregister

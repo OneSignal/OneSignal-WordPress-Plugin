@@ -103,6 +103,10 @@ function onesignal_create_notification($post, $notification_options = array())
         $fields['firefox_icon'] =  $thumbnail_size_url;
         $fields['chrome_web_icon'] =  $thumbnail_size_url;
         $fields['chrome_web_image'] = $large_size_url;
+        $fields['big_picture'] = $large_size_url;
+        $fields['ios_attachments'] = [
+            'id' => $large_size_url
+        ];
     }
 
     // Include any fields from onesignal_send_notification filter

@@ -192,26 +192,6 @@ function onesignal_handle_quick_edit_date_change($post_id, $post, $update)
                 // Clear the stored notification ID since we cancelled it
                 delete_post_meta($post_id, 'os_notification_id');
             }
-        } else {
-            $fields['url'] = $url;
-        }
-        // Set notification images based on the post's featured image
-        if (has_post_thumbnail($post->ID)) {
-            // Get the post thumbnail ID
-            $post_thumbnail_id = get_post_thumbnail_id($post->ID);
-
-            // Retrieve image URLs for different sizes
-            $thumbnail_size_url = wp_get_attachment_image_src($post_thumbnail_id, array(192, 192), true)[0];
-            $large_size_url = wp_get_attachment_image_src($post_thumbnail_id, 'large', true)[0];
-
-            // Assign image URLs to notification fields
-            $fields['firefox_icon'] =  $thumbnail_size_url;
-            $fields['chrome_web_icon'] =  $thumbnail_size_url;
-            $fields['chrome_web_image'] = $large_size_url;
-            $fields['big_picture'] = $large_size_url;
-            $fields['ios_attachments'] = [
-                'id' => $large_size_url
-            ];
         }
 
         // Update the stored publish date

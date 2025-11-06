@@ -4,7 +4,7 @@ defined('ABSPATH') or die('This page may not be accessed directly.');
 
 if (!OneSignalUtils::can_modify_plugin_settings()) {
   // Exit if the current user does not have permission
-  die('Insufficient permissions to access config page.');
+  die( esc_html__( 'Insufficient permissions to access config page.', 'onesignal-free-web-push-notifications' ) );
 }
 
 // The user is just viewing the config page; this page cannot be accessed directly
@@ -39,41 +39,42 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
   <div class="ui site onesignal container" id="content-container">
     <div class="ui menu">
       <span style="padding:0 20px 15px; color:#3A3DB2; font-weight:700;">
-          Migrate Settings to OneSignal.com<br><br>
-          <p style="font-size:1.15rem;font-weight:500">All OneSignal prompt configurations on this page are moving to OneSignal.com.</p>
-          <button type="button" class="ui medium teal button" onclick="window.open('https://documentation.onesignal.com/docs/wordpress','_blank');">Learn More</button>
+          <?php esc_html_e( 'Migrate Settings to OneSignal.com', 'onesignal-free-web-push-notifications' ); ?><br><br>
+          <p style="font-size:1.15rem;font-weight:500"><?php esc_html_e( 'All OneSignal prompt configurations on this page are moving to OneSignal.com.', 'onesignal-free-web-push-notifications' ); ?></p>
+          <button type="button" class="ui medium teal button" onclick="window.open('https://documentation.onesignal.com/docs/wordpress','_blank');"><?php esc_html_e( 'Learn More', 'onesignal-free-web-push-notifications' ); ?></button>
           <form method="post" action="" style="margin-bottom: 20px; margin-top: 20px;">
-            <p style="font-size:1.15rem;">Save your current settings to a txt file</p>
+            <p style="font-size:1.15rem;"><?php esc_html_e( 'Save your current settings to a txt file', 'onesignal-free-web-push-notifications' ); ?></p>
             <?php wp_nonce_field('onesignal_export_nonce'); ?>
             <input type="hidden" name="plugin_action" value="export_settings">
-            <button type="submit" class="ui medium button">Export Current Configuration</button>
+            <button type="submit" class="ui medium button"><?php esc_html_e( 'Export Current Configuration', 'onesignal-free-web-push-notifications' ); ?></button>
           </form>
-          <p style="font-size:1.15rem;">What do I have to do?</p>
-          <p style="font-size:1.15rem;font-weight:500">1. Open the <a href="https://dashboard.onesignal.com/" target="_blank">OneSignal.com dashboard</a></p>
-          <p style="font-size:1.15rem;font-weight:500">2. Go to your app Settings > Push & In-App > Web > Wordpress Plugin or Website Builder</p>
+          <p style="font-size:1.15rem;"><?php esc_html_e( 'What do I have to do?', 'onesignal-free-web-push-notifications' ); ?></p>
+          <?php /* translators: %1$s: opening anchor tag to OneSignal.com dashboard, %2$s: closing anchor tag */ ?>
+          <p style="font-size:1.15rem;font-weight:500"><?php echo sprintf( __( '1. Open the %1$sOneSignal.com dashboard%2$s', 'onesignal-free-web-push-notifications' ), '<a href="https://dashboard.onesignal.com/" target="_blank">', '</a>' ); ?></p>
+          <p style="font-size:1.15rem;font-weight:500"><?php esc_html_e( '2. Go to your app Settings > Push & In-App > Web > Wordpress Plugin or Website Builder', 'onesignal-free-web-push-notifications' ); ?></p>
           <span class="onesignal-error-notice">
-            ⚠️ <strong>IMPORTANT:</strong> Steps 3 and 4 must be completed consecutively and without delay to ensure uninterrupted functionality.
+            ⚠️ <strong><?php esc_html_e( 'IMPORTANT:', 'onesignal-free-web-push-notifications' ); ?></strong> <?php esc_html_e( 'Steps 3 and 4 must be completed consecutively and without delay to ensure uninterrupted functionality.', 'onesignal-free-web-push-notifications' ); ?>
           </span><br/><br/>
-          <p style="font-size:1.15rem;font-weight:500">3. Recreate the plugin settings from this screen on the OneSignal.com dashboard (e.g. configure prompt options, subscription bell, etc...). Click Save.</p>
-          <p style="font-size:1.15rem;font-weight:500">4. Click "Migration Completed", below as soon as you have saved your configuration in the OneSignal.com dashboard.</p>
+          <p style="font-size:1.15rem;font-weight:500"><?php esc_html_e( '3. Recreate the plugin settings from this screen on the OneSignal.com dashboard (e.g. configure prompt options, subscription bell, etc...). Click Save.', 'onesignal-free-web-push-notifications' ); ?></p>
+          <p style="font-size:1.15rem;font-weight:500"><?php esc_html_e( '4. Click "Migration Completed", below as soon as you have saved your configuration in the OneSignal.com dashboard.', 'onesignal-free-web-push-notifications' ); ?></p>
           <form method="post" action="" class="pull-right" id="onesignal-migration-form" style="margin: 10px;">
               <?php wp_nonce_field('onesignal_migration_nonce'); ?>
               <input type="hidden" name="plugin_action" value="complete_migration">
-              <button type="button" class="ui medium purple-button" id="confirm-migration-button">Migration Completed</button>
+              <button type="button" class="ui medium purple-button" id="confirm-migration-button"><?php esc_html_e( 'Migration Completed', 'onesignal-free-web-push-notifications' ); ?></button>
           </form>
           <!-- Modal -->
           <div id="migration-confirmation-modal" class="ui modal">
-              <div class="header">Confirm Migration</div>
+              <div class="header"><?php esc_html_e( 'Confirm Migration', 'onesignal-free-web-push-notifications' ); ?></div>
               <div class="content">
                 <span class="onesignal-error-notice">
-                  This action is irreversible.
+                  <?php esc_html_e( 'This action is irreversible.', 'onesignal-free-web-push-notifications' ); ?>
                 </span><br/><br/>
-                  <p>By confirming the migration, you confirm that you have configured your prompt settings on the OneSignal.com dashboard.</p>
-                  <p>Are you sure you want to mark the plugin as migrated?</p>
+                  <p><?php esc_html_e( 'By confirming the migration, you confirm that you have configured your prompt settings on the OneSignal.com dashboard.', 'onesignal-free-web-push-notifications' ); ?></p>
+                  <p><?php esc_html_e( 'Are you sure you want to mark the plugin as migrated?', 'onesignal-free-web-push-notifications' ); ?></p>
               </div>
               <div class="actions">
-                  <button class="ui cancel button">Cancel</button>
-                  <button class="ui approve button" id="confirm-migration-submit" style="background-color:#E54B4D">Confirm</button>
+                  <button class="ui cancel button"><?php esc_html_e( 'Cancel', 'onesignal-free-web-push-notifications' ); ?></button>
+                  <button class="ui approve button" id="confirm-migration-submit" style="background-color:#E54B4D"><?php esc_html_e( 'Confirm', 'onesignal-free-web-push-notifications' ); ?></button>
               </div>
           </div>
 
@@ -81,8 +82,8 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
       </div>
       <div class="ui menu">
         <span style="padding-bottom:15px; padding-left:20px; color:#E54B4D; font-weight:700;">
-          ⭐ Appreciate OneSignal?
-          <a style="margin-left:15px;" href="https://wordpress.org/support/plugin/onesignal-free-web-push-notifications/reviews/#new-post" target="_blank">Leave us a review →	</a>
+          ⭐ <?php esc_html_e( 'Appreciate OneSignal?', 'onesignal-free-web-push-notifications' ); ?>
+          <a style="margin-left:15px;" href="https://wordpress.org/support/plugin/onesignal-free-web-push-notifications/reviews/#new-post" target="_blank"><?php esc_html_e( 'Leave us a review →', 'onesignal-free-web-push-notifications' ); ?></a>
         </span>
       </div>
   </div>
@@ -95,19 +96,19 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
         <div class="ui dividing header">
           <i class="setting icon"></i>
           <div class="content">
-            Account Settings
+            <?php esc_html_e( 'Account Settings', 'onesignal-free-web-push-notifications' ); ?>
           </div>
         </div>
         <div class="ui borderless shadowless segment">
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="is_site_https" <?php if ($onesignal_wp_settings['is_site_https_firsttime'] === 'unset') { echo "data-unset=\"true\""; }  if ($onesignal_wp_settings['is_site_https']) { echo "checked"; }  ?>>
-              <label>My site uses an HTTPS connection (SSL)<i class="tiny circular help icon link" role="popup" data-html="<p>Check this if your site uses HTTPS:</p><img src='<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/https-url.png") ?>' width=619>" data-variation="flowing"></i></label>
+              <label><?php esc_html_e( 'My site uses an HTTPS connection (SSL)', 'onesignal-free-web-push-notifications' ); ?><i class="tiny circular help icon link" role="popup" data-html="<p><?php esc_attr_e( 'Check this if your site uses HTTPS:', 'onesignal-free-web-push-notifications' ); ?></p><img src='<?php echo esc_url(ONESIGNAL_PLUGIN_URL."views/images/settings/https-url.png") ?>' width=619>" data-variation="flowing"></i></label>
             </div>
           </div>
           <div class="ui inline subdomain-http nag">
             <span class="title">
-              This option is disabled when your current URL begins with <code>http://</code>. Please access this page using <code>https://</code> to enable this option.
+              <?php echo wp_kses_post( __( 'This option is disabled when your current URL begins with <code>http://</code>. Please access this page using <code>https://</code> to enable this option.', 'onesignal-free-web-push-notifications' ) ); ?>
             </span>
             <i class="close icon"></i>
           </div>
@@ -119,46 +120,47 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
                      (OneSignalUtils::url_contains_parameter(ONESIGNAL_URI_REVEAL_PROJECT_NUMBER))
                    ): ?>
           <div class="field">
-            <label>Google Project Number<i class="tiny circular help icon link" role="popup" data-title="Google Project Number" data-content="Your Google Project Number. Do NOT change this as it can cause all existing subscribers to become unreachable." data-variation="wide"></i></label>
-            <p class="hidden danger-label" data-target="[name=gcm_sender_id]">WARNING: Changing this causes all existing subscribers to become unreachable. Please do not change unless instructed to do so!</p>
+            <label><?php esc_html_e( 'Google Project Number', 'onesignal-free-web-push-notifications' ); ?><i class="tiny circular help icon link" role="popup" data-title="<?php esc_attr_e( 'Google Project Number', 'onesignal-free-web-push-notifications' ); ?>" data-content="<?php esc_attr_e( 'Your Google Project Number. Do NOT change this as it can cause all existing subscribers to become unreachable.', 'onesignal-free-web-push-notifications' ); ?>" data-variation="wide"></i></label>
+            <p class="hidden danger-label" data-target="[name=gcm_sender_id]"><?php esc_html_e( 'WARNING: Changing this causes all existing subscribers to become unreachable. Please do not change unless instructed to do so!', 'onesignal-free-web-push-notifications' ); ?></p>
             <input type="text" name="gcm_sender_id" placeholder="#############" value="<?php echo esc_attr($onesignal_wp_settings['gcm_sender_id']); ?>">
           </div>
           <?php endif; ?>
           <div class="field">
-            <label>App ID<i class="tiny circular help icon link" role="popup" data-title="App ID" data-content="Your 36 character alphanumeric app ID. You can find this in App Settings > Keys & IDs." data-variation="wide"></i></label>
+            <label><?php esc_html_e( 'App ID', 'onesignal-free-web-push-notifications' ); ?><i class="tiny circular help icon link" role="popup" data-title="<?php esc_attr_e( 'App ID', 'onesignal-free-web-push-notifications' ); ?>" data-content="<?php esc_attr_e( 'Your 36 character alphanumeric app ID. You can find this in App Settings > Keys & IDs.', 'onesignal-free-web-push-notifications' ); ?>" data-variation="wide"></i></label>
             <input type="text" name="app_id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx" value="<?php echo esc_attr($onesignal_wp_settings['app_id']); ?>">
           </div>
           <div class="field">
-            <label>REST API Key<i class="tiny circular help icon link" role="popup" data-title="Rest API Key" data-content="Your 48 character alphanumeric REST API Key. You can find this in App Settings > Keys & IDs." data-variation="wide"></i></label>
+            <label><?php esc_html_e( 'REST API Key', 'onesignal-free-web-push-notifications' ); ?><i class="tiny circular help icon link" role="popup" data-title="<?php esc_attr_e( 'Rest API Key', 'onesignal-free-web-push-notifications' ); ?>" data-content="<?php esc_attr_e( 'Your 48 character alphanumeric REST API Key. You can find this in App Settings > Keys & IDs.', 'onesignal-free-web-push-notifications' ); ?>" data-variation="wide"></i></label>
             <input type="text" name="app_rest_api_key" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value="<?php echo esc_attr(OneSignal::maskedRestApiKey($onesignal_wp_settings['app_rest_api_key'])); ?>">
           </div>
           <div class="field subdomain-feature">
-            <label>OneSignal Label<i class="tiny circular help icon link" role="popup" data-title="Subdomain" data-content="The label you chose for your site. You can find this in Step 2. Wordpress Site Setup" data-variation="wide"></i></label>
+            <label><?php esc_html_e( 'OneSignal Label', 'onesignal-free-web-push-notifications' ); ?><i class="tiny circular help icon link" role="popup" data-title="<?php esc_attr_e( 'Subdomain', 'onesignal-free-web-push-notifications' ); ?>" data-content="<?php esc_attr_e( 'The label you chose for your site. You can find this in Step 2. Wordpress Site Setup', 'onesignal-free-web-push-notifications' ); ?>" data-variation="wide"></i></label>
             <input type="text" name="subdomain" placeholder="example" value="<?php echo esc_attr($onesignal_wp_settings['subdomain']); ?>">
-            <div class="callout info">Once your site is public, <strong>do not change your label</strong>. If you do, users will receive duplicate notifications.</div>
+            <div class="callout info"><?php echo wp_kses_post( __( 'Once your site is public, <strong>do not change your label</strong>. If you do, users will receive duplicate notifications.', 'onesignal-free-web-push-notifications' ) ); ?></div>
           </div>
           <div class="field">
-            <label>Safari Web ID<i class="tiny circular help icon link" role="popup" data-title="Safari Web ID" data-content="Your Safari Web ID. You can find this on Setup > Safari Push > Step 5." data-variation="wide"></i></label>
+            <label><?php esc_html_e( 'Safari Web ID', 'onesignal-free-web-push-notifications' ); ?><i class="tiny circular help icon link" role="popup" data-title="<?php esc_attr_e( 'Safari Web ID', 'onesignal-free-web-push-notifications' ); ?>" data-content="<?php esc_attr_e( 'Your Safari Web ID. You can find this on Setup > Safari Push > Step 5.', 'onesignal-free-web-push-notifications' ); ?>" data-variation="wide"></i></label>
             <input type="text" name="safari_web_id" placeholder="web.com.example" value="<?php echo esc_attr($onesignal_wp_settings['safari_web_id']); ?>">
           </div>
         </div>
         <div class="ui dividing header">
           <i class="desktop icon"></i>
           <div class="content">
-            Sent Notification Settings
+            <?php esc_html_e( 'Sent Notification Settings', 'onesignal-free-web-push-notifications' ); ?>
           </div>
         </div>
         <div class="ui borderless shadowless segment">
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="showNotificationIconFromPostThumbnail" value="true" <?php if ($onesignal_wp_settings['showNotificationIconFromPostThumbnail']) { echo "checked"; } ?>>
-              <label>Use the post's featured image for the notification icon<i class="tiny circular help icon link" role="popup" data-title="Use post featured image for notification icon" data-content="If checked, use the post's featured image in the notification icon (small icon).  Chrome and Firefox Desktop supported." data-variation="wide"></i></label>
+              <label><?php esc_html_e( "Use the post's featured image for the notification icon", 'onesignal-free-web-push-notifications' ); ?><i class="tiny circular help icon link" role="popup" data-title="<?php esc_attr_e( 'Use post featured image for notification icon', 'onesignal-free-web-push-notifications' ); ?>" data-content="<?php esc_attr_e( "If checked, use the post's featured image in the notification icon (small icon).  Chrome and Firefox Desktop supported.", 'onesignal-free-web-push-notifications' ); ?>" data-variation="wide"></i></label>
             </div>
           </div>
           <div class="field">
             <div class="ui toggle checkbox">
               <input type="checkbox" name="showNotificationImageFromPostThumbnail" value="true" <?php if ($onesignal_wp_settings['showNotificationImageFromPostThumbnail']) { echo "checked"; } ?>>
-              <label>Use the post's featured image for Chrome's large notification image<i class="tiny circular help icon link" role="popup" data-title="Use post featured image for notification image (Chrome only)" data-html="<p>If checked, use the post's featured image in the notification large image (Chrome only). See <a target='docs' href='https://documentation.onesignal.com/docs/web-push-notification-icons#section-image'>our documentation on web push images</a>.</p>" data-variation="wide"></i></label>
+              <?php /* translators: %1$s: opening anchor tag to OneSignal documentation on web push images, %2$s: closing anchor tag */ ?>
+              <label><?php esc_html_e( "Use the post's featured image for Chrome's large notification image", 'onesignal-free-web-push-notifications' ); ?><i class="tiny circular help icon link" role="popup" data-title="<?php esc_attr_e( 'Use post featured image for notification image (Chrome only)', 'onesignal-free-web-push-notifications' ); ?>" data-html="<p><?php echo esc_attr( sprintf( __( "If checked, use the post's featured image in the notification large image (Chrome only). See %1$sour documentation on web push images%2$s.", 'onesignal-free-web-push-notifications' ), "<a target='docs' href='https://documentation.onesignal.com/docs/web-push-notification-icons#section-image'>", '</a>' ) ); ?></p>" data-variation="wide"></i></label>
             </div>
           </div>
           <div class="field">
@@ -191,7 +193,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
                         $onesignal_wp_settings['persist_notifications'] === "platform-default")) {
                           echo "selected";
                     }
-                  ?>>Yes
+                  ?>><?php esc_html_e( 'Yes', 'onesignal-free-web-push-notifications' ); ?>
               </option>
               <option
                 value="yes-except-notification-manager-platforms"
@@ -200,7 +202,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
                         $onesignal_wp_settings['persist_notifications'] === "yes-except-notification-manager-platforms")) {
                           echo "selected";
                     }
-                  ?>>Yes on Mac OS X. No on other platforms.
+                  ?>><?php esc_html_e( 'Yes on Mac OS X. No on other platforms.', 'onesignal-free-web-push-notifications' ); ?>
               </option>
               <option
                 value="yes-all"
@@ -209,7 +211,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
                         $onesignal_wp_settings['persist_notifications'] === "yes-all")) {
                           echo "selected";
                     }
-                  ?>>No
+                  ?>><?php esc_html_e( 'No', 'onesignal-free-web-push-notifications' ); ?>
               </option>
             </select>
           </div>
@@ -227,7 +229,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
         <div class="ui dividing header">
           <i class="alarm outline icon"></i>
           <div class="content">
-            Prompt Settings & Subscription Bell
+            <?php esc_html_e( 'Prompt Settings & Subscription Bell', 'onesignal-free-web-push-notifications' ); ?>
           </div>
         </div>
         <div class="ui borderless shadowless segment">
@@ -450,7 +452,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           <div class="ui dividing header">
             <i class="external icon"></i>
             <div class="content">
-              Prompt Customization
+            <?php esc_html_e( 'Prompt Customization', 'onesignal-free-web-push-notifications' ); ?>
             </div>
           </div>
           <div style="display:flex; flex-wrap: wrap; align-items: center;">
@@ -510,7 +512,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
         <div class="ui dividing header">
           <i class="birthday outline icon"></i>
           <div class="content">
-            Welcome Notification Settings
+            <?php esc_html_e( 'Welcome Notification Settings', 'onesignal-free-web-push-notifications' ); ?>
           </div>
         </div>
         <div class="ui borderless shadowless segment" style="position: relative;">
@@ -540,7 +542,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
         <div class="ui dividing header">
           <i class="wizard icon"></i>
           <div class="content">
-            Automatic Notification Settings
+            <?php esc_html_e( 'Automatic Notification Settings', 'onesignal-free-web-push-notifications' ); ?>
           </div>
         </div>
         <div class="ui borderless shadowless segment">
@@ -560,7 +562,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
         <div class="ui dividing header">
           <i class="area chart icon"></i>
           <div class="content">
-            UTM Tracking Settings
+            <?php esc_html_e( 'UTM Tracking Settings', 'onesignal-free-web-push-notifications' ); ?>
           </div>
         </div>
         <div class="ui borderless shadowless segment">
@@ -572,7 +574,7 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
         <div class="ui dividing header">
           <i class="lab icon"></i>
           <div class="content">
-            Advanced Settings
+            <?php esc_html_e( 'Advanced Settings', 'onesignal-free-web-push-notifications' ); ?>
           </div>
         </div>
         <div class="ui borderless shadowless segment">
@@ -608,10 +610,10 @@ $onesignal_wp_settings = OneSignal::get_onesignal_settings();
           </div>
         </div>
     </div>
-    <button class="ui large teal button" type="submit">Save</button>
+    <button class="ui large teal button" type="submit"><?php esc_html_e( 'Save', 'onesignal-free-web-push-notifications' ); ?></button>
     <div class="ui inline validation nag">
         <span class="title">
-          Your OneSignal subdomain cannot be empty or less than 4 characters. Use the same one you entered on the platform settings at onesignal.com.
+          <?php esc_html_e( 'Your OneSignal subdomain cannot be empty or less than 4 characters. Use the same one you entered on the platform settings at onesignal.com.', 'onesignal-free-web-push-notifications' ); ?>
         </span>
       <i class="close icon"></i>
     </div>

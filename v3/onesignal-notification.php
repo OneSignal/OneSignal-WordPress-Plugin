@@ -201,6 +201,16 @@ function onesignal_handle_quick_edit_date_change($post_id, $post, $update)
         // Update the stored publish date
         update_post_meta($post_id, 'os_previous_publish_date', $current_publish_date);
 
+        // Honor the "Send notification when post is published" preference.
+        $should_send = !empty($_POST['os_update']);
+        if (!$should_send) {
+            $os_meta = get_post_meta($post_id, 'os_meta', true);
+            $should_send = !empty($os_meta['os_update']);
+        }
+        if (!$should_send) {
+            return;
+        }
+
         // Create a new notification with default options (no custom title/content from metabox)
         // This will use the post title and default settings
         onesignal_create_notification($post);

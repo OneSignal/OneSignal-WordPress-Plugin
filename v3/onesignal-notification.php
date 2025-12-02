@@ -137,21 +137,49 @@ function onesignal_create_notification($post, $notification_options = array())
 function onesignal_schedule_notification($new_status, $old_status, $post)
 {
     if (($new_status === 'publish') || ($new_status === 'future')) {
-        // check if update is on.
-        $update = !empty($_POST['os_update']) ? $_POST['os_update'] : $post->os_update;
-        
-        // do not send notification if not enabled
+        $update = null;
+        $notification_options = array();
+
+        // Check if this is a direct user submission with POST data
+        if (!empty($_POST) && isset($_POST['onesignal_v3_metabox_nonce'])) {
+            // Verify nonce for user-initiated posts
+            if (!wp_verify_nonce($_POST['onesignal_v3_metabox_nonce'], 'onesignal_v3_metabox_save')) {
+                return; // Invalid nonce, abort
+            }
+
+            // Verify capability
+            if (!current_user_can('edit_post', $post->ID)) {
+                return; // Insufficient permissions, abort
+            }
+
+            // Use POST data for user-initiated publishes
+            $update = !empty($_POST['os_update']) ? $_POST['os_update'] : null;
+            $notification_options = array(
+                'title' => !empty($_POST['os_title']) ? sanitize_text_field($_POST['os_title']) : null,
+                'content' => !empty($_POST['os_content']) ? sanitize_text_field($_POST['os_content']) : null,
+                'segment' => isset($_POST['os_segment']) ? sanitize_text_field($_POST['os_segment']) : 'All',
+                'mobile_url' => isset($_POST['os_mobile_url']) ? sanitize_url($_POST['os_mobile_url']) : ''
+            );
+        } else {
+            // Scheduled posts, REST API, or plugin-triggered posts
+            // Load from saved metadata (no nonce required)
+            $os_meta = get_post_meta($post->ID, 'os_meta', true);
+            $update = !empty($os_meta['os_update']) ? $os_meta['os_update'] : null;
+
+            if (is_array($os_meta)) {
+                $notification_options = array(
+                    'title' => isset($os_meta['os_title']) ? $os_meta['os_title'] : null,
+                    'content' => isset($os_meta['os_content']) ? $os_meta['os_content'] : null,
+                    'segment' => isset($os_meta['os_segment']) ? $os_meta['os_segment'] : 'All',
+                    'mobile_url' => isset($os_meta['os_mobile_url']) ? $os_meta['os_mobile_url'] : ''
+                );
+            }
+        }
+
+        // Do not send notification if not enabled
         if (empty($update)) {
             return;
         }
-
-        // Prepare notification options from POST data
-        $notification_options = array(
-            'title' => !empty($_POST['os_title']) ? sanitize_text_field($_POST['os_title']) : null,
-            'content' => !empty($_POST['os_content']) ? sanitize_text_field($_POST['os_content']) : null,
-            'segment' => $_POST['os_segment'] ?? 'All',
-            'mobile_url' => $_POST['os_mobile_url'] ?? ''
-        );
 
         // Call the core notification function
         onesignal_create_notification($post, $notification_options);
@@ -161,6 +189,11 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
 // Function to handle quick-edit publish date changes
 function onesignal_handle_quick_edit_date_change($post_id, $post, $update)
 {
+    // Check user capability to edit this post
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
     // Check if this is an autosave, revision, or not an update
     if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id) || !$update) {
         return;
@@ -202,11 +235,21 @@ function onesignal_handle_quick_edit_date_change($post_id, $post, $update)
         update_post_meta($post_id, 'os_previous_publish_date', $current_publish_date);
 
         // Honor the "Send notification when post is published" preference.
-        $should_send = !empty($_POST['os_update']);
+        $should_send = false;
+
+        // Check POST data with nonce verification
+        if (!empty($_POST) && isset($_POST['onesignal_v3_metabox_nonce'])) {
+            if (wp_verify_nonce($_POST['onesignal_v3_metabox_nonce'], 'onesignal_v3_metabox_save')) {
+                $should_send = !empty($_POST['os_update']);
+            }
+        }
+
+        // Fallback to saved metadata if no POST data or failed nonce
         if (!$should_send) {
             $os_meta = get_post_meta($post_id, 'os_meta', true);
             $should_send = !empty($os_meta['os_update']);
         }
+
         if (!$should_send) {
             return;
         }

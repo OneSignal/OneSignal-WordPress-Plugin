@@ -26,57 +26,80 @@ function admin_files()
   wp_enqueue_style('style', plugins_url('onesignal-admin.css', __FILE__), array(), $cache_buster);
 }
 
-if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (isset($_POST["submit"]) && $_POST["submit"] === "Save Settings") {
-    // Get existing settings with default values
-    $onesignal_settings = get_option('OneSignalWPSetting', onesignal_get_default_settings());
+// Hook settings save handler to admin_init
+add_action('admin_init', 'onesignal_handle_settings_save');
 
-    if (isset($_POST['onesignal_app_id']) && !empty($_POST['onesignal_app_id'])) {
-        $onesignal_settings['app_id'] = sanitize_text_field($_POST['onesignal_app_id']);
-    }
-
-    if (isset($_POST['onesignal_rest_api_key']) && !empty($_POST['onesignal_rest_api_key'])) {
-        $onesignal_settings['app_rest_api_key'] = sanitize_text_field($_POST['onesignal_rest_api_key']);
-    }
-
-    if (isset($_POST['utm_additional_url_params'])) {
-        $onesignal_settings['utm_additional_url_params'] = sanitize_text_field($_POST['utm_additional_url_params']);
-    }
-
-    if (isset($_POST['allowed_custom_post_types'])) {
-        $onesignal_settings['allowed_custom_post_types'] = sanitize_text_field($_POST['allowed_custom_post_types']);
-    }
-
-    // Save the auto send notifications setting for posts
-    $auto_send = isset($_POST['onesignal_auto_send']) ? 1 : 0;
-    $onesignal_settings['notification_on_post'] = $auto_send;
-
-    // Save the auto send notifications setting for pages
-    $auto_send_pages = isset($_POST['onesignal_auto_send_pages']) ? 1 : 0;
-    $onesignal_settings['notification_on_page'] = $auto_send_pages;
-
-    // Save the notification on post from plugin setting
-    $notification_on_post_from_plugin = isset($_POST['notification_on_post_from_plugin']) ? 1 : 0;
-    $onesignal_settings['notification_on_post_from_plugin'] = $notification_on_post_from_plugin;
-
-    // Save the mobile subscribers setting
-    $send_to_mobile = isset($_POST['onesignal_send_to_mobile']) ? 1 : 0;
-    $onesignal_settings['send_to_mobile_platforms'] = $send_to_mobile;
-
-    // Save the auto send notifications setting for post updates
-    $auto_send_post_update = isset($_POST['onesignal_auto_send_post_update']) ? 1 : 0;
-    $onesignal_settings['notification_on_post_update'] = $auto_send_post_update;
-
-    // Save the auto send notifications setting for page updates
-    $auto_send_page_update = isset($_POST['onesignal_auto_send_page_update']) ? 1 : 0;
-    $onesignal_settings['notification_on_page_update'] = $auto_send_page_update;
-
-    // Update with autoload set to 'no' to prevent caching issues
-    update_option('OneSignalWPSetting', $onesignal_settings, 'no');
-
-    // Force refresh the settings in cache
-    wp_cache_delete('OneSignalWPSetting', 'options');
+function onesignal_handle_settings_save() {
+  // Only process POST requests
+  if (!isset($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+    return;
   }
+
+  // Only process when submit button is clicked
+  if (!isset($_POST["submit"]) || $_POST["submit"] !== "Save Settings") {
+    return;
+  }
+
+  // Verify nonce - dies on failure with error message
+  check_admin_referer('onesignal_v3_save_settings', 'onesignal_v3_settings_nonce');
+
+  // Verify user capability
+  if (!current_user_can('manage_options')) {
+    wp_die(
+      __('You do not have sufficient permissions to access this page.', 'onesignal'),
+      __('Permission Denied', 'onesignal'),
+      array('response' => 403)
+    );
+  }
+
+  // Get existing settings with default values
+  $onesignal_settings = get_option('OneSignalWPSetting', onesignal_get_default_settings());
+
+  if (isset($_POST['onesignal_app_id']) && !empty($_POST['onesignal_app_id'])) {
+      $onesignal_settings['app_id'] = sanitize_text_field($_POST['onesignal_app_id']);
+  }
+
+  if (isset($_POST['onesignal_rest_api_key']) && !empty($_POST['onesignal_rest_api_key'])) {
+      $onesignal_settings['app_rest_api_key'] = sanitize_text_field($_POST['onesignal_rest_api_key']);
+  }
+
+  if (isset($_POST['utm_additional_url_params'])) {
+      $onesignal_settings['utm_additional_url_params'] = sanitize_text_field($_POST['utm_additional_url_params']);
+  }
+
+  if (isset($_POST['allowed_custom_post_types'])) {
+      $onesignal_settings['allowed_custom_post_types'] = sanitize_text_field($_POST['allowed_custom_post_types']);
+  }
+
+  // Save the auto send notifications setting for posts
+  $auto_send = isset($_POST['onesignal_auto_send']) ? 1 : 0;
+  $onesignal_settings['notification_on_post'] = $auto_send;
+
+  // Save the auto send notifications setting for pages
+  $auto_send_pages = isset($_POST['onesignal_auto_send_pages']) ? 1 : 0;
+  $onesignal_settings['notification_on_page'] = $auto_send_pages;
+
+  // Save the notification on post from plugin setting
+  $notification_on_post_from_plugin = isset($_POST['notification_on_post_from_plugin']) ? 1 : 0;
+  $onesignal_settings['notification_on_post_from_plugin'] = $notification_on_post_from_plugin;
+
+  // Save the mobile subscribers setting
+  $send_to_mobile = isset($_POST['onesignal_send_to_mobile']) ? 1 : 0;
+  $onesignal_settings['send_to_mobile_platforms'] = $send_to_mobile;
+
+  // Save the auto send notifications setting for post updates
+  $auto_send_post_update = isset($_POST['onesignal_auto_send_post_update']) ? 1 : 0;
+  $onesignal_settings['notification_on_post_update'] = $auto_send_post_update;
+
+  // Save the auto send notifications setting for page updates
+  $auto_send_page_update = isset($_POST['onesignal_auto_send_page_update']) ? 1 : 0;
+  $onesignal_settings['notification_on_page_update'] = $auto_send_page_update;
+
+  // Update with autoload set to 'no' to prevent caching issues
+  update_option('OneSignalWPSetting', $onesignal_settings, 'no');
+
+  // Force refresh the settings in cache
+  wp_cache_delete('OneSignalWPSetting', 'options');
 }
 
 // Add this function near the top of the file
@@ -114,6 +137,7 @@ function onesignal_admin_page()
     }
     ?>
     <form method="post">
+      <?php wp_nonce_field('onesignal_v3_save_settings', 'onesignal_v3_settings_nonce'); ?>
       <label for="appid">OneSignal App ID</label>
       <div class="input-with-icon">
         <input type="text" id="appid" name="onesignal_app_id"

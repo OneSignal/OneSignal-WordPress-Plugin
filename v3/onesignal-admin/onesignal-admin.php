@@ -35,6 +35,10 @@ function onesignal_handle_settings_save() {
     return;
   }
 
+  if (!isset($_GET['page']) || $_GET['page'] !== 'onesignal-admin-page.php') {
+    return;
+  }
+
   // Only process when submit button is clicked
   if (!isset($_POST["submit"]) || $_POST["submit"] !== "Save Settings") {
     return;

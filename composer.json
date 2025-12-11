@@ -11,7 +11,7 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/"
+            "tests/unit"
         ]
     },
     "scripts": {

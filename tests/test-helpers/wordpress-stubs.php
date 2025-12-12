@@ -58,11 +58,6 @@ function strip_shortcodes($content) {
     return preg_replace('/\[.*?\]/', '', $content);
 }
 
-function wp_remote_request($url, $args = array()) {
-    // This will be mocked in tests that need it
-    return array();
-}
-
 function wp_remote_retrieve_response_code($response) {
     return $response['response']['code'] ?? 0;
 }

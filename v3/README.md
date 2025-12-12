@@ -10,3 +10,8 @@ OneSignal WordPress Plugin - v3.0.0
 - 🧑‍🤝‍🧑 Choose which [Segment](https://documentation.onesignal.com/docs/segmentation) should recieve notifications for each post.
 - 📑 [Web Topics](https://documentation.onesignal.com/docs/web-push-topic-collapsing) included by default.
 - 📲 Send to mobile app subscribers, with an option to direct them to a different URL ([Deep Link](https://documentation.onesignal.com/docs/links#deep-linking)).
+
+## Running Tests
+
+- Install dependencies: `composer install`
+- Unit tests: `./vendor/bin/phpunit --testsuite unit --testdox`

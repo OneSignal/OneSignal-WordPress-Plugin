@@ -3,6 +3,13 @@ onesignal-free-web-push-notifications.zip
 views/images/settings/ParseToOneSignal.png
 .vscode/
 
+# Composer dependencies
+/vendor/
+composer.lock
+
+# PHPUnit
+.phpunit.result.cache
+
 .map
 **/*.map
 onesignal-free-push-notifications.zip

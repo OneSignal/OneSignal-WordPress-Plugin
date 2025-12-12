@@ -3,32 +3,158 @@
  * Integration tests for OneSignal API integration with mocked HTTP responses
  */
 
-use PHPUnit\Framework\TestCase;
+use WP_Mock\Tools\TestCase;
 use Yoast\PHPUnitPolyfills\Polyfills\AssertionRenames;
 
 class Test_OneSignal_API_Integration extends TestCase {
     use AssertionRenames;
 
     /**
-     * Reset global state before each test
+     * Override setUpContentFiltering to fix PHPUnit 9.6 compatibility issue
      */
-    protected function setUp(): void {
-        parent::setUp();
-        reset_wordpress_state();
+    protected function setUpContentFiltering() {
+        return;
+    }
 
-        // Set up basic OneSignal settings with all required keys
-        update_option('OneSignalWPSetting', array(
-            'app_id' => 'test-app-id',
-            'app_rest_api_key' => 'test-api-key',
-            'send_to_mobile_platforms' => 0,
-            'notification_on_post' => 1
-        ));
+    /**
+     * Set up WP_Mock and common WordPress function mocks before each test
+     */
+    public function setUp(): void {
+        parent::setUp();
+        
+        global $wp_http_requests_mock, $wp_post_meta, $test_get_option_overrides;
+        $wp_http_requests_mock = array();
+        $wp_post_meta = array();
+        $test_get_option_overrides = array();
+
+        // Set up get_option with support for test-specific overrides
+        WP_Mock::userFunction('get_option')
+            ->andReturnUsing(function($option, $default = false) use (&$test_get_option_overrides) {
+                // Check for test-specific override first
+                if (isset($test_get_option_overrides[$option])) {
+                    return $test_get_option_overrides[$option];
+                }
+                // Default settings for OneSignalWPSetting
+                if ($option === 'OneSignalWPSetting') {
+                    return array(
+                        'app_id' => 'test-app-id',
+                        'app_rest_api_key' => 'test-api-key',
+                        'send_to_mobile_platforms' => 0,
+                        'notification_on_post' => 1
+                    );
+                }
+                return $default;
+            });
+
+        // Mock common WordPress functions
+        WP_Mock::userFunction('get_permalink')
+            ->andReturnUsing(function($post_id) {
+                return 'https://example.com/post/' . $post_id;
+            });
+
+        WP_Mock::userFunction('get_bloginfo')
+            ->with('name')
+            ->andReturn('Test Blog');
+
+        WP_Mock::userFunction('has_post_thumbnail')
+            ->andReturn(false);
+
+        WP_Mock::userFunction('get_post_meta')
+            ->andReturnUsing(function($post_id, $key, $single) {
+                global $wp_post_meta;
+                if (!isset($wp_post_meta[$post_id][$key])) {
+                    return $single ? '' : array();
+                }
+                return $single ? $wp_post_meta[$post_id][$key] : array($wp_post_meta[$post_id][$key]);
+            });
+
+        WP_Mock::userFunction('update_post_meta')
+            ->andReturnUsing(function($post_id, $meta_key, $meta_value) {
+                global $wp_post_meta;
+                $wp_post_meta[$post_id][$meta_key] = $meta_value;
+                return true;
+            });
+
+        WP_Mock::userFunction('sanitize_text_field')
+            ->andReturnUsing(function($str) {
+                return trim(strip_tags($str));
+            });
+
+        // Mock HTTP functions using the global mock array
+        WP_Mock::userFunction('wp_remote_post')
+            ->andReturnUsing(function($url, $args) {
+                global $wp_http_requests_mock;
+                if (isset($wp_http_requests_mock[$url])) {
+                    return $wp_http_requests_mock[$url];
+                }
+                return array(
+                    'response' => array('code' => 200),
+                    'body' => json_encode(array('id' => 'test-notification-id'))
+                );
+            });
+
+        WP_Mock::userFunction('wp_remote_request')
+            ->andReturnUsing(function($url, $args) {
+                global $wp_http_requests_mock;
+                if (isset($wp_http_requests_mock[$url])) {
+                    return $wp_http_requests_mock[$url];
+                }
+                return array(
+                    'response' => array('code' => 200),
+                    'body' => json_encode(array('success' => true))
+                );
+            });
+
+        WP_Mock::userFunction('wp_remote_retrieve_response_code')
+            ->andReturnUsing(function($response) {
+                return $response['response']['code'] ?? 0;
+            });
+
+        WP_Mock::userFunction('wp_remote_retrieve_body')
+            ->andReturnUsing(function($response) {
+                return $response['body'] ?? '';
+            });
+
+        WP_Mock::userFunction('is_wp_error')
+            ->andReturnUsing(function($thing) {
+                return ($thing instanceof WP_Error);
+            });
+
+        // Mock WordPress hook functions
+        WP_Mock::userFunction('has_filter')
+            ->andReturnUsing(function($tag, $function_to_check = false) {
+                global $wp_filters;
+                if (!isset($wp_filters[$tag])) {
+                    return false;
+                }
+                if ($function_to_check === false) {
+                    return true;
+                }
+                foreach ($wp_filters[$tag] as $priority => $functions) {
+                    foreach ($functions as $function_data) {
+                        if ($function_data['function'] === $function_to_check) {
+                            return $priority;
+                        }
+                    }
+                }
+                return false;
+            });
     }
 
     /**
      * Test successful API notification creation
      */
     public function test_successful_notification_creation() {
+        // Ensure get_option returns the default settings
+        WP_Mock::userFunction('get_option')
+            ->with('OneSignalWPSetting')
+            ->andReturn(array(
+                'app_id' => 'test-app-id',
+                'app_rest_api_key' => 'test-api-key',
+                'send_to_mobile_platforms' => 0,
+                'notification_on_post' => 1
+            ));
+
         // Mock successful API response
         mock_http_request('https://onesignal.com/api/v1/notifications', array(
             'response' => array('code' => 200),
@@ -187,23 +313,30 @@ class Test_OneSignal_API_Integration extends TestCase {
      * Test Rich API key authorization header
      */
     public function test_rich_api_key_authorization() {
-        update_option('OneSignalWPSetting', array(
+        // Set test-specific override for get_option
+        global $test_get_option_overrides;
+        $test_get_option_overrides['OneSignalWPSetting'] = array(
             'app_id' => 'test-app-id',
             'app_rest_api_key' => 'os_v2_rich_key_123'
-        ));
+        );
 
         $api_key_type = onesignal_get_api_key_type();
         $this->assertSame('Rich', $api_key_type);
+        
+        // Clean up
+        unset($test_get_option_overrides['OneSignalWPSetting']);
     }
 
     /**
      * Test Legacy API key authorization header
      */
     public function test_legacy_api_key_authorization() {
-        update_option('OneSignalWPSetting', array(
-            'app_id' => 'test-app-id',
-            'app_rest_api_key' => 'legacy_key_456'
-        ));
+        WP_Mock::userFunction('get_option')
+            ->with('OneSignalWPSetting')
+            ->andReturn(array(
+                'app_id' => 'test-app-id',
+                'app_rest_api_key' => 'legacy_key_456'
+            ));
 
         $api_key_type = onesignal_get_api_key_type();
         $this->assertSame('Legacy', $api_key_type);
@@ -216,6 +349,16 @@ class Test_OneSignal_API_Integration extends TestCase {
         $post_id = 500;
         $old_notification_id = 'old-notification-789';
         $new_notification_id = 'new-notification-abc';
+
+        // Mock get_option for this test
+        WP_Mock::userFunction('get_option')
+            ->with('OneSignalWPSetting')
+            ->andReturn(array(
+                'app_id' => 'test-app-id',
+                'app_rest_api_key' => 'test-api-key',
+                'send_to_mobile_platforms' => 0,
+                'notification_on_post' => 1
+            ));
 
         // Save an existing notification ID
         onesignal_save_notification_id($post_id, $old_notification_id);
@@ -256,12 +399,14 @@ class Test_OneSignal_API_Integration extends TestCase {
      * Test notification with UTM parameters
      */
     public function test_notification_with_utm_parameters() {
-        update_option('OneSignalWPSetting', array(
-            'app_id' => 'test-app-id',
-            'app_rest_api_key' => 'test-key',
-            'utm_additional_url_params' => 'utm_source=wordpress&utm_medium=push&utm_campaign=test',
-            'send_to_mobile_platforms' => 0
-        ));
+        WP_Mock::userFunction('get_option')
+            ->with('OneSignalWPSetting')
+            ->andReturn(array(
+                'app_id' => 'test-app-id',
+                'app_rest_api_key' => 'test-key',
+                'utm_additional_url_params' => 'utm_source=wordpress&utm_medium=push&utm_campaign=test',
+                'send_to_mobile_platforms' => 0
+            ));
 
         mock_http_request('https://onesignal.com/api/v1/notifications', array(
             'response' => array('code' => 200),

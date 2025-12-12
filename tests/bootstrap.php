@@ -16,12 +16,48 @@ if (!defined('REST_REQUEST')) {
     define('REST_REQUEST', false);
 }
 
-// Load WordPress function stubs for unit tests
-// These are minimal stubs to allow the helper functions to be tested in isolation
-require_once __DIR__ . '/test-helpers/wordpress-stubs.php';
+// Initialize WP_Mock
+WP_Mock::bootstrap();
 
-// Load extended WordPress stubs for integration tests
-require_once __DIR__ . '/test-helpers/wordpress-integration-stubs.php';
+// Define WP_Error class if not already defined
+if (!class_exists('WP_Error')) {
+    class WP_Error {
+        public $errors = array();
+        public $error_data = array();
+
+        public function __construct($code = '', $message = '', $data = '') {
+            if (empty($code)) {
+                return;
+            }
+            $this->errors[$code][] = $message;
+            if (!empty($data)) {
+                $this->error_data[$code] = $data;
+            }
+        }
+
+        public function get_error_message($code = '') {
+            if (empty($code)) {
+                $code = $this->get_error_code();
+            }
+            return $this->errors[$code][0] ?? '';
+        }
+
+        public function get_error_code() {
+            $codes = array_keys($this->errors);
+            return $codes[0] ?? '';
+        }
+    }
+}
+
+// Define essential WordPress functions that are needed at bootstrap time
+if (!function_exists('plugin_dir_path')) {
+    function plugin_dir_path($file) {
+        return dirname($file) . '/';
+    }
+}
+
+// Load HTTP mocking helper for integration tests
+require_once __DIR__ . '/test-helpers/http-mock-helper.php';
 
 // Load the plugin helper functions
 require_once dirname(__DIR__) . '/v3/onesignal-helpers.php';

@@ -3,18 +3,41 @@
  * Integration tests for OneSignal settings management
  */
 
-use PHPUnit\Framework\TestCase;
+use WP_Mock\Tools\TestCase;
 use Yoast\PHPUnitPolyfills\Polyfills\AssertionRenames;
 
 class Test_OneSignal_Settings extends TestCase {
     use AssertionRenames;
 
     /**
-     * Reset global state before each test
+     * Override setUpContentFiltering to fix PHPUnit 9.6 compatibility issue
      */
-    protected function setUp(): void {
+    protected function setUpContentFiltering() {
+        return;
+    }
+
+    /**
+     * Set up WP_Mock and WordPress function mocks before each test
+     */
+    public function setUp(): void {
         parent::setUp();
-        reset_wordpress_state();
+        
+        global $wp_options;
+        $wp_options = array();
+
+        // Mock get_option and update_option to use global storage
+        WP_Mock::userFunction('get_option')
+            ->andReturnUsing(function($option, $default = false) {
+                global $wp_options;
+                return $wp_options[$option] ?? $default;
+            });
+
+        WP_Mock::userFunction('update_option')
+            ->andReturnUsing(function($option, $value) {
+                global $wp_options;
+                $wp_options[$option] = $value;
+                return true;
+            });
     }
 
     /**

@@ -10,22 +10,30 @@ class Test_OneSignal_Helpers extends TestCase {
     use AssertionRenames;
 
     /**
-     * Reset global state before each test
+     * Set up WP_Mock before each test
      */
-    protected function setUp(): void {
+    public function setUp(): void {
         parent::setUp();
-        global $wp_options, $wp_post_meta;
-        $wp_options = array();
-        $wp_post_meta = array();
+        WP_Mock::setUp();
+    }
+
+    /**
+     * Tear down WP_Mock after each test
+     */
+    public function tearDown(): void {
+        WP_Mock::tearDown();
+        parent::tearDown();
     }
 
     /**
      * Test onesignal_get_api_key_type() with Rich API key
      */
     public function test_get_api_key_type_rich() {
-        update_option('OneSignalWPSetting', array(
-            'app_rest_api_key' => 'os_v2_abc123def456'
-        ));
+        WP_Mock::userFunction('get_option')
+            ->with('OneSignalWPSetting')
+            ->andReturn(array(
+                'app_rest_api_key' => 'os_v2_abc123def456'
+            ));
 
         $this->assertSame('Rich', onesignal_get_api_key_type());
     }
@@ -34,9 +42,11 @@ class Test_OneSignal_Helpers extends TestCase {
      * Test onesignal_get_api_key_type() with Legacy API key
      */
     public function test_get_api_key_type_legacy() {
-        update_option('OneSignalWPSetting', array(
-            'app_rest_api_key' => 'NGY2NmE0ZDgtZjdkMi00YjI4LTk3YmMtM2JmNmQ2NjY4Yjdh'
-        ));
+        WP_Mock::userFunction('get_option')
+            ->with('OneSignalWPSetting')
+            ->andReturn(array(
+                'app_rest_api_key' => 'NGY2NmE0ZDgtZjdkMi00YjI4LTk3YmMtM2JmNmQ2NjY4Yjdh'
+            ));
 
         $this->assertSame('Legacy', onesignal_get_api_key_type());
     }
@@ -45,7 +55,9 @@ class Test_OneSignal_Helpers extends TestCase {
      * Test onesignal_get_api_key_type() with no API key set
      */
     public function test_get_api_key_type_unknown() {
-        update_option('OneSignalWPSetting', array());
+        WP_Mock::userFunction('get_option')
+            ->with('OneSignalWPSetting')
+            ->andReturn(array());
 
         $this->assertSame('Unknown', onesignal_get_api_key_type());
     }
@@ -54,9 +66,11 @@ class Test_OneSignal_Helpers extends TestCase {
      * Test onesignal_get_api_key_type() with empty API key
      */
     public function test_get_api_key_type_empty() {
-        update_option('OneSignalWPSetting', array(
-            'app_rest_api_key' => ''
-        ));
+        WP_Mock::userFunction('get_option')
+            ->with('OneSignalWPSetting')
+            ->andReturn(array(
+                'app_rest_api_key' => ''
+            ));
 
         $this->assertSame('Unknown', onesignal_get_api_key_type());
     }
@@ -95,6 +109,23 @@ class Test_OneSignal_Helpers extends TestCase {
     public function test_sanitize_content_for_excerpt_strips_tags() {
         $input = "<p>Hello <strong>World</strong></p>";
         $expected = "Hello World";
+
+        WP_Mock::userFunction('wp_specialchars_decode')
+            ->with($input)
+            ->andReturn($input);
+
+        WP_Mock::userFunction('stripslashes_deep')
+            ->with($input)
+            ->andReturn($input);
+
+        WP_Mock::userFunction('strip_shortcodes')
+            ->with($input)
+            ->andReturn($input);
+
+        WP_Mock::userFunction('wp_strip_all_tags')
+            ->with($input)
+            ->andReturn($expected);
+
         $this->assertSame($expected, sanitize_content_for_excerpt($input));
     }
 
@@ -104,6 +135,26 @@ class Test_OneSignal_Helpers extends TestCase {
     public function test_sanitize_content_for_excerpt_strips_shortcodes() {
         $input = "Hello [gallery] World [contact-form]";
         $expected = "Hello  World";
+        $decoded = "Hello [gallery] World [contact-form]";
+        $no_slashes = "Hello [gallery] World [contact-form]";
+        $no_shortcodes = "Hello  World";
+
+        WP_Mock::userFunction('wp_specialchars_decode')
+            ->with($input)
+            ->andReturn($decoded);
+
+        WP_Mock::userFunction('stripslashes_deep')
+            ->with($decoded)
+            ->andReturn($no_slashes);
+
+        WP_Mock::userFunction('strip_shortcodes')
+            ->with($no_slashes)
+            ->andReturn($no_shortcodes);
+
+        WP_Mock::userFunction('wp_strip_all_tags')
+            ->with($no_shortcodes)
+            ->andReturn($expected);
+
         $this->assertSame($expected, sanitize_content_for_excerpt($input));
     }
 
@@ -113,6 +164,26 @@ class Test_OneSignal_Helpers extends TestCase {
     public function test_sanitize_content_for_excerpt_strips_slashes() {
         $input = "Hello \\'World\\'";
         $expected = "Hello 'World'";
+        $decoded = "Hello \\'World\\'";
+        $no_slashes = "Hello 'World'";
+        $no_shortcodes = "Hello 'World'";
+
+        WP_Mock::userFunction('wp_specialchars_decode')
+            ->with($input)
+            ->andReturn($decoded);
+
+        WP_Mock::userFunction('stripslashes_deep')
+            ->with($decoded)
+            ->andReturn($no_slashes);
+
+        WP_Mock::userFunction('strip_shortcodes')
+            ->with($no_slashes)
+            ->andReturn($no_shortcodes);
+
+        WP_Mock::userFunction('wp_strip_all_tags')
+            ->with($no_shortcodes)
+            ->andReturn($expected);
+
         $this->assertSame($expected, sanitize_content_for_excerpt($input));
     }
 
@@ -122,6 +193,26 @@ class Test_OneSignal_Helpers extends TestCase {
     public function test_sanitize_content_for_excerpt_complex() {
         $input = "<div><p>Hello &amp; <strong>World</strong></p>[shortcode]Text</div>";
         $expected = "Hello & WorldText";
+        $decoded = "<div><p>Hello & <strong>World</strong></p>[shortcode]Text</div>";
+        $no_slashes = "<div><p>Hello & <strong>World</strong></p>[shortcode]Text</div>";
+        $no_shortcodes = "<div><p>Hello & <strong>World</strong></p>Text</div>";
+
+        WP_Mock::userFunction('wp_specialchars_decode')
+            ->with($input)
+            ->andReturn($decoded);
+
+        WP_Mock::userFunction('stripslashes_deep')
+            ->with($decoded)
+            ->andReturn($no_slashes);
+
+        WP_Mock::userFunction('strip_shortcodes')
+            ->with($no_slashes)
+            ->andReturn($no_shortcodes);
+
+        WP_Mock::userFunction('wp_strip_all_tags')
+            ->with($no_shortcodes)
+            ->andReturn($expected);
+
         $this->assertSame($expected, sanitize_content_for_excerpt($input));
     }
 
@@ -136,9 +227,11 @@ class Test_OneSignal_Helpers extends TestCase {
      * Test onesignal_is_post_type_allowed() for 'page' type when enabled
      */
     public function test_is_post_type_allowed_page_enabled() {
-        update_option('OneSignalWPSetting', array(
-            'notification_on_page' => true
-        ));
+        WP_Mock::userFunction('get_option')
+            ->with('OneSignalWPSetting')
+            ->andReturn(array(
+                'notification_on_page' => true
+            ));
 
         $this->assertTrue(onesignal_is_post_type_allowed('page'));
     }
@@ -147,9 +240,11 @@ class Test_OneSignal_Helpers extends TestCase {
      * Test onesignal_is_post_type_allowed() for 'page' type when disabled
      */
     public function test_is_post_type_allowed_page_disabled() {
-        update_option('OneSignalWPSetting', array(
-            'notification_on_page' => false
-        ));
+        WP_Mock::userFunction('get_option')
+            ->with('OneSignalWPSetting')
+            ->andReturn(array(
+                'notification_on_page' => false
+            ));
 
         $this->assertFalse(onesignal_is_post_type_allowed('page'));
     }
@@ -158,9 +253,11 @@ class Test_OneSignal_Helpers extends TestCase {
      * Test onesignal_is_post_type_allowed() for custom post type that is allowed
      */
     public function test_is_post_type_allowed_custom_allowed() {
-        update_option('OneSignalWPSetting', array(
-            'allowed_custom_post_types' => 'product, event, portfolio'
-        ));
+        WP_Mock::userFunction('get_option')
+            ->with('OneSignalWPSetting')
+            ->andReturn(array(
+                'allowed_custom_post_types' => 'product, event, portfolio'
+            ));
 
         $this->assertTrue(onesignal_is_post_type_allowed('product'));
         $this->assertTrue(onesignal_is_post_type_allowed('event'));
@@ -172,9 +269,11 @@ class Test_OneSignal_Helpers extends TestCase {
      * Test onesignal_is_post_type_allowed() for custom post type that is not allowed
      */
     public function test_is_post_type_allowed_custom_not_allowed() {
-        update_option('OneSignalWPSetting', array(
-            'allowed_custom_post_types' => 'product, event'
-        ));
+        WP_Mock::userFunction('get_option')
+            ->with('OneSignalWPSetting')
+            ->andReturn(array(
+                'allowed_custom_post_types' => 'product, event'
+            ));
 
         $this->assertFalse(onesignal_is_post_type_allowed('portfolio'));
     }
@@ -183,7 +282,9 @@ class Test_OneSignal_Helpers extends TestCase {
      * Test onesignal_is_post_type_allowed() with no custom post types configured
      */
     public function test_is_post_type_allowed_no_custom_types() {
-        update_option('OneSignalWPSetting', array());
+        WP_Mock::userFunction('get_option')
+            ->with('OneSignalWPSetting')
+            ->andReturn(array());
 
         $this->assertFalse(onesignal_is_post_type_allowed('product'));
     }
@@ -271,11 +372,24 @@ class Test_OneSignal_Helpers extends TestCase {
     public function test_save_and_get_notification_id() {
         $post_id = 123;
         $notification_id = 'abc-123-def-456';
+        $sanitized_id = 'abc-123-def-456';
+
+        WP_Mock::userFunction('sanitize_text_field')
+            ->with($notification_id)
+            ->andReturn($sanitized_id);
+
+        WP_Mock::userFunction('update_post_meta')
+            ->with($post_id, 'os_notification_id', $sanitized_id)
+            ->andReturn(true);
+
+        WP_Mock::userFunction('get_post_meta')
+            ->with($post_id, 'os_notification_id', true)
+            ->andReturn($sanitized_id);
 
         onesignal_save_notification_id($post_id, $notification_id);
         $retrieved = onesignal_get_notification_id($post_id);
 
-        $this->assertSame($notification_id, $retrieved);
+        $this->assertSame($sanitized_id, $retrieved);
     }
 
     /**
@@ -283,6 +397,11 @@ class Test_OneSignal_Helpers extends TestCase {
      */
     public function test_get_notification_id_none_saved() {
         $post_id = 999;
+
+        WP_Mock::userFunction('get_post_meta')
+            ->with($post_id, 'os_notification_id', true)
+            ->andReturn('');
+
         $retrieved = onesignal_get_notification_id($post_id);
 
         $this->assertSame('', $retrieved);
@@ -294,6 +413,19 @@ class Test_OneSignal_Helpers extends TestCase {
     public function test_save_notification_id_sanitizes() {
         $post_id = 456;
         $notification_id = '<script>alert("xss")</script>abc-123';
+        $sanitized_id = 'alert("xss")abc-123';
+
+        WP_Mock::userFunction('sanitize_text_field')
+            ->with($notification_id)
+            ->andReturn($sanitized_id);
+
+        WP_Mock::userFunction('update_post_meta')
+            ->with($post_id, 'os_notification_id', $sanitized_id)
+            ->andReturn(true);
+
+        WP_Mock::userFunction('get_post_meta')
+            ->with($post_id, 'os_notification_id', true)
+            ->andReturn($sanitized_id);
 
         onesignal_save_notification_id($post_id, $notification_id);
         $retrieved = onesignal_get_notification_id($post_id);

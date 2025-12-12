@@ -10,11 +10,6 @@
         "yoast/phpunit-polyfills": "^1.0",
         "10up/wp_mock": "^0.4"
     },
-    "autoload-dev": {
-        "classmap": [
-            "tests/unit"
-        ]
-    },
     "scripts": {
         "test": "phpunit --testdox",
         "test:unit": "phpunit --testsuite unit --testdox",

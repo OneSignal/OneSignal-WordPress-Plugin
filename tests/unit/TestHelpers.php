@@ -3,26 +3,18 @@
  * Unit tests for OneSignal helper functions
  */
 
-use PHPUnit\Framework\TestCase;
+use WP_Mock\Tools\TestCase;
 use Yoast\PHPUnitPolyfills\Polyfills\AssertionRenames;
 
 class Test_OneSignal_Helpers extends TestCase {
     use AssertionRenames;
 
     /**
-     * Set up WP_Mock before each test
+     * Override setUpContentFiltering to fix PHPUnit 9.6 compatibility issue
+     * WP_Mock 0.4.2 calls getAnnotations() which has compatibility issues with PHPUnit 9.6
      */
-    public function setUp(): void {
-        parent::setUp();
-        WP_Mock::setUp();
-    }
-
-    /**
-     * Tear down WP_Mock after each test
-     */
-    public function tearDown(): void {
-        WP_Mock::tearDown();
-        parent::tearDown();
+    protected function setUpContentFiltering() {
+        return;
     }
 
     /**

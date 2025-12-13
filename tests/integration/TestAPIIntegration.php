@@ -10,6 +10,21 @@ class Test_OneSignal_API_Integration extends TestCase {
     use AssertionRenames;
 
     /**
+     * Global storage for HTTP request mocks
+     */
+    private static $http_requests_mock = array();
+
+    /**
+     * Mock an HTTP request URL with a specific response
+     * 
+     * @param string $url The URL to mock
+     * @param array|WP_Error $response The response array or WP_Error object
+     */
+    private function mock_http_request($url, $response) {
+        self::$http_requests_mock[$url] = $response;
+    }
+
+    /**
      * Override setUpContentFiltering to fix PHPUnit 9.6 compatibility issue
      */
     protected function setUpContentFiltering() {
@@ -22,8 +37,10 @@ class Test_OneSignal_API_Integration extends TestCase {
     public function setUp(): void {
         parent::setUp();
         
-        global $wp_http_requests_mock, $wp_post_meta, $test_get_option_overrides;
-        $wp_http_requests_mock = array();
+        // Reset HTTP mocks
+        self::$http_requests_mock = array();
+        
+        global $wp_post_meta, $test_get_option_overrides;
         $wp_post_meta = array();
         $test_get_option_overrides = array();
 
@@ -80,12 +97,11 @@ class Test_OneSignal_API_Integration extends TestCase {
                 return trim(strip_tags($str));
             });
 
-        // Mock HTTP functions using the global mock array
+        // Mock HTTP functions using the mock array
         WP_Mock::userFunction('wp_remote_post')
             ->andReturnUsing(function($url, $args) {
-                global $wp_http_requests_mock;
-                if (isset($wp_http_requests_mock[$url])) {
-                    return $wp_http_requests_mock[$url];
+                if (isset(self::$http_requests_mock[$url])) {
+                    return self::$http_requests_mock[$url];
                 }
                 return array(
                     'response' => array('code' => 200),
@@ -95,9 +111,8 @@ class Test_OneSignal_API_Integration extends TestCase {
 
         WP_Mock::userFunction('wp_remote_request')
             ->andReturnUsing(function($url, $args) {
-                global $wp_http_requests_mock;
-                if (isset($wp_http_requests_mock[$url])) {
-                    return $wp_http_requests_mock[$url];
+                if (isset(self::$http_requests_mock[$url])) {
+                    return self::$http_requests_mock[$url];
                 }
                 return array(
                     'response' => array('code' => 200),
@@ -156,7 +171,7 @@ class Test_OneSignal_API_Integration extends TestCase {
             ));
 
         // Mock successful API response
-        mock_http_request('https://onesignal.com/api/v1/notifications', array(
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', array(
             'response' => array('code' => 200),
             'body' => json_encode(array(
                 'id' => 'notification-abc-123',
@@ -185,7 +200,7 @@ class Test_OneSignal_API_Integration extends TestCase {
      * Test API notification with custom options
      */
     public function test_notification_with_custom_options() {
-        mock_http_request('https://onesignal.com/api/v1/notifications', array(
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', array(
             'response' => array('code' => 200),
             'body' => json_encode(array('id' => 'custom-notification-456'))
         ));
@@ -217,7 +232,7 @@ class Test_OneSignal_API_Integration extends TestCase {
     public function test_api_error_handling() {
         // Mock API error response
         $error = new WP_Error('http_request_failed', 'Connection timeout');
-        mock_http_request('https://onesignal.com/api/v1/notifications', $error);
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', $error);
 
         $post = (object) array(
             'ID' => 300,
@@ -240,7 +255,7 @@ class Test_OneSignal_API_Integration extends TestCase {
      */
     public function test_api_non_200_response() {
         // Mock 400 Bad Request
-        mock_http_request('https://onesignal.com/api/v1/notifications', array(
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', array(
             'response' => array('code' => 400),
             'body' => json_encode(array('errors' => array('Invalid app_id')))
         ));
@@ -267,7 +282,7 @@ class Test_OneSignal_API_Integration extends TestCase {
         $notification_id = 'cancel-test-123';
 
         // Mock successful cancellation
-        mock_http_request(
+        $this->mock_http_request(
             'https://onesignal.com/api/v1/notifications/' . $notification_id . '?app_id=test-app-id',
             array(
                 'response' => array('code' => 200),
@@ -286,7 +301,7 @@ class Test_OneSignal_API_Integration extends TestCase {
         $notification_id = 'cancel-error-456';
 
         // Mock failed cancellation
-        mock_http_request(
+        $this->mock_http_request(
             'https://onesignal.com/api/v1/notifications/' . $notification_id . '?app_id=test-app-id',
             array(
                 'response' => array('code' => 404),
@@ -365,7 +380,7 @@ class Test_OneSignal_API_Integration extends TestCase {
         $this->assertSame($old_notification_id, onesignal_get_notification_id($post_id));
 
         // Mock cancellation of old notification
-        mock_http_request(
+        $this->mock_http_request(
             'https://onesignal.com/api/v1/notifications/' . $old_notification_id . '?app_id=test-app-id',
             array(
                 'response' => array('code' => 200),
@@ -374,7 +389,7 @@ class Test_OneSignal_API_Integration extends TestCase {
         );
 
         // Mock creation of new notification
-        mock_http_request('https://onesignal.com/api/v1/notifications', array(
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', array(
             'response' => array('code' => 200),
             'body' => json_encode(array('id' => $new_notification_id))
         ));
@@ -408,7 +423,7 @@ class Test_OneSignal_API_Integration extends TestCase {
                 'send_to_mobile_platforms' => 0
             ));
 
-        mock_http_request('https://onesignal.com/api/v1/notifications', array(
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', array(
             'response' => array('code' => 200),
             'body' => json_encode(array('id' => 'utm-notification-123'))
         ));
@@ -433,7 +448,7 @@ class Test_OneSignal_API_Integration extends TestCase {
     public function test_notification_response_parsing() {
         $notification_id = 'parsed-notification-999';
 
-        mock_http_request('https://onesignal.com/api/v1/notifications', array(
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', array(
             'response' => array('code' => 200),
             'body' => json_encode(array(
                 'id' => $notification_id,

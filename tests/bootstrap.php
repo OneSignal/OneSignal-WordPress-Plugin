@@ -56,8 +56,6 @@ if (!function_exists('plugin_dir_path')) {
     }
 }
 
-// Load HTTP mocking helper for integration tests
-require_once __DIR__ . '/test-helpers/http-mock-helper.php';
 
 // Load the plugin helper functions
 require_once dirname(__DIR__) . '/v3/onesignal-helpers.php';

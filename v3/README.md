@@ -14,4 +14,6 @@ OneSignal WordPress Plugin - v3.0.0
 ## Running Tests
 
 - Install dependencies: `composer install`
-- Unit tests: `./vendor/bin/phpunit --testsuite unit --testdox`
+- Run all tests: `./vendor/bin/phpunit  --testdox`
+    - Unit tests: `./vendor/bin/phpunit --testsuite unit --testdox`
+    - Integration tests: `./vendor/bin/phpunit --testsuite integration --testdox`

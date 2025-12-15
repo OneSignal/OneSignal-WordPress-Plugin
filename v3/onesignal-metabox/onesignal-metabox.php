@@ -32,6 +32,7 @@ function onesignal_metabox($post)
       'Authorization' => 'Bearer ' . get_option('OneSignalWPSetting')['app_rest_api_key'],
       'accept' => 'application/json',
       'content-type' => 'application/json',
+      'SDK-Wrapper' => onesignal_get_sdk_wrapper_header(),
     )
   );
 

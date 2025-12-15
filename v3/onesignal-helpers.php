@@ -110,6 +110,7 @@ function onesignal_cancel_notification($notification_id) {
         'headers' => array(
             'Authorization' => $authorizationHeader,
             'accept' => 'application/json',
+            'SDK-Wrapper' => onesignal_get_sdk_wrapper_header(),
         ),
     );
 

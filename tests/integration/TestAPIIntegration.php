@@ -526,7 +526,7 @@ class Test_OneSignal_API_Integration extends TestCase {
         $captured_args = self::$captured_request_args['wp_remote_post'][$url];
         $this->assertArrayHasKey('headers', $captured_args, 'Request args should have headers');
         $this->assertArrayHasKey('SDK-Wrapper', $captured_args['headers'], 'SDK wrapper header should be present');
-        $this->assertSame('onesignal/wordpress/3.6.3', $captured_args['headers']['SDK-Wrapper'], 'SDK wrapper header should match expected format');
+        $this->assertSame(onesignal_get_sdk_wrapper_header(), $captured_args['headers']['SDK-Wrapper'], 'SDK wrapper header should match expected format');
     }
 
     /**
@@ -551,7 +551,7 @@ class Test_OneSignal_API_Integration extends TestCase {
         $captured_args = self::$captured_request_args['wp_remote_request'][$url];
         $this->assertArrayHasKey('headers', $captured_args, 'Request args should have headers');
         $this->assertArrayHasKey('SDK-Wrapper', $captured_args['headers'], 'SDK wrapper header should be present');
-        $this->assertSame('onesignal/wordpress/3.6.3', $captured_args['headers']['SDK-Wrapper'], 'SDK wrapper header should match expected format');
+        $this->assertSame(onesignal_get_sdk_wrapper_header(), $captured_args['headers']['SDK-Wrapper'], 'SDK wrapper header should match expected format');
     }
 
     /**
@@ -592,7 +592,7 @@ class Test_OneSignal_API_Integration extends TestCase {
         $captured_args = self::$captured_request_args['wp_remote_get'][$url];
         $this->assertArrayHasKey('headers', $captured_args, 'Request args should have headers');
         $this->assertArrayHasKey('SDK-Wrapper', $captured_args['headers'], 'SDK wrapper header should be present');
-        $this->assertSame('onesignal/wordpress/3.6.3', $captured_args['headers']['SDK-Wrapper'], 'SDK wrapper header should match expected format');
+        $this->assertSame(onesignal_get_sdk_wrapper_header(), $captured_args['headers']['SDK-Wrapper'], 'SDK wrapper header should match expected format');
     }
 
     /**
@@ -601,6 +601,6 @@ class Test_OneSignal_API_Integration extends TestCase {
     public function test_sdk_wrapper_header_helper_function() {
         $header_value = onesignal_get_sdk_wrapper_header();
         $this->assertStringStartsWith('onesignal/wordpress/', $header_value, 'Header should start with onesignal/wordpress/');
-        $this->assertMatchesRegularExpression('/^onesignal\/wordpress\/\d+\.\d+\.\d+$/', $header_value, 'Header should match pattern onesignal/wordpress/X.Y.Z');
+        $this->assertMatchesRegularExpression('/^onesignal\/wordpress\/\d{6}$/', $header_value, 'Header should match pattern onesignal/wordpress/XXYYZZ');
     }
 }

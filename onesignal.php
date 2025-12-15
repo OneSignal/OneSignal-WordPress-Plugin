@@ -18,7 +18,7 @@ define('ONESIGNAL_API_RATE_LIMIT_SECONDS', 1);
 define('ONESIGNAL_URI_REVEAL_PROJECT_NUMBER', 'reveal_project_number=true');
 
 // Plugin version - must match Version in plugin header
-define('ONESIGNAL_PLUGIN_VERSION', '3.6.3');
+define('ONESIGNAL_PLUGIN_VERSION', '030603');
 
 // Constants for plugin versions
 define('ONESIGNAL_VERSION_V2', 'v2');

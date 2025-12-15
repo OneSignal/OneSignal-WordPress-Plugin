@@ -32,8 +32,3 @@ Run with detailed output
 ```sh
 ./vendor/bin/phpunit --testdox
 ```
-
-Run E2E Tests
-```sh
-./tests/e2e/run-tests.sh
-```

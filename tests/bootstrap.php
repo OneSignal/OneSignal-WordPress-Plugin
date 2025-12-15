@@ -56,6 +56,23 @@ if (!function_exists('plugin_dir_path')) {
     }
 }
 
+// Extract plugin version from onesignal.php header and define constant
+if (!defined('ONESIGNAL_PLUGIN_VERSION')) {
+    $plugin_file = dirname(__DIR__) . '/onesignal.php';
+    $plugin_content = file_get_contents($plugin_file);
+
+    // Parse version from plugin header
+    if (preg_match('/\*\s*Version:\s*([0-9.]+)/i', $plugin_content, $matches)) {
+        $plugin_version = trim($matches[1]);
+    }
+
+    define('ONESIGNAL_PLUGIN_VERSION', $plugin_version);
+}
+
+// Define the SDK wrapper header function - this is to avoid loading the plugin file in the tests
+function onesignal_get_sdk_wrapper_header() {
+    return 'onesignal/wordpress/' . ONESIGNAL_PLUGIN_VERSION;
+}
 
 // Load the plugin helper functions
 require_once dirname(__DIR__) . '/v3/onesignal-helpers.php';

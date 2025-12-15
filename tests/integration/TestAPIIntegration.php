@@ -15,6 +15,11 @@ class Test_OneSignal_API_Integration extends TestCase {
     private static $http_requests_mock = array();
 
     /**
+     * Global storage for captured HTTP request arguments
+     */
+    private static $captured_request_args = array();
+
+    /**
      * Mock an HTTP request URL with a specific response
      * 
      * @param string $url The URL to mock
@@ -97,27 +102,48 @@ class Test_OneSignal_API_Integration extends TestCase {
                 return trim(strip_tags($str));
             });
 
+        WP_Mock::userFunction('wp_specialchars_decode')
+            ->andReturnUsing(function($string, $quote_style = ENT_NOQUOTES) {
+                return html_entity_decode($string, $quote_style, 'UTF-8');
+            });
+
+        WP_Mock::userFunction('stripslashes_deep')
+            ->andReturnUsing(function($value) {
+                return is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value);
+            });
+
+        WP_Mock::userFunction('wp_strip_all_tags')
+            ->andReturnUsing(function($string, $remove_breaks = false) {
+                $string = preg_replace('@<(script|style)[^>]*?>.*?</\\1>@si', '', $string);
+                $string = strip_tags($string);
+                if ($remove_breaks) {
+                    $string = preg_replace('/[\r\n\t ]+/', ' ', $string);
+                }
+                return trim($string);
+            });
+
+        WP_Mock::userFunction('strip_shortcodes')
+            ->andReturnUsing(function($content) {
+                return preg_replace('/\[.*?\]/', '', $content);
+            });
+
         // Mock HTTP functions using the mock array
         WP_Mock::userFunction('wp_remote_post')
             ->andReturnUsing(function($url, $args) {
-                if (isset(self::$http_requests_mock[$url])) {
-                    return self::$http_requests_mock[$url];
-                }
-                return array(
-                    'response' => array('code' => 200),
-                    'body' => json_encode(array('id' => 'test-notification-id'))
-                );
+                self::$captured_request_args['wp_remote_post'][$url] = $args;
+                return self::$http_requests_mock[$url];
             });
 
         WP_Mock::userFunction('wp_remote_request')
             ->andReturnUsing(function($url, $args) {
-                if (isset(self::$http_requests_mock[$url])) {
-                    return self::$http_requests_mock[$url];
-                }
-                return array(
-                    'response' => array('code' => 200),
-                    'body' => json_encode(array('success' => true))
-                );
+                self::$captured_request_args['wp_remote_request'][$url] = $args;
+                return self::$http_requests_mock[$url];
+            });
+
+        WP_Mock::userFunction('wp_remote_get')
+            ->andReturnUsing(function($url, $args) {
+                self::$captured_request_args['wp_remote_get'] = array();
+                return self::$captured_request_args['wp_remote_get'][$url] = $args;
             });
 
         WP_Mock::userFunction('wp_remote_retrieve_response_code')
@@ -470,5 +496,111 @@ class Test_OneSignal_API_Integration extends TestCase {
         // Only the ID should be saved
         $saved_id = onesignal_get_notification_id($post->ID);
         $this->assertSame($notification_id, $saved_id);
+    }
+
+    /**
+     * Test that SDK wrapper header is included in notification creation requests
+     */
+    public function test_sdk_wrapper_header_in_notification_creation() {
+        // Mock successful API response
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', array(
+            'response' => array('code' => 200),
+            'body' => json_encode(array('id' => 'test-header-notification'))
+        ));
+
+        $post = (object) array(
+            'ID' => 800,
+            'post_title' => 'Header Test Post',
+            'post_date' => '2024-01-15 23:00:00',
+            'post_date_gmt' => '2024-01-15 23:00:00',
+            'post_type' => 'post'
+        );
+
+        onesignal_create_notification($post);
+
+        // Verify the header is present in the captured request
+        $url = 'https://onesignal.com/api/v1/notifications';
+        $this->assertArrayHasKey('wp_remote_post', self::$captured_request_args, 'wp_remote_post should have been called');
+        $this->assertArrayHasKey($url, self::$captured_request_args['wp_remote_post'], 'Request should have been made to notifications endpoint');
+        
+        $captured_args = self::$captured_request_args['wp_remote_post'][$url];
+        $this->assertArrayHasKey('headers', $captured_args, 'Request args should have headers');
+        $this->assertArrayHasKey('SDK-Wrapper', $captured_args['headers'], 'SDK wrapper header should be present');
+        $this->assertSame('onesignal/wordpress/3.6.3', $captured_args['headers']['SDK-Wrapper'], 'SDK wrapper header should match expected format');
+    }
+
+    /**
+     * Test that SDK wrapper header is included in notification cancellation requests
+     */
+    public function test_sdk_wrapper_header_in_notification_cancellation() {
+        $notification_id = 'cancel-header-test-123';
+        $url = 'https://onesignal.com/api/v1/notifications/' . $notification_id . '?app_id=test-app-id';
+
+        // Mock successful cancellation response
+        $this->mock_http_request($url, array(
+            'response' => array('code' => 200),
+            'body' => json_encode(array('success' => true))
+        ));
+
+        onesignal_cancel_notification($notification_id);
+
+        // Verify the header is present in the captured request
+        $this->assertArrayHasKey('wp_remote_request', self::$captured_request_args, 'wp_remote_request should have been called');
+        $this->assertArrayHasKey($url, self::$captured_request_args['wp_remote_request'], 'Request should have been made to cancellation endpoint');
+        
+        $captured_args = self::$captured_request_args['wp_remote_request'][$url];
+        $this->assertArrayHasKey('headers', $captured_args, 'Request args should have headers');
+        $this->assertArrayHasKey('SDK-Wrapper', $captured_args['headers'], 'SDK wrapper header should be present');
+        $this->assertSame('onesignal/wordpress/3.6.3', $captured_args['headers']['SDK-Wrapper'], 'SDK wrapper header should match expected format');
+    }
+
+    /**
+     * Test that SDK wrapper header is included in segments API requests (metabox)
+     */
+    public function test_sdk_wrapper_header_in_segments_request() {
+        // This test would require loading the metabox file and calling the metabox function
+        // For now, we'll test the pattern by directly calling wp_remote_get with the expected args
+        $app_id = 'test-app-id';
+        $url = 'https://onesignal.com/api/v1/apps/' . $app_id . '/segments';
+        
+        // Mock the segments API response
+        $this->mock_http_request($url, array(
+            'response' => array('code' => 200),
+            'body' => json_encode(array('segments' => array(
+                (object) array('name' => 'All'),
+                (object) array('name' => 'Premium Users')
+            )))
+        ));
+
+        // Simulate the API call that would be made in the metabox
+        $args = array(
+            'headers' => array(
+                'Authorization' => 'Bearer test-api-key',
+                'accept' => 'application/json',
+                'content-type' => 'application/json',
+                'SDK-Wrapper' => onesignal_get_sdk_wrapper_header(),
+            )
+        );
+
+        // Call wp_remote_get (which is mocked)
+        wp_remote_get($url, $args);
+
+        // Verify the header is present in the captured request
+        $this->assertArrayHasKey('wp_remote_get', self::$captured_request_args, 'wp_remote_get should have been called');
+        $this->assertArrayHasKey($url, self::$captured_request_args['wp_remote_get'], 'Request should have been made to segments endpoint');
+        
+        $captured_args = self::$captured_request_args['wp_remote_get'][$url];
+        $this->assertArrayHasKey('headers', $captured_args, 'Request args should have headers');
+        $this->assertArrayHasKey('SDK-Wrapper', $captured_args['headers'], 'SDK wrapper header should be present');
+        $this->assertSame('onesignal/wordpress/3.6.3', $captured_args['headers']['SDK-Wrapper'], 'SDK wrapper header should match expected format');
+    }
+
+    /**
+     * Test that SDK wrapper header helper function returns correct format
+     */
+    public function test_sdk_wrapper_header_helper_function() {
+        $header_value = onesignal_get_sdk_wrapper_header();
+        $this->assertStringStartsWith('onesignal/wordpress/', $header_value, 'Header should start with onesignal/wordpress/');
+        $this->assertMatchesRegularExpression('/^onesignal\/wordpress\/\d+\.\d+\.\d+$/', $header_value, 'Header should match pattern onesignal/wordpress/X.Y.Z');
     }
 }

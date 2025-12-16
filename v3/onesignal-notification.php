@@ -53,6 +53,7 @@ function onesignal_create_notification($post, $notification_options = array())
             'Authorization' => $authorizationHeader,
             'accept' => 'application/json',
             'content-type' => 'application/json',
+            'SDK-Wrapper' => onesignal_get_sdk_wrapper_header(),
         ),
         'body' => json_encode(array(
             'app_id' => get_option('OneSignalWPSetting')['app_id'],

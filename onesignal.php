@@ -17,6 +17,9 @@ define('ONESIGNAL_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('ONESIGNAL_API_RATE_LIMIT_SECONDS', 1);
 define('ONESIGNAL_URI_REVEAL_PROJECT_NUMBER', 'reveal_project_number=true');
 
+// Plugin version - must match Version in plugin header
+define('ONESIGNAL_PLUGIN_VERSION', '030603');
+
 // Constants for plugin versions
 define('ONESIGNAL_VERSION_V2', 'v2');
 define('ONESIGNAL_VERSION_V3', 'v3');
@@ -72,4 +75,13 @@ function migration_notice() {
                 <p><strong>OneSignal Migration Needed:</strong> All OneSignal prompt configurations are moving to OneSignal.com. See the plugin page for more info.</p>
               </div>';
     }
+}
+
+/**
+ * Get the SDK wrapper header value for OneSignal API requests
+ * 
+ * @return string The header value in format: onesignal/wordpress/<VERSION>
+ */
+function onesignal_get_sdk_wrapper_header() {
+    return 'onesignal/wordpress/' . ONESIGNAL_PLUGIN_VERSION;
 }

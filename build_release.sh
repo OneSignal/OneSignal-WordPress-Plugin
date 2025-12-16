@@ -45,6 +45,12 @@ exclude_options=(
     "--exclude=views/css/link.css"
     "--exclude=views/css/link.css"
     "--exclude=views/css/semantic-ui"
+    "--exclude=vendor/"
+    "--exclude=tests/"
+    "--exclude=phpunit.xml"
+    "--exclude=composer.json"
+    "--exclude=composer.lock"
+    "--exclude=.phpunit.result.cache"
 )
 rsync --archive --delete "${exclude_options[@]}" $WORDPRESS_GIT_SRC_PATH/ $DESTINATION_PATH
 

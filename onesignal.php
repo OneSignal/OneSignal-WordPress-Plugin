@@ -6,7 +6,7 @@ defined('ABSPATH') or die('This page may not be accessed directly.');
  * Plugin Name: OneSignal Push Notifications
  * Plugin URI: https://onesignal.com/
  * Description: Free web push notifications.
- * Version: 3.6.3
+ * Version: 3.7.0
  * Author: OneSignal
  * Author URI: https://onesignal.com
  * License: MIT
@@ -18,7 +18,7 @@ define('ONESIGNAL_API_RATE_LIMIT_SECONDS', 1);
 define('ONESIGNAL_URI_REVEAL_PROJECT_NUMBER', 'reveal_project_number=true');
 
 // Plugin version - must match Version in plugin header
-define('ONESIGNAL_PLUGIN_VERSION', '030603');
+define('ONESIGNAL_PLUGIN_VERSION', '030700');
 
 // Constants for plugin versions
 define('ONESIGNAL_VERSION_V2', 'v2');

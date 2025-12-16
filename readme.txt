@@ -8,13 +8,13 @@ Stable tag: 3.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Increase engagement and drive more repeat traffic to your WordPress site with push notifications. Now a Wordpress VIP Gold Partner.
+Increase engagement and drive more repeat traffic to your WordPress site with push notifications. Now a WordPress VIP Gold Partner.
 
 == Description ==
 
 [OneSignal](https://onesignal.com) is an easy way to increase user engagement. Use OneSignal to send visitors targeted push notifications so they keep coming back. It takes just a few minutes to install.
 
-As a Wordpress VIP Gold Partner, OneSignal has been rigorously tested to handle even the highest volume use cases with reliability and ease of use.
+As a WordPress VIP Gold Partner, OneSignal has been rigorously tested to handle even the highest volume use cases with reliability and ease of use.
 
 After setup, your visitors opt-in to receive push notifications when you publish a new post. Visitors receive these notifications even after they’ve left your website, thus driving re-engagement.
 
@@ -23,7 +23,7 @@ You can configure notification delivery at preset intervals, create user segment
 OneSignal’s free plan allows targeting up to 10,000 subscribers with push notifications. Contact support@onesignal.com if you have any questions. We’d love to hear from you!
 
 = Company =
-OneSignal is trusted by over 1.8M+ developers and marketing strategists. We power push notifications for everyone from early stage startups to Fortune 500 Companies, sending over 6 billion notifications per day. It is the most popular push notification plugin on Wordpress with 100,000+ installations.
+OneSignal is trusted by over 1.8M+ developers and marketing strategists. We power push notifications for everyone from early stage startups to Fortune 500 Companies, sending over 6 billion notifications per day. It is the most popular push notification plugin on WordPress with 100,000+ installations.
 
 = Features =
 * **Supports Chrome** (Desktop & Android), **Safari** (Mac OS X), **Microsoft Edge** (Desktop & Android), **Opera** (Desktop & Android) and **Firefox** (Desktop & Android) on both HTTP and HTTPS sites.
@@ -54,8 +54,8 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 4. Our OneSignal dashboard users page, where you can see your subscribed users.
 5. Our OneSignal dashboard sent notifications page, where you can see the status of your sent notifications.
 6. Our OneSignal dashboard notification creation page, with show some of the browser settings available.
-7. Our OneSignal Wordpress welcome notification options.
-8. Our OneSignal Wordpress setting for prompting options.
+7. Our OneSignal WordPress welcome notification options.
+8. Our OneSignal WordPress setting for prompting options.
 
 == Frequently Asked Questions ==
 

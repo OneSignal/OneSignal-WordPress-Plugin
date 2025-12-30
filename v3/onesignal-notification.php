@@ -134,100 +134,121 @@ function onesignal_create_notification($post, $notification_options = array())
     }
 }
 
+/**
+ * Get the appropriate notification setting key based on post type and publish status
+ *
+ * @param string $post_type The post type
+ * @param bool $is_new_publish Whether this is a new publish (vs update)
+ * @return string|null The setting key to check, or null if post type is not supported
+ */
+function onesignal_get_notification_setting_key($post_type, $is_new_publish) {
+    if ($post_type === 'page') {
+        return $is_new_publish ? 'notification_on_page' : 'notification_on_page_update';
+    }
+
+    // For posts and allowed custom post types, use post settings
+    if ($post_type === 'post') {
+        return $is_new_publish ? 'notification_on_post' : 'notification_on_post_update';
+    }
+
+    // Check if custom post type is allowed
+    if (onesignal_is_post_type_allowed($post_type)) {
+        return $is_new_publish ? 'notification_on_post' : 'notification_on_post_update';
+    }
+
+    return null;
+}
+
+/**
+ * Check if notification should be sent based on settings and metadata
+ *
+ * @param array $settings OneSignal settings array
+ * @param string $post_type Post type
+ * @param bool $is_new_publish Whether this is a new publish
+ * @param array|null $os_meta Saved post metadata (optional)
+ * @return string|null 'on' if notification should be sent, null otherwise
+ */
+function onesignal_should_send_notification($settings, $post_type, $is_new_publish, $os_meta = null) {
+    // Check saved metadata first if available
+    if (is_array($os_meta) && !empty($os_meta['os_update'])) {
+        return $os_meta['os_update'];
+    }
+
+    // Fall back to global settings
+    $setting_key = onesignal_get_notification_setting_key($post_type, $is_new_publish);
+    if ($setting_key && !empty($settings[$setting_key])) {
+        return 'on';
+    }
+
+    return null;
+}
+
 // Function to schedule notification (called on post status transitions)
 function onesignal_schedule_notification($new_status, $old_status, $post)
 {
-    if (($new_status === 'publish') || ($new_status === 'future')) {
-        $update = null;
-        $notification_options = array();
-        // Get settings with defaults - use function if available, otherwise use inline defaults
-        $onesignal_settings = get_option('OneSignalWPSetting', onesignal_get_default_settings());
-
-        // Check if this is a direct user submission with POST data, i.e. normal editor with metabox
-        if (!empty($_POST) && isset($_POST['onesignal_v3_metabox_nonce'])) {
-            // Verify nonce for user-initiated posts
-            if (!wp_verify_nonce($_POST['onesignal_v3_metabox_nonce'], 'onesignal_v3_metabox_save')) {
-                return; // Invalid nonce, abort
-            }
-
-            // Verify capability
-            if (!current_user_can('edit_post', $post->ID)) {
-                return; // Insufficient permissions, abort
-            }
-
-            // Use POST data for user-initiated publishes
-            $update = !empty($_POST['os_update']) ? $_POST['os_update'] : null;
-            $notification_options = array(
-                'title' => !empty($_POST['os_title']) ? sanitize_text_field($_POST['os_title']) : null,
-                'content' => !empty($_POST['os_content']) ? sanitize_text_field($_POST['os_content']) : null,
-                'segment' => isset($_POST['os_segment']) ? sanitize_text_field($_POST['os_segment']) : 'All',
-                'mobile_url' => isset($_POST['os_mobile_url']) ? sanitize_url($_POST['os_mobile_url']) : ''
-            );
-        } else {
-            // No metabox nonce present - this could be quick edit, REST API, scheduled posts, or plugin-triggered posts
-            // Determine if this is a new publish or an update
-            $is_new_publish = ($old_status !== 'publish' && $old_status !== 'future');
-            $post_type = $post->post_type;
-            $is_scheduled_post = ($new_status === 'future');
-
-            // Check if this is a custom post type (not 'post' or 'page')
-            $is_custom_post_type = ($post_type !== 'post' && $post_type !== 'page');
-
-            // For scheduled posts, should send notification if saved metadata is enabled
-            // For quick edit and other scenarios, check global settings first
-            if ($is_scheduled_post) {
-                // Scheduled posts: should send notification if saved metadata is enabled
-                $os_meta = get_post_meta($post->ID, 'os_meta', true);
-                $update = !empty($os_meta['os_update']) ? $os_meta['os_update'] : null;
-
-                // If no saved metadata, should send notification if global settings are enabled
-                if (empty($update)) {
-                    if ($post_type === 'page') {
-                        $update = !empty($onesignal_settings['notification_on_page']) ? 'on' : null;
-                    } elseif (($post_type === 'post') || ($is_custom_post_type && onesignal_is_post_type_allowed($post_type))) {
-                        $update = !empty($onesignal_settings['notification_on_post']) ? 'on' : null;
-                    } 
-                }
-            } else {
-                // Quick edit, REST API, or plugin-triggered posts: should send notification if global settings are enabled
-                // This ensures quick edit respects the global notification settings
-                if ($is_new_publish) {
-                    // New publish: should send notification if notification_on_post, notification_on_page is enabled
-                    if ($post_type === 'page') {
-                        $update = !empty($onesignal_settings['notification_on_page']) ? 'on' : null;
-                    } elseif (($post_type === 'post') || ($is_custom_post_type && onesignal_is_post_type_allowed($post_type))) {
-                        $update = !empty($onesignal_settings['notification_on_post']) ? 'on' : null;
-                    }
-                } else {
-                    // Update: should send notification if notification_on_post_update, notification_on_page_update is enabled
-                    if ($post_type === 'page') {
-                        $update = !empty($onesignal_settings['notification_on_page_update']) ? 'on' : null;
-                    } elseif (($post_type === 'post') || ($is_custom_post_type && onesignal_is_post_type_allowed($post_type))) {
-                        $update = !empty($onesignal_settings['notification_on_post_update']) ? 'on' : null;
-                    }
-                }
-            }
-
-            // Load notification options from saved metadata if available
-            $os_meta = get_post_meta($post->ID, 'os_meta', true);
-            if (is_array($os_meta)) {
-                $notification_options = array(
-                    'title' => isset($os_meta['os_title']) ? $os_meta['os_title'] : null,
-                    'content' => isset($os_meta['os_content']) ? $os_meta['os_content'] : null,
-                    'segment' => isset($os_meta['os_segment']) ? $os_meta['os_segment'] : 'All',
-                    'mobile_url' => isset($os_meta['os_mobile_url']) ? $os_meta['os_mobile_url'] : ''
-                );
-            }
-        }
-
-        // Do not send notification if not enabled
-        if (empty($update)) {
-            return;
-        }
-
-        // Call the core notification function
-        onesignal_create_notification($post, $notification_options);
+    if (($new_status !== 'publish') && ($new_status !== 'future')) {
+        return;
     }
+
+    $update = null;
+    $notification_options = array();
+    $onesignal_settings = get_option('OneSignalWPSetting', onesignal_get_default_settings());
+
+    // Check if this is a direct user submission with POST data (normal editor with metabox)
+    if (!empty($_POST) && isset($_POST['onesignal_v3_metabox_nonce'])) {
+        // Verify nonce for user-initiated posts
+        if (!wp_verify_nonce($_POST['onesignal_v3_metabox_nonce'], 'onesignal_v3_metabox_save')) {
+            return; // Invalid nonce, abort
+        }
+
+        // Verify capability
+        if (!current_user_can('edit_post', $post->ID)) {
+            return; // Insufficient permissions, abort
+        }
+
+        // Use POST data for user-initiated publishes
+        $update = !empty($_POST['os_update']) ? $_POST['os_update'] : null;
+        $notification_options = array(
+            'title' => !empty($_POST['os_title']) ? sanitize_text_field($_POST['os_title']) : null,
+            'content' => !empty($_POST['os_content']) ? sanitize_text_field($_POST['os_content']) : null,
+            'segment' => isset($_POST['os_segment']) ? sanitize_text_field($_POST['os_segment']) : 'All',
+            'mobile_url' => isset($_POST['os_mobile_url']) ? sanitize_url($_POST['os_mobile_url']) : ''
+        );
+    } else {
+        // No metabox nonce present - quick edit, REST API, scheduled posts, or plugin-triggered posts
+        $is_new_publish = ($old_status !== 'publish' && $old_status !== 'future');
+        $is_scheduled_post = ($new_status === 'future');
+
+        // Get saved metadata (only fetch once)
+        $os_meta = get_post_meta($post->ID, 'os_meta', true);
+
+        // For scheduled posts, prioritize saved metadata; for others, use global settings
+        if ($is_scheduled_post) {
+            // Scheduled posts: check saved metadata first, then fall back to global settings
+            $update = onesignal_should_send_notification($onesignal_settings, $post->post_type, true, $os_meta);
+        } else {
+            // Quick edit, REST API, or plugin-triggered: use global settings only
+            $update = onesignal_should_send_notification($onesignal_settings, $post->post_type, $is_new_publish);
+        }
+
+        // Load notification options from saved metadata if available
+        if (is_array($os_meta)) {
+            $notification_options = array(
+                'title' => isset($os_meta['os_title']) ? $os_meta['os_title'] : null,
+                'content' => isset($os_meta['os_content']) ? $os_meta['os_content'] : null,
+                'segment' => isset($os_meta['os_segment']) ? $os_meta['os_segment'] : 'All',
+                'mobile_url' => isset($os_meta['os_mobile_url']) ? $os_meta['os_mobile_url'] : ''
+            );
+        }
+    }
+
+    // Do not send notification if not enabled
+    if (empty($update)) {
+        return;
+    }
+
+    // Call the core notification function
+    onesignal_create_notification($post, $notification_options);
 }
 
 // Function to handle quick-edit publish date changes

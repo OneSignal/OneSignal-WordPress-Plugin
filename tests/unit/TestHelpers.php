@@ -426,4 +426,40 @@ class Test_OneSignal_Helpers extends TestCase {
         $this->assertStringNotContainsString('<script>', $retrieved);
         $this->assertStringContainsString('abc-123', $retrieved);
     }
+
+    /**
+     * Test onesignal_get_plugin_version() reads version from plugin header
+     */
+    public function test_get_plugin_version_reads_header() {
+        $plugin_file = dirname(dirname(__DIR__)) . '/onesignal.php';
+
+        // Extract Version from plugin header: "Version: X.Y.Z"
+        $plugin_content = file_get_contents($plugin_file);
+        $expected_version = '';
+        if (preg_match('/^\s*\*\s*Version:\s*([^\s]+)/m', $plugin_content, $matches)) {
+            $expected_version = trim($matches[1]);
+        }
+
+        WP_Mock::userFunction('get_file_data')
+            ->with($plugin_file, array('Version' => 'Version'), 'plugin')
+            ->andReturn(array('Version' => $expected_version));
+
+        $version = onesignal_get_plugin_version();
+
+        $this->assertSame($expected_version, $version);
+    }
+
+    /**
+     * Test onesignal_get_plugin_version() returns a valid version string
+     */
+    public function test_get_plugin_version_returns_string() {
+        $version = onesignal_get_plugin_version();
+
+        // Should return a string (empty or version)
+        $this->assertIsString($version);
+        // If version exists, it should match semantic versioning pattern
+        if (!empty($version)) {
+            $this->assertMatchesRegularExpression('/^\d+\.\d+\.\d+$/', $version);
+        }
+    }
 }

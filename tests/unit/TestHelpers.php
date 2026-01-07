@@ -462,4 +462,40 @@ class Test_OneSignal_Helpers extends TestCase {
             $this->assertMatchesRegularExpression('/^\d+\.\d+\.\d+$/', $version);
         }
     }
+
+    /**
+     * Test that ONESIGNAL_PLUGIN_VERSION constant matches the plugin header version
+     * This ensures the condensed version constant stays in sync with the semantic version
+     */
+    public function test_plugin_version_constant_matches_header() {
+        $plugin_file = dirname(dirname(__DIR__)) . '/onesignal.php';
+        $plugin_content = file_get_contents($plugin_file);
+
+        // Extract semantic version from header (e.g., "3.7.1")
+        $semantic_version = '';
+        if (preg_match('/^\s*\*\s*Version:\s*([^\s]+)/m', $plugin_content, $matches)) {
+            $semantic_version = trim($matches[1]);
+        }
+
+        $this->assertNotEmpty($semantic_version, 'Should extract version from plugin header');
+
+        // Convert semantic version to condensed format (e.g., "3.7.1" -> "030701")
+        $version_parts = explode('.', $semantic_version);
+        $this->assertCount(3, $version_parts, "Version should have 3 parts (major.minor.patch), got: {$semantic_version}");
+
+        $expected_constant = sprintf('%02d%02d%02d',
+            (int)$version_parts[0],
+            (int)$version_parts[1],
+            (int)$version_parts[2]
+        );
+
+        // Also verify SDK wrapper header uses the correct synchronized version
+        $expected_header = 'onesignal/wordpress/' . $expected_constant;
+        $actual_header = onesignal_get_sdk_wrapper_header();
+        $this->assertSame(
+            $expected_header,
+            $actual_header,
+            "SDK wrapper header should use the synchronized version. Expected: '{$expected_header}', Got: '{$actual_header}'"
+        );
+    }
 }

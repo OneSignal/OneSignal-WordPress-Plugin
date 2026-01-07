@@ -77,6 +77,8 @@ if (!function_exists('onesignal_get_sdk_wrapper_header')) {
 // Load the plugin helper functions
 require_once dirname(__DIR__) . '/v3/onesignal-helpers.php';
 
+require_once dirname(__DIR__) . '/v3/onesignal-init.php';
+
 // Load the notification functions (for integration tests)
 // Use require_once to prevent redeclaration errors
 require_once dirname(__DIR__) . '/v3/onesignal-notification.php';

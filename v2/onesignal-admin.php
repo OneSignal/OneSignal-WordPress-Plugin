@@ -243,7 +243,7 @@ class OneSignal_Admin
 
         // Add our meta box for the "post" post type (default)
         add_meta_box('onesignal_notif_on_post',
-                 'OneSignal Push Notifications',
+                 __( 'OneSignal Push Notifications', 'onesignal-free-web-push-notifications' ),
                  array(__CLASS__, 'onesignal_notif_on_post_html_view'),
                  'post',
                  'side',
@@ -260,7 +260,7 @@ class OneSignal_Admin
         foreach ($post_types  as $post_type) {
             add_meta_box(
         'onesignal_notif_on_post',
-        'OneSignal Push Notifications',
+        __( 'OneSignal Push Notifications', 'onesignal-free-web-push-notifications' ),
         array(__CLASS__, 'onesignal_notif_on_post_html_view'),
         $post_type,
         'side',
@@ -319,9 +319,11 @@ class OneSignal_Admin
               } ?>></input>
 
           <?php if ($post->post_status === 'publish') {
-              echo esc_attr('Send notification on '.$post_type.' update');
+              /* translators: %s: post type (e.g. post, page) */
+              echo esc_attr( sprintf( __( 'Send notification on %s update', 'onesignal-free-web-push-notifications' ), $post_type ) );
           } else {
-              echo esc_attr('Send notification on '.$post_type.' publish');
+              /* translators: %s: post type (e.g. post, page) */
+              echo esc_attr( sprintf( __( 'Send notification on %s publish', 'onesignal-free-web-push-notifications' ), $post_type ) );
 
          } ?>
         </label>
@@ -330,21 +332,21 @@ class OneSignal_Admin
       <div id="onesignal_custom_contents_preferences">
         <input type="checkbox" id="onesignal_modify_title_and_content" value="true" name="onesignal_modify_title_and_content" <?php if ($onesignal_customize_content_checked) {
                   echo 'checked';
-              } ?>></input> Customize notification content</label>
+              } ?>></input> <?php esc_html_e( 'Customize notification content', 'onesignal-free-web-push-notifications' ); ?></label>
 
         <div id="onesignal_custom_contents" style="display:none;padding-top:10px;">
           <div>
-            <label>Notification Title<br/>
+            <label><?php esc_html_e( 'Notification Title', 'onesignal-free-web-push-notifications' ); ?><br/>
             <input type="text" size="16" style="width:220px;" name="onesignal_notification_custom_heading" value="<?php
               echo esc_attr(OneSignalUtils::decode_entities($onesignal_notification_custom_heading));
              ?>" id="onesignal_notification_custom_heading" placeholder="<?php echo esc_attr(OneSignalUtils::decode_entities($onesignal_wp_settings['notification_title'])); ?>"></input>
             </label>
           </div>
           <div style="padding-top:10px">
-            <label>Notification Text<br/>
+            <label><?php esc_html_e( 'Notification Text', 'onesignal-free-web-push-notifications' ); ?><br/>
             <input type="text" size="16" style="width:220px;" name="onesignal_notification_custom_content" value="<?php
               echo esc_attr(OneSignalUtils::decode_entities($onesignal_notification_custom_content));
-              ?>" id="onesignal_notification_custom_content" placeholder="The Post's Current Title"></input>
+              ?>" id="onesignal_notification_custom_content" placeholder="<?php echo esc_attr( __( "The Post's Current Title", 'onesignal-free-web-push-notifications' ) ); ?>"></input>
             </label>
           </div>
         </div>
@@ -384,7 +386,7 @@ class OneSignal_Admin
     {
         if (!OneSignalUtils::can_modify_plugin_settings()) {
             set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
-                    <p><strong>OneSignal Push:</strong><em> Only administrators are allowed to save plugin settings.</em></p>
+                    <p><strong>' . esc_html__( 'OneSignal Push:', 'onesignal-free-web-push-notifications' ) . '</strong><em> ' . esc_html__( 'Only administrators are allowed to save plugin settings.', 'onesignal-free-web-push-notifications' ) . '</em></p>
                 </div>', 86400);
 
             return;
@@ -573,7 +575,7 @@ class OneSignal_Admin
                   });
               </script>
 			  <div class="error notice onesignal-error-notice">
-				  <p><strong>OneSignal Push:</strong> <em>Your setup is not complete. Please follow the Setup guide to set up web push notifications. Both the App ID and REST API Key fields are required.</em></p>
+				  <p><strong><?php esc_html_e( 'OneSignal Push:', 'onesignal-free-web-push-notifications' ); ?></strong> <em><?php esc_html_e( 'Your setup is not complete. Please follow the Setup guide to set up web push notifications. Both the App ID and REST API Key fields are required.', 'onesignal-free-web-push-notifications' ); ?></em></p>
 			  </div>
 			  <?php
             }
@@ -586,7 +588,7 @@ class OneSignal_Admin
             {
                 ?>
 			  <div class="error notice onesignal-error-notice">
-				  <p><strong>OneSignal Push:</strong> <em>cURL is not installed on this server. cURL is required to send notifications. Please make sure cURL is installed on your server before continuing.</em></p>
+				  <p><strong><?php esc_html_e( 'OneSignal Push:', 'onesignal-free-web-push-notifications' ); ?></strong> <em><?php esc_html_e( 'cURL is not installed on this server. cURL is required to send notifications. Please make sure cURL is installed on your server before continuing.', 'onesignal-free-web-push-notifications' ); ?></em></p>
 			  </div>
 			  <?php
             }
@@ -697,8 +699,14 @@ class OneSignal_Admin
 
             $time_to_wait = self::get_sending_rate_limit_wait_time();
             if ($time_to_wait > 0) {
+                /* translators: 1: Number of seconds to wait, 2: API rate limit in seconds */
+                $error_message = sprintf( 
+                    __( 'Please try again in %1$d seconds. Only one notification can be sent every %2$d seconds.', 'onesignal-free-web-push-notifications' ), 
+                    $time_to_wait, 
+                    ONESIGNAL_API_RATE_LIMIT_SECONDS 
+                );
                 set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
-                    <p><strong>OneSignal Push:</strong><em> Please try again in '.$time_to_wait.' seconds. Only one notification can be sent every '.ONESIGNAL_API_RATE_LIMIT_SECONDS.' seconds.</em></p>
+                    <p><strong>' . esc_html__( 'OneSignal Push:', 'onesignal-free-web-push-notifications' ) . '</strong><em> ' . esc_html( $error_message ) . '</em></p>
                 </div>', 86400);
 
                 return;
@@ -826,7 +834,7 @@ class OneSignal_Admin
                         $site_title = qtrans_use($qtransLang, $site_title, false);
                         $notif_content = qtrans_use($qtransLang, $notif_content, false);
                     } catch (Exception $e) {
-                        return new WP_Error('err', __( "OneSignal: There was a problem sending a notification"));
+                        return new WP_Error('err', __( 'OneSignal: There was a problem sending a notification', 'onesignal-free-web-push-notifications' ));
                     }
                 }
 
@@ -923,7 +931,7 @@ class OneSignal_Admin
 
 		if (is_null($response)) {
             set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
-                <p><strong>OneSignal Push:</strong><em> There was a problem sending your notification.</em></p>
+                <p><strong>' . esc_html__( 'OneSignal Push:', 'onesignal-free-web-push-notifications' ) . '</strong><em> ' . esc_html__( 'There was a problem sending your notification.', 'onesignal-free-web-push-notifications' ) . '</em></p>
                 </div>', 86400);
             return;
         }
@@ -941,13 +949,15 @@ class OneSignal_Admin
 
                 if ($status !== 200) {
                     if ($status !== 0) {
+                        /* translators: %d: HTTP status code */
+                        $error_message = sprintf( __( 'There was a %d error sending your notification.', 'onesignal-free-web-push-notifications' ), $status );
                         set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
-                    <p><strong>OneSignal Push:</strong><em> There was a '.$status.' error sending your notification.</em></p>
+                    <p><strong>' . esc_html__( 'OneSignal Push:', 'onesignal-free-web-push-notifications' ) . '</strong><em> ' . esc_html( $error_message ) . '</em></p>
                 </div>', 86400);
                     } else {
                         // A 0 HTTP status code means the connection couldn't be established
                         set_transient('onesignal_transient_error', '<div class="error notice onesignal-error-notice">
-                    <p><strong>OneSignal Push:</strong><em> There was an error establishing a network connection. Please make sure outgoing network connections from cURL are allowed.</em></p>
+                    <p><strong>' . esc_html__( 'OneSignal Push:', 'onesignal-free-web-push-notifications' ) . '</strong><em> ' . esc_html__( 'There was an error establishing a network connection. Please make sure outgoing network connections from cURL are allowed.', 'onesignal-free-web-push-notifications' ) . '</em></p>
                 </div>', 86400);
                     }
                 } else {
@@ -956,10 +966,11 @@ class OneSignal_Admin
 
                         if ($config_show_notification_send_status_message) {
                               $app_id = $onesignal_wp_settings['app_id'];
-                              $delivery_link_text = ' Go to your app\'s Delivery tab to check sent messages: </em><a target="_blank" href="https://dashboard.onesignal.com/apps/' . $app_id . '/notifications">https://dashboard.onesignal.com/apps/' . $app_id . '/notifications</a><em>';
+                              $delivery_link_url = esc_url( 'https://dashboard.onesignal.com/apps/' . $app_id . '/notifications' );
+                              $delivery_link_text = ' ' . __( "Go to your app's Delivery tab to check sent messages:", 'onesignal-free-web-push-notifications' ) . '<a target="_blank" href="' . $delivery_link_url . '"> ' . $delivery_link_url . '</a>';
                               set_transient('onesignal_transient_success', '<div class="updated notice notice-success is-dismissible">
                 <div class="components-notice__content">
-                <p><strong>OneSignal Push:</strong><em> Successfully scheduled a notification.' . $delivery_link_text . '</em></p>
+                <p><strong>' . esc_html__( 'OneSignal Push:', 'onesignal-free-web-push-notifications' ) . '</strong><em> ' . esc_html__( 'Successfully scheduled a notification.', 'onesignal-free-web-push-notifications' ) . $delivery_link_text . '</em></p>
                 </div>
                   </div>', 86400);
                         }
@@ -974,7 +985,7 @@ class OneSignal_Admin
                 return $response;
             }
         } catch (Exception $e) {
-            return new WP_Error('err', __( "OneSignal: There was a problem sending a notification"));
+            return new WP_Error('err', __( 'OneSignal: There was a problem sending a notification', 'onesignal-free-web-push-notifications' ));
         } }
 
     public static function was_post_restored_from_trash($old_status, $new_status)

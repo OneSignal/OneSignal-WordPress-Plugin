@@ -12,7 +12,7 @@ function onesignal_add_metabox()
   if (onesignal_is_post_type_allowed($current_post_type)) {
     add_meta_box(
       'onesignal_metabox', // metabox ID
-      'OneSignal Push Notifications', // title
+      __( 'OneSignal Push Notifications', 'onesignal-free-web-push-notifications' ), // title
       'onesignal_metabox', // callback function
     );
   }
@@ -79,12 +79,17 @@ function onesignal_metabox($post)
        }
        echo $os_update_checked ? 'checked' : '';
        ?>>
-Send notification when <?php echo $post_type === 'page' ? 'page' : 'post'; ?> is <?php echo $is_new_post ? 'published' : 'updated'; ?>
+<?php
+$notification_type = $post_type === 'page' ? __( 'page', 'onesignal-free-web-push-notifications' ) : __( 'post', 'onesignal-free-web-push-notifications' );
+$notification_action = $is_new_post ? __( 'published', 'onesignal-free-web-push-notifications' ) : __( 'updated', 'onesignal-free-web-push-notifications' );
+/* translators: 1: post type (page/post), 2: action (published/updated) */
+echo esc_html( sprintf( __( 'Send notification when %1$s is %2$s', 'onesignal-free-web-push-notifications' ), $notification_type, $notification_action ) );
+?>
 </label>
   <div id="os_options">
-    <label for="os_segment">Send to segment</label>
+    <label for="os_segment"><?php esc_html_e( 'Send to segment', 'onesignal-free-web-push-notifications' ); ?></label>
     <select name="os_segment" id="os_segment">
-    <option value="All">All</option>
+    <option value="All"><?php esc_html_e( 'All', 'onesignal-free-web-push-notifications' ); ?></option>
     <?php
     if ($json && is_array($json->segments)) {
         foreach ($json->segments as $segment) {
@@ -94,22 +99,22 @@ Send notification when <?php echo $post_type === 'page' ? 'page' : 'post'; ?> is
             }
         }
     } else {
-        echo '<option disabled>No segments available</option>';
+        echo '<option disabled>' . esc_html__( 'No segments available', 'onesignal-free-web-push-notifications' ) . '</option>';
     }
     ?>
 </select>
     <hr>
     <label for="os_customise">
-      <input type="checkbox" name="os_customise" id="os_customise" <?php echo isset($os_meta['os_customise']) && $os_meta['os_customise'] === 'on' ? 'checked' : '' ?>>Customize notification content</label>
+      <input type="checkbox" name="os_customise" id="os_customise" <?php echo isset($os_meta['os_customise']) && $os_meta['os_customise'] === 'on' ? 'checked' : '' ?>><?php esc_html_e( 'Customize notification content', 'onesignal-free-web-push-notifications' ); ?></label>
     <div id="os_customisations" style="<?php echo isset($os_meta['os_customise']) && $os_meta['os_customise'] === 'on' ? 'display:block;' : 'display:none;'; ?>">
-      <label for="os_title">Notification title</label>
+      <label for="os_title"><?php esc_html_e( 'Notification title', 'onesignal-free-web-push-notifications' ); ?></label>
       <input type="text" name="os_title" id="os_title" value="<?php echo esc_attr(isset($os_meta['os_title']) ? $os_meta['os_title'] : ''); ?>" disabled>
-      <label for="os_content">Notification content</label>
+      <label for="os_content"><?php esc_html_e( 'Notification content', 'onesignal-free-web-push-notifications' ); ?></label>
       <input type="text" name="os_content" id="os_content" value="<?php echo esc_attr(isset($os_meta['os_content']) ? $os_meta['os_content'] : ''); ?>" disabled>
     </div>
     <?php if (get_option('OneSignalWPSetting')['send_to_mobile_platforms'] == 1) : ?>
       <hr>
-      <label for="os_mobile_url">Mobile URL</label>
+      <label for="os_mobile_url"><?php esc_html_e( 'Mobile URL', 'onesignal-free-web-push-notifications' ); ?></label>
       <input type="text" name="os_mobile_url" id="os_mobile_url" value="<?php echo esc_attr(isset($os_meta['os_mobile_url']) ? $os_meta['os_mobile_url'] : ''); ?>">
     <?php endif; ?>
   </div>

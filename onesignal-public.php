@@ -10,8 +10,35 @@ class OneSignal_Public
 
     public static function init()
     {
+        self::intercept_service_worker_request();
         add_action('wp_head', array(__CLASS__, 'onesignal_header'), 10);
         add_action( 'wp_enqueue_scripts', array( __CLASS__, 'onesigal_amp_style' ) );
+    }
+
+    public static function intercept_service_worker_request()
+    {
+        $request_path = isset($_SERVER['REQUEST_URI']) ? parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) : '';
+
+        $service_worker_files = array(
+            '/OneSignalSDKWorker.js',
+            '/OneSignalSDKUpdaterWorker.js',
+        );
+
+        if (!in_array($request_path, $service_worker_files)) {
+            return;
+        }
+
+        header('Service-Worker-Allowed: /');
+        header('Content-Type: application/javascript');
+        header('X-Robots-Tag: none');
+
+        if (defined('ONESIGNAL_DEBUG') && defined('ONESIGNAL_LOCAL')) {
+            echo "importScripts('https://localhost:3001/dev_sdks/OneSignalSDK.js');";
+        } else {
+            echo "importScripts('https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js');";
+        }
+
+        exit;
     }
 
     // For easier debugging of sites by identifying them as WordPress

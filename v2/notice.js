@@ -67,7 +67,8 @@ function notice() {
   const get_metadata = () => {
     const data = {
       action: "has_metadata",
-      post_id: state.post_id
+      post_id: state.post_id,
+      nonce: ajax_object.nonce,
     };
 
     jQuery.get(ajax_object.ajax_url, data, function (response) {

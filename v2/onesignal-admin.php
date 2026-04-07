@@ -18,47 +18,45 @@ function load_javascript()
     if ($post) {
         wp_register_script('notice_script', plugins_url('notice.js', __FILE__), array('jquery'), '1.1', true);
         wp_enqueue_script('notice_script');
-        wp_localize_script('notice_script', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php'), 'post_id' => $post->ID));
+        wp_localize_script('notice_script', 'ajax_object', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'post_id' => $post->ID,
+            'nonce' => wp_create_nonce('onesignal_has_metadata'),
+        ));
     }
 }
 
 add_action('wp_ajax_has_metadata', 'has_metadata');
 function has_metadata()
 {
-    $post_id = isset($_GET['post_id']) ?
-            (filter_var($_GET['post_id'], FILTER_SANITIZE_NUMBER_INT))
-            : '';
+    check_ajax_referer('onesignal_has_metadata', 'nonce');
 
-    if (is_null($post_id)) {
-        $data = array('error' => 'could not get post id');
-    } else {
-        $recipients = get_post_meta($post_id, 'recipients');
-        if ($recipients && is_array($recipients)) {
-            $recipients = $recipients[0];
-        }
+    $post_id = isset($_GET['post_id']) ? intval($_GET['post_id']) : 0;
 
-        $status = get_post_meta($post_id, 'status');
-        if ($status && is_array($status)) {
-            $status = $status[0];
-        }
-
-        $response_body = get_post_meta($post_id, 'response_body');
-        if ($response_body && is_array($response_body)) {
-            $response_body = $response_body[0];
-        }
-
-        // reset meta
-        delete_post_meta($post_id, 'status');
-        delete_post_meta($post_id, 'recipients');
-        delete_post_meta($post_id, 'response_body');
-
-        $data = array('recipients' => $recipients, 'status_code' => $status, 'response_body' => $response_body);
-
+    if (!$post_id || !current_user_can('edit_post', $post_id)) {
+        wp_send_json_error(array('error' => 'Unauthorized'), 403);
     }
 
-    echo wp_json_encode($data);
+    $recipients = get_post_meta($post_id, 'recipients');
+    if ($recipients && is_array($recipients)) {
+        $recipients = $recipients[0];
+    }
 
-    exit;
+    $status = get_post_meta($post_id, 'status');
+    if ($status && is_array($status)) {
+        $status = $status[0];
+    }
+
+    $response_body = get_post_meta($post_id, 'response_body');
+    if ($response_body && is_array($response_body)) {
+        $response_body = $response_body[0];
+    }
+
+    delete_post_meta($post_id, 'status');
+    delete_post_meta($post_id, 'recipients');
+    delete_post_meta($post_id, 'response_body');
+
+    wp_send_json(array('recipients' => $recipients, 'status_code' => $status, 'response_body' => $response_body));
 }
 
 class OneSignal_Admin

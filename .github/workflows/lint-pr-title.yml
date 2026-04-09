@@ -1,0 +1,12 @@
+name: Lint PR Title
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  lint:
+    uses: OneSignal/sdk-shared/.github/workflows/lint-pr-title.yml@main

@@ -1,0 +1,103 @@
+name: Publish to WordPress.org (v3 trunk)
+
+on:
+  push:
+    tags:
+      - 'v3.*'
+
+permissions:
+  contents: read
+
+env:
+  SVN_REPO: https://plugins.svn.wordpress.org/onesignal-free-web-push-notifications
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    outputs:
+      bare_version: ${{ steps.version.outputs.bare }}
+    steps:
+      - name: Checkout tagged commit
+        uses: actions/checkout@v5
+
+      - name: Strip v prefix from tag
+        id: version
+        run: echo "bare=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Prepare release files
+        run: |
+          mkdir -p /tmp/release-files
+          rsync --archive \
+            --exclude='.git/' \
+            --exclude='.env' \
+            --exclude='.gitignore' \
+            --exclude='.github' \
+            --exclude='.vscode/' \
+            --exclude='build_release.sh' \
+            --exclude='*.zip' \
+            --exclude='onesignal-free-web-push-notifications' \
+            --exclude='onesignal-free-web-push-notifications.zip' \
+            --exclude='CONTRIBUTING.md' \
+            --exclude='LICENSE' \
+            --exclude='docker*' \
+            --exclude='PluginDevDockerUsage.md' \
+            --exclude='README.md' \
+            --exclude='index.php' \
+            --exclude='views/css/*.scss' \
+            --exclude='views/css/callout.css' \
+            --exclude='views/css/link.css' \
+            --exclude='views/css/semantic-ui' \
+            --exclude='vendor/' \
+            --exclude='tests/' \
+            --exclude='phpunit.xml' \
+            --exclude='composer.json' \
+            --exclude='composer.lock' \
+            --exclude='.phpunit.result.cache' \
+            ./ /tmp/release-files/
+
+      - name: Deploy to SVN trunk
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        run: |
+          svn checkout --depth immediates "$SVN_REPO/trunk" /tmp/svn-trunk \
+            --username "$SVN_USERNAME" --password "$SVN_PASSWORD" --non-interactive
+
+          # Full checkout of trunk contents
+          svn update /tmp/svn-trunk --set-depth infinity --non-interactive
+
+          # Sync release files into SVN trunk
+          rsync --archive --delete \
+            --exclude='.svn' \
+            /tmp/release-files/ /tmp/svn-trunk/
+
+          cd /tmp/svn-trunk
+
+          # Stage new files
+          svn status | grep '^\?' | awk '{print $2}' | xargs -r -I {} svn add "{}"
+
+          # Stage deleted files
+          svn status | grep '^\!' | awk '{print $2}' | xargs -r -I {} svn delete "{}"
+
+          svn commit -m "Deploy v${{ steps.version.outputs.bare }} to trunk" \
+            --username "$SVN_USERNAME" --password "$SVN_PASSWORD" --non-interactive
+
+      - name: Create SVN tag from trunk
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        run: |
+          VERSION="${{ steps.version.outputs.bare }}"
+          svn copy "$SVN_REPO/trunk" "$SVN_REPO/tags/$VERSION" \
+            -m "Tag $VERSION" \
+            --username "$SVN_USERNAME" --password "$SVN_PASSWORD" --non-interactive
+
+  github-release:
+    needs: publish
+    permissions:
+      contents: write
+    uses: OneSignal/sdk-shared/.github/workflows/github-release.yml@main
+    with:
+      version: ${{ needs.publish.outputs.bare_version }}
+    secrets:
+      GH_PUSH_TOKEN: ${{ secrets.GH_PUSH_TOKEN }}

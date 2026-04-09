@@ -1,0 +1,132 @@
+name: Publish to WordPress.org (v2 tag only)
+
+on:
+  push:
+    tags:
+      - 'v2.*'
+
+permissions:
+  contents: read
+
+env:
+  SVN_REPO: https://plugins.svn.wordpress.org/onesignal-free-web-push-notifications
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    outputs:
+      bare_version: ${{ steps.version.outputs.bare }}
+    steps:
+      - name: Checkout tagged commit
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Derive versions
+        id: version
+        run: |
+          # Current tag without v prefix (e.g., 2.4.6)
+          BARE="${GITHUB_REF_NAME#v}"
+          echo "bare=$BARE" >> $GITHUB_OUTPUT
+
+          # Previous v2 tag for the SVN copy source
+          PREV=$(git describe --tags --match 'v2.*' --abbrev=0 HEAD~1)
+          PREV_BARE="${PREV#v}"
+          echo "prev_bare=$PREV_BARE" >> $GITHUB_OUTPUT
+
+      - name: Prepare release files
+        run: |
+          mkdir -p /tmp/release-files
+          rsync --archive \
+            --exclude='.git/' \
+            --exclude='.env' \
+            --exclude='.gitignore' \
+            --exclude='.github' \
+            --exclude='.vscode/' \
+            --exclude='build_release.sh' \
+            --exclude='*.zip' \
+            --exclude='onesignal-free-web-push-notifications' \
+            --exclude='onesignal-free-web-push-notifications.zip' \
+            --exclude='CONTRIBUTING.md' \
+            --exclude='LICENSE' \
+            --exclude='docker*' \
+            --exclude='PluginDevDockerUsage.md' \
+            --exclude='README.md' \
+            --exclude='index.php' \
+            --exclude='views/css/*.scss' \
+            --exclude='views/css/callout.css' \
+            --exclude='views/css/link.css' \
+            --exclude='views/css/semantic-ui' \
+            --exclude='vendor/' \
+            --exclude='tests/' \
+            --exclude='phpunit.xml' \
+            --exclude='composer.json' \
+            --exclude='composer.lock' \
+            --exclude='.phpunit.result.cache' \
+            ./ /tmp/release-files/
+
+      - name: Create SVN tag from previous tag
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        run: |
+          VERSION="${{ steps.version.outputs.bare }}"
+          PREV="${{ steps.version.outputs.prev_bare }}"
+
+          svn copy \
+            "$SVN_REPO/tags/$PREV" \
+            "$SVN_REPO/tags/$VERSION" \
+            -m "Create tag $VERSION from $PREV" \
+            --username "$SVN_USERNAME" --password "$SVN_PASSWORD" --non-interactive
+
+      - name: Update SVN tag with release files
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        run: |
+          VERSION="${{ steps.version.outputs.bare }}"
+
+          svn checkout "$SVN_REPO/tags/$VERSION" /tmp/svn-tag \
+            --username "$SVN_USERNAME" --password "$SVN_PASSWORD" --non-interactive
+
+          # Sync release files into SVN tag, preserving .svn metadata
+          rsync --archive --delete \
+            --exclude='.svn' \
+            /tmp/release-files/ /tmp/svn-tag/
+
+          cd /tmp/svn-tag
+
+          # Stage new files
+          svn status | grep '^\?' | awk '{print $2}' | xargs -r -I {} svn add "{}"
+
+          # Stage deleted files
+          svn status | grep '^\!' | awk '{print $2}' | xargs -r -I {} svn delete "{}"
+
+          svn commit -m "Update tag $VERSION" \
+            --username "$SVN_USERNAME" --password "$SVN_PASSWORD" --non-interactive
+
+      - name: Verify trunk is untouched
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        run: |
+          STABLE_TAG=$(svn cat "$SVN_REPO/trunk/readme.txt" \
+            --username "$SVN_USERNAME" --password "$SVN_PASSWORD" --non-interactive \
+            | grep '^Stable tag:' | awk '{print $3}')
+
+          # Trunk stable tag should still point to a v3.x version
+          if [[ ! "$STABLE_TAG" =~ ^3\. ]]; then
+            echo "::error::Trunk Stable tag is '$STABLE_TAG' — expected a 3.x version. Verify trunk was not modified."
+            exit 1
+          fi
+          echo "Trunk Stable tag is '$STABLE_TAG' — confirmed untouched."
+
+  github-release:
+    needs: publish
+    permissions:
+      contents: write
+    uses: OneSignal/sdk-shared/.github/workflows/github-release.yml@main
+    with:
+      version: ${{ needs.publish.outputs.bare_version }}
+    secrets:
+      GH_PUSH_TOKEN: ${{ secrets.GH_PUSH_TOKEN }}

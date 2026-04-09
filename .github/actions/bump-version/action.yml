@@ -1,0 +1,91 @@
+name: Bump Version
+description: Updates plugin version in onesignal.php and readme.txt
+
+inputs:
+  version:
+    description: 'The new version (e.g., 3.8.2 or 2.4.6)'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Git user
+      uses: onesignal/sdk-shared/.github/actions/setup-git-user@main
+
+    - name: Generate changelog from git history
+      id: changelog
+      shell: bash
+      run: |
+        LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+        if [ -n "$LAST_TAG" ]; then
+          RANGE="${LAST_TAG}..HEAD"
+        else
+          RANGE="HEAD"
+        fi
+
+        # Extract changelog lines from merge commit PR titles (strip conventional prefix for readability)
+        ENTRIES=$(git log "$RANGE" --merges --pretty=format:"%s" \
+          | sed -n 's/^Merge pull request #[0-9]* from .*//p; s/^.*: //p' \
+          | grep -v '^$' \
+          | grep -iv '^release\|^chore(release)' \
+          | head -20 \
+          | sed 's/^/- /')
+
+        if [ -z "$ENTRIES" ]; then
+          # Fallback: use non-merge commit subjects
+          ENTRIES=$(git log "$RANGE" --no-merges --pretty=format:"%s" \
+            | grep -v '^chore(release)' \
+            | head -20 \
+            | sed 's/^/- /')
+        fi
+
+        if [ -z "$ENTRIES" ]; then
+          ENTRIES="- See release notes"
+        fi
+
+        # Write to file to preserve newlines across steps
+        echo "$ENTRIES" > /tmp/changelog_entries.txt
+
+    - name: Bump version
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+      run: |
+        IFS='.' read -r major minor patch <<< "$VERSION"
+        padded=$(printf "%02d%02d%02d" "$major" "$minor" "$patch")
+
+        # Update onesignal.php plugin header
+        sed -i "s/^ \* Version: .*/ * Version: ${VERSION}/" onesignal.php
+
+        # Update ONESIGNAL_PLUGIN_VERSION constant
+        sed -i "s/define('ONESIGNAL_PLUGIN_VERSION', '[0-9]*');/define('ONESIGNAL_PLUGIN_VERSION', '${padded}');/" onesignal.php
+
+        # Update readme.txt Stable tag
+        sed -i "s/^Stable tag: .*/Stable tag: ${VERSION}/" readme.txt
+
+        # Read generated changelog entries
+        CHANGELOG=$(cat /tmp/changelog_entries.txt)
+
+        # Insert changelog entry after "== Changelog ==" header
+        tmpfile=$(mktemp)
+        awk -v ver="$VERSION" -v changes="$CHANGELOG" '
+          /^== Changelog ==/ {
+            print
+            print ""
+            print "= " ver " ="
+            n = split(changes, lines, "\n")
+            for (i = 1; i <= n; i++) print lines[i]
+            next
+          }
+          { print }
+        ' readme.txt > "$tmpfile" && mv "$tmpfile" readme.txt
+
+    - name: Commit and push
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+      run: |
+        git add onesignal.php readme.txt
+        git commit -m "chore(release): v${VERSION}"
+        git push

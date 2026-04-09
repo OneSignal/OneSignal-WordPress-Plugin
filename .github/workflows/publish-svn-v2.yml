@@ -5,6 +5,9 @@ on:
     tags:
       - 'v2.*'
 
+permissions:
+  contents: read
+
 env:
   SVN_REPO: https://plugins.svn.wordpress.org/onesignal-free-web-push-notifications
 
@@ -120,6 +123,8 @@ jobs:
 
   github-release:
     needs: publish
+    permissions:
+      contents: write
     uses: OneSignal/sdk-shared/.github/workflows/github-release.yml@main
     with:
       version: ${{ needs.publish.outputs.bare_version }}

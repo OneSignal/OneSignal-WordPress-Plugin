@@ -1,0 +1,40 @@
+name: Release (v2)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 2.4.6)'
+        required: true
+        type: string
+
+jobs:
+  prep:
+    uses: OneSignal/sdk-shared/.github/workflows/prep-release.yml@main
+    with:
+      version: ${{ inputs.version }}
+      target_branch: v2
+    secrets:
+      GH_PUSH_TOKEN: ${{ secrets.GH_PUSH_TOKEN }}
+
+  bump:
+    needs: prep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.prep.outputs.release_branch }}
+          token: ${{ secrets.GH_PUSH_TOKEN || github.token }}
+
+      - uses: ./.github/actions/bump-version
+        with:
+          version: ${{ inputs.version }}
+
+  release:
+    needs: [prep, bump]
+    uses: OneSignal/sdk-shared/.github/workflows/create-release.yml@main
+    with:
+      release_branch: ${{ needs.prep.outputs.release_branch }}
+      target_branch: v2
+    secrets:
+      GH_PUSH_TOKEN: ${{ secrets.GH_PUSH_TOKEN }}

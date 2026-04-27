@@ -85,6 +85,10 @@
                 },
               ]
             : [];
+        } else if (status === "warning") {
+          type = "warning";
+          message = "OneSignal: Push notification not sent: " + notificationId;
+          actions = [];
         } else {
           type = "error";
           message =

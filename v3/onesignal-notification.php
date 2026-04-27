@@ -137,14 +137,23 @@ function onesignal_create_notification($post, $notification_options = array())
         if ($response_code === 200) {
             $response_body = wp_remote_retrieve_body($response);
             $response_data = json_decode($response_body, true);
-            if (!empty($response_data['id'])) {
-                onesignal_save_notification_id($post->ID, $response_data['id']);
-            }
             $notification_id = $response_data['id'] ?? '';
-            if (isset($fields['send_after'])) {
-                onesignal_store_send_notice('scheduled', $notification_id);
+            if (!empty($notification_id)) {
+                onesignal_save_notification_id($post->ID, $notification_id);
+                if (isset($fields['send_after'])) {
+                    onesignal_store_send_notice('scheduled', $notification_id);
+                } else {
+                    onesignal_store_send_notice('success', $notification_id);
+                }
             } else {
-                onesignal_store_send_notice('success', $notification_id);
+                // API returned 200 but empty id — no eligible subscribers
+                $errors = $response_data['errors'] ?? [];
+                if (is_array($errors) && isset($errors[0]) && is_string($errors[0])) {
+                    $detail = str_ireplace(['players', 'player'], ['subscriptions', 'subscription'], $errors[0]);
+                } else {
+                    $detail = 'No eligible subscriptions found in the selected segment.';
+                }
+                onesignal_store_send_notice('warning', $detail);
             }
         } else {
             $response_body = wp_remote_retrieve_body($response);
@@ -218,6 +227,13 @@ function onesignal_display_send_notice()
                 . $scheduled_link . ' '
                 . __('If you change the scheduled post time in WordPress, the existing notification will be cancelled and a new one created.', 'onesignal');
             $type = 'info';
+            break;
+        case 'warning':
+            $message = sprintf(
+                __('Push notification not sent: %s', 'onesignal'),
+                esc_html($notice['detail'])
+            );
+            $type = 'warning';
             break;
         case 'error':
         default:

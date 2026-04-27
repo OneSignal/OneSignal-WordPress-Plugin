@@ -12,6 +12,15 @@ add_action('save_post', 'onesignal_handle_quick_edit_date_change', 10, 3);
 // Register handler to cancel scheduled notifications when posts are deleted
 add_action('wp_trash_post', 'onesignal_cancel_notification_on_post_delete');
 
+// Display admin notices after a notification send attempt (classic editor)
+add_action('admin_notices', 'onesignal_display_send_notice');
+
+// AJAX endpoint to serve pending notices to the block editor
+add_action('wp_ajax_onesignal_get_send_notice', 'onesignal_ajax_get_send_notice');
+
+// Enqueue block editor notice script
+add_action('enqueue_block_editor_assets', 'onesignal_enqueue_block_editor_notice');
+
 // Core function to create and send/schedule a notification
 function onesignal_create_notification($post, $notification_options = array())
 {
@@ -121,6 +130,7 @@ function onesignal_create_notification($post, $notification_options = array())
     $response = wp_remote_post('https://onesignal.com/api/v1/notifications', $args);
     if (is_wp_error($response)) {
         error_log('API request failed: ' . $response->get_error_message());
+        onesignal_store_send_notice('error', $response->get_error_message());
     } else {
         // Save the notification ID for potential future cancellation
         $response_code = wp_remote_retrieve_response_code($response);
@@ -130,8 +140,140 @@ function onesignal_create_notification($post, $notification_options = array())
             if (!empty($response_data['id'])) {
                 onesignal_save_notification_id($post->ID, $response_data['id']);
             }
+            $notification_id = $response_data['id'] ?? '';
+            if (isset($fields['send_after'])) {
+                onesignal_store_send_notice('scheduled', $notification_id);
+            } else {
+                onesignal_store_send_notice('success', $notification_id);
+            }
+        } else {
+            $response_body = wp_remote_retrieve_body($response);
+            $response_data = json_decode($response_body, true);
+            $error_message = $response_data['errors'][0] ?? wp_remote_retrieve_response_message($response);
+            error_log('API request failed with status ' . $response_code . ': ' . $error_message);
+            onesignal_store_send_notice('error', $error_message);
         }
     }
+}
+
+/**
+ * Stores a notification send result in a short-lived user-scoped transient
+ * so it can be displayed as an admin notice after the page redirect.
+ */
+function onesignal_store_send_notice($status, $detail = '')
+{
+    $key = 'onesignal_send_notice_' . get_current_user_id();
+    set_transient($key, array('status' => $status, 'detail' => $detail), 60);
+}
+
+/**
+ * Reads the stored transient and renders a WP admin notice, then deletes it.
+ */
+function onesignal_display_send_notice()
+{
+    $screen = get_current_screen();
+    // Only show on post edit screens
+    if (!$screen || !in_array($screen->base, array('post', 'edit'), true)) {
+        return;
+    }
+
+    // In the block editor, Gutenberg fetches the redirect page in the background
+    // after saving, which causes admin_notices to fire and consume the transient
+    // before the JS AJAX handler can read it. Let the JS handle it instead.
+    if ($screen->is_block_editor()) {
+        return;
+    }
+
+    $key = 'onesignal_send_notice_' . get_current_user_id();
+    $notice = get_transient($key);
+    if (!$notice) {
+        return;
+    }
+    delete_transient($key);
+
+    $app_id          = get_option('OneSignalWPSetting')['app_id'] ?? '';
+    $notification_id = $notice['detail'] ?? '';
+    $dashboard_url   = (!empty($app_id) && !empty($notification_id))
+        ? 'https://dashboard.onesignal.com/apps/' . rawurlencode($app_id) . '/push/' . rawurlencode($notification_id)
+        : '';
+
+    $link = !empty($dashboard_url)
+        ? ' <a href="' . esc_url($dashboard_url) . '" target="_blank" rel="noopener noreferrer">'
+            . esc_html__('View the notification in the OneSignal Dashboard.', 'onesignal')
+            . '</a>'
+        : '';
+
+    switch ($notice['status']) {
+        case 'success':
+            $message = __('Push notification sent successfully.', 'onesignal') . $link;
+            $type    = 'success';
+            break;
+        case 'scheduled':
+            $scheduled_link = !empty($dashboard_url)
+                ? ' <a href="' . esc_url($dashboard_url) . '" target="_blank" rel="noopener noreferrer">'
+                    . esc_html__('View the scheduled notification in the OneSignal Dashboard.', 'onesignal')
+                    . '</a>'
+                : '';
+            $message = __('Push notification scheduled.', 'onesignal')
+                . $scheduled_link . ' '
+                . __('If you change the scheduled post time in WordPress, the existing notification will be cancelled and a new one created.', 'onesignal');
+            $type = 'info';
+            break;
+        case 'error':
+        default:
+            $message = sprintf(
+                __('Push notification failed to send: %s', 'onesignal'),
+                esc_html($notification_id)
+            );
+            $type = 'error';
+            break;
+    }
+
+    printf(
+        '<div class="notice notice-%s is-dismissible"><p><strong>OneSignal:</strong> %s</p></div>',
+        esc_attr($type),
+        $message
+    );
+}
+
+/**
+ * AJAX handler that returns and clears the pending notice for the current user.
+ * Used by the block editor JS after a save completes.
+ */
+function onesignal_ajax_get_send_notice()
+{
+    check_ajax_referer('onesignal_notice_nonce', 'nonce');
+    $key = 'onesignal_send_notice_' . get_current_user_id();
+    $notice = get_transient($key);
+    if ($notice) {
+        delete_transient($key);
+        wp_send_json_success($notice);
+    } else {
+        wp_send_json_success(null);
+    }
+}
+
+/**
+ * Enqueues the block editor JS that polls for a pending notice after each save.
+ */
+function onesignal_enqueue_block_editor_notice()
+{
+    $script_path = plugin_dir_path(__FILE__) . 'onesignal-block-editor-notice.js';
+    if (!file_exists($script_path)) {
+        return;
+    }
+    wp_enqueue_script(
+        'onesignal-block-editor-notice',
+        plugins_url('onesignal-block-editor-notice.js', __FILE__),
+        array('wp-data', 'wp-notices', 'wp-i18n'),
+        filemtime($script_path),
+        true
+    );
+    wp_localize_script('onesignal-block-editor-notice', 'onesignalNotice', array(
+        'nonce'  => wp_create_nonce('onesignal_notice_nonce'),
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'appId'  => get_option('OneSignalWPSetting')['app_id'] ?? '',
+    ));
 }
 
 // Function to schedule notification (called on post status transitions)

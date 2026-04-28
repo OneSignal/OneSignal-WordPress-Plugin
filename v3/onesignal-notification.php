@@ -130,7 +130,7 @@ function onesignal_create_notification($post, $notification_options = array())
     $response = wp_remote_post('https://onesignal.com/api/v1/notifications', $args);
     if (is_wp_error($response)) {
         error_log('API request failed: ' . $response->get_error_message());
-        onesignal_store_send_notice('error', $response->get_error_message());
+        onesignal_store_send_notice('error', $response->get_error_message(), $post->ID);
     } else {
         // Save the notification ID for potential future cancellation
         $response_code = wp_remote_retrieve_response_code($response);
@@ -141,9 +141,9 @@ function onesignal_create_notification($post, $notification_options = array())
             if (!empty($notification_id)) {
                 onesignal_save_notification_id($post->ID, $notification_id);
                 if (isset($fields['send_after'])) {
-                    onesignal_store_send_notice('scheduled', $notification_id);
+                    onesignal_store_send_notice('scheduled', $notification_id, $post->ID);
                 } else {
-                    onesignal_store_send_notice('success', $notification_id);
+                    onesignal_store_send_notice('success', $notification_id, $post->ID);
                 }
             } else {
                 // API returned 200 but empty id — no eligible subscribers
@@ -153,14 +153,17 @@ function onesignal_create_notification($post, $notification_options = array())
                 } else {
                     $detail = 'No eligible subscriptions found in the selected segment.';
                 }
-                onesignal_store_send_notice('warning', $detail);
+                onesignal_store_send_notice('warning', $detail, $post->ID);
             }
         } else {
             $response_body = wp_remote_retrieve_body($response);
             $response_data = json_decode($response_body, true);
-            $error_message = $response_data['errors'][0] ?? wp_remote_retrieve_response_message($response);
+            $errors = $response_data['errors'] ?? [];
+            $error_message = (is_array($errors) && isset($errors[0]) && is_string($errors[0]))
+                ? $errors[0]
+                : wp_remote_retrieve_response_message($response);
             error_log('API request failed with status ' . $response_code . ': ' . $error_message);
-            onesignal_store_send_notice('error', $error_message);
+            onesignal_store_send_notice('error', $error_message, $post->ID);
         }
     }
 }
@@ -169,9 +172,9 @@ function onesignal_create_notification($post, $notification_options = array())
  * Stores a notification send result in a short-lived user-scoped transient
  * so it can be displayed as an admin notice after the page redirect.
  */
-function onesignal_store_send_notice($status, $detail = '')
+function onesignal_store_send_notice($status, $detail = '', $post_id = 0)
 {
-    $key = 'onesignal_send_notice_' . get_current_user_id();
+    $key = 'onesignal_send_notice_' . get_current_user_id() . '_' . $post_id;
     set_transient($key, array('status' => $status, 'detail' => $detail), 60);
 }
 
@@ -180,6 +183,8 @@ function onesignal_store_send_notice($status, $detail = '')
  */
 function onesignal_display_send_notice()
 {
+    global $post;
+
     $screen = get_current_screen();
     // Only show on post edit screens
     if (!$screen || !in_array($screen->base, array('post', 'edit'), true)) {
@@ -193,7 +198,8 @@ function onesignal_display_send_notice()
         return;
     }
 
-    $key = 'onesignal_send_notice_' . get_current_user_id();
+    $post_id = $post ? $post->ID : 0;
+    $key = 'onesignal_send_notice_' . get_current_user_id() . '_' . $post_id;
     $notice = get_transient($key);
     if (!$notice) {
         return;
@@ -259,7 +265,8 @@ function onesignal_display_send_notice()
 function onesignal_ajax_get_send_notice()
 {
     check_ajax_referer('onesignal_notice_nonce', 'nonce');
-    $key = 'onesignal_send_notice_' . get_current_user_id();
+    $post_id = absint($_POST['post_id'] ?? 0);
+    $key = 'onesignal_send_notice_' . get_current_user_id() . '_' . $post_id;
     $notice = get_transient($key);
     if ($notice) {
         delete_transient($key);

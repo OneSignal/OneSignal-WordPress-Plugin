@@ -36,9 +36,11 @@
   }
 
   function fetchAndDisplayNotice() {
+    var postId = select("core/editor").getCurrentPostId();
     var body = new URLSearchParams({
       action: "onesignal_get_send_notice",
       nonce: onesignalNotice.nonce,
+      post_id: postId,
     });
 
     fetch(onesignalNotice.ajaxUrl, {

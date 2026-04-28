@@ -161,6 +161,12 @@ class Test_OneSignal_API_Integration extends TestCase {
                 return ($thing instanceof WP_Error);
             });
 
+        WP_Mock::userFunction('get_current_user_id')
+            ->andReturn(1);
+
+        WP_Mock::userFunction('set_transient')
+            ->andReturn(true);
+
         // Mock WordPress hook functions
         WP_Mock::userFunction('has_filter')
             ->andReturnUsing(function($tag, $function_to_check = false) {

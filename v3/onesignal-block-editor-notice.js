@@ -1,17 +1,18 @@
 (function () {
-  var subscribe = wp.data.subscribe;
-  var select = wp.data.select;
-  var dispatch = wp.data.dispatch;
+  let subscribe = wp.data.subscribe;
+  let select = wp.data.select;
+  let dispatch = wp.data.dispatch;
 
-  var wasSaving = false;
+  let wasSaving = false;
 
-  var unsubscribe = subscribe(function () {
-    var editor = select("core/editor");
+  subscribe(function () {
+    let editor = select("core/editor");
     if (!editor) return;
 
-    var isSaving = editor.isSavingPost();
-    var isAutosave = editor.isAutosavingPost();
-    var isSavingNonAutosave = isSaving && !isAutosave;
+    let isSaving = editor.isSavingPost();
+    let isAutosave = editor.isAutosavingPost();
+    let isSavingMetaBoxes = editor.isSavingMetaBoxes ? editor.isSavingMetaBoxes() : false;
+    let isSavingNonAutosave = (isSaving && !isAutosave) || isSavingMetaBoxes;
 
     // Detect the moment a non-autosave save transitions from in-progress to complete
     if (wasSaving && !isSavingNonAutosave) {
@@ -25,7 +26,7 @@
   });
 
   function buildDashboardUrl(notificationId) {
-    var appId = onesignalNotice.appId;
+    let appId = onesignalNotice.appId;
     if (!appId || !notificationId) return "";
     return (
       "https://dashboard.onesignal.com/apps/" +
@@ -36,8 +37,8 @@
   }
 
   function fetchAndDisplayNotice() {
-    var postId = select("core/editor").getCurrentPostId();
-    var body = new URLSearchParams({
+    let postId = select("core/editor").getCurrentPostId();
+    let body = new URLSearchParams({
       action: "onesignal_get_send_notice",
       nonce: onesignalNotice.nonce,
       post_id: postId,
@@ -55,10 +56,10 @@
       .then(function (response) {
         if (!response.success || !response.data) return;
 
-        var status = response.data.status;
-        var notificationId = response.data.detail;
-        var dashboardUrl = buildDashboardUrl(notificationId);
-        var type, message, actions;
+        let status = response.data.status;
+        let detail = response.data.detail;
+        let dashboardUrl = buildDashboardUrl(detail);
+        let type, message, actions;
 
         if (status === "success") {
           type = "success";
@@ -89,12 +90,12 @@
             : [];
         } else if (status === "warning") {
           type = "warning";
-          message = "OneSignal: Push notification not sent: " + notificationId;
+          message = "OneSignal: Push notification not sent: " + detail;
           actions = [];
         } else {
           type = "error";
           message =
-            "OneSignal: Push notification failed to send: " + notificationId;
+            "OneSignal: Push notification failed to send: " + detail;
           actions = [];
         }
 

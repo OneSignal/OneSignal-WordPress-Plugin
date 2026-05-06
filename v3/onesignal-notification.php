@@ -179,10 +179,23 @@ function onesignal_store_send_notice($status, $detail = '', $post_id = 0)
 }
 
 /**
+ * Builds a dashboard link anchor tag for use in admin notices.
+ */
+function onesignal_build_dashboard_link($url, $label)
+{
+    if (empty($url)) return '';
+    return ' <a href="' . esc_url($url) . '" target="_blank" rel="noopener noreferrer">'
+        . esc_html__($label, 'onesignal')
+        . '</a>';
+}
+
+/**
  * Reads the stored transient and renders a WP admin notice, then deletes it.
  */
 function onesignal_display_send_notice()
 {
+    if (!is_admin()) return;
+
     global $post;
 
     $screen = get_current_screen();
@@ -206,38 +219,29 @@ function onesignal_display_send_notice()
     }
     delete_transient($key);
 
-    $app_id          = get_option('OneSignalWPSetting')['app_id'] ?? '';
-    $notification_id = $notice['detail'] ?? '';
-    $dashboard_url   = (!empty($app_id) && !empty($notification_id))
-        ? 'https://dashboard.onesignal.com/apps/' . rawurlencode($app_id) . '/push/' . rawurlencode($notification_id)
-        : '';
-
-    $link = !empty($dashboard_url)
-        ? ' <a href="' . esc_url($dashboard_url) . '" target="_blank" rel="noopener noreferrer">'
-            . esc_html__('View the notification in the OneSignal Dashboard.', 'onesignal')
-            . '</a>'
+    $app_id = get_option('OneSignalWPSetting')['app_id'] ?? '';
+    $detail = $notice['detail'] ?? '';
+    $dashboard_url = (!empty($app_id) && !empty($detail))
+        ? 'https://dashboard.onesignal.com/apps/' . rawurlencode($app_id) . '/push/' . rawurlencode($detail)
         : '';
 
     switch ($notice['status']) {
         case 'success':
+            $link    = onesignal_build_dashboard_link($dashboard_url, 'View the notification in the OneSignal Dashboard.');
             $message = __('Push notification sent successfully.', 'onesignal') . $link;
             $type    = 'success';
             break;
         case 'scheduled':
-            $scheduled_link = !empty($dashboard_url)
-                ? ' <a href="' . esc_url($dashboard_url) . '" target="_blank" rel="noopener noreferrer">'
-                    . esc_html__('View the scheduled notification in the OneSignal Dashboard.', 'onesignal')
-                    . '</a>'
-                : '';
+            $link    = onesignal_build_dashboard_link($dashboard_url, 'View the scheduled notification in the OneSignal Dashboard.');
             $message = __('Push notification scheduled.', 'onesignal')
-                . $scheduled_link . ' '
+                . $link . ' '
                 . __('If you change the scheduled post time in WordPress, the existing notification will be cancelled and a new one created.', 'onesignal');
-            $type = 'info';
+            $type    = 'info';
             break;
         case 'warning':
             $message = sprintf(
                 __('Push notification not sent: %s', 'onesignal'),
-                esc_html($notice['detail'])
+                esc_html($detail)
             );
             $type = 'warning';
             break;
@@ -245,7 +249,7 @@ function onesignal_display_send_notice()
         default:
             $message = sprintf(
                 __('Push notification failed to send: %s', 'onesignal'),
-                esc_html($notification_id)
+                esc_html($detail)
             );
             $type = 'error';
             break;
@@ -266,6 +270,9 @@ function onesignal_ajax_get_send_notice()
 {
     check_ajax_referer('onesignal_notice_nonce', 'nonce');
     $post_id = absint($_POST['post_id'] ?? 0);
+    if (!current_user_can('edit_post', $post_id)) {
+        wp_send_json_success(null);
+    }
     $key = 'onesignal_send_notice_' . get_current_user_id() . '_' . $post_id;
     $notice = get_transient($key);
     if ($notice) {

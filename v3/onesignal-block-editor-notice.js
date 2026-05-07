@@ -11,7 +11,7 @@
 
     let isSaving = editor.isSavingPost();
     let isAutosave = editor.isAutosavingPost();
-    let isSavingMetaBoxes = editor.isSavingMetaBoxes ? editor.isSavingMetaBoxes() : false;
+    let isSavingMetaBoxes = wp.data.select("core/edit-post")?.isSavingMetaBoxes() ?? false;
     let isSavingNonAutosave = (isSaving && !isAutosave) || isSavingMetaBoxes;
 
     // Detect the moment a non-autosave save transitions from in-progress to complete

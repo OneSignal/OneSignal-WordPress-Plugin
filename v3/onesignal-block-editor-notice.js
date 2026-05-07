@@ -76,8 +76,7 @@
             : [];
         } else if (status === "scheduled") {
           type = "info";
-          message =
-            "OneSignal: Push notification scheduled. If you change the scheduled post time in WordPress, the existing notification will be cancelled and a new one created.";
+          message = "OneSignal: Push notification scheduled. If you change the scheduled post time in WordPress, the existing notification will be cancelled and a new one created.";
           actions = dashboardUrl
             ? [
                 {
@@ -94,8 +93,7 @@
           actions = [];
         } else {
           type = "error";
-          message =
-            "OneSignal: Push notification failed to send: " + detail;
+          message = "OneSignal: Push notification failed to send: " + detail;
           actions = [];
         }
 

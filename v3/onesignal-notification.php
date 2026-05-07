@@ -199,8 +199,8 @@ function onesignal_display_send_notice()
     global $post;
 
     $screen = get_current_screen();
-    // Only show on post edit screens
-    if (!$screen || !in_array($screen->base, array('post', 'edit'), true)) {
+    // Only show on the single-post edit screen
+    if (!$screen || $screen->base !== 'post') {
         return;
     }
 

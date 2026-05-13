@@ -20,6 +20,11 @@ class Test_OneSignal_API_Integration extends TestCase {
     private static $captured_request_args = array();
 
     /**
+     * Last value stored via set_transient, captured for status-branch assertions.
+     */
+    private array $lastTransient = [];
+
+    /**
      * Mock an HTTP request URL with a specific response
      * 
      * @param string $url The URL to mock
@@ -159,6 +164,16 @@ class Test_OneSignal_API_Integration extends TestCase {
         WP_Mock::userFunction('is_wp_error')
             ->andReturnUsing(function($thing) {
                 return ($thing instanceof WP_Error);
+            });
+
+        WP_Mock::userFunction('get_current_user_id')
+            ->andReturn(1);
+
+        $this->lastTransient = [];
+        WP_Mock::userFunction('set_transient')
+            ->andReturnUsing(function ($key, $value) {
+                $this->lastTransient = $value;
+                return true;
             });
 
         // Mock WordPress hook functions
@@ -602,5 +617,146 @@ class Test_OneSignal_API_Integration extends TestCase {
         $header_value = onesignal_get_sdk_wrapper_header();
         $this->assertStringStartsWith('onesignal/wordpress/', $header_value, 'Header should start with onesignal/wordpress/');
         $this->assertMatchesRegularExpression('/^onesignal\/wordpress\/\d{6}$/', $header_value, 'Header should match pattern onesignal/wordpress/XXYYZZ');
+    }
+
+    /**
+     * Test store_send_notice stores status='success' and the notification ID as detail.
+     */
+    public function test_store_notice_success_status() {
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', [
+            'response' => ['code' => 200],
+            'body'     => json_encode(['id' => 'notif-success-123']),
+        ]);
+
+        $post = (object) [
+            'ID'            => 1001,
+            'post_title'    => 'Success Notice Test',
+            'post_date'     => '2024-01-15 10:00:00',
+            'post_date_gmt' => '2024-01-15 10:00:00',
+            'post_type'     => 'post',
+        ];
+
+        onesignal_create_notification($post);
+
+        $this->assertSame('success', $this->lastTransient['status']);
+        $this->assertSame('notif-success-123', $this->lastTransient['detail']);
+    }
+
+    /**
+     * Test store_send_notice stores status='scheduled' for a future post date.
+     */
+    public function test_store_notice_scheduled_status() {
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', [
+            'response' => ['code' => 200],
+            'body'     => json_encode(['id' => 'notif-scheduled-456']),
+        ]);
+
+        $post = (object) [
+            'ID'            => 1002,
+            'post_title'    => 'Scheduled Notice Test',
+            'post_date'     => '2030-01-01 10:00:00',
+            'post_date_gmt' => '2030-01-01 10:00:00',
+            'post_type'     => 'post',
+        ];
+
+        onesignal_create_notification($post);
+
+        $this->assertSame('scheduled', $this->lastTransient['status']);
+        $this->assertSame('notif-scheduled-456', $this->lastTransient['detail']);
+    }
+
+    /**
+     * Test store_send_notice stores status='warning' with the translated error string
+     * when the API returns 200 but no recipients (string error in errors[0]).
+     */
+    public function test_store_notice_warning_status_with_string_error() {
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', [
+            'response' => ['code' => 200],
+            'body'     => json_encode(['id' => '', 'errors' => ['All included players are not subscribed']]),
+        ]);
+
+        $post = (object) [
+            'ID'            => 1003,
+            'post_title'    => 'Warning Notice Test',
+            'post_date'     => '2024-01-15 10:00:00',
+            'post_date_gmt' => '2024-01-15 10:00:00',
+            'post_type'     => 'post',
+        ];
+
+        onesignal_create_notification($post);
+
+        $this->assertSame('warning', $this->lastTransient['status']);
+        // "players" → "subscriptions" translation should have been applied
+        $this->assertStringContainsString('subscriptions', $this->lastTransient['detail']);
+        $this->assertStringNotContainsString('players', $this->lastTransient['detail']);
+    }
+
+    /**
+     * Test store_send_notice stores status='warning' with the fallback message
+     * when the API returns 200 with no id and no usable errors array.
+     */
+    public function test_store_notice_warning_status_fallback_message() {
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', [
+            'response' => ['code' => 200],
+            'body'     => json_encode(['id' => '']),
+        ]);
+
+        $post = (object) [
+            'ID'            => 1004,
+            'post_title'    => 'Warning Fallback Test',
+            'post_date'     => '2024-01-15 10:00:00',
+            'post_date_gmt' => '2024-01-15 10:00:00',
+            'post_type'     => 'post',
+        ];
+
+        onesignal_create_notification($post);
+
+        $this->assertSame('warning', $this->lastTransient['status']);
+        $this->assertSame('No eligible subscriptions found in the selected segment.', $this->lastTransient['detail']);
+    }
+
+    /**
+     * Test store_send_notice stores status='error' and the WP_Error message as detail.
+     */
+    public function test_store_notice_error_status_on_wp_error() {
+        $error = new WP_Error('http_request_failed', 'Connection timeout');
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', $error);
+
+        $post = (object) [
+            'ID'            => 1005,
+            'post_title'    => 'WP Error Notice Test',
+            'post_date'     => '2024-01-15 10:00:00',
+            'post_date_gmt' => '2024-01-15 10:00:00',
+            'post_type'     => 'post',
+        ];
+
+        onesignal_create_notification($post);
+
+        $this->assertSame('error', $this->lastTransient['status']);
+        $this->assertSame('Connection timeout', $this->lastTransient['detail']);
+    }
+
+    /**
+     * Test store_send_notice stores status='error' and the API error string as detail
+     * when the API returns a non-200 response with a string errors[0].
+     */
+    public function test_store_notice_error_status_on_non_200() {
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', [
+            'response' => ['code' => 400, 'message' => 'Bad Request'],
+            'body'     => json_encode(['errors' => ['Invalid app_id']]),
+        ]);
+
+        $post = (object) [
+            'ID'            => 1006,
+            'post_title'    => 'Non-200 Error Notice Test',
+            'post_date'     => '2024-01-15 10:00:00',
+            'post_date_gmt' => '2024-01-15 10:00:00',
+            'post_type'     => 'post',
+        ];
+
+        onesignal_create_notification($post);
+
+        $this->assertSame('error', $this->lastTransient['status']);
+        $this->assertSame('Invalid app_id', $this->lastTransient['detail']);
     }
 }

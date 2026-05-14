@@ -123,6 +123,10 @@ add_action('admin_print_styles-post-new.php', 'onesignal_meta_files');
 
 function onesignal_meta_files()
 {
+  if (!onesignal_is_post_type_allowed(get_post_type())) {
+    return;
+  }
+
   $cache_buster = ceil(time() / 3600); // updates every hour
   wp_enqueue_script(
     'onesignal_metabox_js',

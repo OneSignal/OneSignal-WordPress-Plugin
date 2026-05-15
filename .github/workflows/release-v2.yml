@@ -26,6 +26,8 @@ jobs:
         with:
           ref: ${{ needs.prep.outputs.release_branch }}
           token: ${{ github.token }}
+          fetch-depth: 0
+          fetch-tags: true
 
       - uses: ./.github/actions/bump-version
         with:

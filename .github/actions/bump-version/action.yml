@@ -24,28 +24,28 @@ runs:
           RANGE="HEAD"
         fi
 
-        # Extract changelog lines from merge commit PR titles (strip conventional prefix for readability)
+        # `|| true` keeps an empty pipeline (e.g. grep finding no matches) from
+        # tripping `set -e -o pipefail` before the fallbacks below can run.
         ENTRIES=$(git log "$RANGE" --merges --pretty=format:"%s" \
           | sed -n 's/^Merge pull request #[0-9]* from .*//p; s/^.*: //p' \
           | grep -v '^$' \
           | grep -iv '^release\|^chore(release)' \
           | head -20 \
-          | sed 's/^/- /')
+          | sed 's/^/- /' || true)
 
         if [ -z "$ENTRIES" ]; then
-          # Fallback: use non-merge commit subjects
+          # Fallback: use non-merge commit subjects (covers squash merges)
           ENTRIES=$(git log "$RANGE" --no-merges --pretty=format:"%s" \
             | grep -v '^chore(release)' \
             | head -20 \
-            | sed 's/^/- /')
+            | sed 's/^/- /' || true)
         fi
 
         if [ -z "$ENTRIES" ]; then
           ENTRIES="- See release notes"
         fi
 
-        # Write to file to preserve newlines across steps
-        echo "$ENTRIES" > /tmp/changelog_entries.txt
+        printf '%s\n' "$ENTRIES" > /tmp/changelog_entries.txt
 
     - name: Bump version
       shell: bash

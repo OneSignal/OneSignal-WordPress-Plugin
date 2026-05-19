@@ -4,7 +4,7 @@ Donate link: https://onesignal.com
 Tags: push notification, push notifications, desktop notifications, mobile notifications, chrome push, android, android notification, android notifications, android push, desktop notification, firefox, firefox push, mobile, mobile notification, notification, notifications, notify, onesignal, push, push messages, safari, safari push, web push, chrome
 Requires at least: 3.8
 Tested up to: 6.9
-Stable tag: 3.8.1
+Stable tag: 3.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,16 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 [youtube https://www.youtube.com/watch?v=q1mH2kCK7LQ]
 
 == Changelog ==
+
+= 3.9.0 =
+- ci: grant pull-requests:write to Release (v3) workflow (#422)
+- ci: fix Release workflow failing on empty changelog pipelines (#421)
+- ci: "prep / prepare_release" CI failure: grant write permissions and drop GH_PUSH_TOKEN (#420)
+- docs: add pull request template (#419)
+- fix: [SDK-4340] skip enqueueing metabox assets for disallowed post types (#418)
+- feat: show toast with notification feedback (#417)
+- chore: remove unused workflows and fix permissions (#416)
+- ci: automate release pipeline with sdk-shared workflows (#415)
 
 = 3.8.1 =
 - Improve AJAX handler validation

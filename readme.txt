@@ -2,9 +2,10 @@
 Contributors: OneSignal
 Donate link: https://onesignal.com
 Tags: push notification, push notifications, desktop notifications, mobile notifications, chrome push, android, android notification, android notifications, android push, desktop notification, firefox, firefox push, mobile, mobile notification, notification, notifications, notify, onesignal, push, push messages, safari, safari push, web push, chrome
-Requires at least: 3.8
-Tested up to: 6.9
-Stable tag: 3.8.1
+Requires at least: 6.0
+Tested up to: 7.0
+Requires PHP: 7.4
+Stable tag: 3.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +64,11 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 [youtube https://www.youtube.com/watch?v=q1mH2kCK7LQ]
 
 == Changelog ==
+
+= 3.9.0 =
+- fix: [SDK-4340] skip enqueueing metabox assets for disallowed post types (#418)
+- feat: show toast with notification feedback (#417)
+- chore: bump "Tested up to" WordPress core version
 
 = 3.8.1 =
 - Improve AJAX handler validation

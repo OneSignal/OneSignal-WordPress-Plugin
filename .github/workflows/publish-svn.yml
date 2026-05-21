@@ -96,6 +96,7 @@ jobs:
     needs: publish
     permissions:
       contents: write
+      pull-requests: read
     uses: OneSignal/sdk-shared/.github/workflows/github-release.yml@main
     with:
       version: ${{ needs.publish.outputs.bare_version }}

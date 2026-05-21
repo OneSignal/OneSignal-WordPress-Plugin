@@ -1,0 +1,48 @@
+name: Tag on Release Merge
+
+on:
+  push:
+    branches:
+      - main
+      - v2
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.head_commit.message, 'chore: Release ')
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          # PAT is required so the pushed tag triggers downstream tag-based
+          # workflows (publish-svn.yml / publish-svn-v2.yml). Tags pushed with
+          # the default GITHUB_TOKEN do not trigger other workflows.
+          token: ${{ secrets.GH_PUSH_TOKEN }}
+
+      - uses: onesignal/sdk-shared/.github/actions/setup-git-user@main
+
+      - name: Extract version and push tag
+        env:
+          MSG: ${{ github.event.head_commit.message }}
+        run: |
+          SUBJECT=$(printf '%s\n' "$MSG" | head -n 1)
+
+          # Match: "chore: Release X.Y.Z" or "chore: Release X.Y.Z (#NNN)"
+          VERSION=$(echo "$SUBJECT" | sed -nE 's/^chore: Release ([0-9]+\.[0-9]+\.[0-9]+)( \(#[0-9]+\))?$/\1/p')
+          if [ -z "$VERSION" ]; then
+            echo "Commit subject is not a release commit; skipping: $SUBJECT"
+            exit 0
+          fi
+
+          TAG="v$VERSION"
+          if git rev-parse "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists; skipping."
+            exit 0
+          fi
+
+          echo "Tagging $TAG at $GITHUB_SHA"
+          git tag "$TAG" "$GITHUB_SHA"
+          git push origin "$TAG"

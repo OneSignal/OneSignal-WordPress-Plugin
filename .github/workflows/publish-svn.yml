@@ -82,7 +82,7 @@ jobs:
           # Stage deleted files
           svn status | grep '^\!' | awk '{print $2}' | xargs -r -I {} svn delete "{}"
 
-          svn commit -m "Deploy v${{ steps.version.outputs.bare }} to trunk" \
+          svn commit -m "${{ steps.version.outputs.bare }} release" \
             --username "$SVN_USERNAME" --password "$SVN_PASSWORD" --non-interactive
 
       - name: Create SVN tag from trunk

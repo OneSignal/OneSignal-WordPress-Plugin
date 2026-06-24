@@ -47,8 +47,9 @@ class Test_OneSignal_API_Integration extends TestCase {
     public function setUp(): void {
         parent::setUp();
         
-        // Reset HTTP mocks
+        // Reset HTTP mocks and captured args
         self::$http_requests_mock = array();
+        self::$captured_request_args = array();
         
         global $wp_post_meta, $test_get_option_overrides;
         $wp_post_meta = array();
@@ -734,6 +735,103 @@ class Test_OneSignal_API_Integration extends TestCase {
 
         $this->assertSame('error', $this->lastTransient['status']);
         $this->assertSame('Connection timeout', $this->lastTransient['detail']);
+    }
+
+    /**
+     * Test that a pending notification is cancelled when a scheduled post reverts to draft.
+     */
+    public function test_cancel_notification_when_scheduled_post_reverts_to_draft() {
+        $post_id = 2001;
+        $notification_id = 'scheduled-notif-to-cancel';
+
+        global $wp_post_meta;
+        $wp_post_meta[$post_id]['os_notification_id'] = $notification_id;
+        $wp_post_meta[$post_id]['os_previous_publish_date'] = '2030-06-01 10:00:00';
+
+        WP_Mock::userFunction('delete_post_meta')
+            ->andReturnUsing(function($pid, $meta_key) {
+                global $wp_post_meta;
+                unset($wp_post_meta[$pid][$meta_key]);
+                return true;
+            });
+
+        $cancel_url = 'https://onesignal.com/api/v1/notifications/' . $notification_id . '?app_id=test-app-id';
+        $this->mock_http_request($cancel_url, [
+            'response' => ['code' => 200],
+            'body'     => json_encode(['success' => true]),
+        ]);
+
+        $post = (object) [
+            'ID'            => $post_id,
+            'post_title'    => 'Formerly Scheduled Post',
+            'post_type'     => 'post',
+            'post_date'     => '2030-06-01 10:00:00',
+            'post_date_gmt' => '2030-06-01 10:00:00',
+        ];
+
+        onesignal_schedule_notification('draft', 'future', $post);
+
+        $this->assertArrayHasKey('wp_remote_request', self::$captured_request_args);
+        $this->assertArrayHasKey($cancel_url, self::$captured_request_args['wp_remote_request']);
+        $this->assertSame('', onesignal_get_notification_id($post_id));
+        $this->assertSame('', get_post_meta($post_id, 'os_previous_publish_date', true));
+    }
+
+    /**
+     * Test that no cancellation is attempted when a scheduled post reverts to draft but has no stored notification ID.
+     */
+    public function test_no_cancellation_when_no_notification_stored_on_draft_revert() {
+        $post_id = 2002;
+
+        WP_Mock::userFunction('delete_post_meta')
+            ->andReturnUsing(function($pid, $meta_key) {
+                global $wp_post_meta;
+                unset($wp_post_meta[$pid][$meta_key]);
+                return true;
+            });
+
+        $post = (object) [
+            'ID'            => $post_id,
+            'post_title'    => 'No Notification Post',
+            'post_type'     => 'post',
+            'post_date'     => '2030-06-01 10:00:00',
+            'post_date_gmt' => '2030-06-01 10:00:00',
+        ];
+
+        onesignal_schedule_notification('draft', 'future', $post);
+
+        // No HTTP request should have been made
+        $this->assertArrayNotHasKey('wp_remote_request', self::$captured_request_args);
+    }
+
+    /**
+     * Test that no cancellation is attempted for disallowed post types on draft revert.
+     */
+    public function test_no_cancellation_for_disallowed_post_type_on_draft_revert() {
+        $post_id = 2003;
+        $notification_id = 'should-not-be-cancelled';
+
+        global $wp_post_meta;
+        $wp_post_meta[$post_id]['os_notification_id'] = $notification_id;
+
+        WP_Mock::userFunction('delete_post_meta')
+            ->andReturnUsing(function($pid, $meta_key) {
+                global $wp_post_meta;
+                unset($wp_post_meta[$pid][$meta_key]);
+                return true;
+            });
+
+        $post = (object) [
+            'ID'        => $post_id,
+            'post_title' => 'Disallowed Type Post',
+            'post_type' => 'portfolio',
+        ];
+
+        onesignal_schedule_notification('draft', 'future', $post);
+
+        // No HTTP request should have been made; notification ID should remain
+        $this->assertArrayNotHasKey('wp_remote_request', self::$captured_request_args);
+        $this->assertSame($notification_id, onesignal_get_notification_id($post_id));
     }
 
     /**

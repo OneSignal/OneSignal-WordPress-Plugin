@@ -192,7 +192,7 @@ class Test_OneSignal_Post_Hooks extends TestCase {
             'accepted_args' => 3
         );
         $wp_filters['wp_trash_post'][10][] = array(
-            'function' => 'onesignal_cancel_notification_on_post_delete',
+            'function' => 'onesignal_cancel_and_clear_notification',
             'accepted_args' => 1
         );
     }
@@ -215,7 +215,7 @@ class Test_OneSignal_Post_Hooks extends TestCase {
      * Test that wp_trash_post hook is registered
      */
     public function test_wp_trash_post_hook_registered() {
-        $this->assertNotFalse(has_action('wp_trash_post', 'onesignal_cancel_notification_on_post_delete'));
+        $this->assertNotFalse(has_action('wp_trash_post', 'onesignal_cancel_and_clear_notification'));
     }
 
     /**

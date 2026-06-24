@@ -10,7 +10,7 @@ add_action('transition_post_status', 'onesignal_schedule_notification', 10, 3);
 add_action('save_post', 'onesignal_handle_quick_edit_date_change', 10, 3);
 
 // Register handler to cancel scheduled notifications when posts are deleted
-add_action('wp_trash_post', 'onesignal_cancel_notification_on_post_delete');
+add_action('wp_trash_post', 'onesignal_cancel_and_clear_notification');
 
 // Display admin notices after a notification send attempt (classic editor)
 add_action('admin_notices', 'onesignal_display_send_notice');
@@ -21,7 +21,9 @@ add_action('wp_ajax_onesignal_get_send_notice', 'onesignal_ajax_get_send_notice'
 // Enqueue block editor notice script
 add_action('enqueue_block_editor_assets', 'onesignal_enqueue_block_editor_notice');
 
-// Core function to create and send/schedule a notification
+/**
+ * Creates and sends (or schedules) a OneSignal notification for a post.
+ */
 function onesignal_create_notification($post, $notification_options = array())
 {
     $onesignal_wp_settings = get_option("OneSignalWPSetting");
@@ -306,7 +308,9 @@ function onesignal_enqueue_block_editor_notice()
     ));
 }
 
-// Function to schedule notification (called on post status transitions)
+/**
+ * Fires on every post status transition; sends or cancels notifications as appropriate.
+ */
 function onesignal_schedule_notification($new_status, $old_status, $post)
 {
     if (($new_status === 'publish') || ($new_status === 'future')) {
@@ -328,10 +332,20 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
 
         // Call the core notification function
         onesignal_create_notification($post, $notification_options);
+    } elseif ($old_status === 'future') {
+        // A scheduled post was reverted to a non-scheduled status (e.g. draft, pending).
+        // Cancel the pending OneSignal notification so it isn't delivered at the old scheduled time.
+        if (!onesignal_is_post_type_allowed($post->post_type)) {
+            return;
+        }
+
+        onesignal_cancel_and_clear_notification($post->ID);
     }
 }
 
-// Function to handle quick-edit publish date changes
+/**
+ * Cancels and re-schedules a notification when a scheduled post's publish date is changed via quick-edit.
+ */
 function onesignal_handle_quick_edit_date_change($post_id, $post, $update)
 {
     // Check user capability to edit this post
@@ -405,21 +419,20 @@ function onesignal_handle_quick_edit_date_change($post_id, $post, $update)
     }
 }
 
-// Function to cancel scheduled notifications when a post is deleted
-function onesignal_cancel_notification_on_post_delete($post_id)
+/**
+ * Cancels the stored OneSignal notification, and clears its meta, on post deletion or status change (e.g. scheduled -> draft).
+ */
+function onesignal_cancel_and_clear_notification($post_id)
 {
-    $post = get_post($post_id);
-
-    if (!$post) {
-        return;
-    }
-
     $existing_notification_id = onesignal_get_notification_id($post_id);
-    if (!empty($existing_notification_id)) {
-        $cancelled = onesignal_cancel_notification($existing_notification_id);
-        if ($cancelled) {
-            delete_post_meta($post_id, 'os_notification_id');
-            delete_post_meta($post_id, 'os_previous_publish_date');
-        }
+    if (empty($existing_notification_id)) {
+        return false;
     }
+
+    $cancelled = onesignal_cancel_notification($existing_notification_id);
+    if ($cancelled) {
+        delete_post_meta($post_id, 'os_notification_id');
+        delete_post_meta($post_id, 'os_previous_publish_date');
+    }
+    return $cancelled;
 }

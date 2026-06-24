@@ -5,7 +5,7 @@ Tags: push notification, push notifications, desktop notifications, mobile notif
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.9.0
+Stable tag: 3.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,9 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 [youtube https://www.youtube.com/watch?v=q1mH2kCK7LQ]
 
 == Changelog ==
+
+= 3.9.1 =
+- fix: cancel scheduled notification when reverting a post to draft. (#427)
 
 = 3.9.0 =
 - fix: [SDK-4340] skip enqueueing metabox assets for disallowed post types (#418)

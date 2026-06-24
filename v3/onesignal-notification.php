@@ -332,7 +332,7 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
 
         // Call the core notification function
         onesignal_create_notification($post, $notification_options);
-    } elseif ($old_status === 'future' && $new_status !== 'publish' && $new_status !== 'future') {
+    } elseif ($old_status === 'future') {
         // A scheduled post was reverted to a non-scheduled status (e.g. draft, pending).
         // Cancel the pending OneSignal notification so it isn't delivered at the old scheduled time.
         if (!onesignal_is_post_type_allowed($post->post_type)) {

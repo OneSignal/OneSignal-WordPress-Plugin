@@ -97,11 +97,45 @@ jobs:
 
   github-release:
     needs: publish
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: read
-    uses: OneSignal/sdk-shared/.github/workflows/github-release.yml@main
-    with:
-      version: ${{ needs.publish.outputs.bare_version }}
-    secrets:
-      GH_PUSH_TOKEN: ${{ secrets.GH_PUSH_TOKEN }}
+    steps:
+      - name: Create GitHub Release
+        uses: actions/github-script@v9
+        env:
+          TAG: ${{ github.ref_name }}
+          VERSION: ${{ needs.publish.outputs.bare_version }}
+        with:
+          github-token: ${{ secrets.GH_PUSH_TOKEN || github.token }}
+          script: |
+            // Tags are v-prefixed (e.g. v3.9.1); releases are titled with the bare version (e.g. 3.9.1).
+            const tag = process.env.TAG;
+            const version = process.env.VERSION;
+            const { owner, repo } = context.repo;
+
+            try {
+              await github.rest.repos.getReleaseByTag({ owner, repo, tag });
+              core.info(`Release for ${tag} already exists; skipping.`);
+              return;
+            } catch (e) {
+              if (e.status !== 404) throw e;
+            }
+
+            const prs = await github.rest.pulls.list({
+              owner, repo, state: 'closed', sort: 'updated', direction: 'desc', per_page: 50,
+            });
+            const releasePr = prs.data.find(pr =>
+              pr.merged_at && pr.title.replace(/^chore:\s*/i, '').startsWith(`Release ${version}`)
+            );
+            const body = releasePr ? releasePr.body.split('<!--')[0].trim() : '';
+
+            await github.rest.repos.createRelease({
+              owner, repo,
+              tag_name: tag,
+              name: version,
+              body,
+              draft: false,
+              prerelease: /alpha|beta/i.test(version),
+            });

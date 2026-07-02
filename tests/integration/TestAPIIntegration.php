@@ -108,6 +108,13 @@ class Test_OneSignal_API_Integration extends TestCase {
                 return trim(strip_tags($str));
             });
 
+        WP_Mock::userFunction('sanitize_title')
+            ->andReturnUsing(function($title) {
+                $title = strtolower(strip_tags($title));
+                $title = preg_replace('/[^a-z0-9_-]+/', '-', $title);
+                return trim(preg_replace('/-+/', '-', $title), '-');
+            });
+
         WP_Mock::userFunction('wp_specialchars_decode')
             ->andReturnUsing(function($string, $quote_style = ENT_NOQUOTES) {
                 return html_entity_decode($string, $quote_style, 'UTF-8');
@@ -266,6 +273,63 @@ class Test_OneSignal_API_Integration extends TestCase {
 
         $saved_id = onesignal_get_notification_id($post->ID);
         $this->assertSame('custom-notification-456', $saved_id);
+    }
+
+    /**
+     * Test web_push_topic is derived from the post ID
+     */
+    public function test_web_push_topic_derived_from_post_id() {
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', array(
+            'response' => array('code' => 200),
+            'body' => json_encode(array('id' => 'topic-notification-123'))
+        ));
+
+        $post = (object) array(
+            'ID' => 314,
+            'post_title' => 'A Title With Spaces & Punctuation!',
+            'post_date' => '2024-01-15 10:00:00',
+            'post_date_gmt' => '2024-01-15 10:00:00',
+            'post_type' => 'post'
+        );
+
+        onesignal_create_notification($post);
+
+        $captured_args = self::$captured_request_args['wp_remote_post']['https://onesignal.com/api/v1/notifications'];
+        $body = json_decode($captured_args['body'], true);
+
+        $this->assertSame('post-314', $body['web_push_topic']);
+    }
+
+    /**
+     * Test web_push_topic is unaffected by custom notification options
+     */
+    public function test_web_push_topic_ignores_custom_options() {
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', array(
+            'response' => array('code' => 200),
+            'body' => json_encode(array('id' => 'topic-notification-456'))
+        ));
+
+        $post = (object) array(
+            'ID' => 271,
+            'post_title' => 'Post Title',
+            'post_date' => '2024-01-15 12:00:00',
+            'post_date_gmt' => '2024-01-15 12:00:00',
+            'post_type' => 'post'
+        );
+
+        $custom_options = array(
+            'title' => 'Custom Title',
+            'content' => 'Custom Content With Spaces',
+            'segment' => 'Premium Users'
+        );
+
+        onesignal_create_notification($post, $custom_options);
+
+        $captured_args = self::$captured_request_args['wp_remote_post']['https://onesignal.com/api/v1/notifications'];
+        $body = json_decode($captured_args['body'], true);
+
+        $this->assertSame('post-271', $body['web_push_topic']);
+        $this->assertSame(array('Premium Users'), $body['included_segments']);
     }
 
     /**

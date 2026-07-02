@@ -71,7 +71,7 @@ function onesignal_create_notification($post, $notification_options = array())
             'headings' => array('en' => $title),
             'contents' => array('en' => $excerpt),
             'included_segments' => array($segment),
-            'web_push_topic' => str_replace(' ', '-', strtolower($segment)),
+            'web_push_topic' => sanitize_title('post-' . $post->ID),
             'isAnyWeb' => true,
         )),
     );

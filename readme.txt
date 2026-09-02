@@ -66,6 +66,9 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 == Changelog ==
 
 = 3.9.2 =
+- fix: [SDK-5157] resolve Plugin Check errors in shipped files (#434)
+
+= 3.9.2 =
 - fix: derive web_push_topic from the post ID (#431)
 
 = 3.9.1 =

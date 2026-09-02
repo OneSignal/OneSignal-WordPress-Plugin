@@ -1,11 +1,13 @@
 <?php
 
+defined('ABSPATH') or die('This page may not be accessed directly.');
+
 function onesignal_handle_export()
 {
     if (isset($_POST['plugin_action']) && $_POST['plugin_action'] === 'export_settings') {
 
         if (!check_admin_referer('onesignal_export_nonce')) {
-            wp_die(__('Security check failed', 'onesignal-push'));
+            wp_die(esc_html__('Security check failed', 'onesignal-push'));
         }
 
         $settings = get_option('OneSignalWPSetting');
@@ -50,7 +52,7 @@ function onesignal_handle_export()
         header('Content-Length: ' . strlen($txt_data));
         header('Pragma: public');
 
-        echo $txt_data;
+        echo $txt_data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plain-text file download, not HTML output.
         exit;
     }
 }

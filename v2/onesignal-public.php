@@ -36,7 +36,7 @@ class OneSignal_Public
     //   /app/plugins/onesignal-free-web-push-notifications
     private static function getOneSignalPluginPath()
     {
-        $path = parse_url(ONESIGNAL_PLUGIN_URL)['path'];
+        $path = wp_parse_url(ONESIGNAL_PLUGIN_URL)['path'];
         return rtrim($path, '/');
     }
 
@@ -85,7 +85,7 @@ class OneSignal_Public
         <?php
             if(array_key_exists('onesignal_sw_js', $onesignal_wp_settings)) {
                 $swScope = self::getOneSignalPluginPath() . '/sdk_files/push/onesignal/';
-                echo "oneSignal_options['serviceWorkerParam'] = { scope: '$swScope' };\n";
+                echo "oneSignal_options['serviceWorkerParam'] = { scope: ".wp_json_encode($swScope)." };\n";
                 echo "oneSignal_options['serviceWorkerPath'] = 'OneSignalSDKWorker.js';\n";
             } else {
                 echo "oneSignal_options['serviceWorkerParam'] = { scope: '/' };\n";
@@ -141,34 +141,34 @@ class OneSignal_Public
         echo "oneSignal_options['promptOptions'] = { };\n";
         if (array_key_exists('prompt_customize_enable', $onesignal_wp_settings) && $onesignal_wp_settings['prompt_customize_enable'] === true) {
             if (self::valid_for_key('prompt_action_message', $onesignal_wp_settings)) {
-                echo "oneSignal_options['promptOptions']['actionMessage'] = \"".OneSignalUtils::decode_entities(esc_html($onesignal_wp_settings["prompt_action_message"]))."\";\n"; 
+                echo "oneSignal_options['promptOptions']['actionMessage'] = ".wp_json_encode(OneSignalUtils::decode_entities($onesignal_wp_settings["prompt_action_message"])).";\n"; 
             }
             if (self::valid_for_key('prompt_example_notification_title_desktop', $onesignal_wp_settings)) {
-                echo "oneSignal_options['promptOptions']['exampleNotificationTitleDesktop'] = \"".OneSignalUtils::decode_entities(esc_html($onesignal_wp_settings['prompt_example_notification_title_desktop']))."\";\n";
+                echo "oneSignal_options['promptOptions']['exampleNotificationTitleDesktop'] = ".wp_json_encode(OneSignalUtils::decode_entities($onesignal_wp_settings['prompt_example_notification_title_desktop'])).";\n";
             }
             if (self::valid_for_key('prompt_example_notification_message_desktop', $onesignal_wp_settings)) {
-                echo "oneSignal_options['promptOptions']['exampleNotificationMessageDesktop'] = \"".OneSignalUtils::decode_entities(esc_html($onesignal_wp_settings['prompt_example_notification_message_desktop']))."\";\n";
+                echo "oneSignal_options['promptOptions']['exampleNotificationMessageDesktop'] = ".wp_json_encode(OneSignalUtils::decode_entities($onesignal_wp_settings['prompt_example_notification_message_desktop'])).";\n";
             }
             if (self::valid_for_key('prompt_example_notification_title_mobile', $onesignal_wp_settings)) {
-                echo "oneSignal_options['promptOptions']['exampleNotificationTitleMobile'] = \"".OneSignalUtils::decode_entities(esc_html($onesignal_wp_settings['prompt_example_notification_title_mobile']))."\";\n";
+                echo "oneSignal_options['promptOptions']['exampleNotificationTitleMobile'] = ".wp_json_encode(OneSignalUtils::decode_entities($onesignal_wp_settings['prompt_example_notification_title_mobile'])).";\n";
             }
             if (self::valid_for_key('prompt_example_notification_message_mobile', $onesignal_wp_settings)) {
-                echo "oneSignal_options['promptOptions']['exampleNotificationMessageMobile'] = \"".OneSignalUtils::decode_entities(esc_html($onesignal_wp_settings['prompt_example_notification_message_mobile']))."\";\n";
+                echo "oneSignal_options['promptOptions']['exampleNotificationMessageMobile'] = ".wp_json_encode(OneSignalUtils::decode_entities($onesignal_wp_settings['prompt_example_notification_message_mobile'])).";\n";
             }
             if (self::valid_for_key('prompt_example_notification_caption', $onesignal_wp_settings)) {
-                echo "oneSignal_options['promptOptions']['exampleNotificationCaption'] = \"".OneSignalUtils::decode_entities(esc_html($onesignal_wp_settings['prompt_example_notification_caption']))."\";\n";
+                echo "oneSignal_options['promptOptions']['exampleNotificationCaption'] = ".wp_json_encode(OneSignalUtils::decode_entities($onesignal_wp_settings['prompt_example_notification_caption'])).";\n";
             }
             if (self::valid_for_key('prompt_accept_button_text', $onesignal_wp_settings)) {
-                echo "oneSignal_options['promptOptions']['acceptButtonText'] = \"".OneSignalUtils::decode_entities(esc_html($onesignal_wp_settings['prompt_accept_button_text']))."\";\n";
+                echo "oneSignal_options['promptOptions']['acceptButtonText'] = ".wp_json_encode(OneSignalUtils::decode_entities($onesignal_wp_settings['prompt_accept_button_text'])).";\n";
             }
             if (self::valid_for_key('prompt_cancel_button_text', $onesignal_wp_settings)) {
-                echo "oneSignal_options['promptOptions']['cancelButtonText'] = \"".OneSignalUtils::decode_entities(esc_html($onesignal_wp_settings['prompt_cancel_button_text']))."\";\n";
+                echo "oneSignal_options['promptOptions']['cancelButtonText'] = ".wp_json_encode(OneSignalUtils::decode_entities($onesignal_wp_settings['prompt_cancel_button_text'])).";\n";
             }
             if (self::valid_for_key('prompt_site_name', $onesignal_wp_settings)) {
-                echo "oneSignal_options['promptOptions']['siteName'] = \"".OneSignalUtils::decode_entities(esc_html($onesignal_wp_settings['prompt_site_name']))."\";\n";
+                echo "oneSignal_options['promptOptions']['siteName'] = ".wp_json_encode(OneSignalUtils::decode_entities($onesignal_wp_settings['prompt_site_name'])).";\n";
             }
             if (self::valid_for_key('prompt_auto_accept_title', $onesignal_wp_settings)) {
-                echo "oneSignal_options['promptOptions']['autoAcceptTitle'] = \"".OneSignalUtils::decode_entities(esc_html($onesignal_wp_settings['prompt_auto_accept_title']))."\";\n";
+                echo "oneSignal_options['promptOptions']['autoAcceptTitle'] = ".wp_json_encode(OneSignalUtils::decode_entities($onesignal_wp_settings['prompt_auto_accept_title'])).";\n";
             }
         }
 

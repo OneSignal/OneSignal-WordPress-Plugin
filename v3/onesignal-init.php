@@ -31,7 +31,7 @@ function onesignal_init()
   }
 
   $onesignal_wp_settings = get_option('OneSignalWPSetting');
-  $path = rtrim(parse_url(ONESIGNAL_PLUGIN_URL)['path'], '/');
+  $path = rtrim(wp_parse_url(ONESIGNAL_PLUGIN_URL)['path'], '/');
   $scope = $path . '/sdk_files/push/onesignal/';
   $filename = 'OneSignalSDKWorker.js';
 ?>
@@ -42,9 +42,9 @@ function onesignal_init()
             await OneSignal.init({
               appId: "<?php echo esc_html($onesignal_wp_settings['app_id']); ?>",
               serviceWorkerOverrideForTypical: true,
-              path: "<?php echo ONESIGNAL_PLUGIN_URL; ?>sdk_files/",
-              serviceWorkerParam: { scope: "<?php echo $scope ?>" },
-              serviceWorkerPath: "<?php echo $filename; ?>",
+              path: "<?php echo esc_url(ONESIGNAL_PLUGIN_URL); ?>sdk_files/",
+              serviceWorkerParam: { scope: <?php echo wp_json_encode($scope); ?> },
+              serviceWorkerPath: <?php echo wp_json_encode($filename); ?>,
             });
           });
 

@@ -1,12 +1,14 @@
 <?php
 
+defined('ABSPATH') or die('This page may not be accessed directly.');
+
 function onesignal_complete_migration()
 {
     if (isset($_POST['plugin_action']) && $_POST['plugin_action'] === 'complete_migration') {
 
         // Security check
         if (!check_admin_referer('onesignal_migration_nonce')) {
-            wp_die(__('Security check failed', 'onesignal-push'));
+            wp_die(esc_html__('Security check failed', 'onesignal-push'));
         }
 
         // Mark the plugin as migrated

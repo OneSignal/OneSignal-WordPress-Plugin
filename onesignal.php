@@ -10,6 +10,8 @@ defined('ABSPATH') or die('This page may not be accessed directly.');
  * Author: OneSignal
  * Author URI: https://onesignal.com
  * License: MIT
+ * Text Domain: onesignal-free-web-push-notifications
+ * Domain Path: /languages
  */
 
 // Define plugin constants
@@ -72,7 +74,7 @@ function migration_notice() {
     $screen = get_current_screen();
     if ($screen && $screen->id === 'plugins') {
         echo '<div class="notice notice-warning is-dismissible">
-                <p><strong>OneSignal Migration Needed:</strong> All OneSignal prompt configurations are moving to OneSignal.com. See the plugin page for more info.</p>
+                <p><strong>' . esc_html__( 'OneSignal Migration Needed:', 'onesignal-free-web-push-notifications' ) . '</strong> ' . esc_html__( 'All OneSignal prompt configurations are moving to OneSignal.com. See the plugin page for more info.', 'onesignal-free-web-push-notifications' ) . '</p>
               </div>';
     }
 }

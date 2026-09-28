@@ -816,7 +816,7 @@ class Test_OneSignal_API_Integration extends TestCase {
         ]);
 
         $_POST['os_update']  = 'on';
-        $_POST['os_title']   = "\\'Fatale fascist\\' ontmaskerd";
+        $_POST['os_title']   = "\\'Breaking\\' news: it\\'s here";
         $_POST['os_content'] = "He said \\\"hello\\\" and it\\'s fine";
 
         $post = (object) [
@@ -836,7 +836,7 @@ class Test_OneSignal_API_Integration extends TestCase {
         $captured_args = self::$captured_request_args['wp_remote_post']['https://onesignal.com/api/v1/notifications'];
         $body = json_decode($captured_args['body'], true);
 
-        $this->assertSame("'Fatale fascist' ontmaskerd", $body['headings']['en']);
+        $this->assertSame("'Breaking' news: it's here", $body['headings']['en']);
         $this->assertSame('He said "hello" and it\'s fine', $body['contents']['en']);
     }
 

@@ -810,7 +810,6 @@ class Test_OneSignal_API_Integration extends TestCase {
 
         global $wp_post_meta;
         $wp_post_meta[$post_id]['os_notification_id'] = $notification_id;
-        $wp_post_meta[$post_id]['os_previous_publish_date'] = '2030-06-01 10:00:00';
 
         WP_Mock::userFunction('delete_post_meta')
             ->andReturnUsing(function($pid, $meta_key) {
@@ -838,7 +837,6 @@ class Test_OneSignal_API_Integration extends TestCase {
         $this->assertArrayHasKey('wp_remote_request', self::$captured_request_args);
         $this->assertArrayHasKey($cancel_url, self::$captured_request_args['wp_remote_request']);
         $this->assertSame('', onesignal_get_notification_id($post_id));
-        $this->assertSame('', get_post_meta($post_id, 'os_previous_publish_date', true));
     }
 
     /**
@@ -920,5 +918,236 @@ class Test_OneSignal_API_Integration extends TestCase {
 
         $this->assertSame('error', $this->lastTransient['status']);
         $this->assertSame('Invalid app_id', $this->lastTransient['detail']);
+    }
+
+    private const NOTIFICATIONS_URL = 'https://onesignal.com/api/v1/notifications';
+
+    /**
+     * Mocks the WordPress functions that onesignal_handle_scheduled_post_update calls,
+     * and stores an existing scheduled notification plus metabox meta for the post.
+     */
+    private function set_up_scheduled_post($post_id, $existing_notification_id, $os_meta, $nonce_valid = false) {
+        global $wp_post_meta;
+        $wp_post_meta[$post_id]['os_notification_id'] = $existing_notification_id;
+        $wp_post_meta[$post_id]['os_meta'] = $os_meta;
+
+        WP_Mock::userFunction('current_user_can')->andReturn(true);
+        WP_Mock::userFunction('wp_is_post_autosave')->andReturn(false);
+        WP_Mock::userFunction('wp_is_post_revision')->andReturn(false);
+        WP_Mock::userFunction('wp_verify_nonce')->andReturn($nonce_valid);
+        WP_Mock::userFunction('delete_post_meta')
+            ->andReturnUsing(function($pid, $meta_key) {
+                global $wp_post_meta;
+                unset($wp_post_meta[$pid][$meta_key]);
+                return true;
+            });
+
+        $this->mock_http_request(
+            self::NOTIFICATIONS_URL . '/' . $existing_notification_id . '?app_id=test-app-id',
+            ['response' => ['code' => 200], 'body' => json_encode(['success' => true])]
+        );
+        $this->mock_http_request(self::NOTIFICATIONS_URL, [
+            'response' => ['code' => 200],
+            'body'     => json_encode(['id' => 'recreated-notification']),
+        ]);
+    }
+
+    private function scheduled_post($post_id, array $overrides = []) {
+        return (object) array_merge([
+            'ID'            => $post_id,
+            'post_title'    => 'Scheduled Title',
+            'post_name'     => 'scheduled-title',
+            'post_status'   => 'future',
+            'post_type'     => 'post',
+            'post_date'     => '2030-06-01 10:00:00',
+            'post_date_gmt' => '2030-06-01 10:00:00',
+        ], $overrides);
+    }
+
+    private function assert_notification_cancelled($existing_notification_id) {
+        $cancel_url = self::NOTIFICATIONS_URL . '/' . $existing_notification_id . '?app_id=test-app-id';
+        $this->assertArrayHasKey('wp_remote_request', self::$captured_request_args);
+        $this->assertArrayHasKey($cancel_url, self::$captured_request_args['wp_remote_request']);
+    }
+
+    private function captured_notification_body() {
+        $this->assertArrayHasKey('wp_remote_post', self::$captured_request_args);
+        $this->assertArrayHasKey(self::NOTIFICATIONS_URL, self::$captured_request_args['wp_remote_post']);
+        return json_decode(self::$captured_request_args['wp_remote_post'][self::NOTIFICATIONS_URL]['body'], true);
+    }
+
+    /**
+     * Test that a Quick Edit title change cancels the scheduled notification and creates one with the new title.
+     */
+    public function test_scheduled_post_title_change_recreates_notification() {
+        $post_id = 4001;
+        $this->set_up_scheduled_post($post_id, 'old-scheduled-notification', ['os_update' => 'on']);
+
+        $before = $this->scheduled_post($post_id, ['post_title' => 'Old Title']);
+        $after  = $this->scheduled_post($post_id, ['post_title' => 'New Title']);
+
+        onesignal_handle_scheduled_post_update($post_id, $after, $before);
+
+        $this->assert_notification_cancelled('old-scheduled-notification');
+        $body = $this->captured_notification_body();
+        $this->assertSame('New Title', $body['contents']['en']);
+        $this->assertSame('2030-06-01 10:00:00 UTC', $body['send_after']);
+        $this->assertSame('recreated-notification', onesignal_get_notification_id($post_id));
+    }
+
+    /**
+     * Test that a Quick Edit slug change re-creates the scheduled notification.
+     */
+    public function test_scheduled_post_slug_change_recreates_notification() {
+        $post_id = 4002;
+        $this->set_up_scheduled_post($post_id, 'old-scheduled-notification', ['os_update' => 'on']);
+
+        $before = $this->scheduled_post($post_id, ['post_name' => 'old-slug']);
+        $after  = $this->scheduled_post($post_id, ['post_name' => 'new-slug']);
+
+        onesignal_handle_scheduled_post_update($post_id, $after, $before);
+
+        $this->assert_notification_cancelled('old-scheduled-notification');
+        $this->assertSame('recreated-notification', onesignal_get_notification_id($post_id));
+    }
+
+    /**
+     * Test that a Quick Edit date change re-creates the scheduled notification with the new send time.
+     */
+    public function test_scheduled_post_date_change_recreates_notification() {
+        $post_id = 4003;
+        $this->set_up_scheduled_post($post_id, 'old-scheduled-notification', ['os_update' => 'on']);
+
+        $before = $this->scheduled_post($post_id);
+        $after  = $this->scheduled_post($post_id, [
+            'post_date'     => '2030-07-15 08:30:00',
+            'post_date_gmt' => '2030-07-15 08:30:00',
+        ]);
+
+        onesignal_handle_scheduled_post_update($post_id, $after, $before);
+
+        $this->assert_notification_cancelled('old-scheduled-notification');
+        $body = $this->captured_notification_body();
+        $this->assertSame('2030-07-15 08:30:00 UTC', $body['send_after']);
+    }
+
+    /**
+     * Test that the re-created notification uses the title, content, and segment saved from the metabox.
+     */
+    public function test_scheduled_post_recreate_uses_saved_metabox_options() {
+        $post_id = 4004;
+        $this->set_up_scheduled_post($post_id, 'old-scheduled-notification', [
+            'os_update'  => 'on',
+            'os_title'   => 'Custom Heading',
+            'os_content' => 'Custom Body',
+            'os_segment' => 'Premium Users',
+        ]);
+
+        $before = $this->scheduled_post($post_id, ['post_title' => 'Old Title']);
+        $after  = $this->scheduled_post($post_id, ['post_title' => 'New Title']);
+
+        onesignal_handle_scheduled_post_update($post_id, $after, $before);
+
+        $body = $this->captured_notification_body();
+        $this->assertSame('Custom Heading', $body['headings']['en']);
+        $this->assertSame('Custom Body', $body['contents']['en']);
+        $this->assertSame(['Premium Users'], $body['included_segments']);
+    }
+
+    /**
+     * Test that an update without a change to title, slug, or date makes no API request.
+     */
+    public function test_scheduled_post_update_without_relevant_change_does_nothing() {
+        $post_id = 4005;
+        $this->set_up_scheduled_post($post_id, 'old-scheduled-notification', ['os_update' => 'on']);
+
+        $before = $this->scheduled_post($post_id, ['post_content' => 'Old body']);
+        $after  = $this->scheduled_post($post_id, ['post_content' => 'New body']);
+
+        onesignal_handle_scheduled_post_update($post_id, $after, $before);
+
+        $this->assertArrayNotHasKey('wp_remote_request', self::$captured_request_args);
+        $this->assertArrayNotHasKey('wp_remote_post', self::$captured_request_args);
+        $this->assertSame('old-scheduled-notification', onesignal_get_notification_id($post_id));
+    }
+
+    /**
+     * Test that a status transition is left to onesignal_schedule_notification and makes no API request here.
+     */
+    public function test_scheduled_post_update_ignored_when_status_changes() {
+        $post_id = 4006;
+        $this->set_up_scheduled_post($post_id, 'old-scheduled-notification', ['os_update' => 'on']);
+
+        $before = $this->scheduled_post($post_id, ['post_status' => 'draft', 'post_title' => 'Old Title']);
+        $after  = $this->scheduled_post($post_id, ['post_title' => 'New Title']);
+
+        onesignal_handle_scheduled_post_update($post_id, $after, $before);
+
+        $this->assertArrayNotHasKey('wp_remote_request', self::$captured_request_args);
+        $this->assertArrayNotHasKey('wp_remote_post', self::$captured_request_args);
+    }
+
+    /**
+     * Test that a full editor save with the send option on is skipped, because transition_post_status handles it.
+     */
+    public function test_scheduled_post_update_skipped_when_metabox_submitted_with_send_on() {
+        $post_id = 4007;
+        $this->set_up_scheduled_post($post_id, 'old-scheduled-notification', ['os_update' => 'on'], true);
+
+        $_POST['onesignal_v3_metabox_nonce'] = 'valid';
+        $_POST['os_update'] = 'on';
+
+        $before = $this->scheduled_post($post_id, ['post_title' => 'Old Title']);
+        $after  = $this->scheduled_post($post_id, ['post_title' => 'New Title']);
+
+        try {
+            onesignal_handle_scheduled_post_update($post_id, $after, $before);
+        } finally {
+            unset($_POST['onesignal_v3_metabox_nonce'], $_POST['os_update']);
+        }
+
+        $this->assertArrayNotHasKey('wp_remote_request', self::$captured_request_args);
+        $this->assertArrayNotHasKey('wp_remote_post', self::$captured_request_args);
+        $this->assertSame('old-scheduled-notification', onesignal_get_notification_id($post_id));
+    }
+
+    /**
+     * Test that a full editor save with the send option off cancels the notification and does not re-create it.
+     */
+    public function test_scheduled_post_update_cancels_only_when_metabox_submitted_with_send_off() {
+        $post_id = 4008;
+        $this->set_up_scheduled_post($post_id, 'old-scheduled-notification', ['os_update' => 'on'], true);
+
+        $_POST['onesignal_v3_metabox_nonce'] = 'valid';
+
+        $before = $this->scheduled_post($post_id, ['post_title' => 'Old Title']);
+        $after  = $this->scheduled_post($post_id, ['post_title' => 'New Title']);
+
+        try {
+            onesignal_handle_scheduled_post_update($post_id, $after, $before);
+        } finally {
+            unset($_POST['onesignal_v3_metabox_nonce']);
+        }
+
+        $this->assert_notification_cancelled('old-scheduled-notification');
+        $this->assertArrayNotHasKey('wp_remote_post', self::$captured_request_args);
+        $this->assertSame('', onesignal_get_notification_id($post_id));
+    }
+
+    /**
+     * Test that a Quick Edit change cancels the notification but does not re-create it when the saved send option is off.
+     */
+    public function test_scheduled_post_update_cancels_only_when_saved_send_option_off() {
+        $post_id = 4009;
+        $this->set_up_scheduled_post($post_id, 'old-scheduled-notification', ['os_segment' => 'All']);
+
+        $before = $this->scheduled_post($post_id, ['post_title' => 'Old Title']);
+        $after  = $this->scheduled_post($post_id, ['post_title' => 'New Title']);
+
+        onesignal_handle_scheduled_post_update($post_id, $after, $before);
+
+        $this->assert_notification_cancelled('old-scheduled-notification');
+        $this->assertArrayNotHasKey('wp_remote_post', self::$captured_request_args);
+        $this->assertSame('', onesignal_get_notification_id($post_id));
     }
 }

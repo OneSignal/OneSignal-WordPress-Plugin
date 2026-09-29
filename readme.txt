@@ -5,7 +5,7 @@ Tags: push notification, push notifications, desktop notifications, mobile notif
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 3.9.3
+Stable tag: 3.9.4
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -64,6 +64,10 @@ OneSignal is trusted by over 1.8M+ developers and marketing strategists. We powe
 [youtube https://www.youtube.com/watch?v=q1mH2kCK7LQ]
 
 == Changelog ==
+
+= 3.9.4 =
+- fix: [SDK-5350] update the scheduled push when a scheduled post title or slug changes (#438)
+- fix: [SDK-5355] remove slashes from custom notification title (#437)
 
 = 3.9.3 =
 - fix: [SDK-5157] resolve Plugin Check errors in shipped files (#434)

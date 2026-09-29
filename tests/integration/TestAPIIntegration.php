@@ -1112,9 +1112,11 @@ class Test_OneSignal_API_Integration extends TestCase {
     }
 
     /**
-     * Test that a full editor save with the send option off cancels the notification and does not re-create it.
+     * Test that a full editor save with the send box unchecked still re-creates the notification
+     * from the saved send option. The metabox renders the box from the global default for
+     * scheduled posts, so an unchecked box is not a reliable opt-out.
      */
-    public function test_scheduled_post_update_cancels_only_when_metabox_submitted_with_send_off() {
+    public function test_scheduled_post_update_recreates_from_saved_meta_when_metabox_submitted_with_send_off() {
         $post_id = 4008;
         $this->set_up_scheduled_post($post_id, 'old-scheduled-notification', ['os_update' => 'on'], true);
 
@@ -1130,14 +1132,15 @@ class Test_OneSignal_API_Integration extends TestCase {
         }
 
         $this->assert_notification_cancelled('old-scheduled-notification');
-        $this->assertArrayNotHasKey('wp_remote_post', self::$captured_request_args);
-        $this->assertSame('', onesignal_get_notification_id($post_id));
+        $body = $this->captured_notification_body();
+        $this->assertSame('New Title', $body['contents']['en']);
+        $this->assertSame('recreated-notification', onesignal_get_notification_id($post_id));
     }
 
     /**
-     * Test that a Quick Edit change cancels the notification but does not re-create it when the saved send option is off.
+     * Test that a Quick Edit change leaves the stored notification alone when the saved send option is off.
      */
-    public function test_scheduled_post_update_cancels_only_when_saved_send_option_off() {
+    public function test_scheduled_post_update_does_nothing_when_saved_send_option_off() {
         $post_id = 4009;
         $this->set_up_scheduled_post($post_id, 'old-scheduled-notification', ['os_segment' => 'All']);
 
@@ -1146,8 +1149,8 @@ class Test_OneSignal_API_Integration extends TestCase {
 
         onesignal_handle_scheduled_post_update($post_id, $after, $before);
 
-        $this->assert_notification_cancelled('old-scheduled-notification');
+        $this->assertArrayNotHasKey('wp_remote_request', self::$captured_request_args);
         $this->assertArrayNotHasKey('wp_remote_post', self::$captured_request_args);
-        $this->assertSame('', onesignal_get_notification_id($post_id));
+        $this->assertSame('old-scheduled-notification', onesignal_get_notification_id($post_id));
     }
 }

@@ -63,7 +63,12 @@ function onesignal_metabox($post)
        // Determine if this is a new post (never published)
        $is_new_post = ($post->post_status !== 'publish' || empty($post->post_date_gmt));
        $post_type = $post->post_type;
-       if ($is_new_post) {
+       $has_scheduled_notification = $post->post_status === 'future'
+           && !empty(onesignal_get_notification_id($post->ID));
+       if ($has_scheduled_notification) {
+           // Show the choice saved with the scheduled notification, not the global default.
+           $os_update_checked = !empty($os_meta['os_update']);
+       } elseif ($is_new_post) {
            if ($post_type === 'page') {
                $os_update_checked = (get_option('OneSignalWPSetting')['notification_on_page'] ?? 0) == 1;
            } else {

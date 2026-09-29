@@ -377,6 +377,12 @@ function onesignal_notification_options_from_meta($os_meta)
  */
 function onesignal_handle_scheduled_post_update($post_id, $post_after, $post_before)
 {
+    // A REST save (block editor) cannot create a notification, so it must not cancel one either.
+    // The metabox request that follows the REST save re-creates the notification through transition_post_status.
+    if (defined('REST_REQUEST') && REST_REQUEST) {
+        return;
+    }
+
     if (!current_user_can('edit_post', $post_id)) {
         return;
     }
@@ -394,11 +400,10 @@ function onesignal_handle_scheduled_post_update($post_id, $post_after, $post_bef
         return;
     }
 
-    $metabox_submitted = isset($_POST['onesignal_v3_metabox_nonce'])
-        && wp_verify_nonce($_POST['onesignal_v3_metabox_nonce'], 'onesignal_v3_metabox_save');
-
     // The editor form was submitted with the send option on; transition_post_status already re-created the notification.
-    if ($metabox_submitted && !empty($_POST['os_update'])) {
+    if (!empty($_POST['os_update'])
+        && isset($_POST['onesignal_v3_metabox_nonce'])
+        && wp_verify_nonce($_POST['onesignal_v3_metabox_nonce'], 'onesignal_v3_metabox_save')) {
         return;
     }
 
@@ -406,21 +411,13 @@ function onesignal_handle_scheduled_post_update($post_id, $post_after, $post_bef
         return;
     }
 
-    $existing_notification_id = onesignal_get_notification_id($post_id);
-    if (!empty($existing_notification_id) && onesignal_cancel_notification($existing_notification_id)) {
-        delete_post_meta($post_id, 'os_notification_id');
-    }
-
-    // The editor form was submitted with the send option off; do not re-create the notification.
-    if ($metabox_submitted) {
-        return;
-    }
-
+    // An unchecked box in the submitted form is not a reliable opt-out. Use the option saved on the last save.
     $os_meta = get_post_meta($post_id, 'os_meta', true);
     if (empty($os_meta['os_update'])) {
         return;
     }
 
+    // onesignal_create_notification cancels the stored notification before it creates the new one.
     onesignal_create_notification($post_after, onesignal_notification_options_from_meta($os_meta));
 }
 

@@ -324,7 +324,7 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
 
         // Prepare notification options from POST data
         $notification_options = array(
-            'title' => !empty($_POST['os_title']) ? sanitize_text_field($_POST['os_title']) : null,
+            'title' => !empty($_POST['os_title']) ? sanitize_text_field(wp_unslash($_POST['os_title'])) : null,
             'content' => !empty($_POST['os_content']) ? sanitize_text_field($_POST['os_content']) : null,
             'segment' => $_POST['os_segment'] ?? 'All',
             'mobile_url' => $_POST['os_mobile_url'] ?? ''

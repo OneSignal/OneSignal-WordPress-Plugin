@@ -125,6 +125,11 @@ class Test_OneSignal_API_Integration extends TestCase {
                 return is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value);
             });
 
+        WP_Mock::userFunction('wp_unslash')
+            ->andReturnUsing(function($value) {
+                return stripslashes_deep($value);
+            });
+
         WP_Mock::userFunction('wp_strip_all_tags')
             ->andReturnUsing(function($string, $remove_breaks = false) {
                 $string = preg_replace('@<(script|style)[^>]*?>.*?</\\1>@si', '', $string);
@@ -799,6 +804,40 @@ class Test_OneSignal_API_Integration extends TestCase {
 
         $this->assertSame('error', $this->lastTransient['status']);
         $this->assertSame('Connection timeout', $this->lastTransient['detail']);
+    }
+
+    /**
+     * Test that slashes WordPress adds to $_POST are removed from the custom title and content.
+     */
+    public function test_custom_title_and_content_from_post_data_are_unslashed() {
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', [
+            'response' => ['code' => 200],
+            'body'     => json_encode(['id' => 'unslashed-notification-789']),
+        ]);
+
+        $_POST['os_update']  = 'on';
+        $_POST['os_title']   = "\\'Breaking\\' news: it\\'s here";
+        $_POST['os_content'] = "He said \\\"hello\\\" and it\\'s fine";
+
+        $post = (object) [
+            'ID'            => 3001,
+            'post_title'    => 'Post Title',
+            'post_type'     => 'post',
+            'post_date'     => '2024-01-15 10:00:00',
+            'post_date_gmt' => '2024-01-15 10:00:00',
+        ];
+
+        try {
+            onesignal_schedule_notification('publish', 'draft', $post);
+        } finally {
+            unset($_POST['os_update'], $_POST['os_title'], $_POST['os_content']);
+        }
+
+        $captured_args = self::$captured_request_args['wp_remote_post']['https://onesignal.com/api/v1/notifications'];
+        $body = json_decode($captured_args['body'], true);
+
+        $this->assertSame("'Breaking' news: it's here", $body['headings']['en']);
+        $this->assertSame('He said "hello" and it\'s fine', $body['contents']['en']);
     }
 
     /**

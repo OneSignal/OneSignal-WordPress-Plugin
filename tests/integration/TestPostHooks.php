@@ -187,8 +187,8 @@ class Test_OneSignal_Post_Hooks extends TestCase {
             'function' => 'onesignal_schedule_notification',
             'accepted_args' => 3
         );
-        $wp_filters['save_post'][10][] = array(
-            'function' => 'onesignal_handle_quick_edit_date_change',
+        $wp_filters['post_updated'][10][] = array(
+            'function' => 'onesignal_handle_scheduled_post_update',
             'accepted_args' => 3
         );
         $wp_filters['wp_trash_post'][10][] = array(
@@ -205,10 +205,10 @@ class Test_OneSignal_Post_Hooks extends TestCase {
     }
 
     /**
-     * Test that save_post hook is registered
+     * Test that post_updated hook is registered
      */
-    public function test_save_post_hook_registered() {
-        $this->assertNotFalse(has_action('save_post', 'onesignal_handle_quick_edit_date_change'));
+    public function test_post_updated_hook_registered() {
+        $this->assertNotFalse(has_action('post_updated', 'onesignal_handle_scheduled_post_update'));
     }
 
     /**
@@ -246,26 +246,12 @@ class Test_OneSignal_Post_Hooks extends TestCase {
     }
 
     /**
-     * Test previous publish date is stored
-     */
-    public function test_previous_publish_date_stored() {
-        $post_id = 789;
-        $date = '2024-01-15 10:30:00';
-
-        update_post_meta($post_id, 'os_previous_publish_date', $date);
-        $retrieved = get_post_meta($post_id, 'os_previous_publish_date', true);
-
-        $this->assertSame($date, $retrieved);
-    }
-
-    /**
      * Test multiple post metadata can be stored
      */
     public function test_multiple_post_metadata() {
         $post_id = 999;
 
         onesignal_save_notification_id($post_id, 'notification-123');
-        update_post_meta($post_id, 'os_previous_publish_date', '2024-01-20 15:00:00');
         update_post_meta($post_id, 'os_meta', array(
             'os_update' => '1',
             'os_title' => 'Custom Title',
@@ -274,11 +260,9 @@ class Test_OneSignal_Post_Hooks extends TestCase {
         ));
 
         $notification_id = onesignal_get_notification_id($post_id);
-        $prev_date = get_post_meta($post_id, 'os_previous_publish_date', true);
         $meta = get_post_meta($post_id, 'os_meta', true);
 
         $this->assertSame('notification-123', $notification_id);
-        $this->assertSame('2024-01-20 15:00:00', $prev_date);
         $this->assertIsArray($meta);
         $this->assertSame('Custom Title', $meta['os_title']);
     }
@@ -318,18 +302,15 @@ class Test_OneSignal_Post_Hooks extends TestCase {
 
         // Set up metadata
         onesignal_save_notification_id($post_id, 'notification-to-delete');
-        update_post_meta($post_id, 'os_previous_publish_date', '2024-01-25 12:00:00');
 
         // Verify metadata exists
         $this->assertSame('notification-to-delete', onesignal_get_notification_id($post_id));
 
         // Delete metadata
         delete_post_meta($post_id, 'os_notification_id');
-        delete_post_meta($post_id, 'os_previous_publish_date');
 
         // Verify metadata is gone
         $this->assertSame('', onesignal_get_notification_id($post_id));
-        $this->assertSame('', get_post_meta($post_id, 'os_previous_publish_date', true));
     }
 
     /**

@@ -6,8 +6,8 @@ defined('ABSPATH') or die('This page may not be accessed directly.');
 // Register the notification function, called when a post status changes
 add_action('transition_post_status', 'onesignal_schedule_notification', 10, 3);
 
-// Register the quick-edit handler to handle publish date changes
-add_action('save_post', 'onesignal_handle_quick_edit_date_change', 10, 3);
+// Register the handler that re-creates the notification when a scheduled post changes (e.g. Quick Edit)
+add_action('post_updated', 'onesignal_handle_scheduled_post_update', 10, 3);
 
 // Register handler to cancel scheduled notifications when posts are deleted
 add_action('wp_trash_post', 'onesignal_cancel_and_clear_notification');
@@ -33,9 +33,6 @@ function onesignal_create_notification($post, $notification_options = array())
     if (!empty($existing_notification_id)) {
         onesignal_cancel_notification($existing_notification_id);
     }
-
-    // Store the current publish date for future quick-edit comparisons
-    update_post_meta($post->ID, 'os_previous_publish_date', $post->post_date);
 
     // set api params - use provided options or defaults
     $title = $notification_options['title'] ?? decode_entities(get_bloginfo('name'));
@@ -237,7 +234,7 @@ function onesignal_display_send_notice()
             $link    = onesignal_build_dashboard_link($dashboard_url, 'View the scheduled notification in the OneSignal Dashboard.');
             $message = __('Push notification scheduled.', 'onesignal')
                 . $link . ' '
-                . __('If you change the scheduled post time in WordPress, the existing notification will be cancelled and a new one created.', 'onesignal');
+                . __('If you change the scheduled post time, title, or slug in WordPress, the existing notification will be cancelled and a new one created.', 'onesignal');
             $type    = 'info';
             break;
         case 'warning':
@@ -344,79 +341,84 @@ function onesignal_schedule_notification($new_status, $old_status, $post)
 }
 
 /**
- * Cancels and re-schedules a notification when a scheduled post's publish date is changed via quick-edit.
+ * Returns true when a change to the post affects the payload of its scheduled notification.
  */
-function onesignal_handle_quick_edit_date_change($post_id, $post, $update)
+function onesignal_scheduled_post_changed($post_before, $post_after)
 {
-    // Check user capability to edit this post
+    foreach (array('post_title', 'post_name', 'post_date_gmt') as $field) {
+        if (($post_before->$field ?? null) !== ($post_after->$field ?? null)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Builds notification options from the metabox values saved in post meta.
+ */
+function onesignal_notification_options_from_meta($os_meta)
+{
+    if (!is_array($os_meta)) {
+        $os_meta = array();
+    }
+
+    return array(
+        'title' => !empty($os_meta['os_title']) ? $os_meta['os_title'] : null,
+        'content' => !empty($os_meta['os_content']) ? $os_meta['os_content'] : null,
+        'segment' => !empty($os_meta['os_segment']) ? $os_meta['os_segment'] : 'All',
+        'mobile_url' => $os_meta['os_mobile_url'] ?? '',
+    );
+}
+
+/**
+ * Cancels and re-creates the scheduled notification when the title, slug, or publish date
+ * of a scheduled post changes. Quick Edit is the main path that reaches this handler,
+ * because it saves the post without the OneSignal metabox fields.
+ */
+function onesignal_handle_scheduled_post_update($post_id, $post_after, $post_before)
+{
+    // A REST save (block editor) cannot create a notification, so it must not cancel one either.
+    // The metabox request that follows the REST save re-creates the notification through transition_post_status.
+    if (defined('REST_REQUEST') && REST_REQUEST) {
+        return;
+    }
+
     if (!current_user_can('edit_post', $post_id)) {
         return;
     }
 
-    // Check if this is an autosave, revision, or not an update
-    if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id) || !$update) {
+    if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
         return;
     }
 
-    // Check if the post type is allowed for notifications
-    if (!onesignal_is_post_type_allowed($post->post_type)) {
+    if (!onesignal_is_post_type_allowed($post_after->post_type)) {
         return;
     }
 
-    // Only handle posts with 'future' status (scheduled posts)
-    if ($post->post_status !== 'future') {
+    // Only handle posts that stay scheduled. Status transitions are handled by onesignal_schedule_notification.
+    if ($post_before->post_status !== 'future' || $post_after->post_status !== 'future') {
         return;
     }
 
-    // Get the previous publish date stored in post meta
-    $previous_publish_date = get_post_meta($post_id, 'os_previous_publish_date', true);
-    $current_publish_date = $post->post_date;
-
-    // If this is the first time we're tracking the publish date, store it and return
-    if (empty($previous_publish_date)) {
-        update_post_meta($post_id, 'os_previous_publish_date', $current_publish_date);
+    // The editor form was submitted with the send option on; transition_post_status already re-created the notification.
+    if (!empty($_POST['os_update'])
+        && isset($_POST['onesignal_v3_metabox_nonce'])
+        && wp_verify_nonce($_POST['onesignal_v3_metabox_nonce'], 'onesignal_v3_metabox_save')) {
         return;
     }
 
-    // Check if the publish date has actually changed
-    if ($previous_publish_date !== $current_publish_date) {
-        // Cancel any existing scheduled notification for this post
-        $existing_notification_id = onesignal_get_notification_id($post_id);
-        if (!empty($existing_notification_id)) {
-            $cancelled = onesignal_cancel_notification($existing_notification_id);
-            if ($cancelled) {
-                // Clear the stored notification ID since we cancelled it
-                delete_post_meta($post_id, 'os_notification_id');
-            }
-        }
-
-        // Update the stored publish date
-        update_post_meta($post_id, 'os_previous_publish_date', $current_publish_date);
-
-        // Honor the "Send notification when post is published" preference.
-        $should_send = false;
-
-        // Check POST data with nonce verification
-        if (!empty($_POST) && isset($_POST['onesignal_v3_metabox_nonce'])) {
-            if (wp_verify_nonce($_POST['onesignal_v3_metabox_nonce'], 'onesignal_v3_metabox_save')) {
-                $should_send = !empty($_POST['os_update']);
-            }
-        }
-
-        // Fallback to saved metadata if no POST data or failed nonce
-        if (!$should_send) {
-            $os_meta = get_post_meta($post_id, 'os_meta', true);
-            $should_send = !empty($os_meta['os_update']);
-        }
-
-        if (!$should_send) {
-            return;
-        }
-
-        // Create a new notification with default options (no custom title/content from metabox)
-        // This will use the post title and default settings
-        onesignal_create_notification($post);
+    if (!onesignal_scheduled_post_changed($post_before, $post_after)) {
+        return;
     }
+
+    // An unchecked box in the submitted form is not a reliable opt-out. Use the option saved on the last save.
+    $os_meta = get_post_meta($post_id, 'os_meta', true);
+    if (empty($os_meta['os_update'])) {
+        return;
+    }
+
+    // onesignal_create_notification cancels the stored notification before it creates the new one.
+    onesignal_create_notification($post_after, onesignal_notification_options_from_meta($os_meta));
 }
 
 /**
@@ -432,7 +434,6 @@ function onesignal_cancel_and_clear_notification($post_id)
     $cancelled = onesignal_cancel_notification($existing_notification_id);
     if ($cancelled) {
         delete_post_meta($post_id, 'os_notification_id');
-        delete_post_meta($post_id, 'os_previous_publish_date');
     }
     return $cancelled;
 }

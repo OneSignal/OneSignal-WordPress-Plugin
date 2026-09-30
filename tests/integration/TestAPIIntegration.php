@@ -851,10 +851,10 @@ class Test_OneSignal_API_Integration extends TestCase {
     public function test_segment_and_mobile_url_from_post_data_are_unslashed() {
         global $test_get_option_overrides;
         $test_get_option_overrides['OneSignalWPSetting'] = [
-            'app_id'                  => 'test-app-id',
-            'app_rest_api_key'        => 'test-api-key',
+            'app_id'                   => 'test-app-id',
+            'app_rest_api_key'         => 'test-api-key',
             'send_to_mobile_platforms' => 1,
-            'notification_on_post'    => 1,
+            'notification_on_post'     => 1,
         ];
 
         $this->mock_http_request('https://onesignal.com/api/v1/notifications', [

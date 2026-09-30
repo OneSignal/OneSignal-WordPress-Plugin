@@ -130,6 +130,11 @@ class Test_OneSignal_API_Integration extends TestCase {
                 return stripslashes_deep($value);
             });
 
+        WP_Mock::userFunction('esc_url_raw')
+            ->andReturnUsing(function($url) {
+                return str_replace(' ', '%20', ltrim($url));
+            });
+
         WP_Mock::userFunction('wp_strip_all_tags')
             ->andReturnUsing(function($string, $remove_breaks = false) {
                 $string = preg_replace('@<(script|style)[^>]*?>.*?</\\1>@si', '', $string);
@@ -838,6 +843,49 @@ class Test_OneSignal_API_Integration extends TestCase {
 
         $this->assertSame("'Breaking' news: it's here", $body['headings']['en']);
         $this->assertSame('He said "hello" and it\'s fine', $body['contents']['en']);
+    }
+
+    /**
+     * Test that slashes WordPress adds to $_POST are removed from the segment and the mobile URL.
+     */
+    public function test_segment_and_mobile_url_from_post_data_are_unslashed() {
+        global $test_get_option_overrides;
+        $test_get_option_overrides['OneSignalWPSetting'] = [
+            'app_id'                  => 'test-app-id',
+            'app_rest_api_key'        => 'test-api-key',
+            'send_to_mobile_platforms' => 1,
+            'notification_on_post'    => 1,
+        ];
+
+        $this->mock_http_request('https://onesignal.com/api/v1/notifications', [
+            'response' => ['code' => 200],
+            'body'     => json_encode(['id' => 'unslashed-notification-790']),
+        ]);
+
+        $_POST['os_update']     = 'on';
+        $_POST['os_segment']    = "Ramon\\'s readers";
+        $_POST['os_mobile_url'] = "myapp://post/3002?ref=Ramon\\'s";
+
+        $post = (object) [
+            'ID'            => 3002,
+            'post_title'    => 'Post Title',
+            'post_type'     => 'post',
+            'post_date'     => '2024-01-15 10:00:00',
+            'post_date_gmt' => '2024-01-15 10:00:00',
+        ];
+
+        try {
+            onesignal_schedule_notification('publish', 'draft', $post);
+        } finally {
+            unset($_POST['os_update'], $_POST['os_segment'], $_POST['os_mobile_url']);
+            unset($test_get_option_overrides['OneSignalWPSetting']);
+        }
+
+        $captured_args = self::$captured_request_args['wp_remote_post']['https://onesignal.com/api/v1/notifications'];
+        $body = json_decode($captured_args['body'], true);
+
+        $this->assertSame(["Ramon's readers"], $body['included_segments']);
+        $this->assertSame("myapp://post/3002?ref=Ramon's", $body['app_url']);
     }
 
     /**
